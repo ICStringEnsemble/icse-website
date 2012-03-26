@@ -1,0 +1,7 @@
+parameters:
+#    icse_public.example.class: Icse\PublicBundle\Example
+
+services:
+#    icse_public.example:
+#        class: %icse_public.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

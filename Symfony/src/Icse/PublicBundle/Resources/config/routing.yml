@@ -1,0 +1,3 @@
+IcsePublicBundle_homepage:
+    pattern:  /
+    defaults: { _controller: IcsePublicBundle:Default:index }
