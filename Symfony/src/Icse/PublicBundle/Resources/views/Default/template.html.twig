@@ -1,0 +1,30 @@
+<html>
+<head>
+<title>
+  Imperial College String Ensemble{% block title %}{% endblock %}
+</title>
+<link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+<link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon"> 
+<link rel="stylesheet" href="{{ asset('bundles/icsepublic/css/main.css') }}" type="text/css">
+</head>
+<body>
+  <header><h1>Imperial College String Ensemble</h1></header>
+  <nav>
+  <ul>
+    <li><a href="#">Home</a></li>
+    <li><a href="#">News</a></li>
+    <li><a href="#">About Us</a></li>
+    <li><a href="#">Events</a></li>
+    <li><a href="#">Join Us</a></li>
+    <li><a href="#">Members</a></li>
+    <li><a href="#">Support Us</a></li>
+  </ul>
+  </nav>
+  <section>
+  {% block content %}{% endblock %}
+  </section>
+  <footer>
+  Copyright &copy; 2005&ndash;today Imperial College String Ensemble 
+  </footer>
+</body>
+</html>

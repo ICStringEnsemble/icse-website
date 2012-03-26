@@ -8,37 +8,33 @@ class __TwigTemplate_e5bc52acbf9dcd5a13a629b9b3b2db63 extends Twig_Template
         parent::__construct($env);
 
         $this->blocks = array(
-            'page_title' => array($this, 'block_page_title'),
+            'content' => array($this, 'block_content'),
         );
+    }
+
+    protected function doGetParent(array $context)
+    {
+        return "IcsePublicBundle:Default:template.html.twig";
     }
 
     protected function doDisplay(array $context, array $blocks = array())
     {
-        // line 1
-        echo "<html>
-<head>
-<title>
-  Imperial College String Ensemble";
-        // line 4
-        $this->displayBlock('page_title', $context, $blocks);
-        // line 5
-        echo "</title>
-<link rel=\"icon\" href=\"{ asset('favicon.ico') }}\" type=\"image/x-icon\">
-<link rel=\"shortcut icon\" href=\"";
-        // line 7
-        echo twig_escape_filter($this->env, $this->env->getExtension('assets')->getAssetUrl("favicon.ico"), "html", null, true);
-        echo "\" type=\"image/x-icon\"> 
-</head>
-<body>
-  Hello !
-</body>
-</html>
-";
+        $this->getParent($context)->display($context, array_merge($this->blocks, $blocks));
     }
 
-    // line 4
-    public function block_page_title($context, array $blocks = array())
+    // line 3
+    public function block_content($context, array $blocks = array())
     {
+        // line 4
+        echo "  <h1>Welcome to ICSE!</h1>
+  
+  <p>
+    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+    tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
+    vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+    no sea takimata sanctus est Lorem ipsum dolor sit amet.
+  </p>
+";
     }
 
     public function getTemplateName()

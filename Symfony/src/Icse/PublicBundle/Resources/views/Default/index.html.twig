@@ -1,12 +1,12 @@
-<html>
-<head>
-<title>
-  Imperial College String Ensemble{% block page_title %}{% endblock %}
-</title>
-<link rel="icon" href="{{ asset('favicon.ico' }}" type="image/x-icon">
-<link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon"> 
-</head>
-<body>
-  Hello !
-</body>
-</html>
+{% extends 'IcsePublicBundle:Default:template.html.twig' %}
+
+{% block content %}
+  <h1>Welcome to ICSE!</h1>
+  
+  <p>
+    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+    tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
+    vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+    no sea takimata sanctus est Lorem ipsum dolor sit amet.
+  </p>
+{% endblock %}
