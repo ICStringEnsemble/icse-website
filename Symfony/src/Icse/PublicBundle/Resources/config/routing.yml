@@ -1,3 +1,16 @@
-IcsePublicBundle_homepage:
+IcsePublicBundle_home:
     pattern:  /
     defaults: { _controller: IcsePublicBundle:Default:index }
+
+IcsePublicBundle_about:
+    pattern:  /about
+    defaults: { _controller: IcsePublicBundle:Default:about }
+
+IcsePublicBundle_support:
+    pattern:  /support
+    defaults: { _controller: IcsePublicBundle:Default:support }
+
+IcsePublicBundle_contact:
+    pattern:  /contact
+    defaults: { _controller: IcsePublicBundle:Default:contact }
+

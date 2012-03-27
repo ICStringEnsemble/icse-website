@@ -1,3 +1,6 @@
+{% macro navbar_item(currentId, id, label) %}
+<li {% if id == currentId %}class='current'{% endif %}><a href="{{ path('IcsePublicBundle_' ~ id ) }}">{{ label }}</a></li>{% endmacro %}
+
 <html>
 <head>
 <title>
@@ -5,26 +8,34 @@
 </title>
 <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon"> 
-<link rel="stylesheet" href="{{ asset('bundles/icsepublic/css/main.css') }}" type="text/css">
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsepublic/css/main.css') }}" />
 </head>
 <body>
-  <header><h1>Imperial College String Ensemble</h1></header>
-  <nav>
-  <ul>
-    <li><a href="#">Home</a></li>
-    <li><a href="#">News</a></li>
-    <li><a href="#">About Us</a></li>
-    <li><a href="#">Events</a></li>
-    <li><a href="#">Join Us</a></li>
-    <li><a href="#">Members</a></li>
-    <li><a href="#">Support Us</a></li>
-  </ul>
-  </nav>
-  <section>
-  {% block content %}{% endblock %}
-  </section>
+  <div id="above_footer">
+    <header>
+    <hgroup>
+    <h1>
+      <a href="{{ path('IcsePublicBundle_home') }}"><img src="{{ asset('bundles/icsepublic/images/banner_logo.png') }}" alt="Imperial College String Ensemble"/></a>
+    </h1>
+    </hgroup>
+    </header>
+    <nav>
+    <ul>
+      {{ _self.navbar_item(currentPage, 'home', 'Home') }}
+      <li><a href="#">News</a></li>
+      {{ _self.navbar_item(currentPage, 'about', 'About Us') }}
+      <li><a href="#">Events</a></li>
+      <li><a href="#">Join Us</a></li>
+      <li><a href="#">Members</a></li>
+      {{ _self.navbar_item(currentPage, 'support', 'Support Us') }}
+    </ul>
+    </nav>
+      <section>
+      {% block content %}{% endblock %}
+      </section>
+  </div>
   <footer>
-  Copyright &copy; 2005&ndash;today Imperial College String Ensemble 
+  Copyright &copy; 2005&ndash;{{ "now" | date ("Y") }} Imperial College String Ensemble 
   </footer>
 </body>
 </html>

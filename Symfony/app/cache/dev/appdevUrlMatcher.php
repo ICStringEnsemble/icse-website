@@ -84,12 +84,27 @@ class appdevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
         }
 
-        // IcsePublicBundle_homepage
+        // IcsePublicBundle_home
         if (rtrim($pathinfo, '/') === '') {
             if (substr($pathinfo, -1) !== '/') {
-                return $this->redirect($pathinfo.'/', 'IcsePublicBundle_homepage');
+                return $this->redirect($pathinfo.'/', 'IcsePublicBundle_home');
             }
-            return array (  '_controller' => 'Icse\\PublicBundle\\Controller\\DefaultController::indexAction',  '_route' => 'IcsePublicBundle_homepage',);
+            return array (  '_controller' => 'Icse\\PublicBundle\\Controller\\DefaultController::indexAction',  '_route' => 'IcsePublicBundle_home',);
+        }
+
+        // IcsePublicBundle_about
+        if ($pathinfo === '/about') {
+            return array (  '_controller' => 'Icse\\PublicBundle\\Controller\\DefaultController::aboutAction',  '_route' => 'IcsePublicBundle_about',);
+        }
+
+        // IcsePublicBundle_support
+        if ($pathinfo === '/support') {
+            return array (  '_controller' => 'Icse\\PublicBundle\\Controller\\DefaultController::supportAction',  '_route' => 'IcsePublicBundle_support',);
+        }
+
+        // IcsePublicBundle_contact
+        if ($pathinfo === '/contact') {
+            return array (  '_controller' => 'Icse\\PublicBundle\\Controller\\DefaultController::contactAction',  '_route' => 'IcsePublicBundle_contact',);
         }
 
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();

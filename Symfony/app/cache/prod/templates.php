@@ -61,7 +61,10 @@
   'TwigBundle:Exception:exception.atom.twig' => '/home/dphoyes/web_devel/union.ic.ac.uk/www/arts/stringensemble/Symfony/vendor/symfony/src/Symfony/Bundle/TwigBundle/Resources/views/Exception/exception.atom.twig',
   'SwiftmailerBundle:Collector:swiftmailer.html.twig' => '/home/dphoyes/web_devel/union.ic.ac.uk/www/arts/stringensemble/Symfony/vendor/symfony/src/Symfony/Bundle/SwiftmailerBundle/Resources/views/Collector/swiftmailer.html.twig',
   'DoctrineBundle:Collector:db.html.twig' => '/home/dphoyes/web_devel/union.ic.ac.uk/www/arts/stringensemble/Symfony/vendor/symfony/src/Symfony/Bundle/DoctrineBundle/Resources/views/Collector/db.html.twig',
-  'IcsePublicBundle:Default:index.html.twig' => '/home/dphoyes/web_devel/union.ic.ac.uk/www/arts/stringensemble/Symfony/src/Icse/PublicBundle/Resources/views/Default/index.html.twig',
-  'IcsePublicBundle:Default:.index.html.twig.swp' => '/home/dphoyes/web_devel/union.ic.ac.uk/www/arts/stringensemble/Symfony/src/Icse/PublicBundle/Resources/views/Default/.index.html.twig.swp',
+  'IcsePublicBundle:Default:.about.html.twig.swp' => '/home/dphoyes/web_devel/union.ic.ac.uk/www/arts/stringensemble/Symfony/src/Icse/PublicBundle/Resources/views/Default/.about.html.twig.swp',
+  'IcsePublicBundle:Default:about.html.twig' => '/home/dphoyes/web_devel/union.ic.ac.uk/www/arts/stringensemble/Symfony/src/Icse/PublicBundle/Resources/views/Default/about.html.twig',
+  'IcsePublicBundle:Default:template.html.twig' => '/home/dphoyes/web_devel/union.ic.ac.uk/www/arts/stringensemble/Symfony/src/Icse/PublicBundle/Resources/views/Default/template.html.twig',
+  'IcsePublicBundle:Default:home.html.twig' => '/home/dphoyes/web_devel/union.ic.ac.uk/www/arts/stringensemble/Symfony/src/Icse/PublicBundle/Resources/views/Default/home.html.twig',
+  'IcsePublicBundle:Default:.template.html.twig.swp' => '/home/dphoyes/web_devel/union.ic.ac.uk/www/arts/stringensemble/Symfony/src/Icse/PublicBundle/Resources/views/Default/.template.html.twig.swp',
   '::base.html.twig' => '/home/dphoyes/web_devel/union.ic.ac.uk/www/arts/stringensemble/Symfony/app/Resources/views/base.html.twig',
 );

@@ -23,7 +23,10 @@ class appdevUrlGenerator extends Symfony\Component\Routing\Generator\UrlGenerato
        '_configurator_home' => true,
        '_configurator_step' => true,
        '_configurator_final' => true,
-       'IcsePublicBundle_homepage' => true,
+       'IcsePublicBundle_home' => true,
+       'IcsePublicBundle_about' => true,
+       'IcsePublicBundle_support' => true,
+       'IcsePublicBundle_contact' => true,
     );
 
     /**
@@ -97,8 +100,23 @@ class appdevUrlGenerator extends Symfony\Component\Routing\Generator\UrlGenerato
         return array(array (), array (  '_controller' => 'Sensio\\Bundle\\DistributionBundle\\Controller\\ConfiguratorController::finalAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/_configurator/final',  ),));
     }
 
-    private function getIcsePublicBundle_homepageRouteInfo()
+    private function getIcsePublicBundle_homeRouteInfo()
     {
         return array(array (), array (  '_controller' => 'Icse\\PublicBundle\\Controller\\DefaultController::indexAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/',  ),));
+    }
+
+    private function getIcsePublicBundle_aboutRouteInfo()
+    {
+        return array(array (), array (  '_controller' => 'Icse\\PublicBundle\\Controller\\DefaultController::aboutAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/about',  ),));
+    }
+
+    private function getIcsePublicBundle_supportRouteInfo()
+    {
+        return array(array (), array (  '_controller' => 'Icse\\PublicBundle\\Controller\\DefaultController::supportAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/support',  ),));
+    }
+
+    private function getIcsePublicBundle_contactRouteInfo()
+    {
+        return array(array (), array (  '_controller' => 'Icse\\PublicBundle\\Controller\\DefaultController::contactAction',), array (), array (  0 =>   array (    0 => 'text',    1 => '/contact',  ),));
     }
 }
