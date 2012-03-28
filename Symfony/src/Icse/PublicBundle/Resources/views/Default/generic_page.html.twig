@@ -1,12 +1,12 @@
 {% extends 'IcsePublicBundle:Default:template.html.twig' %}
-{% set currentPage = 'home' %}
+{% set currentPage = pageId %}
 
-{% block title %} - Home{% endblock %}
+{% block title %} - {{ pageTitle }}{% endblock %} 
 
 {% block content %}
 
 {% autoescape false %} 
-{{ home_intro }}
+{{ pageBody }}
 {% endautoescape %} 
 
 {% endblock %}

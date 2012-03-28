@@ -1,0 +1,19 @@
+Icse\PublicBundle\Entity\SiteText:
+  type: entity
+  table: null
+  fields:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+    name:
+      type: string
+      length: '50'
+    text:
+      type: text
+    updated_at:
+      type: datetime
+    updated_by:
+      type: integer
+  lifecycleCallbacks: {  }

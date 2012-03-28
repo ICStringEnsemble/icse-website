@@ -1,0 +1,152 @@
+<?php
+
+namespace Icse\PublicBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Icse\PublicBundle\Entity\SiteText
+ */
+class SiteText
+{
+    /**
+     * @var integer $id
+     */
+    private $id;
+
+    /**
+     * @var string $location
+     */
+    private $location;
+
+    /**
+     * @var string $text
+     */
+    private $text;
+
+    /**
+     * @var text $text2
+     */
+    private $text2;
+
+    /**
+     * @var datetime $updated_at
+     */
+    private $updated_at;
+
+    /**
+     * @var integer $updated_by
+     */
+    private $updated_by;
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set location
+     *
+     * @param string $location
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
+    }
+
+    /**
+     * Get location
+     *
+     * @return string 
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
+     * Set text
+     *
+     * @param string $text
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
+    }
+
+    /**
+     * Get text
+     *
+     * @return string 
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * Set text2
+     *
+     * @param text $text2
+     */
+    public function setText2($text2)
+    {
+        $this->text2 = $text2;
+    }
+
+    /**
+     * Get text2
+     *
+     * @return text 
+     */
+    public function getText2()
+    {
+        return $this->text2;
+    }
+
+    /**
+     * Set updated_at
+     *
+     * @param datetime $updatedAt
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updated_at = $updatedAt;
+    }
+
+    /**
+     * Get updated_at
+     *
+     * @return datetime 
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
+    }
+
+    /**
+     * Set updated_by
+     *
+     * @param integer $updatedBy
+     */
+    public function setUpdatedBy($updatedBy)
+    {
+        $this->updated_by = $updatedBy;
+    }
+
+    /**
+     * Get updated_by
+     *
+     * @return integer 
+     */
+    public function getUpdatedBy()
+    {
+        return $this->updated_by;
+    }
+}
