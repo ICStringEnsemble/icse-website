@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Icse\PublicBundle\Entity\Subscriber;
 
 
-if (!function_exists('ldap_get_mail'))
+if (!function_exists('ldap_get_info'))
   {
     function ldap_get_mail($login)
     {
@@ -19,7 +19,7 @@ if (!function_exists('ldap_get_mail'))
         }
       else
         {
-          return null;
+          return false;
         }
     }
 
@@ -30,7 +30,14 @@ if (!function_exists('ldap_get_mail'))
 
     function ldap_get_info($login)
     {
-      return array(2 => "Department of X");
+      if ($login == "js10")
+        {
+          return array(2 => "Department of Wibble");
+        }
+      else
+        {
+          return false;
+        }
     }
   }
 
@@ -115,20 +122,26 @@ class DefaultController extends Controller
         }
       else
         {
-          $email_from_username = ldap_get_mail($input);
-          if ($email_from_username)
+          $ldap_info = ldap_get_info($input);
+          if ($ldap_info == false)
             {
-              $output['type'] = 'username';
-              $output['email'] = $email_from_username;
-              $names = ldap_get_names($input);
-              $output['first_name'] = $names[0];
-              $output['last_name'] = $names[count($names)-1];
-              $info = ldap_get_info($input);
-              $output['department'] = $info[2];
+              $output['type'] = 'invalid';
             }
           else
             {
-              $output['type'] = 'invalid';
+              $output['type'] = 'username';
+              do
+                {
+                  $email = ldap_get_mail($input);
+                } while ($email == false);
+              $output['email'] = $email;
+              do
+                {
+                  $names = ldap_get_names($input);
+                } while ($names == false);
+              $output['first_name'] = $names[0];
+              $output['last_name'] = $names[count($names)-1];
+              $output['department'] = $ldap_info[2];
             }
         }
       return new Response(json_encode($output));
