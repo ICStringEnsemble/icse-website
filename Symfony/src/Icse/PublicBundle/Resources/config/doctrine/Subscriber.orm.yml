@@ -1,0 +1,22 @@
+Icse\PublicBundle\Entity\Subscriber:
+  type: entity
+  table: null
+  fields:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+    username:
+      type: string
+      length: '15'
+    email:
+      type: string
+      length: 255
+    first_name:
+      type: string
+      length: '50'
+    last_name:
+      type: string
+      length: '50'
+  lifecycleCallbacks: {  }

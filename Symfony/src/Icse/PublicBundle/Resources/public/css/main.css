@@ -71,7 +71,6 @@ section {
   padding: 0 20px;
   padding-top:1em;
   padding-bottom:3em;
-  background-color: #fff;
   line-height: 1.5em;
 }
 
@@ -110,3 +109,87 @@ footer a:link, footer a:visited {
 footer a:hover {
   color: #996633;
 } 
+
+form {
+  margin-top: 1em;
+}
+
+form input[type=text], form input[type=email] {
+  display: block;
+  float:left;
+  width: 200px;
+  vertical-align: middle; 
+}
+
+
+form label {
+  float: left;
+  width: 380px;
+  text-align: right;
+  margin-right: 20px;
+  padding-bottom: 1em;
+}
+
+form .radio input {
+  display: block;
+  float: left;
+  margin-right: 0px;
+  margin-left: 0px;
+  clear: both;
+}
+
+/* Radio labels */
+form .radio label[for^="form"] {
+  width: auto;
+  float:left;
+  vertical-align: middle; 
+  margin: 0;
+  padding-bottom: 0.5em;
+  padding-left: 10px;
+}
+
+form .radio input:first-of-type {
+  clear: none;
+}
+
+
+form div {
+  clear: both;
+}
+
+form div#other_instrument {
+  clear:none;
+  float:left;
+  margin-left: 20px;
+}
+
+form label[for=form_other_instrument] {
+  width: 0;
+}
+
+/* div containing the radio list */
+form .radio div[id^="form"] {
+  float: left;
+  clear: none;
+  margin-bottom: 1em;
+}
+
+form input[type=submit] {
+  display: block;
+  float: none;
+  clear: both;
+  margin-left: 400px;
+}
+
+form#username_or_email_form input[type=submit] {
+  display: block;
+  float: left;
+  clear: none;
+  margin-left: 20px;
+}
+
+
+form #username_or_email_error {
+  color: #f00;
+}
+

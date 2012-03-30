@@ -6,6 +6,14 @@ IcsePublicBundle_about:
     pattern:  /about
     defaults: { _controller: IcsePublicBundle:Default:about }
 
+IcsePublicBundle_join:
+    pattern:  /join
+    defaults: { _controller: IcsePublicBundle:Default:join }
+
+IcsePublicBundle_query_username:
+    pattern:  /join/query_username
+    defaults: { _controller: IcsePublicBundle:Default:query_username, _format: json }
+
 IcsePublicBundle_support:
     pattern:  /support
     defaults: { _controller: IcsePublicBundle:Default:support }

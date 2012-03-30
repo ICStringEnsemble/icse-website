@@ -15,19 +15,14 @@ class SiteText
     private $id;
 
     /**
-     * @var string $location
+     * @var string $name
      */
-    private $location;
+    private $name;
 
     /**
-     * @var string $text
+     * @var text $text
      */
     private $text;
-
-    /**
-     * @var text $text2
-     */
-    private $text2;
 
     /**
      * @var datetime $updated_at
@@ -51,29 +46,29 @@ class SiteText
     }
 
     /**
-     * Set location
+     * Set name
      *
-     * @param string $location
+     * @param string $name
      */
-    public function setLocation($location)
+    public function setName($name)
     {
-        $this->location = $location;
+        $this->name = $name;
     }
 
     /**
-     * Get location
+     * Get name
      *
      * @return string 
      */
-    public function getLocation()
+    public function getName()
     {
-        return $this->location;
+        return $this->name;
     }
 
     /**
      * Set text
      *
-     * @param string $text
+     * @param text $text
      */
     public function setText($text)
     {
@@ -83,31 +78,11 @@ class SiteText
     /**
      * Get text
      *
-     * @return string 
+     * @return text 
      */
     public function getText()
     {
         return $this->text;
-    }
-
-    /**
-     * Set text2
-     *
-     * @param text $text2
-     */
-    public function setText2($text2)
-    {
-        $this->text2 = $text2;
-    }
-
-    /**
-     * Get text2
-     *
-     * @return text 
-     */
-    public function getText2()
-    {
-        return $this->text2;
     }
 
     /**

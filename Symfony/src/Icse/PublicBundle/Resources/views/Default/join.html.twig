@@ -1,0 +1,119 @@
+{% extends 'IcsePublicBundle:Default:template.html.twig' %}
+{% set currentPage = 'join' %}
+
+{% block title %} - Join Us{% endblock %}
+
+{% block content %}
+
+{% autoescape false %} 
+{{ join_intro }}
+{% endautoescape %} 
+
+<form id="username_or_email_form" style="display: none">
+  <label for="username_or_email_field">Enter your Imperial username or your e-mail address</label>
+  <input id="username_or_email_field" type="text" placeholder="Eg. jfs10, or john@gmail.com"/>
+  <input type="submit" value="Enter"/>
+  <div id="username_or_email_error" style="display: none">
+    Not a valid Imperial Username or e-mail address.
+  </div>
+</form>
+
+<form action="{{ path('IcsePublicBundle_join') }}" method="post" {{ form_enctype(form) }}>
+  {{ form_errors(form) }} 
+  <div class="show_if_email show_if_username">
+    {{ form_row(form.first_name) }} 
+    {{ form_row(form.last_name) }} 
+  </div>
+  <div class="never_show">
+    {{ form_row(form.login) }}
+  </div> 
+  <div class="show_if_username">
+    {{ form_row(form.email) }} 
+    {{ form_row(form.department) }} 
+  </div>
+  <div class="show_if_email show_if_username radio">
+    {{ form_row(form.player) }} 
+  </div>
+  <div class="show_if_player">
+    <div class="radio">
+      {{ form_row(form.instrument) }} 
+    </div>
+    <div id="other_instrument">
+      {{ form_row(form.other_instrument) }} 
+    </div>
+    {{ form_row(form.standard) }} 
+  </div>
+  {{ form_rest(form) }} 
+  <input class="show_if_email show_if_username" type="submit"/>
+</form>
+
+<script>
+  $('#other_instrument').remove().appendTo('#form_instrument');
+
+
+  var slideTime = 300;
+  isReset = true;
+  player = false;
+  $('#username_or_email_form').show();
+  $('.show_if_email, .show_if_username, .never_show, .show_if_player').hide();
+  $('#form_other_instrument').attr('placeholder', 'Please specify');
+  $('#form_other_instrument').attr('disabled', 'disabled');
+  $('#username_or_email_form').submit(function(e){
+    e.preventDefault();
+    if (isReset){
+      var input = $('#username_or_email_field').val()
+      $.getJSON("{{ path('IcsePublicBundle_query_username') }}",
+                {input: input},
+                function(data){
+                  if (data['type'] == 'email'){
+                    $('.show_if_email').slideDown(slideTime);
+                    $('#form_email').val(input);
+                    $('#form_login').val("");
+                    $('#form_department').val("");
+                  } else if (data['type'] == 'username'){
+                    $('.show_if_username').slideDown(slideTime);
+                    $('#form_first_name').val(data['first_name']);
+                    $('#form_last_name').val(data['last_name']);
+                    $('#form_email').val(data['email']);
+                    $('#form_login').val(input);
+                    $('#form_department').val(data['department']);
+                  } else {
+                    $('#username_or_email_error').slideDown();
+                  }
+                  if ((data['type'] == 'username' || data['type'] == 'email') && player == true){
+                    $('.show_if_player').slideDown(slideTime);
+                  }
+                });
+      isReset = false;
+    }
+  });
+
+  var hideAll = function(){
+    $('.show_if_email, .show_if_username, .show_if_player, #username_or_email_error').slideUp(slideTime);
+    isReset = true;
+  };
+
+  $('#username_or_email_field').keyup(function(e){
+    if(e.keyCode < 13 || e.keyCode == 32 || e.keyCode > 40) hideAll();
+  });
+  $('#username_or_email_field').bind('paste', hideAll);
+
+  $('#form_player').change(function(){
+    if ($('#form_player_true').is(':checked')){
+      $('.show_if_player').slideDown(slideTime);
+      player = true;
+    } else {
+      $('.show_if_player').slideUp(slideTime);
+      player = false;
+    }
+  });
+
+  $('#form_instrument').change(function(){
+    if ($('#form_instrument_other').is(':checked'))
+      $('#form_other_instrument').removeAttr('disabled');
+    else
+      $('#form_other_instrument').attr('disabled', 'disabled');
+  });
+</script>
+
+{% endblock %}

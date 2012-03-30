@@ -6,9 +6,11 @@
 <title>
   Imperial College String Ensemble{% block title %}{% endblock %}
 </title>
+<meta charset="UTF-8"> 
 <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon"> 
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsepublic/css/main.css') }}" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 </head>
 <body>
   <div id="above_footer">
@@ -25,7 +27,7 @@
       <li><a href="#">News</a></li>
       {{ _self.navbar_item(currentPage, 'about', 'About Us') }}
       <li><a href="#">Events</a></li>
-      <li><a href="#">Join Us</a></li>
+      {{ _self.navbar_item(currentPage, 'join', 'Join Us') }}
       <li><a href="#">Members</a></li>
       {{ _self.navbar_item(currentPage, 'support', 'Support Us') }}
     </ul>
