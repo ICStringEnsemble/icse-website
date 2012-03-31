@@ -9,6 +9,12 @@
 {{ join_intro }}
 {% endautoescape %} 
 
+<form>
+  <div class="global_errors">
+    {{ form_errors(form) }} 
+  </div>
+</form>
+
 <form id="username_or_email_form" style="display: none">
   <label for="username_or_email_field">Enter your Imperial username or your e-mail address</label>
   <input id="username_or_email_field" type="text" placeholder="Eg. jfs10, or john@gmail.com"/>
@@ -18,8 +24,7 @@
   </div>
 </form>
 
-<form action="{{ path('IcsePublicBundle_join') }}" method="post" {{ form_enctype(form) }}>
-  {{ form_errors(form) }} 
+<form action="{{ path('IcsePublicBundle_join') }}" method="post" {{ form_enctype(form) }} >
   <div class="show_if_email show_if_username">
     {{ form_row(form.first_name) }} 
     {{ form_row(form.last_name) }} 
@@ -51,15 +56,16 @@
   $('#other_instrument').remove().appendTo('#form_instrument');
 
 
-  var slideTime = 300;
+  var username_or_email = "{{ username_or_email }}";
+  slideTime = 300;
   isReset = true;
   player = false;
   $('#username_or_email_form').show();
   $('.show_if_email, .show_if_username, .never_show, .show_if_player').hide();
   $('#form_other_instrument').attr('placeholder', 'Please specify');
   $('#form_other_instrument').attr('disabled', 'disabled');
-  $('#username_or_email_form').submit(function(e){
-    e.preventDefault();
+
+  var query_username_or_email = function(slideTime){
     if (isReset){
       var input = $('#username_or_email_field').val()
       $.getJSON("{{ path('IcsePublicBundle_query_username') }}",
@@ -86,9 +92,17 @@
                 });
       isReset = false;
     }
-  });
+  }
 
-  var hideAll = function(){
+  if (username_or_email){
+    console.log('yay');
+    $('#username_or_email_field').val(username_or_email);
+  }
+  if ($('#username_or_email_field').val() != "")  
+    query_username_or_email(0);
+  $('#username_or_email_form').submit(function(e){e.preventDefault();query_username_or_email(slideTime);});
+
+  var hideAll = function(slideTime){
     $('.show_if_email, .show_if_username, .show_if_player, #username_or_email_error').slideUp(slideTime);
     isReset = true;
   };
@@ -98,22 +112,36 @@
   });
   $('#username_or_email_field').bind('paste', hideAll);
 
-  $('#form_player').change(function(){
-    if ($('#form_player_true').is(':checked')){
+  var enableDisableOtherInstrument = function(){
+    if ($('#form_instrument_other').is(':checked')){
+      $('#form_other_instrument').removeAttr('disabled');
+      $('#form_other_instrument').attr('required', 'required');
+    } else {
+      $('#form_other_instrument').attr('disabled', 'disabled');
+      $('#form_other_instrument').removeAttr('required');
+    }
+  };
+  enableDisableOtherInstrument();
+  $('#form_instrument').change(enableDisableOtherInstrument);
+
+  var showHidePlayer = function(slideTime){
+    if ($('#form_player_1').is(':checked')){
       $('.show_if_player').slideDown(slideTime);
+      $('input[name="form[instrument]"]').attr('required', 'required');
+      $('#form_standard').attr('required', 'required');
+      enableDisableOtherInstrument();
       player = true;
     } else {
       $('.show_if_player').slideUp(slideTime);
+      $('input[name="form[instrument]"]').removeAttr('required');
+      $('#form_standard').removeAttr('required');
+      $('#form_other_instrument').removeAttr('required');
       player = false;
     }
-  });
+  };
+  showHidePlayer(0);
+  $('#form_player').change(slideTime, showHidePlayer);
 
-  $('#form_instrument').change(function(){
-    if ($('#form_instrument_other').is(':checked'))
-      $('#form_other_instrument').removeAttr('disabled');
-    else
-      $('#form_other_instrument').attr('disabled', 'disabled');
-  });
 </script>
 
 {% endblock %}

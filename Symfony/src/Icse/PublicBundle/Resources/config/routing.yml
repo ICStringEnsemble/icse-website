@@ -10,6 +10,10 @@ IcsePublicBundle_join:
     pattern:  /join
     defaults: { _controller: IcsePublicBundle:Default:join }
 
+IcsePublicBundle_join_success:
+    pattern:  /join/success/{name}
+    defaults: { _controller: IcsePublicBundle:Default:join_success }
+
 IcsePublicBundle_query_username:
     pattern:  /join/query_username
     defaults: { _controller: IcsePublicBundle:Default:query_username, _format: json }

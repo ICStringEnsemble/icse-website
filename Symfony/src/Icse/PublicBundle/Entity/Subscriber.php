@@ -15,9 +15,9 @@ class Subscriber
     private $id;
 
     /**
-     * @var string $username
+     * @var string $login
      */
-    private $username;
+    private $login;
 
     /**
      * @var string $email
@@ -34,6 +34,33 @@ class Subscriber
      */
     private $last_name;
 
+    /**
+     * @var string $department
+     */
+    private $department;
+
+    /**
+     * @var boolean $player
+     */
+    private $player;
+
+    /**
+     * @var string $instrument
+     */
+    private $instrument;
+
+    private $other_instrument;
+
+    /**
+     * @var string $standard
+     */
+    private $standard;
+
+    /**
+     * @var datetime $subscribed_at
+     */
+    private $subscribed_at;
+
 
     /**
      * Get id
@@ -46,23 +73,23 @@ class Subscriber
     }
 
     /**
-     * Set username
+     * Set login
      *
-     * @param string $username
+     * @param string $login
      */
-    public function setUsername($username)
+    public function setLogin($login)
     {
-        $this->username = $username;
+        $this->login = $login;
     }
 
     /**
-     * Get username
+     * Get login
      *
      * @return string 
      */
-    public function getUsername()
+    public function getLogin()
     {
-        return $this->username;
+        return $this->login;
     }
 
     /**
@@ -123,5 +150,115 @@ class Subscriber
     public function getLastName()
     {
         return $this->last_name;
+    }
+
+    /**
+     * Set department
+     *
+     * @param string $department
+     */
+    public function setDepartment($department)
+    {
+        $this->department = $department;
+    }
+
+    /**
+     * Get department
+     *
+     * @return string 
+     */
+    public function getDepartment()
+    {
+        return $this->department;
+    }
+
+    /**
+     * Set player
+     *
+     * @param boolean $player
+     */
+    public function setPlayer($player)
+    {
+        $this->player = $player;
+    }
+
+    /**
+     * Get player
+     *
+     * @return boolean 
+     */
+    public function isPlayer()
+    {
+        return $this->player;
+    }
+
+    /**
+     * Set instrument
+     *
+     * @param string $instrument
+     */
+    public function setInstrument($instrument)
+    {
+        $this->instrument = $instrument;
+    }
+
+    public function setOtherInstrument($instrument)
+    {
+        $this->other_instrument = $instrument;
+    }
+
+    /**
+     * Get instrument
+     *
+     * @return string 
+     */
+    public function getInstrument()
+    {
+        return $this->instrument;
+    }
+
+    public function getOtherInstrument()
+    {
+        return $this->other_instrument;
+    }
+
+    /**
+     * Set standard
+     *
+     * @param string $standard
+     */
+    public function setStandard($standard)
+    {
+        $this->standard = $standard;
+    }
+
+    /**
+     * Get standard
+     *
+     * @return string 
+     */
+    public function getStandard()
+    {
+        return $this->standard;
+    }
+
+    /**
+     * Set subscribed_at
+     *
+     * @param datetime $subscribedAt
+     */
+    public function setSubscribedAt($subscribedAt)
+    {
+        $this->subscribed_at = $subscribedAt;
+    }
+
+    /**
+     * Get subscribed_at
+     *
+     * @return datetime 
+     */
+    public function getSubscribedAt()
+    {
+        return $this->subscribed_at;
     }
 }

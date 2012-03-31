@@ -7,16 +7,33 @@ Icse\PublicBundle\Entity\Subscriber:
       id: true
       generator:
         strategy: AUTO
-    username:
+    login:
       type: string
-      length: '15'
+      length: 15
+      nullable: true
     email:
       type: string
       length: 255
     first_name:
       type: string
-      length: '50'
+      length: 50
     last_name:
       type: string
-      length: '50'
+      length: 50
+    department:
+      type: string
+      length: 255
+      nullable: true
+    player:
+      type: boolean
+    instrument:
+      type: string
+      length: 50
+      nullable: true
+    standard:
+      type: string
+      length: 50
+      nullable: true
+    subscribed_at:
+      type: datetime
   lifecycleCallbacks: {  }

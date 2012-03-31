@@ -124,6 +124,7 @@ form input[type=text], form input[type=email] {
 
 form label {
   float: left;
+  clear: left;
   width: 380px;
   text-align: right;
   margin-right: 20px;
@@ -144,6 +145,7 @@ form .radio label[for^="form"] {
   float:left;
   vertical-align: middle; 
   margin: 0;
+  clear: none;
   padding-bottom: 0.5em;
   padding-left: 10px;
 }
@@ -189,7 +191,12 @@ form#username_or_email_form input[type=submit] {
 }
 
 
-form #username_or_email_error {
+form #username_or_email_error, form li {
   color: #f00;
+  float: right;
 }
 
+form .global_errors li {
+  float: left;
+  clear: both;
+}

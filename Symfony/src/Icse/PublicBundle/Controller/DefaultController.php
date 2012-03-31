@@ -66,9 +66,9 @@ class DefaultController extends Controller
 
   public function joinAction(Request $request)
     {
+      $username_or_email = "";
       $subscriber = new Subscriber();
-
-      $form = $this->createFormBuilder()
+      $form = $this->createFormBuilder($subscriber)
               ->add('first_name', 'text')
               ->add('last_name', 'text')
               ->add('email', 'email')
@@ -76,8 +76,8 @@ class DefaultController extends Controller
               ->add('department', 'text', array('required' => false))
               ->add('player', 'choice', array(
                       'choices' => array(
-                        'true' => 'Yes!',
-                        'false' => 'No, just notify me about any concerts.'
+                        true => 'Yes!',
+                        false => 'No, just notify me about any concerts.'
                       ),
                       'expanded' => true,
                       'multiple' => false,
@@ -102,14 +102,64 @@ class DefaultController extends Controller
       if ($request->getMethod() == 'POST')
         {
           $form->bindRequest($request);
-          $data = $form->getData();
-          return $this->render('IcsePublicBundle:Default:join.html.twig', array('join_intro' => $this->getSiteText('join_intro')));
+          /* Do more error checking, and fill in implied data */
+          if ($subscriber->getLogin())
+            {
+              $info = ldap_get_info($subscriber->getLogin());
+              if (!$info)
+                $form->addError(new \Symfony\Component\Form\FormError("Not a valid Imperial login username."));
+              else 
+                {
+                  if (!$subscriber->getDepartment())
+                    $subscriber->setDepartment($info[2]);
+                }
+            }
+          else
+            {
+              $subscriber->setDepartment(null);
+            }
+          if ($subscriber->isPlayer())
+            {
+              if (!$subscriber->getInstrument() || ($subscriber->getInstrument() == 'other' && !$subscriber->getOtherInstrument()))
+                $form->addError(new \Symfony\Component\Form\FormError("Please specify the instrument you play."));
+              if ($subscriber->getInstrument() == 'other')
+                $subscriber->setInstrument($subscriber->getOtherInstrument());
+              if (!$subscriber->getStandard())
+                $form->addError(new \Symfony\Component\Form\FormError("Please indicate your playing standard."));
+            }
+          else
+            {
+              $subscriber->setInstrument(null);
+              $subscriber->setStandard(null);
+            }
+          /* End error checking */
+          if ($form->isValid())
+            {
+              $subscriber->setSubscribedAt(new \DateTime());
+              $em = $this->getDoctrine()->getEntityManager();
+              $em->persist($subscriber);
+              $em->flush();
+              return $this->redirect($this->generateUrl('IcsePublicBundle_join_success', array('name' => $subscriber->getFirstName())));
+            }
+          else
+            {
+              if ($subscriber->getLogin())
+                $username_or_email = $subscriber->getLogin();
+              else
+                $username_or_email = $subscriber->getEmail();
+            }
         }
-      else
-        {
-          return $this->render('IcsePublicBundle:Default:join.html.twig', array('join_intro' => $this->getSiteText('join_intro'),
-                                                                                'form' => $form->createView()));
-        }
+      return $this->render('IcsePublicBundle:Default:join.html.twig', array('join_intro' => $this->getSiteText('join_intro'),
+                                                                            'form' => $form->createView(),
+                                                                            'username_or_email' => $username_or_email));
+    }
+
+
+  public function join_successAction($name)
+    {
+      return $this->render('IcsePublicBundle:Default:generic_page.html.twig', array('pageId' => 'join',
+                                                                                    'pageTitle' => 'Join Us',
+                                                                                    'pageBody' => "Thanks " . $name . ", we'll get back to you shortly."));
     }
 
   public function query_usernameAction(Request $request)
