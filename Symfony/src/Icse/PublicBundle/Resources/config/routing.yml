@@ -8,15 +8,15 @@ IcsePublicBundle_about:
 
 IcsePublicBundle_join:
     pattern:  /join
-    defaults: { _controller: IcsePublicBundle:Default:join }
+    defaults: { _controller: IcsePublicBundle:SignUp:join }
 
 IcsePublicBundle_join_success:
     pattern:  /join/success/{name}
-    defaults: { _controller: IcsePublicBundle:Default:join_success }
+    defaults: { _controller: IcsePublicBundle:SignUp:join_success }
 
 IcsePublicBundle_query_username:
     pattern:  /join/query_username
-    defaults: { _controller: IcsePublicBundle:Default:query_username, _format: json }
+    defaults: { _controller: IcsePublicBundle:SignUp:query_username, _format: json }
 
 IcsePublicBundle_support:
     pattern:  /support

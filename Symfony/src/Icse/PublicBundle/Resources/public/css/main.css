@@ -114,7 +114,7 @@ form {
   margin-top: 1em;
 }
 
-form input[type=text], form input[type=email] {
+form input[type=text], form input[type=email], form input[type=password] {
   display: block;
   float:left;
   width: 200px;
