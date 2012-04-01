@@ -1,0 +1,7 @@
+parameters:
+#    icse_members.example.class: Icse\MembersBundle\Example
+
+services:
+#    icse_members.example:
+#        class: %icse_members.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

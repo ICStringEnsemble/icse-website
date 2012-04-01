@@ -1,0 +1,29 @@
+{% extends 'IcsePublicBundle:Default:template.html.twig' %}
+{% set currentPage = 'members' %}
+
+{% block title %} - Login{% endblock %} 
+
+{% block content %}
+
+{% if error %}
+  <div>{{ error.message }}</div>
+{% endif %}
+
+<form action="{{ path('IcsePublicBundle_login_check') }}" method="post">
+  <div>
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="_username" value="{{ last_username }}" />
+  </div>
+  <div>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="_password" />
+  </div>
+    {#
+        If you want to control the URL the user is redirected to on success (more details below)
+        <input type="hidden" name="_target_path" value="/account" />
+    #}
+
+    <button type="submit">login</button>
+</form>
+
+{% endblock %}
