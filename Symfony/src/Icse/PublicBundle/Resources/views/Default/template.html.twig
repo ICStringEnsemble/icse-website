@@ -1,5 +1,5 @@
-{% macro navbar_item(currentId, id, label) %}
-<li {% if id == currentId %}class='current'{% endif %}><a href="{{ path('IcsePublicBundle_' ~ id ) }}">{{ label }}</a></li>{% endmacro %}
+{% macro navbar_item(currentId, id, label, route) %}
+<li {% if id == currentId %}class='current'{% endif %}><a href="{{ path(route) }}">{{ label }}</a></li>{% endmacro %}
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -23,13 +23,13 @@
     </header>
     <nav>
     <ul>
-      {{ _self.navbar_item(currentPage, 'home', 'Home') }}
+      {{ _self.navbar_item(currentPage, 'home', 'Home', 'IcsePublicBundle_home') }}
       <li><a href="#">News</a></li>
-      {{ _self.navbar_item(currentPage, 'about', 'About Us') }}
+      {{ _self.navbar_item(currentPage, 'about', 'About Us', 'IcsePublicBundle_about') }}
       <li><a href="#">Events</a></li>
-      {{ _self.navbar_item(currentPage, 'join', 'Join Us') }}
-      <li><a href="#">Members</a></li>
-      {{ _self.navbar_item(currentPage, 'support', 'Support Us') }}
+      {{ _self.navbar_item(currentPage, 'join', 'Join Us', 'IcsePublicBundle_join') }}
+      {{ _self.navbar_item(currentPage, 'members', 'Members', 'IcseMembersBundle_home') }}
+      {{ _self.navbar_item(currentPage, 'support', 'Support Us', 'IcsePublicBundle_support') }}
     </ul>
     </nav>
       <section>

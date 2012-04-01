@@ -166,7 +166,10 @@ class DefaultController extends Controller
     {
       $input = $request->query->get('input');
       $output = array();
-      if (filter_var($input, FILTER_VALIDATE_EMAIL))
+      $emailValidator = new \Symfony\Component\Validator\Constraints\EmailValidator;
+      $emailConstraint = new \Symfony\Component\Validator\Constraints\Email;
+      $emailConstraint->checkMX = true;
+      if ($emailValidator->isValid($input, $emailConstraint))
         {
           $output['type'] = 'email';
         }
@@ -180,15 +183,19 @@ class DefaultController extends Controller
           else
             {
               $output['type'] = 'username';
+              $attempts = 0;
               do
                 {
                   $email = ldap_get_mail($input);
-                } while ($email == false);
+                  $attempts += 1;
+                } while ($email == false && $attempts < 10);
               $output['email'] = $email;
+              $attempts = 0;
               do
                 {
                   $names = ldap_get_names($input);
-                } while ($names == false);
+                  $attempts += 1;
+                } while ($names == false && $attempts < 10);
               $output['first_name'] = $names[0];
               $output['last_name'] = $names[count($names)-1];
               $output['department'] = $ldap_info[2];

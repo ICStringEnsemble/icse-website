@@ -26,3 +26,9 @@ IcsePublicBundle_contact:
     pattern:  /contact
     defaults: { _controller: IcsePublicBundle:Default:contact }
 
+IcsePublicBundle_login:
+    pattern:   /login
+    defaults:  { _controller: IcsePublicBundle:Security:login }
+
+IcsePublicBundle_login_check:
+    pattern:   /login_check

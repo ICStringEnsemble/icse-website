@@ -8,5 +8,6 @@ Icse\PublicBundle\Entity\Subscriber:
             - NotBlank: ~
             - Email:
                 message: Not a valid email address
+                checkMX: true 
         player:
             - NotBlank: ~

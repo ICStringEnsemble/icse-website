@@ -1,3 +1,7 @@
+IcseMembersBundle:
+    resource: "@IcseMembersBundle/Resources/config/routing.yml"
+    prefix:   /
+
 IcsePublicBundle:
     resource: "@IcsePublicBundle/Resources/config/routing.yml"
     prefix:   /
