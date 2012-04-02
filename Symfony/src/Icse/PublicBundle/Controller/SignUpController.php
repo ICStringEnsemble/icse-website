@@ -157,7 +157,7 @@ class SignUpController extends Controller
       $emailValidator = new \Symfony\Component\Validator\Constraints\EmailValidator;
       $emailConstraint = new \Symfony\Component\Validator\Constraints\Email;
       $emailConstraint->checkMX = true;
-      if ($emailValidator->isValid($input, $emailConstraint))
+      if ($input != "" && $emailValidator->isValid($input, $emailConstraint))
         {
           $output['type'] = 'email';
         }
@@ -177,6 +177,7 @@ class SignUpController extends Controller
                   $email = ldap_get_mail($input);
                   $attempts += 1;
                 } while ($email == false && $attempts < 10);
+              if ($email == false) $email = "";
               $output['email'] = $email;
               $attempts = 0;
               do
@@ -184,6 +185,7 @@ class SignUpController extends Controller
                   $names = ldap_get_names($input);
                   $attempts += 1;
                 } while ($names == false && $attempts < 10);
+              if ($names == false) $names = array("","");
               $output['first_name'] = $names[0];
               $output['last_name'] = $names[count($names)-1];
               $output['department'] = $ldap_info[2];
