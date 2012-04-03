@@ -64,6 +64,10 @@ nav a:hover {
   background: #444;
 }
 
+nav .logged_in a {
+  color: #ff0;
+}
+
 section {
   clear: both;
   width: 954px;

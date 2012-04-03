@@ -28,7 +28,9 @@
       {{ _self.navbar_item(currentPage, 'about', 'About Us', 'IcsePublicBundle_about') }}
       <li><a href="#">Events</a></li>
       {{ _self.navbar_item(currentPage, 'join', 'Join Us', 'IcsePublicBundle_join') }}
+      <div {% if is_granted('ROLE_USER') %}class="logged_in"{% endif %} >
       {{ _self.navbar_item(currentPage, 'members', 'Members', 'IcseMembersBundle_home') }}
+      </div>
       {{ _self.navbar_item(currentPage, 'support', 'Support Us', 'IcsePublicBundle_support') }}
     </ul>
     </nav>

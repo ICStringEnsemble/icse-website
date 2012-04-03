@@ -1,0 +1,30 @@
+Icse\MembersBundle\Entity\Member:
+  type: entity
+  repositoryClass: Icse\MembersBundle\Entity\MemberRepository 
+  table: null
+  fields:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+    username:
+      type: string
+      length: '50'
+      unique: true
+      nullable: true
+    salt:
+      type: string
+      length: '40'
+      nullable: true
+    password:
+      type: string
+      length: '89'
+      nullable: true
+    email:
+      type: string
+      length: '60'
+      unique: true
+    active:
+      type: boolean
+  lifecycleCallbacks: {  }
