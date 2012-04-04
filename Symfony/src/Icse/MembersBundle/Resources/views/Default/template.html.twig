@@ -1,0 +1,22 @@
+{% extends 'IcsePublicBundle:Default:template.html.twig' %}
+{% set currentPage = 'members' %}
+
+{% block style_extra %}<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsemembers/css/main.css') }}" />{% endblock %}
+
+{% block header_to_footer %}
+<div id="nav_column">
+  <p>
+  Logged in as {{ app.user.getFullName() }} 
+  </p>
+  <p>
+  <a href="{{ path('IcseMembersBundle_logout') }}">Logout</a>
+  </p>
+  <ul>
+    <li>1</li>
+    <li>2</li>
+  </ul>
+</div>
+<section>
+{% block content %}{% endblock %}
+</section>
+{% endblock %}
