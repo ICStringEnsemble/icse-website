@@ -207,7 +207,7 @@ form input#remember_me {
 form label#remember_me_label {
   clear: none;
   width: auto;
-  margin-left: 5px;
+  padding-left: 5px;
 }
 
 form #username_or_email_error, form li {

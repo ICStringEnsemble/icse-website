@@ -11,9 +11,11 @@ Icse\MembersBundle\Entity\Member:
     first_name:
       type: string
       length: 50
+      nullable: false
     last_name:
       type: string
       length: 50 
+      nullable: false
     username:
       type: string
       length: '50'
