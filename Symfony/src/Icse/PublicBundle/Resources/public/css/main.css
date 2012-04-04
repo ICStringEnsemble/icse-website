@@ -15,6 +15,7 @@ body {
   height: auto !important;
   height: 100%;
   background: url(../images/bg.png) #eee repeat-y center;
+  min-width: 994px;
 }
 
 header {
@@ -97,6 +98,7 @@ section p {
 }
 
 footer {
+  min-width: 994px;
   color:#fff;
   background-color: #000;
   text-align: center;

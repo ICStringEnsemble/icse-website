@@ -1,12 +1,10 @@
 #above_footer {
   background: url(../images/bg.png) #fff repeat-y left;
-  background-color: #fff;
 }
 
 #nav_column {
   float: left;
   width: 260px;
-  height: 100%;
   padding: 20px;
 }
 
@@ -15,7 +13,7 @@
 }
 
 section {
-  float: left;
   clear: none;
-  margin: 0 0;
+  width: auto;
+  padding-left: 320px;
 }
