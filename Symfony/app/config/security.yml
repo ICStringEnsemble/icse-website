@@ -3,12 +3,16 @@ security:
         secured_area:
             pattern:    ^/
             anonymous: ~
-            form_login:
+            imperial_form_login:
                 login_path:  /login
                 check_path:  /login_check
             logout:
                 path: /logout
                 target: /
+            remember_me:
+                key:      3Q18L=WtlR/=9$B 
+                lifetime: 1209600 
+                path:     /arts/stringensemble
 
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
@@ -20,6 +24,9 @@ security:
 
     encoders:
         Icse\MembersBundle\Entity\Member: sha512
+
+    factories:
+        - "%kernel.root_dir%/../src/Icse/MembersBundle/Resources/config/security_factories.yml" 
 
     role_hierarchy:
         ROLE_ADMIN: ROLE_USER

@@ -1,3 +1,6 @@
 IcseMembersBundle_home:
     pattern:  /members
     defaults: { _controller: IcseMembersBundle:Default:index }
+
+IcseMembersBundle_logout:
+    pattern:   /logout

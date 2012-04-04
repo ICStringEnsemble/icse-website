@@ -194,6 +194,21 @@ form#username_or_email_form input[type=submit] {
   margin-left: 20px;
 }
 
+form #login_button {
+  float: left;
+}
+
+form input#remember_me {
+  float: left;
+  margin-top: 0.5em;
+  margin-left: 30px;
+}
+
+form label#remember_me_label {
+  clear: none;
+  width: auto;
+  margin-left: 5px;
+}
 
 form #username_or_email_error, form li {
   color: #f00;
@@ -202,5 +217,12 @@ form #username_or_email_error, form li {
 
 form .global_errors li {
   float: left;
+  clear: both;
+  min-height: 2em;
+  margin-left: 400px;
+  margin-bottom: 0.5em;
+}
+
+div#end_form {
   clear: both;
 }

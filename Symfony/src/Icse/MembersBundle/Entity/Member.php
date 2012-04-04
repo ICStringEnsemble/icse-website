@@ -192,4 +192,74 @@ class Member implements AdvancedUserInterface
     {
         return $this->active;
     }
+    /**
+     * @var string $first_name
+     */
+    private $first_name;
+
+    /**
+     * @var string $last_name
+     */
+    private $last_name;
+
+
+    /**
+     * Get active
+     *
+     * @return boolean 
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * Set first_name
+     *
+     * @param string $firstName
+     */
+    public function setFirstName($firstName)
+    {
+        $this->first_name = $firstName;
+    }
+
+    /**
+     * Get first_name
+     *
+     * @return string 
+     */
+    public function getFirstName()
+    {
+        return $this->first_name;
+    }
+
+    /**
+     * Set last_name
+     *
+     * @param string $lastName
+     */
+    public function setLastName($lastName)
+    {
+        $this->last_name = $lastName;
+    }
+
+    /**
+     * Get last_name
+     *
+     * @return string 
+     */
+    public function getLastName()
+    {
+        return $this->last_name;
+    }
+
+    /**
+     * Get Full name; first and last names concatenated together
+     *
+     * @return string 
+     */
+    public function getFullName()
+    {
+        return $this->getFirstName() .' '. $this->getLastName();
+    }
 }

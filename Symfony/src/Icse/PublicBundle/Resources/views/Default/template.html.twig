@@ -10,6 +10,7 @@
 <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon"> 
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsepublic/css/main.css') }}" />
+{% block style_extra %}{% endblock %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 </head>
 <body>
@@ -34,9 +35,11 @@
       {{ _self.navbar_item(currentPage, 'support', 'Support Us', 'IcsePublicBundle_support') }}
     </ul>
     </nav>
-      <section>
-      {% block content %}{% endblock %}
-      </section>
+    {% block header_to_footer %}
+    <section>
+    {% block content %}{% endblock %}
+    </section>
+    {% endblock %}
   </div>
   <footer>
   Copyright &copy; 2005&ndash;{{ "now" | date ("Y") }} Imperial College String Ensemble | <a href="{{ path('IcsePublicBundle_contact') }}">Contact Us</a>

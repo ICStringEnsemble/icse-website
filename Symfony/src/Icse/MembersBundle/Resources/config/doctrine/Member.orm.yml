@@ -8,6 +8,12 @@ Icse\MembersBundle\Entity\Member:
       id: true
       generator:
         strategy: AUTO
+    first_name:
+      type: string
+      length: 50
+    last_name:
+      type: string
+      length: 50 
     username:
       type: string
       length: '50'

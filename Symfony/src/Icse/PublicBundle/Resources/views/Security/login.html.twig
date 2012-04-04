@@ -5,11 +5,14 @@
 
 {% block content %}
 
-{% if error %}
-  <div>{{ error.message }}</div>
-{% endif %}
+<h1>Login</h1>
 
 <form action="{{ path('IcsePublicBundle_login_check') }}" method="post">
+  <ul class="global_errors"><li>
+  {% if error %}
+  {{ error.message }}
+  {% endif %}
+  </li></ul>
   <div>
     <label for="username">Username:</label>
     <input type="text" id="username" name="_username" value="{{ last_username }}" />
@@ -23,7 +26,11 @@
         <input type="hidden" name="_target_path" value="/account" />
     #}
 
-    <input type="submit" value="Login"/>
+    <input type="submit" id="login_button" value="Login"/>
+  <input type="checkbox" id="remember_me" name="_remember_me" />
+  <label for="remember_me" id="remember_me_label" >Stay logged in</label>
 </form>
+
+<div id="end_form"></div>
 
 {% endblock %}

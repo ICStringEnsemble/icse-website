@@ -2,6 +2,10 @@ parameters:
 #    icse_members.example.class: Icse\MembersBundle\Example
 
 services:
+    security.authentication.provider.imperial:
+        class: Icse\MembersBundle\Security\Authentication\Provider\ImperialProvider
+        arguments: ['', @security.user_checker, '', @security.encoder_factory, %security.authentication.hide_user_not_found%]
+
 #    icse_members.example:
 #        class: %icse_members.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
