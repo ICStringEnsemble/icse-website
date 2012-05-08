@@ -4,7 +4,7 @@
 
 #nav_column {
   float: left;
-  width: 260px;
+  width: 200px;
   padding: 20px;
 }
 
@@ -15,5 +15,5 @@
 section {
   clear: none;
   width: auto;
-  padding-left: 320px;
+  padding-left: 260px;
 }

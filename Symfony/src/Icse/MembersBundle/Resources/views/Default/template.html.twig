@@ -8,12 +8,11 @@
   <p>
   Logged in as {{ app.user.getFullName() }} 
   </p>
-  <p>
-  <a href="{{ path('IcseMembersBundle_logout') }}">Logout</a>
-  </p>
   <ul>
-    <li>1</li>
-    <li>2</li>
+    <li><a href="#">Schedule</a></li>
+    <li><a href="#">Practice Parts</a></li>
+    <li><a href="#">Account Settings</a></li>
+    <li><a href="{{ path('IcseMembersBundle_logout') }}">Logout</a></li>
   </ul>
 </div>
 <section>
