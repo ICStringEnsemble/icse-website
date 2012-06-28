@@ -4,16 +4,56 @@
 
 #nav_column {
   float: left;
-  width: 200px;
-  padding: 20px;
+  width: 238px;
 }
 
-#nav_column p {
-  margin-bottom: 1em;
+#nav_column li {
+  display: block;
+  float: left;
+  clear: left;
+}
+#nav_column #nav_col_head {
+  width: 200px;
+  padding: 0.5em 20px;
+  color: #fff;
+  background: #000;
+}
+
+#nav_column li a:link, #nav_column li a:visited {
+  display: block;
+  width: 198px;
+  padding: 0.5em 20px;
+  text-decoration: none;
+  color: #000;
+}
+
+#nav_column li a:hover {
+  background: #ae8a60; 
 }
 
 section {
   clear: none;
   width: auto;
   padding-left: 260px;
+}
+
+section p {
+  width: 734px;
+}
+
+form label {
+  width: 300px;
+}
+
+form input[type=submit] {
+  margin-left: 320px;
+}
+
+form p.error {
+  color: #f00;
+  margin-left: 320px;
+}
+
+p.success {
+  color: #090;
 }

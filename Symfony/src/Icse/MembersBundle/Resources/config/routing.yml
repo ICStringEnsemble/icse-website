@@ -4,3 +4,7 @@ IcseMembersBundle_home:
 
 IcseMembersBundle_logout:
     pattern:   /logout
+
+IcseMembersBundle_account_settings:
+    pattern:  /members/account
+    defaults: { _controller: IcseMembersBundle:AccountSettings:index }

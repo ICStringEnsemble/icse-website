@@ -1,0 +1,74 @@
+{% extends 'IcseMembersBundle:Default:template.html.twig' %}
+
+{% block title %} - Account Settings{% endblock %} 
+
+{% block content %}
+
+<h1>Account Settings</h1>
+
+<h2>Change Password</h2>
+
+{% if cpResponse['success'] is defined %}
+<p class="success">{{ cpResponse['success'] }}</p>
+{% endif %}
+
+<p>
+You can either log in using your Imperial College password (in which case we will not store
+your password at any point) or you can create a new password to use specifically for the ICSE website.
+{% if ImperialPasswd == true %}
+You are currently using your Imperial College password.
+{% else %}
+You are currently using a separate ICSE password.
+{% endif %}
+</p>
+
+<form method="post" action="#">
+  <div>
+    {% if cpResponse['oldpass'] is defined %}
+    <p class="error">{{ cpResponse['oldpass'] }}</p>
+    {% endif %}
+    <label for="form_old_password">Old Password</label>
+    <input type="password" id="form_old_password" name="old_password" required="required" />
+  </div>
+  <div class="radio">
+    {% if cpResponse['icsepass'] is defined %}
+    <p class="error">{{ cpResponse['icsepass'] }}</p>
+    {% endif %}
+    <label>Create a new ICSE password?</label>
+    <div id="form_pass_type">
+      <input type="radio" id="form_icse_passwd" name="icse_passwd" required="required" value="2" />
+      <label for="form_icse_passwd" class=" required">Yes</label>
+      <input type="radio" id="form_ic_passwd" name="icse_passwd" required="required" value="1" />
+      <label for="form_ic_passwd" class=" required">No, use my Imperial College password.</label>
+    </div>
+  </div>
+  <div>
+    {% if cpResponse['newpass'] is defined %}
+    <p class="error">{{ cpResponse['newpass'] }}</p>
+    {% endif %}
+    <label for="form_new_password">Choose a new password</label>
+    <input type="password" id="form_new_password" name="new_password" required="required" />
+  </div>
+  <div>
+    <label for="form_new_password_again">Enter your new password again</label>
+    <input type="password" id="form_new_password_again" name="new_password_again" required="required" />
+  </div>
+  <input type="hidden" name="form_id" value="cp" /> 
+  <input type="submit" value="Change Password"/>
+</form>
+
+<script>
+  var enableDisablePasswd = function(){
+    if ($('#form_icse_passwd').is(':checked')){
+      $('#form_new_password, #form_new_password_again').removeAttr('disabled');
+      $('#form_new_password, #form_new_password_again').attr('required', 'required');
+    } else {
+      $('#form_new_password, #form_new_password_again').attr('disabled', 'disabled');
+      $('#form_new_password, #form_new_password_again').removeAttr('required');
+    }
+  }
+  enableDisablePasswd();
+  $('#form_pass_type').change(enableDisablePasswd);
+</script>
+
+{% endblock %}

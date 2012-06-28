@@ -5,17 +5,18 @@
 
 {% block header_to_footer %}
 <div id="nav_column">
-  <p>
-  Logged in as {{ app.user.getFullName() }} 
-  </p>
+  <div id="nav_col_head">
+    {{ app.user.getFullName() }}
+  </div>
   <ul>
     <li><a href="#">Schedule</a></li>
     <li><a href="#">Practice Parts</a></li>
-    <li><a href="#">Account Settings</a></li>
+    <li><a href="{{ path('IcseMembersBundle_account_settings') }}">Account Settings</a></li>
     <li><a href="{{ path('IcseMembersBundle_logout') }}">Logout</a></li>
   </ul>
 </div>
 <section>
-{% block content %}{% endblock %}
+{% block content %}
+{% endblock %}
 </section>
 {% endblock %}

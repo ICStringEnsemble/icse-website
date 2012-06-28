@@ -16,7 +16,7 @@ security:
 
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        - { path: ^/members, roles: ROLE_USER }
+        - { path: ^/members, roles: ROLE_USER, requires_channel: https }
 
     providers:
         main:

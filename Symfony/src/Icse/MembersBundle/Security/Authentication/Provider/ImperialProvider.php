@@ -26,6 +26,16 @@ if (!function_exists('pam_auth'))
     }
   } 
 
+function queryCredsValid (UserInterface $user, $presentedPassword, EncoderFactoryInterface $encoderFactory)
+{
+  return ($user->getPassword() != NULL
+            && $encoderFactory->getEncoder($user)->isPasswordValid($user->getPassword(),
+                                                                  $presentedPassword,
+                                                                  $user->getSalt()))
+      || ($user->getPassword() == NULL
+            && pam_auth($user->getUsername(), $presentedPassword));
+}
+
 /**
  * uses a UserProviderInterface to retrieve the user
  * for a UsernamePasswordToken.
@@ -69,8 +79,7 @@ class ImperialProvider extends \Symfony\Component\Security\Core\Authentication\P
                 throw new BadCredentialsException('No password given');
             }
 
-            if (($user->getPassword() != NULL && !$this->encoderFactory->getEncoder($user)->isPasswordValid($user->getPassword(), $presentedPassword, $user->getSalt()))
-            || ($user->getPassword() == NULL && !pam_auth($user->getUsername(), $presentedPassword))) {
+            if (!queryCredsValid($user, $presentedPassword, $this->encoderFactory)) {
                 throw new BadCredentialsException('Incorrect password');
             }
         }
