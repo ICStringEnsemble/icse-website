@@ -6,13 +6,21 @@
   float: left;
   width: 238px;
 }
+/*
+#nav_column li.category {
+  font-weight: bold;
+  font-family: Arial;
+  padding: 0.5em 20px;
+  background: #99764d;
+  width: 198px;
+}*/
 
 #nav_column li {
   display: block;
   float: left;
   clear: left;
 }
-#nav_column #nav_col_head {
+#nav_column #nav_col_head, #nav_column li.category {
   width: 200px;
   padding: 0.5em 20px;
   color: #fff;
@@ -31,14 +39,18 @@
   background: #ae8a60; 
 }
 
+#section_container {
+  margin-left: 240px;
+}
+
 section {
+  float: left;
   clear: none;
   width: auto;
-  padding-left: 260px;
 }
 
 section p {
-  width: 734px;
+  width: 714px;
 }
 
 form label {
@@ -57,3 +69,4 @@ form p.error {
 p.success {
   color: #090;
 }
+

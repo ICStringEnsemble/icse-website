@@ -116,6 +116,10 @@ footer a:hover {
   color: #996633;
 } 
 
+::selection {
+	background: #d8c3a9;
+} 
+
 form {
   margin-top: 1em;
 }

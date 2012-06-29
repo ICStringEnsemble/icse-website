@@ -36,20 +36,20 @@ You are currently using a separate ICSE password.
     {% endif %}
     <label>Create a new ICSE password?</label>
     <div id="form_pass_type">
-      <input type="radio" id="form_icse_passwd" name="icse_passwd" required="required" value="2" />
+      <input type="radio" id="form_icse_passwd" name="icse_passwd" required="required" value="2" {% if cpResponse['passtype'] is defined and cpResponse['passtype'] == 2 %}checked="yes"{% endif %}/>
       <label for="form_icse_passwd" class=" required">Yes</label>
-      <input type="radio" id="form_ic_passwd" name="icse_passwd" required="required" value="1" />
+      <input type="radio" id="form_ic_passwd" name="icse_passwd" required="required" value="1" {% if cpResponse['passtype'] is defined and cpResponse['passtype'] == 1 %}checked="yes"{% endif %}/>
       <label for="form_ic_passwd" class=" required">No, use my Imperial College password.</label>
     </div>
   </div>
-  <div>
+  <div class="show_if_newpass">
     {% if cpResponse['newpass'] is defined %}
     <p class="error">{{ cpResponse['newpass'] }}</p>
     {% endif %}
     <label for="form_new_password">Choose a new password</label>
     <input type="password" id="form_new_password" name="new_password" required="required" />
   </div>
-  <div>
+  <div class="show_if_newpass">
     <label for="form_new_password_again">Enter your new password again</label>
     <input type="password" id="form_new_password_again" name="new_password_again" required="required" />
   </div>
@@ -58,17 +58,17 @@ You are currently using a separate ICSE password.
 </form>
 
 <script>
-  var enableDisablePasswd = function(){
+  var enableDisablePasswd = function(slideTime){
     if ($('#form_icse_passwd').is(':checked')){
-      $('#form_new_password, #form_new_password_again').removeAttr('disabled');
       $('#form_new_password, #form_new_password_again').attr('required', 'required');
+      $('.show_if_newpass').slideDown(slideTime);
     } else {
-      $('#form_new_password, #form_new_password_again').attr('disabled', 'disabled');
       $('#form_new_password, #form_new_password_again').removeAttr('required');
+      $('.show_if_newpass').slideUp(slideTime);
     }
   }
-  enableDisablePasswd();
-  $('#form_pass_type').change(enableDisablePasswd);
+  enableDisablePasswd(0);
+  $('#form_pass_type').change(10, enableDisablePasswd);
 </script>
 
 {% endblock %}

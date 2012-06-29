@@ -44,7 +44,7 @@ class Member implements AdvancedUserInterface
     public function __construct()
     {
       $this->active = true;
-      $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+      //$this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
     }
 
     public function getRoles()
@@ -251,5 +251,15 @@ class Member implements AdvancedUserInterface
     public function getLastName()
     {
         return $this->last_name;
+    }
+
+    /**
+     * Get Full name; first and last names concatenated together
+     *
+     * @return string 
+     */
+    public function getFullName()
+    {
+        return $this->getFirstName() .' '. $this->getLastName();
     }
 }

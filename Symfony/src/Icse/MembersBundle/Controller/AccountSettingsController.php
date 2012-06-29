@@ -50,6 +50,8 @@ class AccountSettingsController extends Controller
           $em = $this->getDoctrine()->getEntityManager();
           $em->persist($user);
           $em->flush();
+        } else {
+          $cpResponse['passtype'] = $request->request->get('icse_passwd');
         }
       }
 

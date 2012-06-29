@@ -13,6 +13,7 @@ security:
                 key:      3Q18L=WtlR/=9$B 
                 lifetime: 1209600 
                 path:     /arts/stringensemble
+            switch_user: true
 
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
@@ -30,4 +31,4 @@ security:
 
     role_hierarchy:
         ROLE_ADMIN: ROLE_USER
-        ROLE_SUPER_ADMIN: ROLE_ADMIN
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
