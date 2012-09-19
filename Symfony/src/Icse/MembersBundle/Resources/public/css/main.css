@@ -70,3 +70,7 @@ p.success {
   color: #090;
 }
 
+.wibble {
+  clear: both;
+  height: 1em;
+}
