@@ -1,0 +1,11 @@
+{% extends 'IcseMembersBundle:Default:template.html.twig' %}
+
+{% block title %} - {{ pageTitle }}{% endblock %} 
+
+{% block content %}
+
+{% autoescape false %} 
+{{ pageBody }}
+{% endautoescape %} 
+
+{% endblock %}

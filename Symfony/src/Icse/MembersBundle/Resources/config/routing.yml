@@ -8,3 +8,7 @@ IcseMembersBundle_logout:
 IcseMembersBundle_account_settings:
     pattern:  /members/account
     defaults: { _controller: IcseMembersBundle:AccountSettings:index }
+
+IcseMembersBundle_migrateDB:
+    pattern:  /members/superadmin/migratedb
+    defaults: { _controller: IcseMembersBundle:SuperAdmin:migrateDB }

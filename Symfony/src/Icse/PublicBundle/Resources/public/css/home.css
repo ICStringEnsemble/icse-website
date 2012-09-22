@@ -1,0 +1,32 @@
+#col_left, #col_right {
+  float: left;
+}
+
+#col_left {
+  width: 580px;
+  margin-right: 20px;
+  padding-top: 1em;
+}
+
+#col_right {
+  width: 334px;
+  margin-left: 20px;
+  padding-top: 20px;
+}
+
+#col_right #photo_banner {
+  margin-bottom: 20px;
+}
+
+#news_pic {
+  float: left;
+  margin-right: 20px;
+}
+
+#above_footer {
+  background: url(../images/bg_home.png) #eee repeat-y center;
+}
+
+section {
+  padding-top: 0;
+}

@@ -9,6 +9,7 @@
     {{ app.user.getFullName() }}
   </div>
   <ul>
+    <li class="category">ICSE Resources</li>
     <li><a href="#">Schedule</a></li>
     <li><a href="#">Practice Parts</a></li>
     {% if is_granted('ROLE_ADMIN') %}
@@ -16,17 +17,19 @@
     <li><a href="#">Members</a></li>
     <li><a href="#">Site Text</a></li>
     {% endif %}
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
+    <li class="category">Super Admin</li>
+    <li><a href="{{ path('IcseMembersBundle_migrateDB') }}" onclick="return confirm('WARNING! You are about to execute a database migration that could result in schema changes and data lost. Are you sure you wish to continue?')">Migrate DB</a></li>
+    {% endif %}
     <li class="category">Account</li>
     <li><a href="{{ path('IcseMembersBundle_account_settings') }}">Settings</a></li>
     <li><a href="{{ path('IcseMembersBundle_logout') }}">Logout</a></li>
   </ul>
-  <div class="wibble"></div>
 </div>
 <div id="section_container">
 <section>
 {% block content %}
 {% endblock %}
 </section>
-<div class="wibble"></div>
 </div>
 {% endblock %}

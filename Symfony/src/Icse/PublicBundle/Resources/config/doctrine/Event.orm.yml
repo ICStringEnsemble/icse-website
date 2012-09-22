@@ -1,0 +1,24 @@
+Icse\PublicBundle\Entity\Event:
+  type: entity
+  table: null
+  fields:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+    name:
+      type: string
+      length: 255
+    description:
+      type: text
+    starts_at:
+      type: datetime
+    location:
+      type: string
+      length: 255
+    updated_at:
+      type: datetime
+    updated_by:
+      type: integer
+  lifecycleCallbacks: {  }

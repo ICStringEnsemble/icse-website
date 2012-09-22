@@ -3,10 +3,42 @@
 
 {% block title %} - Home{% endblock %}
 
+{% block style_extra %}<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsepublic/css/home.css') }}" />{% endblock %} 
+
 {% block content %}
 
-{% autoescape false %} 
-{{ home_intro }}
-{% endautoescape %} 
+<div id=col_left>
+  {% autoescape false %} 
+  {{ home_intro }}
+  {% endautoescape %}
+
+  <h2>Upcoming Events</h2>
+
+  <h2>Previous Events</h2>
+
+</div>
+
+<div id=col_right>
+  <img id="photo_banner" src="http://placekitten.com/334/254"/>
+
+  <h2>Next Rehearsal</h2>
+  <ul>
+    <li>Friday 31st February 2012</li>
+    <li>in the Great Hall</li>
+  </ul>
+
+  <h2>News</h2>
+  <img id="news_pic" src="http://Placekitten.com/64/70"/>
+  <h3>Lorem Ipsum</h3>
+  <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr</p>
+
+  <h2>Twitter</h2>
+
+<a class="twitter-timeline" href="https://twitter.com/ICStrings" data-widget-id="248604844275929088">Tweets by @ICStrings</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+ 
+</div>
+
+<p>h</p>
 
 {% endblock %}

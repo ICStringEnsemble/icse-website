@@ -93,7 +93,14 @@ section h2 {
   font-family: Arial;
 }
 
-section p {
+section h3 {
+  font-size: 1.1em;
+  font-weight: bold;
+  padding-bottom: 0.1em;
+  font-family: Arial;
+}
+
+section p, section ul {
   margin-bottom: 1em;
 }
 
@@ -232,3 +239,7 @@ form .global_errors li {
 div#end_form {
   clear: both;
 }
+
+.footer_clear {
+  clear: both;
+} 
