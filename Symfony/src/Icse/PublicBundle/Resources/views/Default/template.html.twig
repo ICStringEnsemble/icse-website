@@ -11,7 +11,10 @@
 <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon"> 
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsepublic/css/main.css') }}" />
 {% block style_extra %}{% endblock %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script> 
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script> 
+<link  href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/humanity/jquery-ui.css" rel="stylesheet" type="text/css" media="all" /> 
+{% block js_extra %}{% endblock %}
 </head>
 <body>
   <div id="above_footer">

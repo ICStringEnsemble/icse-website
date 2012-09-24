@@ -1,5 +1,0 @@
-services:
-    security.authentication.factory.imperial:
-        class:  Icse\MembersBundle\DependencyInjection\Security\Factory\ImperialFactory
-        tags:
-            - { name: security.listener.factory }

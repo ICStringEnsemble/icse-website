@@ -1,0 +1,58 @@
+{% extends 'IcseMembersBundle:Default:template.html.twig' %}
+
+{% block title %} - Image Uploads{% endblock %} 
+
+{% block js_extra %}
+{{ parent() }}
+<script src="{{ asset('bundles/icsemembers/js/jquery.Jcrop.min.js') }}"></script>
+{% endblock %} 
+
+{% block style_extra %}
+{{ parent() }}
+{% endblock %}
+
+{% block content %}
+
+
+<h1>Image Uploads</h1>
+
+<button id=new_image_button disabled=disabled type=button>New Image</button>
+
+<div id=new_image_dialog title="Add New Image" hidden=hidden>
+  <form method="post" enctype="multipart/form-data" action={{ path('IcseMembersBundle_receive_upload') }}>
+    <input type="file" name="images[]" id="images" multiple /> 
+    <input type=submit />
+  </form>
+  <div id="response"></div>  
+  <ul id="image_list"></ul>
+  <img id=img_preview src=http://www.blood-pressure-monitoring.org/blog/wp-content/uploads/2011/09/white-bread.jpg />
+</div>
+
+<script>
+  /* Undo fallback */
+  $('#new_image_button').removeAttr('disabled');
+
+  /* New image dialog */
+  $('#new_image_dialog').dialog({
+    autoOpen: false,
+    modal: true,
+    width: 500,
+    height: 500
+  });
+  $('#new_image_button').button().click(function(){
+    $('#new_image_dialog').dialog('open');
+  });
+
+  /* File Uploader */
+
+
+  /* Jcrop */
+  var jcrop_api;
+  $('#img_preview').Jcrop({aspectRatio:0}, function(){
+    jcrop_api = this;
+  });
+  //jcrop_api.setOptions({aspectRatio:0.5});
+
+</script>
+
+{% endblock %}

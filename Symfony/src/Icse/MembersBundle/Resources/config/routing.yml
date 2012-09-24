@@ -9,6 +9,14 @@ IcseMembersBundle_account_settings:
     pattern:  /members/account
     defaults: { _controller: IcseMembersBundle:AccountSettings:index }
 
+IcseMembersBundle_image_uploads:
+    pattern:  /members/admin/images
+    defaults: { _controller: IcseMembersBundle:Admin:imageUploads }
+
+IcseMembersBundle_receive_upload:
+    pattern:  /members/admin/upload
+    defaults: { _controller: IcseMembersBundle:Admin:upload }
+
 IcseMembersBundle_migrateDB:
     pattern:  /members/superadmin/migratedb
     defaults: { _controller: IcseMembersBundle:SuperAdmin:migrateDB }

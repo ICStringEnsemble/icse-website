@@ -150,14 +150,19 @@ class SignUpController extends Controller
                                                                                     'pageBody' => "Thanks " . $name . ", we'll get back to you shortly."));
     }
 
+  private function isValidEmail($input)
+    {
+      $emailConstraint = new \Symfony\Component\Validator\Constraints\Email;
+      $emailConstraint->checkMX = true;
+      $errorList = $this->get('validator')->validateValue($input, $emailConstraint); 
+      return count($errorList) == 0; 
+    }
+  
   public function query_usernameAction(Request $request)
     {
       $input = $request->query->get('input');
       $output = array();
-      $emailValidator = new \Symfony\Component\Validator\Constraints\EmailValidator;
-      $emailConstraint = new \Symfony\Component\Validator\Constraints\Email;
-      $emailConstraint->checkMX = true;
-      if ($input != "" && $emailValidator->isValid($input, $emailConstraint))
+      if ($input != "" && $this->isValidEmail($input))
         {
           $output['type'] = 'email';
         }

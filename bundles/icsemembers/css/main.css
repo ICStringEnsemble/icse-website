@@ -1,0 +1,73 @@
+#above_footer {
+  background: url(../images/bg.png) #fff repeat-y left;
+}
+
+#nav_column {
+  float: left;
+  width: 238px;
+}
+/*
+#nav_column li.category {
+  font-weight: bold;
+  font-family: Arial;
+  padding: 0.5em 20px;
+  background: #99764d;
+  width: 198px;
+}*/
+
+#nav_column li {
+  display: block;
+  float: left;
+  clear: left;
+}
+#nav_column #nav_col_head, #nav_column li.category {
+  width: 200px;
+  padding: 0.5em 20px;
+  color: #fff;
+  background: #000;
+}
+
+#nav_column li a:link, #nav_column li a:visited {
+  display: block;
+  width: 198px;
+  padding: 0.5em 20px;
+  text-decoration: none;
+  color: #000;
+}
+
+#nav_column li a:hover {
+  background: #ae8a60; 
+}
+
+#section_container {
+  margin-left: 240px;
+}
+
+section {
+  float: left;
+  clear: none;
+  width: auto;
+}
+
+section p {
+  width: 714px;
+}
+
+form label {
+  width: 300px;
+}
+
+form input[type=submit] {
+  margin-left: 320px;
+}
+
+form p.error {
+  color: #f00;
+  margin-left: 320px;
+}
+
+p.success {
+  color: #090;
+}
+
+

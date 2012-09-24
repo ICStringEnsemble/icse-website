@@ -1,7 +1,11 @@
 {% extends 'IcsePublicBundle:Default:template.html.twig' %}
 {% set currentPage = 'members' %}
 
-{% block style_extra %}<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsemembers/css/main.css') }}" />{% endblock %}
+{% block style_extra %}
+{{ parent() }}
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsemembers/css/main.css') }}" />
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsemembers/css/jquery.Jcrop.min.css') }}" />
+{% endblock %}
 
 {% block header_to_footer %}
 <div id="nav_column">
@@ -9,18 +13,47 @@
     {{ app.user.getFullName() }}
   </div>
   <ul>
+    {# ICSE Resources #}
     <li class="category">ICSE Resources</li>
     <li><a href="#">Schedule</a></li>
     <li><a href="#">Practice Parts</a></li>
+
+    {# Admin #}
     {% if is_granted('ROLE_ADMIN') %}
     <li class="category">Admin</li>
     <li><a href="#">Members</a></li>
+    <li><a href="{{ path('IcseMembersBundle_image_uploads') }}">Image Uploads</a></li>
     <li><a href="#">Site Text</a></li>
     {% endif %}
+
+    {# Super Admin #}
     {% if is_granted('ROLE_SUPER_ADMIN') %}
     <li class="category">Super Admin</li>
-    <li><a href="{{ path('IcseMembersBundle_migrateDB') }}" onclick="return confirm('WARNING! You are about to execute a database migration that could result in schema changes and data lost. Are you sure you wish to continue?')">Migrate DB</a></li>
+    <div id="confirm_migrateDB" title="Perform Database Migration?" hidden=hidden>
+      <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span>
+      WARNING! You are about to execute a database migration that could result in schema
+      changes and data lost. Are you sure you wish to continue?</p>
+    </div>
+    <li><a href="" id="migrateDB">Migrate DB</a></li>
+    <script>
+      $('#confirm_migrateDB').dialog({
+        autoOpen: false,
+        resizable: false,
+        modal: true,
+        buttons : {
+          "Yes" : function(){window.location.href = "{{ path('IcseMembersBundle_migrateDB') }}";},
+          "No" : function(){$(this).dialog("close");}
+        }
+      });
+
+      $('#migrateDB').click(function(e){
+        e.preventDefault(); 
+        $('#confirm_migrateDB').dialog('open');
+      })
+    </script>
     {% endif %}
+
+    {# Account settings #}
     <li class="category">Account</li>
     <li><a href="{{ path('IcseMembersBundle_account_settings') }}">Settings</a></li>
     <li><a href="{{ path('IcseMembersBundle_logout') }}">Logout</a></li>
