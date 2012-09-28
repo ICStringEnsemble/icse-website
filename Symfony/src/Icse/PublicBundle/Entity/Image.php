@@ -178,7 +178,8 @@ class Image
 
         $this->original_tmp_file = $this->getFile();
         $new_filename = $this->getFile();
-        $extension = pathinfo($new_filename)['extension'];
+        $path_info = pathinfo($new_filename);
+        $extension = $path_info['extension'];
         while (file_exists($this->image_dir.$new_filename))
           {
             $new_filename = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36).'.'.$extension;

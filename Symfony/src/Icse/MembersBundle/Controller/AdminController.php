@@ -49,7 +49,8 @@ class AdminController extends Controller
     {
       if ($request->getMethod() == 'POST')
         {
-          $stored_filename = $this->get('request')->request->get('file')['file'];
+          $form_data = $this->get('request')->request->get('file');
+          $stored_filename = $form_data['file'];
           if ($stored_filename)
             {
               if (getimagesize($this->tmp_dir.$stored_filename)) $file = new Image();
