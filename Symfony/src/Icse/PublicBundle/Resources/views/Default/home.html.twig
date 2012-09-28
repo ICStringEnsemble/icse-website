@@ -3,7 +3,10 @@
 
 {% block title %} - Home{% endblock %}
 
-{% block style_extra %}<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsepublic/css/home.css') }}" />{% endblock %} 
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsepublic/css/home.css') }}" />
+{% endblock %} 
 
 {% block content %}
 

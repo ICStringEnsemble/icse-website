@@ -1,10 +1,15 @@
 {% extends 'IcsePublicBundle:Default:template.html.twig' %}
 {% set currentPage = 'members' %}
 
-{% block style_extra %}
+{% block stylesheets %}
 {{ parent() }}
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsemembers/css/main.css') }}" />
-<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsemembers/css/jquery.Jcrop.min.css') }}" />
+<link rel="stylesheet" type="text/css" media="all" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/humanity/jquery-ui.css" /> 
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script> 
 {% endblock %}
 
 {% block header_to_footer %}

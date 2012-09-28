@@ -8,11 +8,11 @@ IcsePublicBundle_about:
 
 IcsePublicBundle_join:
     pattern:  /join
-    defaults: { _controller: IcsePublicBundle:SignUp:join }
+    defaults: { _controller: IcsePublicBundle:SignUp:join, freshers: false }
 
-IcsePublicBundle_join_success:
-    pattern:  /join/success/{name}
-    defaults: { _controller: IcsePublicBundle:SignUp:join_success }
+IcsePublicBundle_join_freshers:
+    pattern:  /join/freshersfair
+    defaults: { _controller: IcsePublicBundle:SignUp:join, freshers: true }
 
 IcsePublicBundle_query_username:
     pattern:  /join/query_username
@@ -32,3 +32,7 @@ IcsePublicBundle_login:
 
 IcsePublicBundle_login_check:
     pattern:   /login_check
+
+IcsePublicBundle_resource:
+    pattern:   /resources/{type}/{file}
+    defaults: { _controller: IcsePublicBundle:Resources:resource }

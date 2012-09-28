@@ -52,8 +52,20 @@ class SignUpController extends Controller
       return $textObject ? $textObject->getText() : "";
     }
 
-  public function joinAction(Request $request)
+  public function joinAction(Request $request, $freshers)
     {
+      if ($request->query->has('sn'))
+        {
+          $parameters = array('pageId' => 'join',
+                              'pageTitle' => 'Join Us',
+                              'pageBody' => "Thanks " .  $request->query->get('sn') . ", we'll get back to you shortly.",
+                              'freshers' => $freshers);
+          if ($freshers)
+            {
+              $parameters['reloadPeriod'] = 3000;
+            }
+          return $this->render('IcsePublicBundle:Default:generic_page.html.twig', $parameters);
+        }
       $username_or_email = "";
       $subscriber = new Subscriber();
       $form = $this->createFormBuilder($subscriber)
@@ -78,7 +90,7 @@ class SignUpController extends Controller
                         'Cello' => '\'Cello',
                         'Double Bass' => 'Double Bass',
                         'other' => 'Other'
-                      ),
+                      ), 
                       'expanded' => true,
                       'multiple' => false,
                       'required' => false
@@ -127,7 +139,7 @@ class SignUpController extends Controller
               $em = $this->getDoctrine()->getEntityManager();
               $em->persist($subscriber);
               $em->flush();
-              return $this->redirect($this->generateUrl('IcsePublicBundle_join_success', array('name' => $subscriber->getFirstName())));
+              return $this->redirect($this->generateUrl($freshers ? 'IcsePublicBundle_join_freshers' : 'IcsePublicBundle_join') . '?' . http_build_query (array('sn' => $subscriber->getFirstName())));
             }
           else
             {
@@ -137,17 +149,10 @@ class SignUpController extends Controller
                 $username_or_email = $subscriber->getEmail();
             }
         }
-      return $this->render('IcsePublicBundle:Default:join.html.twig', array('join_intro' => $this->getSiteText('join_intro'),
+      return $this->render('IcsePublicBundle:SignUp:join.html.twig', array('join_intro' => $this->getSiteText('join_intro'),
                                                                             'form' => $form->createView(),
-                                                                            'username_or_email' => $username_or_email));
-    }
-
-
-  public function join_successAction($name)
-    {
-      return $this->render('IcsePublicBundle:Default:generic_page.html.twig', array('pageId' => 'join',
-                                                                                    'pageTitle' => 'Join Us',
-                                                                                    'pageBody' => "Thanks " . $name . ", we'll get back to you shortly."));
+                                                                            'username_or_email' => $username_or_email,
+                                                                            'freshers' => $freshers));
     }
 
   private function isValidEmail($input)

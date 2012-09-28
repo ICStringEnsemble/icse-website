@@ -9,7 +9,7 @@ class SuperAdminController extends Controller
 {
   public function migrateDBAction()
     {
-      exec('echo y | /usr/bin/php ./Symfony/app/console doctrine:migrations:migrate', $output, $error);
+      exec('/usr/bin/php ./Symfony/app/console -n doctrine:migrations:migrate', $output, $error);
       if ($error == 0)
         {
           array_push($output, "Success");

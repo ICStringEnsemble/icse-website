@@ -1,5 +1,5 @@
 {
-    "hash": "c6a70f61ddf0c03d81510d5f0374506c",
+    "hash": "15a727c225b7485233bcfcaef850397c",
     "packages": [
         {
             "package": "doctrine/common",
@@ -22,8 +22,8 @@
         {
             "package": "doctrine/doctrine-bundle",
             "version": "dev-master",
-            "source-reference": "d3c930599723c8343472a5791b0f5909a4111a73",
-            "commit-date": "1347289964"
+            "source-reference": "065947875fd66b3f89ed01f94859e8600491ada5",
+            "commit-date": "1348519642"
         },
         {
             "package": "doctrine/doctrine-migrations-bundle",
@@ -42,6 +42,16 @@
             "version": "2.3.x-dev",
             "source-reference": "ea2b28857830720460a345c80c6e7d3f6adae93a",
             "commit-date": "1348121015"
+        },
+        {
+            "package": "fkr/imagine-bundle",
+            "version": "dev-master",
+            "source-reference": "66c1091afc49094d45d8f80dd3b5320bd10a4d36",
+            "commit-date": "1336940578"
+        },
+        {
+            "package": "imagine/Imagine",
+            "version": "v0.2.8"
         },
         {
             "package": "jms/aop-bundle",
@@ -160,8 +170,8 @@
         {
             "package": "symfony/symfony",
             "version": "2.1.x-dev",
-            "source-reference": "7273311e1fb663ae7f5501f57a52ba9bd4db2ec3",
-            "commit-date": "1348414301"
+            "source-reference": "21d16e60fa2d4dc12a489817070896daf806b55d",
+            "commit-date": "1348488710"
         },
         {
             "package": "twig/extensions",

@@ -2,30 +2,23 @@
 
 {% block title %} - Image Uploads{% endblock %} 
 
-{% block js_extra %}
+{% block stylesheets %}
 {{ parent() }}
-<script src="{{ asset('bundles/icsemembers/js/jquery.Jcrop.min.js') }}"></script>
-{% endblock %} 
-
-{% block style_extra %}
-{{ parent() }}
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsemembers/css/upload.css') }}" />
 {% endblock %}
 
 {% block content %}
 
-
 <h1>Image Uploads</h1>
 
-<button id=new_image_button disabled=disabled type=button>New Image</button>
+<button id=new_image_button disabled=disabled type=button>New Images</button>
 
-<div id=new_image_dialog title="Add New Image" hidden=hidden>
+<div id=new_image_dialog title="Add New Images" hidden=hidden>
   <form method="post" enctype="multipart/form-data" action={{ path('IcseMembersBundle_receive_upload') }}>
-    <input type="file" name="images[]" id="images" multiple /> 
-    <input type=submit />
+    <input type="file" name="files[]" id="files" multiple /> 
+    {#<input type=submit>#}
   </form>
-  <div id="response"></div>  
-  <ul id="image_list"></ul>
-  <img id=img_preview src=http://www.blood-pressure-monitoring.org/blog/wp-content/uploads/2011/09/white-bread.jpg />
+  <ul id="upload_list"></ul>
 </div>
 
 <script>
@@ -44,14 +37,79 @@
   });
 
   /* File Uploader */
+  var uploadCount = 0;
+  var tmp_path = "{{ path('IcsePublicBundle_resource', {'type':'tmp', 'file':''}) }}"+'/';
+  $('#files').change(function () {
+    var len = this.files.length;
+    for ( var i=0; i < len; i++ ) {
+      file = this.files[i];
+      if (file.type.match('image.*')) {
+        var uploadID = uploadCount++;
+        $('#upload_list').append('<li><div class=upload_item id=upload'+uploadID+' ><progress></progress></div></li>');
+        var formData = new FormData();
+        if (formData) {
+          formData.append("files[]", file);
+          $.ajax({
+            url: "{{ path('IcseMembersBundle_receive_upload') }}",
+            type: "POST",
+            data: formData,
+            dataType: 'json', 
+            processData: false,
+            contentType: false,
+            success: function (id, filename) {
+              return function (res) {
+                var image = res[0];
+                $('div#upload'+id+' progress').replaceWith('<div class=thumbnail><img src='+tmp_path+res[0]+'?size=thumb /></div>');
+                $('div#upload'+id).append(
+                    '<form action="{{ path('IcseMembersBundle_confirm_upload') }}" method="post" {{ form_enctype(form) }}>'
+                  + '{{ form_widget(form) }}'
+                  + '<input type="button" value="Cancel" />'
+                  + '<input type="submit" value="Save" />'
+                  + '</form> '
+                );
+                $('div#upload'+id+' input#file_name').val(filename);
+                $('div#upload'+id+' input#file_file').val(res[0]);
 
+                var frm = $('div#upload'+id+' form');
+                
+                frm.submit(function () {
+                    $.ajax({
+                        type: frm.attr('method'),
+                        url: frm.attr('action'),
+                        data: frm.serialize(),
+                        dataType: 'json', 
+                        success: function (result) {
+                          if (result == "success"){
+                            frm.closest('.upload_item').remove(); 
+                          }
+                        }
+                    });
 
-  /* Jcrop */
-  var jcrop_api;
-  $('#img_preview').Jcrop({aspectRatio:0}, function(){
-    jcrop_api = this;
+                    return false; 
+                });
+              };
+            }(uploadID, file.name),
+            xhr: function (id) {
+              return function() {
+                xhr = $.ajaxSettings.xhr();
+                if(xhr.upload){
+                  xhr.upload.addEventListener('progress', function(e) {
+                    if(e.lengthComputable){
+                      $('div#upload'+id+' progress').attr({value:e.loaded,max:e.total});
+                    } 
+                  } , false);
+                }
+                return xhr;
+              }
+            }(uploadID)
+          });
+
+        }
+      }
+    }
+
   });
-  //jcrop_api.setOptions({aspectRatio:0.5});
+
 
 </script>
 

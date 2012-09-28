@@ -1,4 +1,4 @@
-{% extends 'IcsePublicBundle:Default:template.html.twig' %}
+{% extends (freshers is defined and freshers) ? 'IcsePublicBundle:SignUp:freshers_template.html.twig' : 'IcsePublicBundle:Default:template.html.twig' %} 
 {% set currentPage = pageId %}
 
 {% block title %} - {{ pageTitle }}{% endblock %} 
@@ -8,5 +8,13 @@
 {% autoescape false %} 
 {{ pageBody }}
 {% endautoescape %} 
+
+{% if reloadPeriod is defined %}
+<script>
+$(document).ready(function(){ 
+  setTimeout(function(){window.top.location.reload();}, {{ reloadPeriod }});
+});
+</script>
+{% endif %}
 
 {% endblock %}

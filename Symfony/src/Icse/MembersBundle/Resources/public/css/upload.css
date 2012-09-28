@@ -1,0 +1,26 @@
+.upload_item {
+  background: #fff;
+  margin: 1em 0;
+  padding: 5px;
+  min-width: 445px;
+  overflow: hidden;
+}
+
+.upload_item .thumbnail {
+  float: left;
+  width: 100px;
+}
+
+.upload_item form {
+  float: left;
+  clear: none;
+}
+
+.upload_item label {
+  width: 100px;
+}
+
+.upload_item input[type=submit] {
+  margin: 2px;
+  display: inline;
+}

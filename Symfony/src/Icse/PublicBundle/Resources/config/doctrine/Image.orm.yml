@@ -1,0 +1,26 @@
+Icse\PublicBundle\Entity\Image:
+    type: entity
+    table: null
+    repositoryClass: Icse\PublicBundle\Entity\ImageRepository
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        file:
+            type: string
+            length: 255
+        name:
+            type: string
+            length: 255
+        category:
+            type: string
+            length: 255
+        updated_at:
+            type: datetime
+        updated_by:
+            type: integer
+    lifecycleCallbacks: 
+        prePersist: [ sanitiseFilename ]
+        postPersist: [ storeFile ]

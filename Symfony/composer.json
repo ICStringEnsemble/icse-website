@@ -21,6 +21,7 @@
         "symfony/console": "*",
         "symfony/yaml": "*",
         "symfony/twig-bundle": "*",
+        "fkr/imagine-bundle": "*",
         "doctrine/doctrine-migrations-bundle": "*"
     },
     "scripts": {

@@ -9,12 +9,12 @@
 <meta charset="UTF-8"> 
 <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon"> 
+{% block stylesheets %}
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsepublic/css/main.css') }}" />
-{% block style_extra %}{% endblock %}
+{% endblock %}
+{% block javascripts %}
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script> 
-<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script> 
-<link  href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/humanity/jquery-ui.css" rel="stylesheet" type="text/css" media="all" /> 
-{% block js_extra %}{% endblock %}
+{% endblock %}
 </head>
 <body>
   <div id="above_footer">
@@ -32,7 +32,7 @@
       {{ _self.navbar_item(currentPage, 'about', 'About Us', 'IcsePublicBundle_about') }}
       <li><a href="#">Events</a></li>
       {{ _self.navbar_item(currentPage, 'join', 'Join Us', 'IcsePublicBundle_join') }}
-      <div {% if is_granted('ROLE_USER') %}class="logged_in"{% endif %} >
+      <div {% if status_code is not defined %}{% if is_granted('ROLE_USER') %}class="logged_in"{% endif %}{% endif %} >
       {{ _self.navbar_item(currentPage, 'members', 'Members', 'IcseMembersBundle_home') }}
       </div>
       {{ _self.navbar_item(currentPage, 'support', 'Support Us', 'IcsePublicBundle_support') }}

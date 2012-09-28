@@ -187,7 +187,7 @@ class Subscriber
      *
      * @return boolean 
      */
-    public function getPlayer()
+    public function isPlayer()
     {
         return $this->player;
     }
@@ -260,5 +260,15 @@ class Subscriber
     public function getSubscribedAt()
     {
         return $this->subscribed_at;
+    }
+
+    /**
+     * Get player
+     *
+     * @return boolean 
+     */
+    public function getPlayer()
+    {
+        return $this->player;
     }
 }

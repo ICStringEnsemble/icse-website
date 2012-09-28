@@ -261,4 +261,14 @@ class Subscriber
     {
         return $this->subscribed_at;
     }
+
+    /**
+     * Get player
+     *
+     * @return boolean 
+     */
+    public function getPlayer()
+    {
+        return $this->player;
+    }
 }
