@@ -49,7 +49,7 @@
     {{ form_row(form.standard) }} 
   </div>
   {{ form_rest(form) }} 
-  <input class="show_if_email show_if_username" type="submit"/>
+  <input class="show_if_email show_if_username" type="submit" value="Submit" />
 </form>
 
 <script>
@@ -63,7 +63,7 @@
   $('#username_or_email_form').show();
   $('.show_if_email, .show_if_username, .never_show, .show_if_player').hide();
   $('#form_other_instrument').attr('placeholder', 'Please specify');
-  $('#form_other_instrument').attr('disabled', 'disabled');
+  $('#form_other_instrument').prop('disabled', true);
 
   var query_username_or_email = function(slideTime){
     if (isReset){
@@ -114,11 +114,11 @@
 
   var enableDisableOtherInstrument = function(){
     if ($('#form_instrument input[value="other"]').is(':checked')){
-      $('#form_other_instrument').removeAttr('disabled');
-      $('#form_other_instrument').attr('required', 'required');
+      $('#form_other_instrument').prop('disabled', false);
+      $('#form_other_instrument').prop('required', true);
     } else {
-      $('#form_other_instrument').attr('disabled', 'disabled');
-      $('#form_other_instrument').removeAttr('required');
+      $('#form_other_instrument').prop('disabled', true);
+      $('#form_other_instrument').prop('required', false);
     }
   };
   enableDisableOtherInstrument();
@@ -126,16 +126,16 @@
 
   var showHidePlayer = function(slideTime){
     if ($('#form_player input[value="1"]').is(':checked')){
-      $('.show_if_player').slideDown(slideTime);
-      $('input[name="form[instrument]"]').attr('required', 'required');
-      $('#form_standard').attr('required', 'required');
+      $('input[name="form[instrument]"]').prop('required', true);
+      $('#form_standard').prop('required', true);
       enableDisableOtherInstrument();
+      $('.show_if_player').slideDown(slideTime);
       player = true;
     } else {
       $('.show_if_player').slideUp(slideTime);
-      $('input[name="form[instrument]"]').removeAttr('required');
-      $('#form_standard').removeAttr('required');
-      $('#form_other_instrument').removeAttr('required');
+      $('input[name="form[instrument]"]').prop('required', false);
+      $('#form_standard').prop('required', false);
+      $('#form_other_instrument').prop('required', false);
       player = false;
     }
   };

@@ -12,7 +12,7 @@
 {% if reloadPeriod is defined %}
 <script>
 $(document).ready(function(){ 
-  setTimeout(function(){window.top.location.reload();}, {{ reloadPeriod }});
+  setTimeout(function(){window.top.location.reload(true);}, {{ reloadPeriod }});
 });
 </script>
 {% endif %}
