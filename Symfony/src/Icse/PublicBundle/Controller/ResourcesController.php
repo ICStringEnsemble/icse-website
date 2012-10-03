@@ -65,6 +65,10 @@ class ResourcesController extends Controller
                 {
                   $path = $this->resizeImage($path, '_thumb', 100, 100);
                 }
+              else if ($size_id == 'homepageslideshow')
+                {
+                  $path = $this->resizeImage($path, '_homepageslideshow', 334, 254, true);
+                }
               else if ($size_id == 'original')
                 {
                 }
@@ -96,13 +100,17 @@ class ResourcesController extends Controller
 
   public function resourceAction($type, $file, Request $request)
     {
-      $path = $this->dir . 'tmp/' . $file;
+      $path = $this->dir . $type . '/' . $file;
       if ($type == 'tmp')
         {
           if ($this->get('security.context')->isGranted('ROLE_ADMIN') == false)
             {
               throw new AccessDeniedException();
             } 
+          return $this->serveFile($path, $request);
+        }
+      else if ($type == 'images')
+        {
           return $this->serveFile($path, $request);
         }
       else

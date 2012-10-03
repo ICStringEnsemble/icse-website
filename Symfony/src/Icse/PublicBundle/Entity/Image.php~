@@ -173,13 +173,14 @@ class Image
     public function sanitiseFilename()
     {
         $this->setFile(basename($this->getFile()));
-        if (strlen($this->getFile()) < 5 || !file_exists($tmp_dir.$this->getFile()))
+        if (strlen($this->getFile()) < 5 || !file_exists($this->tmp_dir.$this->getFile()))
             throw $this->createNotFoundException('File does not exist'); 
 
         $this->original_tmp_file = $this->getFile();
         $new_filename = $this->getFile();
-        $extension = pathinfo($new_filename)['extension'];
-        while (file_exists($image_dir.$new_filename))
+        $path_info = pathinfo($new_filename);
+        $extension = $path_info['extension'];
+        while (file_exists($this->image_dir.$new_filename))
           {
             $new_filename = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36).'.'.$extension;
           }
@@ -194,7 +195,7 @@ class Image
           }
         else
           {
-            //throw new \Exception('Could not relocate file');
+            throw new \Exception('Could not relocate file');
           }
     }
 }

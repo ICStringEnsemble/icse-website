@@ -21,6 +21,24 @@
 }
 
 .upload_item input[type=submit] {
-  margin: 2px;
-  display: inline;
+}
+
+.upload_item input[type=submit], .upload_item input[type=button] {
+  float: left;
+  clear: none;
+  margin-right: 6px;
+  margin-top: 0.3em;
+  margin-left: 0;
+  height: 1.6em;
+  padding: 0 8px;
+} 
+
+.upload_item .loading_spinner {
+  margin-top: 0.3em;
+  height: 1.6em;
+}
+
+.upload_item .info {
+  float: left;
+  clear: none;
 }

@@ -65,6 +65,7 @@
                   + '{{ form_widget(form) }}'
                   + '<input type="button" value="Cancel" />'
                   + '<input type="submit" value="Save" />'
+                  + '<div class="info"></div>'
                   + '</form> '
                 );
                 $('div#upload'+id+' input#file_name').val(filename);
@@ -84,6 +85,8 @@
                           }
                         }
                     });
+                    $('div#upload'+id+' input').prop('disabled', true);
+                    $('div#upload'+id+' .info').html('<img class="loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" />');
 
                     return false; 
                 });

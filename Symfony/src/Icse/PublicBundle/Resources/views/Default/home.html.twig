@@ -8,6 +8,11 @@
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsepublic/css/home.css') }}" />
 {% endblock %} 
 
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('bundles/icsepublic/js/jquery.cycle.all.js') }}"></script> 
+{% endblock %} 
+
 {% block content %}
 
 <div id=col_left>
@@ -16,13 +21,26 @@
   {% endautoescape %}
 
   <h2>Upcoming Events</h2>
+  {% for event in future_events %}
+  <h3>{{ event.getName() }}</h3>
+  <p>{{ event.getStartsAt() | date("l jS F Y") }}</p>
+  {% endfor %}
 
   <h2>Previous Events</h2>
 
 </div>
 
 <div id=col_right>
-  <img id="photo_banner" src="http://placekitten.com/334/254"/>
+  <div id=slideshow >
+    {% for image in slideshow_images %}
+    <img width=334px height=254px src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':image.getFile(), 'size':'homepageslideshow'}) }}"/>
+    {% endfor %}
+  </div>
+  <script>
+    $('#slideshow').cycle('fadeout'); 
+  </script>
+
+
 
   <h2>Next Rehearsal</h2>
   <ul>

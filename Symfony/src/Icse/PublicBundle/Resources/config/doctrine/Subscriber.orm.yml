@@ -1,5 +1,6 @@
 Icse\PublicBundle\Entity\Subscriber:
   type: entity
+  repositoryClass: Icse\PublicBundle\Entity\SubscriberRepository
   table: null
   fields:
     id:

@@ -12,4 +12,66 @@ use Doctrine\ORM\EntityRepository;
  */
 class SubscriberRepository extends EntityRepository
 {
+  public function findAllMostRecentFirst()
+    {
+      return $this->getEntityManager()
+                  ->createQuery('SELECT s 
+                                 FROM IcsePublicBundle:Subscriber s
+                                 ORDER BY s.subscribed_at DESC')
+                  ->getResult();
+    }
+
+  public function findAllPlayers()
+    {
+      return $this->getEntityManager()
+                  ->createQuery('SELECT s 
+                                 FROM IcsePublicBundle:Subscriber s
+                                 WHERE s.player = :player
+                                 ORDER BY s.subscribed_at DESC')
+                  ->setParameter('player', 1)
+                  ->getResult();
+    }
+
+  public function findAllConcertGoers()
+    {
+      return $this->getEntityManager()
+                  ->createQuery('SELECT s 
+                                 FROM IcsePublicBundle:Subscriber s
+                                 WHERE s.player = :player
+                                 ORDER BY s.subscribed_at DESC')
+                  ->setParameter('player', 0)
+                  ->getResult();
+    }
+
+  public function findByInstrumentMostRecentFirst($instrument)
+    {
+      return $this->getEntityManager()
+                  ->createQuery('SELECT s 
+                                 FROM IcsePublicBundle:Subscriber s
+                                 WHERE s.player = :player
+                                 AND s.instrument = :instrument
+                                 ORDER BY s.subscribed_at DESC')
+                  ->setParameters(array('player' => 1,
+                                        'instrument' => $instrument))
+                  ->getResult();
+    }
+
+  public function findAllOtherInstrument()
+    {
+      return $this->getEntityManager()
+                  ->createQuery('SELECT s 
+                                FROM IcsePublicBundle:Subscriber s
+                                WHERE s.player = :player
+                                AND s.instrument <> :violin
+                                AND s.instrument <> :viola
+                                AND s.instrument <> :cello
+                                AND s.instrument <> :doublebass
+                                ORDER BY s.subscribed_at DESC')
+                  ->setParameters(array('player' => 1,
+                                        'violin' => "Violin",
+                                        'viola' => "Viola",
+                                        'cello' => "Cello",
+                                        'doublebass' => "Double Bass"))
+                  ->getResult();
+    } 
 }

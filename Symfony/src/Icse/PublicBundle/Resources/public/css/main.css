@@ -250,3 +250,34 @@ form .global_errors li {
 div#end_form {
   clear: both;
 }
+
+#signupstable {
+  margin-top: 2em;
+}
+
+textarea#email_textarea {
+  vertical-align: top;
+  height: 2.7em;
+}
+
+#signupsfilter .current {
+  font-weight: bold;
+}
+
+#signupstable, #signupstable td, #signupstable th {
+  padding: 0 10px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+#signupstable th {
+  background-color: #a6681e; 
+  color: #fff;
+  font-weight: bold;
+}
+
+#signupstable tr.odd td {
+  background-color: #e3c9ab; 
+} 
+#signupstable tr.even td {
+} 

@@ -5,6 +5,7 @@ namespace Icse\MembersBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request; 
 use Symfony\Component\HttpFoundation\Response; 
+use Symfony\Component\HttpKernel\Exception\HttpException; 
 use Icse\MembersBundle\Form\Type\FileInfoType;
 use Icse\PublicBundle\Entity\Image;
 
@@ -68,9 +69,19 @@ class AdminController extends Controller
                   $em->flush(); 
                   return new Response(json_encode("success"));
                 }
+              else
+                {
+                  throw new HttpException(400, 'Form submission not valid');
+                }
+            }
+          else
+            {
+              throw new HttpException(400, 'No filename specified');
             }
         } 
-
-      return new Response('error');
+      else
+        {
+          throw new HttpException(400, 'No POST data received');
+        }
     }
 }
