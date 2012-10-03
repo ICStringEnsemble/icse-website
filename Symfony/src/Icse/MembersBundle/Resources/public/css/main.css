@@ -2,6 +2,10 @@
   background: url(../images/bg.png) #fff repeat-y left;
 }
 
+#above_footer.full_width {
+  background: #fff;
+} 
+
 #nav_column {
   float: left;
   width: 238px;

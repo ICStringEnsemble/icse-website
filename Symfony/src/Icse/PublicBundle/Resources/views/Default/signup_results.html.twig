@@ -4,6 +4,13 @@
 {% extends 'IcsePublicBundle:Default:template.html.twig' %}
 {% set currentPage = 'signup_results' %}
 
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsemembers/css/main.css') }}" />
+{% endblock %} 
+
+{% block aboveFooterAttrs %}class=full_width{% endblock %} 
+
 {% block title %} - Signups{% endblock %} 
 
 {% block content %}
