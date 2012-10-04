@@ -20,13 +20,21 @@
   {{ home_intro }}
   {% endautoescape %}
 
-  <h2>Upcoming Events</h2>
-  {% for event in future_events %}
-  <h3>{{ event.getName() }}</h3>
-  <p>{{ event.getStartsAt() | date("l jS F Y") }}</p>
+  {% for event_group in [{label:"Today", events:today_events},
+                         {label:"Tomorrow", events:tomorrow_events},
+                         {label:"This Week", events:thisweek_events},
+                         {label:"Next Week", events:nextweek_events},
+                         {label:((today_events or tomorrow_events or thisweek_events or nextweek_events)
+                               ?"Other Upcoming Events":"Upcoming Events"), events:future_events},
+                         {label:"Previous Events", events:past_events}] %}
+    {% if event_group.events %}
+      <h2>{{ event_group.label }}</h2>
+      {% for event in event_group.events %}
+        <h3>{{ event.getName() }}</h3>
+        <p>{{ event.getStartsAt() | date("l jS F Y g:ia") }}</p>
+      {% endfor %}
+    {% endif %}
   {% endfor %}
-
-  <h2>Previous Events</h2>
 
 </div>
 
@@ -37,7 +45,10 @@
     {% endfor %}
   </div>
   <script>
-    $('#slideshow').cycle('fadeout'); 
+    $('#slideshow').cycle({ 
+        fx:     'fadeout', 
+        random:  1 
+    }); 
   </script>
 
 

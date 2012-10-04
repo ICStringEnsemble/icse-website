@@ -12,4 +12,80 @@ use Doctrine\ORM\EntityRepository;
  */
 class EventRepository extends EntityRepository
 {
+  public function findPastEvents()
+    {
+      return $this->getEntityManager()
+                  ->createQuery ('SELECT e 
+                                  FROM IcsePublicBundle:Event e
+                                  WHERE e.starts_at < :time
+                                  ORDER BY e.starts_at DESC')
+                  ->setParameters(array('time' => new \DateTime("today")))
+                  ->getResult();
+    }
+
+  public function findTodayEvents()
+    {
+      return $this->getEntityManager()
+                  ->createQuery ('SELECT e 
+                                  FROM IcsePublicBundle:Event e
+                                  WHERE e.starts_at >= :starttime
+                                  AND e.starts_at < :endtime
+                                  ORDER BY e.starts_at ASC')
+                  ->setParameters(array('starttime' => new \DateTime("today"),
+                                        'endtime' => new \DateTime("tomorrow")))
+                  ->getResult();
+    }
+
+  public function findTomorrowEvents()
+    {
+      return $this->getEntityManager()
+                  ->createQuery ('SELECT e 
+                                  FROM IcsePublicBundle:Event e
+                                  WHERE e.starts_at >= :starttime
+                                  AND e.starts_at < :endtime
+                                  ORDER BY e.starts_at ASC')
+                  ->setParameters(array('starttime' => new \DateTime("tomorrow"),
+                                        'endtime' => new \DateTime("tomorrow +1 day")))
+                  ->getResult();
+    }
+
+  public function findLaterThisWeekEvents()
+    {
+      return $this->getEntityManager()
+                  ->createQuery ('SELECT e 
+                                  FROM IcsePublicBundle:Event e
+                                  WHERE e.starts_at >= :starttime
+                                  AND e.starts_at < :endtime
+                                  ORDER BY e.starts_at ASC')
+                  ->setParameters(array('starttime' => new \DateTime("tomorrow +1 day"),
+                                        'endtime' => new \DateTime("next monday")))
+                  ->getResult();
+    }
+
+
+  public function findNextWeekEvents()
+    {
+      return $this->getEntityManager()
+                  ->createQuery ('SELECT e 
+                                  FROM IcsePublicBundle:Event e
+                                  WHERE e.starts_at >= :starttime
+                                  AND e.starts_at < :endtime
+                                  ORDER BY e.starts_at ASC')
+                  ->setParameters(array('starttime' => max(new \DateTime("next monday"), new \DateTime("tomorrow +1 day")),
+                                        'endtime' => new \DateTime("next monday +1 week")))
+                  ->getResult();
+    }
+
+
+
+  public function findFutureEvents()
+    {
+      return $this->getEntityManager()
+                  ->createQuery ('SELECT e 
+                                  FROM IcsePublicBundle:Event e
+                                  WHERE e.starts_at >= :time
+                                  ORDER BY e.starts_at ASC')
+                  ->setParameters(array('time' => new \DateTime("next monday +1 week")))
+                  ->getResult();
+    }  
 }

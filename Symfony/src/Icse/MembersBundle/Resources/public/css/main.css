@@ -24,6 +24,7 @@
   float: left;
   clear: left;
 }
+
 #nav_column #nav_col_head, #nav_column li.category {
   width: 200px;
   padding: 0.5em 20px;
@@ -45,6 +46,7 @@
 
 #section_container {
   margin-left: 240px;
+  overflow: hidden; 
 }
 
 section {

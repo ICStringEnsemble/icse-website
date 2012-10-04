@@ -1,5 +1,6 @@
 Icse\PublicBundle\Entity\Event:
   type: entity
+  repositoryClass: Icse\PublicBundle\Entity\EventRepository
   table: null
   fields:
     id:
