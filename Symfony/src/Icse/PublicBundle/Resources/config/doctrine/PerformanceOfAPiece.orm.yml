@@ -1,0 +1,17 @@
+Icse\PublicBundle\Entity\PerformanceOfAPiece:
+    type: entity
+    table: null
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    manyToOne:
+        piece:
+            targetEntity: PieceOfMusic
+            inversedBy: performances
+        event:
+            targetEntity: Event
+            inversedBy: performances
+    lifecycleCallbacks: {  }

@@ -26,6 +26,22 @@
   margin-right: 20px;
 }
 
+.event {
+  clear: both;
+  margin-top: 1em;
+  overflow: hidden;
+}
+
+.event ul {
+  list-style: disc inside;
+}
+
+.poster {
+  float: left;
+  margin-right: 1em;
+  border: 1px solid #000;
+}
+
 #above_footer {
   background: url(../images/bg_home.png) #eee repeat-y center;
 }

@@ -44,12 +44,20 @@ class Member implements AdvancedUserInterface
     public function __construct()
     {
       $this->active = true;
+      $this->role = 1;
       //$this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
     }
 
     public function getRoles()
     {
-      return array('ROLE_USER');
+      switch($this->getRole()) {
+        case 1:
+          return array('ROLE_USER');
+        case 10:
+          return array('ROLE_ADMIN');
+        case 100:
+          return array('ROLE_SUPER_ADMIN');
+      }
     }
 
     public function equals(UserInterface $member)
@@ -261,5 +269,30 @@ class Member implements AdvancedUserInterface
     public function getFullName()
     {
         return $this->getFirstName() .' '. $this->getLastName();
+    }
+    /**
+     * @var integer $role
+     */
+    private $role;
+
+
+    /**
+     * Set role
+     *
+     * @param integer $role
+     */
+    public function setRole($role)
+    {
+        $this->role = $role;
+    }
+
+    /**
+     * Get role
+     *
+     * @return integer 
+     */
+    public function getRole()
+    {
+        return $this->role;
     }
 }

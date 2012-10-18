@@ -1,0 +1,27 @@
+<?php
+
+namespace Icse\MembersBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Icse\MembersBundle\Entity\PracticePart
+ */
+class PracticePart
+{
+    /**
+     * @var integer $id
+     */
+    private $id;
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+}

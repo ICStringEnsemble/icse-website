@@ -23,33 +23,31 @@ class DefaultController extends Controller
 
   public function indexAction()
     {
-      $slideshow_images = $this->getDoctrine()
-                               ->getRepository('IcsePublicBundle:Image')
-                               ->findByCategory('Homepage Slideshow');
+      $dm = $this->getDoctrine();
 
-      $today_events = $this->getDoctrine()
-                            ->getRepository('IcsePublicBundle:Event')
-                            ->findTodayEvents(); 
+      $slideshow_images = $dm->getRepository('IcsePublicBundle:Image')
+                             ->findByCategory('Homepage Slideshow');
 
-      $tomorrow_events = $this->getDoctrine()
-                            ->getRepository('IcsePublicBundle:Event')
+      $today_events = $dm->getRepository('IcsePublicBundle:Event')
+                         ->findTodayEvents(); 
+
+      $tomorrow_events = $dm->getRepository('IcsePublicBundle:Event')
                             ->findTomorrowEvents(); 
 
-      $thisweek_events = $this->getDoctrine()
-                            ->getRepository('IcsePublicBundle:Event')
+      $thisweek_events = $dm->getRepository('IcsePublicBundle:Event')
                             ->findLaterThisWeekEvents(); 
 
-      $nextweek_events = $this->getDoctrine()
-                            ->getRepository('IcsePublicBundle:Event')
+      $nextweek_events = $dm->getRepository('IcsePublicBundle:Event')
                             ->findNextWeekEvents(); 
 
-      $future_events = $this->getDoctrine()
-                            ->getRepository('IcsePublicBundle:Event')
-                            ->findFutureEvents();
+      $future_events = $dm->getRepository('IcsePublicBundle:Event')
+                          ->findFutureEvents();
 
-      $past_events = $this->getDoctrine()
-                          ->getRepository('IcsePublicBundle:Event')
-                          ->findPastEvents();
+      $past_events = $dm->getRepository('IcsePublicBundle:Event')
+                        ->findPastEvents();
+
+      $next_rehearsal = $dm->getRepository('IcseMembersBundle:Rehearsal')
+                           ->findNext();
 
       return $this->render('IcsePublicBundle:Default:home.html.twig', array('home_intro' => $this->getSiteText('home_intro'),
                                                                             'today_events' => $today_events,
@@ -58,6 +56,7 @@ class DefaultController extends Controller
                                                                             'nextweek_events' => $nextweek_events,
                                                                             'future_events' => $future_events,
                                                                             'past_events' => $past_events,
+                                                                            'next_rehearsal' => $next_rehearsal,
                                                                             'slideshow_images' => $slideshow_images));
     }
 

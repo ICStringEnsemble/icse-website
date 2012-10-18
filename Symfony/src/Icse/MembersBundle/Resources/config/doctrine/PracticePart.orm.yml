@@ -1,0 +1,24 @@
+Icse\MembersBundle\Entity\PracticePart:
+    type: entity
+    table: null
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        file:
+            type: string
+            length: 255
+        type:
+            type: string
+            length: 255
+        updated_at:
+            type: datetime
+        updated_by:
+            type: integer
+    manyToOne:
+        piece:
+            targetEntity: Icse\PublicBundle\Entity\PieceOfMusic
+            inversedBy: practice_parts 
+    lifecycleCallbacks: {  }

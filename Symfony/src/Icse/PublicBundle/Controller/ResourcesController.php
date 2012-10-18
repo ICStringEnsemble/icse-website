@@ -15,7 +15,7 @@ class ResourcesController extends Controller
 
   private function appendSuffixToFile($path, $suffix)
     {
-      $extension_pos = strrpos($path, '.'); // find position of the last dot
+      $extension_pos = strrpos($path, '.');
       return substr($path, 0, $extension_pos) . $suffix . substr($path, $extension_pos); 
     }
 
@@ -65,9 +65,13 @@ class ResourcesController extends Controller
                 {
                   $path = $this->resizeImage($path, '_thumb', 100, 100);
                 }
-              else if ($size_id == 'homepageslideshow')
+              else if ($size_id == 'hpslideshow')
                 {
-                  $path = $this->resizeImage($path, '_homepageslideshow', 334, 254, true);
+                  $path = $this->resizeImage($path, '_hpslideshow', 334, 254, true);
+                }
+              else if ($size_id == 'hpmainthumb')
+                {
+                  $path = $this->resizeImage($path, '_hpmainthumb', 200, null);
                 }
               else if ($size_id == 'original')
                 {

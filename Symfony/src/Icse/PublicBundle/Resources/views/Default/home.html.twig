@@ -6,11 +6,13 @@
 {% block stylesheets %}
 {{ parent() }}
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsepublic/css/home.css') }}" />
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsepublic/fancybox/jquery.fancybox.css') }}" />
 {% endblock %} 
 
 {% block javascripts %}
 {{ parent() }}
 <script src="{{ asset('bundles/icsepublic/js/jquery.cycle.all.js') }}"></script> 
+<script src="{{ asset('bundles/icsepublic/fancybox/jquery.fancybox.js') }}"></script> 
 {% endblock %} 
 
 {% block content %}
@@ -22,7 +24,8 @@
 
   {% for event_group in [{label:"Today", events:today_events},
                          {label:"Tomorrow", events:tomorrow_events},
-                         {label:"This Week", events:thisweek_events},
+                         {label:((today_events or tomorrow_events)
+                               ?"Later This Week":"This Week"), events:thisweek_events},
                          {label:"Next Week", events:nextweek_events},
                          {label:((today_events or tomorrow_events or thisweek_events or nextweek_events)
                                ?"Other Upcoming Events":"Upcoming Events"), events:future_events},
@@ -30,18 +33,60 @@
     {% if event_group.events %}
       <h2>{{ event_group.label }}</h2>
       {% for event in event_group.events %}
-        <h3>{{ event.getName() }}</h3>
-        <p>{{ event.getStartsAt() | date("l jS F Y g:ia") }}</p>
+        <div class=event >
+          {# Event Poster #}
+          {% if event.getPoster() %}
+          <a class="view_full_image" href="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':event.getPoster().getFile(), 'size':'original'}) }}" title="{{ event.getName() }}" >
+            <img class=poster src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':event.getPoster().getFile(), 'size':'hpmainthumb'}) }}" />
+          </a>
+          {% endif %}
+          {# Event Name #}
+          <h3>{{ event.getName() }}</h3>
+          {# Event Time #}
+          <div class="datetime">{{ event.getStartsAt() | date("l jS F Y, g:ia") }}</div>
+          {# Event Location #}
+          {% if event.getLocation() %}
+            <div class="location">{{ event.getLocation().getName() }}</div>
+          {% endif %}
+          {# Event Repertoire #}
+          {% if not event.getPerformances().isEmpty() %}
+          <ul class="repertoire">
+            {% for performance in event.getPerformances() %}
+            <li>{{ performance.getPiece().getComposer() }}: {{ performance.getPiece().getName() }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          {# Event Description #}
+          {% if event.getDescription() %}
+            <p>{{ event.getDescription() }}</p>
+          {% endif %}
+        </div>
       {% endfor %}
     {% endif %}
   {% endfor %}
-
 </div>
+
+<script>
+  $('.view_full_image').fancybox({
+    padding: 0,
+    closeClick: true,
+    openEffect:'elastic',
+    closeEffect:'elastic',
+    helpers: {
+      orig: $(this),
+      overlay: {
+        css: {
+          'background': 'rgba(45, 45, 45, 0.5)' 
+        }
+      }
+    }
+  });
+</script>
 
 <div id=col_right>
   <div id=slideshow >
     {% for image in slideshow_images %}
-    <img width=334px height=254px src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':image.getFile(), 'size':'homepageslideshow'}) }}"/>
+    <img width=334px height=254px src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':image.getFile(), 'size':'hpslideshow'}) }}"/>
     {% endfor %}
   </div>
   <script>
@@ -52,17 +97,19 @@
   </script>
 
 
-
+  {% if next_rehearsal %}
   <h2>Next Rehearsal</h2>
-  <ul>
-    <li>Friday 31st February 2012</li>
-    <li>in the Great Hall</li>
-  </ul>
+  <div class="datetime">{{ next_rehearsal.getStartsAt() | date("l jS F Y, g:ia") }}</div>
+  <div class="location">{{ next_rehearsal.getLocation().getName() }}</div>
+  {% endif %}
 
   <h2>News</h2>
+  {#
   <img id="news_pic" src="http://Placekitten.com/64/70"/>
   <h3>Lorem Ipsum</h3>
   <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr</p>
+  #}
+  <p>Coming soon...</p>
 
   <h2>Twitter</h2>
 

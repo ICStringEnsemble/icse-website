@@ -1,7 +1,7 @@
-Icse\PublicBundle\Entity\Event:
+Icse\MembersBundle\Entity\Rehearsal:
     type: entity
-    repositoryClass: Icse\PublicBundle\Entity\EventRepository
     table: null
+    repositoryClass: Icse\MembersBundle\Entity\RehearsalRepository
     fields:
         id:
             type: integer
@@ -11,7 +11,8 @@ Icse\PublicBundle\Entity\Event:
         name:
             type: string
             length: 255
-        description:
+            nullable: true
+        comments:
             type: text
             nullable: true
         starts_at:
@@ -22,14 +23,6 @@ Icse\PublicBundle\Entity\Event:
             type: integer
     manyToOne:
         location:
-            targetEntity: Venue
-            nullable: true 
-        poster:
-            targetEntity: Image
-            nullable: true 
-    oneToMany:
-        performances:
-            targetEntity: PerformanceOfAPiece
-            mappedBy: event 
+            targetEntity: Icse\PublicBundle\Entity\Venue
+            nullable: true
     lifecycleCallbacks: {  }
-

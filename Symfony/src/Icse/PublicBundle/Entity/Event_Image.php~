@@ -1,0 +1,55 @@
+<?php
+
+namespace Icse\PublicBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Icse\PublicBundle\Entity\Event_Image
+ */
+class Event_Image
+{
+    /**
+     * @var integer $id
+     */
+    private $id;
+
+    /**
+     * @var Icse\PublicBundle\Entity\Image
+     */
+    private $image;
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set image
+     *
+     * @param Icse\PublicBundle\Entity\Image $image
+     * @return Event_Image
+     */
+    public function setImage(\Icse\PublicBundle\Entity\Image $image = null)
+    {
+        $this->image = $image;
+    
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return Icse\PublicBundle\Entity\Image 
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+}

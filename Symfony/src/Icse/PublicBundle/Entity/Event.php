@@ -174,4 +174,115 @@ class Event
     {
         return $this->updated_by;
     }
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    private $images;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->images = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add images
+     *
+     * @param Icse\PublicBundle\Entity\Image $images
+     * @return Event
+     */
+    public function addImage(\Icse\PublicBundle\Entity\Image $images)
+    {
+        $this->images[] = $images;
+    
+        return $this;
+    }
+
+    /**
+     * Remove images
+     *
+     * @param Icse\PublicBundle\Entity\Image $images
+     */
+    public function removeImage(\Icse\PublicBundle\Entity\Image $images)
+    {
+        $this->images->removeElement($images);
+    }
+
+    /**
+     * Get images
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+    /**
+     * @var Icse\PublicBundle\Entity\Image
+     */
+    private $poster;
+
+
+    /**
+     * Set poster
+     *
+     * @param Icse\PublicBundle\Entity\Image $poster
+     * @return Event
+     */
+    public function setPoster(\Icse\PublicBundle\Entity\Image $poster = null)
+    {
+        $this->poster = $poster;
+    
+        return $this;
+    }
+
+    /**
+     * Get poster
+     *
+     * @return Icse\PublicBundle\Entity\Image 
+     */
+    public function getPoster()
+    {
+        return $this->poster;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    private $performances;
+
+
+    /**
+     * Add performances
+     *
+     * @param Icse\PublicBundle\Entity\PerformanceOfAPiece $performances
+     * @return Event
+     */
+    public function addPerformance(\Icse\PublicBundle\Entity\PerformanceOfAPiece $performances)
+    {
+        $this->performances[] = $performances;
+    
+        return $this;
+    }
+
+    /**
+     * Remove performances
+     *
+     * @param Icse\PublicBundle\Entity\PerformanceOfAPiece $performances
+     */
+    public function removePerformance(\Icse\PublicBundle\Entity\PerformanceOfAPiece $performances)
+    {
+        $this->performances->removeElement($performances);
+    }
+
+    /**
+     * Get performances
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getPerformances()
+    {
+        return $this->performances;
+    }
 }

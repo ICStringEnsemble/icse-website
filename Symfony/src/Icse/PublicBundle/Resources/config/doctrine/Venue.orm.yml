@@ -1,0 +1,14 @@
+Icse\PublicBundle\Entity\Venue:
+    type: entity
+    table: null
+    repositoryClass: Icse\PublicBundle\Entity\VenueRepository
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        name:
+            type: string
+            length: 255
+    lifecycleCallbacks: {  }
