@@ -9,25 +9,28 @@
 
 {% block javascripts %}
 {{ parent() }}
-<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script> 
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.0/jquery-ui.min.js"></script> 
+{#
+<script src="{{ asset('bundles/icsepublic/js/effects.core.js') }}"></script> 
+<script src="{{ asset('bundles/icsepublic/js/jquery-ui-git') }}"></script>  
+#}
 {% endblock %}
 
 {% block header_to_footer %}
 <div id="nav_column">
-  <div id="nav_col_head">
-    {{ app.user.getFullName() }}
-  </div>
+  <div id="hidden_nav_col_edge"><div>Menu</div></div>
   <ul>
     {# ICSE Resources #}
-    <li class="category">ICSE Resources</li>
+    <li id="nav_col_head">Members Area<img id="hide_nav_col_button" src="{{ asset('bundles/icsemembers/images/leftarrow.png') }}" /></li>
     <li><a href="#">Schedule</a></li>
     <li><a href="#">Practice Parts</a></li>
 
     {# Admin #}
     {% if is_granted('ROLE_ADMIN') %}
     <li class="category">Admin</li>
-    <li><a href="#">Members</a></li>
-    <li><a href="{{ path('IcseMembersBundle_image_uploads') }}">Image Uploads</a></li>
+    <li><a href="#">Members List</a></li>
+    <li><a href="#">Music Library</a></li>
+    <li><a href="{{ path('IcseMembersBundle_image_uploads') }}">Photos and Images</a></li>
     <li><a href="#">Site Text</a></li>
     {% endif %}
 
@@ -59,7 +62,7 @@
     {% endif %}
 
     {# Account settings #}
-    <li class="category">Account</li>
+    <li class="category">Account: {{ app.user.getFullName() }}</li>
     <li><a href="{{ path('IcseMembersBundle_account_settings') }}">Settings</a></li>
     <li><a href="{{ path('IcseMembersBundle_logout') }}">Logout</a></li>
   </ul>
@@ -70,4 +73,22 @@
 {% endblock %}
 </section>
 </div>
+<script>
+  $(document).ready(function(){
+    var nav_col_enabled = true;
+    var nav_col_transition_time = 400;
+    $('#hide_nav_col_button, #hidden_nav_col_edge').click(function(){
+      if (nav_col_enabled) {
+        $('#above_footer').addClass("nav_col_hidden"); 
+        $('#hide_nav_col_button').addClass("rotate-180");
+        nav_col_enabled = false;
+      }
+      else {
+        $('#above_footer').removeClass("nav_col_hidden"); 
+        $('#hide_nav_col_button').removeClass("rotate-180");
+        nav_col_enabled = true;
+      }
+    });
+  })
+</script>
 {% endblock %}

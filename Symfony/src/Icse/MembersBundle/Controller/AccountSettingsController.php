@@ -17,10 +17,9 @@ function randString($length) {
 
 class AccountSettingsController extends Controller
 {
-  public function indexAction()
+  public function indexAction(Request $request)
     {
       $cpResponse = array();
-      $request = Request::createFromGlobals();
       $user = $this->get('security.context')->getToken()->getUser(); 
       $encoder = $this->get('security.encoder_factory'); 
 
@@ -56,7 +55,9 @@ class AccountSettingsController extends Controller
       }
 
       $ImperialPasswd = !($user->getPassword());
+      $email = $user->getEmail();
       return $this->render('IcseMembersBundle:AccountSettings:index.html.twig', array("ImperialPasswd" => $ImperialPasswd,
+                                                                                      "email" => $email, 
                                                                                       "cpResponse" => $cpResponse));
     }
 }

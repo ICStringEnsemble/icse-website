@@ -6,6 +6,12 @@
 
 <h1>Account Settings</h1>
 
+<h2>Change Email Address</h2>
+<p>
+Your email address is currently set to {{ email }}. You can use this address to login to the members
+area, and we may also use it for contacting you.
+</p>
+
 <h2>Change Password</h2>
 
 {% if cpResponse['success'] is defined %}
@@ -14,7 +20,7 @@
 
 <p>
 You can either log in using your Imperial College password (in which case we will not store
-your password at any point) or you can create a new password to use specifically for the ICSE website.
+your password in any way) or you can create a new password to use specifically for the ICSE website.
 {% if ImperialPasswd == true %}
 You are currently using your Imperial College password.
 {% else %}
@@ -22,7 +28,7 @@ You are currently using a separate ICSE password.
 {% endif %}
 </p>
 
-<form method="post" action="#">
+<form method="post" action="">
   <div>
     {% if cpResponse['oldpass'] is defined %}
     <p class="error">{{ cpResponse['oldpass'] }}</p>
@@ -37,9 +43,9 @@ You are currently using a separate ICSE password.
     <label>Create a new ICSE password?</label>
     <div id="form_pass_type">
       <input type="radio" id="form_icse_passwd" name="icse_passwd" required="required" value="2" {% if cpResponse['passtype'] is defined and cpResponse['passtype'] == 2 %}checked="yes"{% endif %}/>
-      <label for="form_icse_passwd" class=" required">Yes</label>
+      <label for="form_icse_passwd" class=" required">Yes, make a separate password for ICSE.</label>
       <input type="radio" id="form_ic_passwd" name="icse_passwd" required="required" value="1" {% if cpResponse['passtype'] is defined and cpResponse['passtype'] == 1 %}checked="yes"{% endif %}/>
-      <label for="form_ic_passwd" class=" required">No, use my Imperial College password.</label>
+      <label for="form_ic_passwd" class=" required">No, I'll use my Imperial College password.</label>
     </div>
   </div>
   <div class="show_if_newpass">
