@@ -21,7 +21,7 @@
   <div id="hidden_nav_col_edge"><div>Menu</div></div>
   <ul>
     {# ICSE Resources #}
-    <li id="nav_col_head">Members Area<img id="hide_nav_col_button" src="{{ asset('bundles/icsemembers/images/leftarrow.png') }}" /></li>
+    <li id="nav_col_head">Members Area<img title="Hide/Show" id="hide_nav_col_button" src="{{ asset('bundles/icsemembers/images/leftarrow.png') }}" /></li>
     <li><a href="#">Schedule</a></li>
     <li><a href="#">Practice Parts</a></li>
 
@@ -76,7 +76,6 @@
 <script>
   $(document).ready(function(){
     var nav_col_enabled = true;
-    var nav_col_transition_time = 400;
     $('#hide_nav_col_button, #hidden_nav_col_edge').click(function(){
       if (nav_col_enabled) {
         $('#above_footer').addClass("nav_col_hidden"); 

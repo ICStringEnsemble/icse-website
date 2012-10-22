@@ -15,7 +15,7 @@ if (!function_exists('pam_auth'))
   {
     function pam_auth($username, $password)
     {
-      if ($username == "js10" && $password == "wibble")
+      if ($username == "dph10" && $password == "wibble")
         {
           return true;
         }

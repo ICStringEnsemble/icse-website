@@ -17,13 +17,23 @@ function randString($length) {
 
 class AccountSettingsController extends Controller
 {
+
+  private function isValidEmail($input)
+    {
+      $emailConstraint = new \Symfony\Component\Validator\Constraints\Email;
+      $emailConstraint->checkMX = true;
+      $errorList = $this->get('validator')->validateValue($input, $emailConstraint); 
+      return count($errorList) == 0; 
+    }
+   
   public function indexAction(Request $request)
     {
       $cpResponse = array();
+      $ceResponse = array();
       $user = $this->get('security.context')->getToken()->getUser(); 
-      $encoder = $this->get('security.encoder_factory'); 
 
       if ($request->request->get('form_id') == "cp") { //if change password
+        $encoder = $this->get('security.encoder_factory'); 
         if (!\Icse\MembersBundle\Security\Authentication\Provider\queryCredsValid($user,
                                                                                   $request->request->get('old_password'),
                                                                                   $encoder)) { //if old password incorrect
@@ -53,11 +63,24 @@ class AccountSettingsController extends Controller
           $cpResponse['passtype'] = $request->request->get('icse_passwd');
         }
       }
+      
+      else if ($request->request->get('form_id') == "ce") { //change email
+        if ($this->isValidEmail($request->request->get('new_email'))) {
+          $user->setEmail($request->request->get('new_email'));
+          $em = $this->getDoctrine()->getEntityManager();
+          $em->persist($user);
+          $em->flush();
+          $ceResponse['success'] = "Email address was successfully changed";
+        } else {
+          $ceResponse['newemail'] = "Invalid email address";
+        }
+      }
 
       $ImperialPasswd = !($user->getPassword());
       $email = $user->getEmail();
       return $this->render('IcseMembersBundle:AccountSettings:index.html.twig', array("ImperialPasswd" => $ImperialPasswd,
                                                                                       "email" => $email, 
+                                                                                      "ceResponse" => $ceResponse, 
                                                                                       "cpResponse" => $cpResponse));
     }
 }

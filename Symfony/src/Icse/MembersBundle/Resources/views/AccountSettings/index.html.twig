@@ -7,10 +7,24 @@
 <h1>Account Settings</h1>
 
 <h2>Change Email Address</h2>
+{% if ceResponse['success'] is defined %}
+<p class="success">{{ ceResponse['success'] }}</p>
+{% endif %}
 <p>
 Your email address is currently set to {{ email }}. You can use this address to login to the members
 area, and we may also use it for contacting you.
 </p>
+<form method="post" action="">
+  <div>
+    {% if ceResponse['newemail'] is defined %}
+    <p class="error">{{ ceResponse['newemail'] }}</p>
+    {% endif %}
+    <label for="form_new_email">New email address</label>
+    <input type="email" id="form_new_email" name="new_email" required="required" />
+  </div>
+  <input type="hidden" name="form_id" value="ce" /> 
+  <input type="submit" value="Change Email Address"/>
+</form>
 
 <h2>Change Password</h2>
 
