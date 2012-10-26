@@ -14,7 +14,14 @@
 <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon"> 
 {% block stylesheets %}
-<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsepublic/css/main.css') }}" />
+{% stylesheets 
+  'bundles/icsepublic/css/main.scss'
+  filter='scss,cssrewrite'
+  output='css/icsepublic/main.css'
+%}
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+{% endstylesheets %}
+{#<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsepublic/css/main.scss') }}" />#}
 {% endblock %}
 {% block javascripts %}
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script> 

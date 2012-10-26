@@ -25,8 +25,14 @@ assetic:
     debug:          %kernel.debug%
     use_controller: false
     # java: /usr/bin/java
+    sass: /usr/bin/sass
     filters:
         cssrewrite: ~
+        sass:
+            bin: /usr/bin/sass
+        scss:
+            bin: /usr/bin/scss
+        compass: ~
         # closure:
         #     jar: %kernel.root_dir%/java/compiler.jar
         # yui_css:

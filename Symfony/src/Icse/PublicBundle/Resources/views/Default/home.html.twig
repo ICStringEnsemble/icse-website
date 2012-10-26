@@ -5,7 +5,13 @@
 
 {% block stylesheets %}
 {{ parent() }}
-<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsepublic/css/home.css') }}" />
+{% stylesheets 
+  'bundles/icsepublic/css/home.scss'
+  filter='scss,cssrewrite'
+  output='css/icsepublic/home.css'
+%}
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+{% endstylesheets %} 
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsepublic/fancybox/jquery.fancybox.css') }}" />
 {% endblock %} 
 
