@@ -64,4 +64,4 @@ jms_security_extra:
     secure_all_services: false
 
 fkr_imagine:
-    driver: gd
+    driver: imagick

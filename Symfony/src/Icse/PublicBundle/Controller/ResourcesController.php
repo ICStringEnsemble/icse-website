@@ -21,7 +21,6 @@ class ResourcesController extends Controller
 
   private function resizeImage ($path, $dest_suffix, $width, $height, $crop=false)
     {
-      ini_set("memory_limit","1028M");
       $dest_path = $this->appendSuffixToFile($path, $dest_suffix);
       if (!file_exists($dest_path))
         {
