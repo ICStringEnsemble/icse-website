@@ -1,6 +1,10 @@
-html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}
+@import "compass/reset";
+$page-width:  994px;
+$page-side-padding: 20px;
+$footer-text-size: 0.8em;
+$footer-padding: 0.5em;
+$footer-overall-height: $footer-text-size * (1 + 2 * $footer-padding/1em);
 
-$wibble:  5;
 
 html, body {
   height: 100%;
@@ -11,16 +15,12 @@ body {
   font-size: 16px;
 } 
 
-.ui-widget {
-    font-size:95% !important;
-}
-
 #above_footer {
   min-height:100%;
   height: auto !important;
   height: 100%;
-  background: url(../images/bg.png) #eee repeat-y center;
-  min-width: 994px;
+  min-width: $page-width;
+  background: url(@IcsePublicBundle/images/bg.png) #eee repeat-y center;
 }
 
 header {
@@ -28,11 +28,10 @@ header {
 }
 
 hgroup {
-  width: 954px;
+  width: $page-width - 2 * $page-side-padding;
   margin: 0 auto;
-  padding: 7px 20px;
-  background-color: #fff;
-  background-image: url(../images/banner_violin.png);
+  padding: 7px $page-side-padding;
+  background-image: url(@IcsePublicBundle/images/banner_violin.png);
   background-repeat: no-repeat;
   background-position: bottom right;
 }
@@ -43,7 +42,7 @@ nav {
 }
 
 nav ul {
-  width: 994px;
+  width: $page-width;
   margin: 0 auto;
   list-style: none;
 }
@@ -74,11 +73,14 @@ nav .logged_in a {
   color: #ff0;
 }
 
+#header_to_footer {
+}
+
 section {
   clear: both;
-  width: 954px;
+  width: $page-width - 2 * $page-side-padding;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 $page-side-padding;
   padding-top:1em;
   padding-bottom:3em;
   line-height: 1.5em;
@@ -110,18 +112,19 @@ section h3 {
   font-family: Arial;
 }
 
+section p {
+  max-width: 714px;
+}
+
 section p, section ul {
   margin-bottom: 1em;
 }
 
-footer, .footer_push {
-  font-size: 0.8em;
-  height: 1em;
-  padding: 0.5em 0;
-}
-
 footer {
-  min-width: 994px;
+  font-size: $footer-text-size;
+  padding: $footer-padding 0;
+  min-width: $page-width;
+  height: 1em;
   color:#fff;
   background-color: #000;
   text-align: center;
@@ -129,6 +132,7 @@ footer {
 }
 
 .footer_push {
+  height: $footer-overall-height;
   clear:both;
 }
 

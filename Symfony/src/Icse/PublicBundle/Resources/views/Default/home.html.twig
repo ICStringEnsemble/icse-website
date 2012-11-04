@@ -6,12 +6,12 @@
 {% block stylesheets %}
 {{ parent() }}
 {% stylesheets 
-  'bundles/icsepublic/css/home.scss'
-  filter='scss,cssrewrite'
-  output='css/icsepublic/home.css'
+  '@IcsePublicBundle/Resources/style/home.scss' 
+  filter='compass,css_url_rewrite,?yui_css'
+  output='bundles/icsepublic/css/main.css'
 %}
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
-{% endstylesheets %} 
+{% endstylesheets %}
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsepublic/fancybox/jquery.fancybox.css') }}" />
 {% endblock %} 
 

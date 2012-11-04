@@ -1,5 +1,5 @@
 #above_footer {
-  background: url(../images/bg.png) #fff repeat-y left;
+  background: url(@IcseMembersBundle/images/bg.png) #fff repeat-y left;
   transition: background 1s;
   -moz-transition: background 1s;
   -webkit-transition: background 1s;
@@ -8,7 +8,7 @@
 
 #above_footer.nav_col_hidden {
   background-position: -206px 0;
-  background-image: url(../images/bg_hidden_nav.png);
+  background-image: url(@IcseMembersBundle/images/bg_hidden_nav.png);
 }
 
 #above_footer.full_width {
@@ -110,10 +110,6 @@
 section {
   clear: none;
   width: auto;
-}
-
-section p {
-  width: 714px;
 }
 
 form label {

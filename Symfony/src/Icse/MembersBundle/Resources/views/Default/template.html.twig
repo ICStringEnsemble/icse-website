@@ -3,7 +3,14 @@
 
 {% block stylesheets %}
 {{ parent() }}
-<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsemembers/css/main.css') }}" />
+{% stylesheets 
+  '@IcseMembersBundle/Resources/style/main.scss'
+  '@IcseMembersBundle/Resources/style/upload.scss'
+  filter='compass,css_url_rewrite,?yui_css'
+  output='bundles/icsemembers/css/main.css'
+%}
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+{% endstylesheets %} 
 <link rel="stylesheet" type="text/css" media="all" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/humanity/jquery-ui.css" /> 
 {% endblock %}
 

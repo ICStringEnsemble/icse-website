@@ -21,8 +21,9 @@ class AppKernel extends Kernel
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),  
             new Fkr\ImagineBundle\FkrImagineBundle(), 
+            new Fkr\CssURLRewriteBundle\FkrCssURLRewriteBundle(), 
             new Icse\PublicBundle\IcsePublicBundle(),
-            new Icse\MembersBundle\IcseMembersBundle(), 
+            new Icse\MembersBundle\IcseMembersBundle() 
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

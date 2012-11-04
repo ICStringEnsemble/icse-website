@@ -22,6 +22,7 @@
         "symfony/yaml": "*",
         "symfony/twig-bundle": "*",
         "fkr/imagine-bundle": "*",
+        "fkr/cssurlrewrite-bundle": "*", 
         "doctrine/doctrine-migrations-bundle": "*"
     },
     "scripts": {
