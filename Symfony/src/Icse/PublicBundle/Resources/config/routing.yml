@@ -6,6 +6,10 @@ IcsePublicBundle_about:
     pattern:  /about
     defaults: { _controller: IcsePublicBundle:Default:about }
 
+IcsePublicBundle_event:
+    pattern:  /events/{id}/{slug}
+    defaults: {_controller: IcsePublicBundle:Events:event, slug: ''}
+
 IcsePublicBundle_join:
     pattern:  /join
     defaults: { _controller: IcsePublicBundle:SignUp:join, freshers: false }
@@ -16,7 +20,7 @@ IcsePublicBundle_join_freshers:
 
 IcsePublicBundle_signup_results_tmp:
     pattern:  /view/all/signups/from/freshers/fair
-    defaults: { _controller: IcsePublicBundle:Default:signup_results }
+    defaults: { _controller: IcsePublicBundle:Default:signup}results }
 
 IcsePublicBundle_query_username:
     pattern:  /join/query_username

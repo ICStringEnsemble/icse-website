@@ -47,7 +47,7 @@
           </a>
           {% endif %}
           {# Event Name #}
-          <h3>{{ event.getName() }}</h3>
+          <h3><a href="{{ path('IcsePublicBundle_event', event) }}">{{ event.getName() }}</a></h3>
           {# Event Time #}
           <div class="datetime">{{ event.getStartsAt() | date("l jS F Y, g:ia") }}</div>
           {# Event Location #}

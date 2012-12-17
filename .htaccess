@@ -1,5 +1,6 @@
 RewriteEngine On
 RewriteCond %{HTTP_HOST} ^union\.ic\.ac\.uk$ [NC]
 RewriteRule ^(.*)$ http://www.union.ic.ac.uk/arts/stringensemble/new/$1 [R=301,L] 
-RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-f [OR]
+RewriteCond $0 ^\..*$ 
 RewriteRule ^(.*)$ site.php [QSA,L] 

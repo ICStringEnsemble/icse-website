@@ -1,7 +1,10 @@
 parameters:
+    router.options.generator_base_class: Icse\PublicBundle\Routing\Generator\UrlGenerator
 #    icse_public.example.class: Icse\PublicBundle\Example
 
 services:
+    Utility:
+        class: Icse\PublicBundle\Utility\Wobble
 #    icse_public.example:
 #        class: %icse_public.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
