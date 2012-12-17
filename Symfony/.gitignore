@@ -1,4 +1,4 @@
-/app/cache/dev/
+/app/cache/*
 /app/logs/*
 /app/config/parameters.yml
 /uploads/
