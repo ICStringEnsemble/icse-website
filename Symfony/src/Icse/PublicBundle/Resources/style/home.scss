@@ -49,3 +49,11 @@
 section {
   padding-top: 0;
 }
+
+.event a {
+  color: #000;
+  text-decoration: none;
+  &:hover, &.mouseover {
+    color: #666;
+  }
+}

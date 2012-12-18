@@ -12,13 +12,11 @@
 %}
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
 {% endstylesheets %}
-<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsepublic/fancybox/jquery.fancybox.css') }}" />
 {% endblock %} 
 
 {% block javascripts %}
 {{ parent() }}
 <script src="{{ asset('bundles/icsepublic/js/jquery.cycle.all.js') }}"></script> 
-<script src="{{ asset('bundles/icsepublic/fancybox/jquery.fancybox.js') }}"></script> 
 {% endblock %} 
 
 {% block content %}
@@ -42,7 +40,7 @@
         <div class=event >
           {# Event Poster #}
           {% if event.getPoster() %}
-          <a class="view_full_image" href="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':event.getPoster().getFile(), 'size':'original'}) }}" title="{{ event.getName() }}" >
+          <a href="{{ path('IcsePublicBundle_event', event) }}" title="{{ event.getName() }}" >
             <img class=poster src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':event.getPoster().getFile(), 'size':'hpmainthumb'}) }}" />
           </a>
           {% endif %}
@@ -73,20 +71,12 @@
 </div>
 
 <script>
-  $('.view_full_image').fancybox({
-    padding: 0,
-    closeClick: true,
-    openEffect:'elastic',
-    closeEffect:'elastic',
-    helpers: {
-      orig: $(this),
-      overlay: {
-        css: {
-          'background': 'rgba(45, 45, 45, 0.5)' 
-        }
-      }
-    }
-  });
+    $('.event img').mouseenter(function(e){
+        $(this).parents('.event').find('h3 a').addClass('mouseover'); 
+    });
+    $('.event img').mouseleave(function(e){
+        $(this).parents('.event').find('h3 a').removeClass('mouseover'); 
+    });
 </script>
 
 <div id=col_right>

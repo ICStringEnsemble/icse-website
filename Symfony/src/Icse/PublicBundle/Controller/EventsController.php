@@ -22,6 +22,6 @@ class EventsController extends Controller
         }
 
 
-        return new Response("hello");
+        return $this->render('IcsePublicBundle:Events:event.html.twig', array('event' => $event));
     }
 }
