@@ -10,6 +10,10 @@ IcsePublicBundle_event:
     pattern:  /events/{id}/{slug}
     defaults: {_controller: IcsePublicBundle:Events:event, slug: ''}
 
+IcsePublicBundle_event_endslash:
+    pattern:  /events/{id}/
+    defaults: {_controller: IcsePublicBundle:Events:event, slug: ''}
+
 IcsePublicBundle_join:
     pattern:  /join
     defaults: { _controller: IcsePublicBundle:SignUp:join, freshers: false }
