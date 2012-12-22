@@ -69,8 +69,12 @@ nav a:hover {
   background: #444;
 }
 
-nav .logged_in a {
+nav #members_area_button.logged_in a {
   color: #ff0;
+}
+
+nav #members_area_button {
+  float: right;
 }
 
 #header_to_footer {
@@ -193,6 +197,9 @@ form .radio input:first-of-type {
   clear: none;
 }
 
+form input[type=radio], form input[type=checkbox] {
+  margin-top: 0.4em;
+}
 
 form div {
   clear: both;
@@ -222,7 +229,7 @@ form input[type=submit] {
   margin-left: 400px;
 }
 
-form#username_or_email_form input[type=submit] {
+#username_or_email_lookup input[type=button] {
   display: block;
   float: left;
   clear: none;

@@ -24,7 +24,7 @@ IcsePublicBundle_join_freshers:
 
 IcsePublicBundle_signup_results_tmp:
     pattern:  /view/all/signups/from/freshers/fair
-    defaults: { _controller: IcsePublicBundle:Default:signup}results }
+    defaults: { _controller: IcsePublicBundle:Default:signup_results }
 
 IcsePublicBundle_query_username:
     pattern:  /join/query_username

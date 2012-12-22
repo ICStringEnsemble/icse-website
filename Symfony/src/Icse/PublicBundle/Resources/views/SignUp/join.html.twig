@@ -3,6 +3,31 @@
 
 {% block title %} - Join Us{% endblock %}
 
+{% form_theme form _self %}
+
+{% block _form_instrument_widget %}
+{% spaceless %}
+    <div {{ block('widget_container_attributes') }}>
+    {% for child in form %}
+        {{ form_widget(child) }}
+        {{ form_label(child) }}
+    {% endfor %}
+{% endspaceless %} 
+{% endblock %} 
+
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script type="text/javascript" src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script> 
+{% javascripts 
+  '@IcsePublicBundle/Resources/script/signup.js'
+  filter='?yui_js'
+  output='bundles/icsepublic/js/signup.js'
+%}
+<script src="{{ asset_url }}"></script> 
+{% endjavascripts %}
+{% endblock %} 
+
 {% block content %}
 
 {% autoescape false %} 
@@ -15,16 +40,22 @@
   </div>
 </form>
 
-<form id="username_or_email_form" style="display: none">
-  <label for="username_or_email_field">Enter your Imperial username</label>
-  <input id="username_or_email_field" type="text" placeholder="Eg. jfs10"/>
-  <input type="submit" value="Continue"/>
-  <div id="username_or_email_error" style="display: none">
-    Not a valid Imperial Username or e-mail address.
-  </div>
-</form>
+
 
 <form action="" method="post" {{ form_enctype(form) }} >
+  <div class="radio">
+    {{ form_row(form.player) }} 
+  </div>
+
+  <div id="username_or_email_lookup" hidden >
+    <label for="username_or_email_field">Enter your Imperial username <br>(or e-mail address if you don't have one)</label>
+    <input id="username_or_email_field" type="text" placeholder="Eg. jfs10" value="{{ username_or_email }}" />
+    <input type="button" id="lookup_button" value="Continue"/>
+    <div id="username_or_email_error" hidden>
+      Not a valid Imperial Username or e-mail address.
+    </div>
+  </div>
+
   <div class="show_if_email show_if_username">
     {{ form_row(form.first_name) }} 
     {{ form_row(form.last_name) }} 
@@ -36,112 +67,19 @@
     {{ form_row(form.email) }} 
     {{ form_row(form.department) }} 
   </div>
-  <div class="show_if_email show_if_username radio">
-    {{ form_row(form.player) }} 
-  </div>
   <div class="show_if_player">
     <div class="radio">
-      {{ form_row(form.instrument) }} 
-    </div>
-    <div id="other_instrument">
-      {{ form_row(form.other_instrument) }} 
-    </div>
+        {{ form_label(form.instrument) }}
+        {{ form_errors(form.instrument) }}
+        {{ form_widget(form.instrument) }} 
+        <div id="other_instrument">
+          {{ form_row(form.other_instrument) }} 
+        </div>
+    </div> 
+    </div> {# Don't ask #}
     {{ form_row(form.standard) }} 
   </div>
   {{ form_rest(form) }} 
   <input class="show_if_email show_if_username" type="submit" value="Submit" />
 </form>
-
-<script>
-  $('#other_instrument').remove().appendTo('#form_instrument');
-
-
-  var username_or_email = "{{ username_or_email }}";
-  slideTime = 300;
-  isReset = true;
-  player = false;
-  $('#username_or_email_form').show();
-  $('.show_if_email, .show_if_username, .never_show, .show_if_player').hide();
-  $('#form_other_instrument').attr('placeholder', 'Please specify');
-  $('#form_other_instrument').prop('disabled', true);
-
-  var query_username_or_email = function(slideTime){
-    if (isReset){
-      var input = $('#username_or_email_field').val()
-      $.getJSON("{{ path('IcsePublicBundle_query_username') }}",
-                {input: input},
-                function(data){
-                  if (data['type'] == 'email'){
-                    $('.show_if_email').slideDown(slideTime);
-                    $('#form_email').val(input);
-                    $('#form_login').val("");
-                    $('#form_department').val("");
-                  } else if (data['type'] == 'username'){
-                    $('.show_if_username').slideDown(slideTime);
-                    $('#form_first_name').val(data['first_name']);
-                    $('#form_last_name').val(data['last_name']);
-                    $('#form_email').val(data['email']);
-                    $('#form_login').val(input);
-                    $('#form_department').val(data['department']);
-                  } else {
-                    $('#username_or_email_error').slideDown();
-                  }
-                  if ((data['type'] == 'username' || data['type'] == 'email') && player == true){
-                    $('.show_if_player').slideDown(slideTime);
-                  }
-                });
-      isReset = false;
-    }
-  }
-
-  if (username_or_email){
-    console.log('yay');
-    $('#username_or_email_field').val(username_or_email);
-  }
-  if ($('#username_or_email_field').val() != "")  
-    query_username_or_email(0);
-  $('#username_or_email_form').submit(function(e){e.preventDefault();query_username_or_email(slideTime);});
-
-  var hideAll = function(slideTime){
-    $('.show_if_email, .show_if_username, .show_if_player, #username_or_email_error').slideUp(slideTime);
-    isReset = true;
-  };
-
-  $('#username_or_email_field').keyup(function(e){
-    if(e.keyCode < 13 || e.keyCode == 32 || e.keyCode > 40) hideAll();
-  });
-  $('#username_or_email_field').bind('paste', hideAll);
-
-  var enableDisableOtherInstrument = function(){
-    if ($('#form_instrument input[value="other"]').is(':checked')){
-      $('#form_other_instrument').prop('disabled', false);
-      $('#form_other_instrument').prop('required', true);
-    } else {
-      $('#form_other_instrument').prop('disabled', true);
-      $('#form_other_instrument').prop('required', false);
-    }
-  };
-  enableDisableOtherInstrument();
-  $('#form_instrument').change(enableDisableOtherInstrument);
-
-  var showHidePlayer = function(slideTime){
-    if ($('#form_player input[value="1"]').is(':checked')){
-      $('input[name="form[instrument]"]').prop('required', true);
-      $('#form_standard').prop('required', true);
-      enableDisableOtherInstrument();
-      $('.show_if_player').slideDown(slideTime);
-      player = true;
-    } else {
-      $('.show_if_player').slideUp(slideTime);
-      $('input[name="form[instrument]"]').prop('required', false);
-      $('#form_standard').prop('required', false);
-      $('#form_other_instrument').prop('required', false);
-      player = false;
-    }
-  };
-  showHidePlayer(0);
-  $('#form_player').change(slideTime, showHidePlayer);
-
-</script>
-
 {% endblock %}

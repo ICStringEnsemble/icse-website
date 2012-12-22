@@ -76,8 +76,8 @@ class SignUpController extends Controller
               ->add('department', 'text', array('required' => false))
               ->add('player', 'choice', array(
                       'choices' => array(
-                        true => 'Yes!',
-                        false => 'No, just notify me about any concerts.'
+                        true => 'Yes! I play an instrument and would like to join in.',
+                        false => 'No, but notify me about any concerts.'
                       ),
                       'expanded' => true,
                       'multiple' => false,
@@ -87,15 +87,15 @@ class SignUpController extends Controller
                       'choices' => array(
                         'Violin' => 'Violin',
                         'Viola' => 'Viola',
-                        'Cello' => '\'Cello',
+                        'Cello' => 'Cello',
                         'Double Bass' => 'Double Bass',
                         'other' => 'Other'
                       ), 
                       'expanded' => true,
-                      'multiple' => false,
+                      'multiple' => true,
                       'required' => false
                     ))
-              ->add('other_instrument', 'text', array('label' => ' ', 'required' => false))
+              ->add('other_instrument', 'text', array('label' => ' ', 'required' => false, 'attr' => array('placeholder' => 'Please specify')))
               ->add('standard', 'text', array('label' => 'Give us an idea of your standard', 'required' => false))
               ->getForm(); 
 
@@ -120,12 +120,21 @@ class SignUpController extends Controller
             }
           if ($subscriber->isPlayer())
             {
-              if (!$subscriber->getInstrument() || ($subscriber->getInstrument() == 'other' && !$subscriber->getOtherInstrument()))
-                $form->addError(new \Symfony\Component\Form\FormError("Please specify the instrument you play."));
-              if ($subscriber->getInstrument() == 'other')
-                $subscriber->setInstrument($subscriber->getOtherInstrument());
-              if (!$subscriber->getStandard())
-                $form->addError(new \Symfony\Component\Form\FormError("Please indicate your playing standard."));
+              $indexOtherInInstruments = array_search('other', $subscriber->getInstrument());
+              $selectedOther = ($indexOtherInInstruments !== false);
+              if (!$subscriber->getInstrument() || ($selectedOther && !$subscriber->getOtherInstrument())) {
+                  $form->addError(new \Symfony\Component\Form\FormError("Please specify the instrument you play."));
+              }
+              if ($selectedOther) {
+                  $instruments = $subscriber->getInstrument();
+                  $instruments[$indexOtherInInstruments] = $subscriber->getOtherInstrument();
+                  $subscriber->setInstrument($instruments);
+              }
+              $instrumentString = implode (', ', $subscriber->getInstrument());
+              $subscriber->setInstrument($instrumentString);
+              if (!$subscriber->getStandard()) {
+                  $form->addError(new \Symfony\Component\Form\FormError("Please indicate your playing standard."));
+              }
             }
           else
             {

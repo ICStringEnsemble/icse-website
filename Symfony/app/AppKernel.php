@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),  
             new Fkr\ImagineBundle\FkrImagineBundle(), 
             new Fkr\CssURLRewriteBundle\FkrCssURLRewriteBundle(), 
+            new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new Icse\PublicBundle\IcsePublicBundle(),
             new Icse\MembersBundle\IcseMembersBundle() 
         );

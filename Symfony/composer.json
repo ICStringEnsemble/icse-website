@@ -23,6 +23,7 @@
         "symfony/twig-bundle": "*",
         "fkr/imagine-bundle": "*@dev",
         "fkr/cssurlrewrite-bundle": "*@dev", 
+        "friendsofsymfony/jsrouting-bundle": "1.1.*@dev",
         "doctrine/doctrine-migrations-bundle": "*@dev" 
     },
     "scripts": {
