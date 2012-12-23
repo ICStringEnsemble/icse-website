@@ -3,6 +3,7 @@ imports:
     - { resource: security.yml }
 
 framework:
+    trusted_proxies: ~
     #esi:             ~
     #translator:      { fallback: %locale% }
     secret:          %secret%
