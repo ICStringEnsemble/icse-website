@@ -8,7 +8,10 @@
 {% spaceless %}
 <head>
 <title>
-  Imperial College String Ensemble{% block title %}{% endblock %}
+  Imperial College String Ensemble
+  {% if pageTitle is defined %}
+  - {{ pageTitle }}
+  {% endif %}
 </title>
 <meta charset="UTF-8"> 
 <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
@@ -37,17 +40,21 @@
     </hgroup>
     </header>
     <nav>
-    <ul>
-      {{ _self.navbar_item(currentPage, 'home', 'Home', 'IcsePublicBundle_home') }}
-      <li><a href="#">News</a></li>
-      {{ _self.navbar_item(currentPage, 'about', 'About Us', 'IcsePublicBundle_about') }}
-      <li><a href="#">Events</a></li>
-      {{ _self.navbar_item(currentPage, 'join', 'Join Us', 'IcsePublicBundle_join') }}
-      <div id="members_area_button" {% if status_code is not defined %}{% if is_granted('ROLE_USER') %}class="logged_in"{% endif %}{% endif %} >
-      {{ _self.navbar_item(currentPage, 'members', 'Members', 'IcseMembersBundle_home') }}
-      </div>
-      {{ _self.navbar_item(currentPage, 'support', 'Support Us', 'IcsePublicBundle_support') }}
-    </ul>
+    {% block navbars %}
+    <div id="top_nav">
+      <ul>
+        {{ _self.navbar_item(currentPage, 'home', 'Home', 'IcsePublicBundle_home') }}
+        <li><a href="#">News</a></li>
+        {{ _self.navbar_item(currentPage, 'about', 'About Us', 'IcsePublicBundle_about') }}
+        <li><a href="#">Events</a></li>
+        {{ _self.navbar_item(currentPage, 'join', 'Join Us', 'IcsePublicBundle_join') }}
+        <div id="members_area_button" {% if status_code is not defined %}{% if is_granted('ROLE_USER') %}class="logged_in"{% endif %}{% endif %} >
+        {{ _self.navbar_item(currentPage, 'members', 'Members', 'IcseMembersBundle_home') }}
+        </div>
+        {{ _self.navbar_item(currentPage, 'support', 'Support Us', 'IcsePublicBundle_support') }}
+      </ul>
+    </div>
+    {% endblock navbars %}
     </nav>
     {% block header_to_footer %}
     <section>

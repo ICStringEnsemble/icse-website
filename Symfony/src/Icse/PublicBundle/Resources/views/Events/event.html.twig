@@ -1,7 +1,7 @@
 {% extends 'IcsePublicBundle:Default:template.html.twig' %} 
 {% set currentPage = 'events' %}
 
-{% block title %} - Event{% endblock %} 
+{% set pageTitle = event.getName() %} 
 
 {% block stylesheets %}
 {{ parent() }}

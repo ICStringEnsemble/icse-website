@@ -15,7 +15,7 @@ class DefaultController extends Controller
   private function getSiteText($name)
     {
       $textObject = $this->getDoctrine()
-                    ->getRepository('IcsePublicBundle:SiteText')
+                    ->getRepository('IcsePublicBundle:SiteSection')
                     ->findOneByName($name);
 
       return $textObject ? $textObject->getText() : "";
@@ -58,13 +58,6 @@ class DefaultController extends Controller
                                                                             'past_events' => $past_events,
                                                                             'next_rehearsal' => $next_rehearsal,
                                                                             'slideshow_images' => $slideshow_images));
-    }
-
-  public function aboutAction()
-    {
-      return $this->render('IcsePublicBundle:Default:generic_page.html.twig', array('pageId' => 'about',
-                                                                                    'pageTitle' => 'About Us',
-                                                                                    'pageBody' => $this->getSiteText('about')));
     }
 
   public function supportAction()

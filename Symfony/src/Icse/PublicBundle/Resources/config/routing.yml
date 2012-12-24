@@ -3,8 +3,16 @@ IcsePublicBundle_home:
     defaults: { _controller: IcsePublicBundle:Default:index }
 
 IcsePublicBundle_about:
-    pattern:  /about
-    defaults: { _controller: IcsePublicBundle:Default:about }
+    pattern:  /about/ensemble
+    defaults: { _controller: IcsePublicBundle:About:ensemble }
+
+IcsePublicBundle_about_ensemble:
+    pattern:  /about/ensemble
+    defaults: { _controller: IcsePublicBundle:About:ensemble }
+
+IcsePublicBundle_about_conductor:
+    pattern:  /about/conductor
+    defaults: { _controller: IcsePublicBundle:About:conductor }
 
 IcsePublicBundle_event:
     pattern:  /events/{id}/{slug}

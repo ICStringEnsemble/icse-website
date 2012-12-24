@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Icse\PublicBundle\Entity\SiteText
  */
-class SiteText
+class SiteSection
 {
     /**
      * @var integer $id

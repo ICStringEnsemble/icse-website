@@ -1,7 +1,7 @@
 {% extends (freshers is defined and freshers) ? 'IcsePublicBundle:SignUp:freshers_template.html.twig' : 'IcsePublicBundle:Default:template.html.twig' %}
 {% set currentPage = 'join' %}
 
-{% block title %} - Join Us{% endblock %}
+{% set pageTitle = 'Join Us' %}  
 
 {% form_theme form _self %}
 

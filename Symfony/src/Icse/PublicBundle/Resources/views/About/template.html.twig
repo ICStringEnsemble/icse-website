@@ -1,0 +1,10 @@
+{% extends 'IcsePublicBundle:Default:subnav_template.html.twig' %} 
+
+{% set currentPage = 'about' %}
+
+{% set subnav_items = [
+              {label: 'The Ensemble', id:'ensemble', url: path('IcsePublicBundle_about_ensemble')},
+              {label: 'The Conductor', id:'conductor', url: path('IcsePublicBundle_about_conductor')},
+              {label: 'The Committee', id:'committee', url:'#'},
+] %}
+ 

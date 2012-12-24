@@ -5,6 +5,9 @@ $footer-text-size: 0.8em;
 $footer-padding: 0.5em;
 $footer-overall-height: $footer-text-size * (1 + 2 * $footer-padding/1em);
 
+$nav_colour1: #000;
+$nav_colour2: #333;
+
 
 html, body {
   height: 100%;
@@ -36,9 +39,16 @@ hgroup {
   background-position: bottom right;
 }
 
-nav {
-  background: #000;
+#top_nav {
+  background: $nav_colour1;
   height: 2em;
+}
+
+#sub_nav {
+  width: $page-width;
+  margin: 0 auto;
+  height: 2em;
+  background: $nav_colour2;
 }
 
 nav ul {
@@ -50,11 +60,25 @@ nav ul {
 nav li {
   display: block;
   float: left;
-  background-color:#000;
 }
 
-nav li.current {
-  background-color:#333;
+#top_nav li.current a {
+  &:link, &:visited {
+    background-color: $nav_colour2;
+  }
+  &:hover {
+    background: #444;
+  }
+}
+
+#sub_nav li.current a {
+  &:link, &:visited {
+    background-color: #fff;
+    color: #000;
+  }
+  &:hover {
+    background: #eee;
+  }
 }
 
 nav a:link, nav a:visited {
@@ -65,15 +89,15 @@ nav a:link, nav a:visited {
   font-family: Verdana;
 }
 
-nav a:hover {
+nav li a:hover {
   background: #444;
 }
 
-nav #members_area_button.logged_in a {
+#top_nav #members_area_button.logged_in a {
   color: #ff0;
 }
 
-nav #members_area_button {
+#top_nav #members_area_button {
   float: right;
 }
 

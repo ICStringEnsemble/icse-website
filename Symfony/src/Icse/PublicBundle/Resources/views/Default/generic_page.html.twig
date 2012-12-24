@@ -1,8 +1,6 @@
 {% extends (freshers is defined and freshers) ? 'IcsePublicBundle:SignUp:freshers_template.html.twig' : 'IcsePublicBundle:Default:template.html.twig' %} 
 {% set currentPage = pageId %}
 
-{% block title %} - {{ pageTitle }}{% endblock %} 
-
 {% block content %}
 
 {% autoescape false %} 

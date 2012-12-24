@@ -181,4 +181,42 @@ class PieceOfMusic
     {
         return $this->composer;
     }
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    private $practice_parts;
+
+
+    /**
+     * Add practice_parts
+     *
+     * @param Icse\MembersBundle\Entity\PracticePart $practiceParts
+     * @return PieceOfMusic
+     */
+    public function addPracticePart(\Icse\MembersBundle\Entity\PracticePart $practiceParts)
+    {
+        $this->practice_parts[] = $practiceParts;
+    
+        return $this;
+    }
+
+    /**
+     * Remove practice_parts
+     *
+     * @param Icse\MembersBundle\Entity\PracticePart $practiceParts
+     */
+    public function removePracticePart(\Icse\MembersBundle\Entity\PracticePart $practiceParts)
+    {
+        $this->practice_parts->removeElement($practiceParts);
+    }
+
+    /**
+     * Get practice_parts
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getPracticeParts()
+    {
+        return $this->practice_parts;
+    }
 }

@@ -1,4 +1,4 @@
-Icse\PublicBundle\Entity\SiteText:
+Icse\PublicBundle\Entity\SiteSection:
   type: entity
   table: null
   fields:

@@ -1,0 +1,14 @@
+{% extends 'IcsePublicBundle:Default:template.html.twig' %} 
+
+{% block navbars %}
+{{ parent() }}
+<div id="sub_nav">
+<ul>
+  {% for item in subnav_items %}
+  <li {% if currentSubPage == item.id %}class=current{% endif %}>
+    <a href="{{ item.url }}" >{{ item.label}}</a>
+  </li>
+  {% endfor %}
+</ul>
+</div>
+{% endblock %}

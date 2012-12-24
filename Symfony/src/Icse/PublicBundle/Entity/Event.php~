@@ -3,6 +3,7 @@
 namespace Icse\PublicBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Common\Tools; 
 
 /**
  * Icse\PublicBundle\Entity\Event
@@ -284,5 +285,10 @@ class Event
     public function getPerformances()
     {
         return $this->performances;
+    }
+
+    public function getSlug()
+    {
+        return Tools::slugify($this->getName());
     }
 }

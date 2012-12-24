@@ -46,7 +46,7 @@ class SignUpController extends Controller
   private function getSiteText($name)
     {
       $textObject = $this->getDoctrine()
-                    ->getRepository('IcsePublicBundle:SiteText')
+                    ->getRepository('IcsePublicBundle:SiteSection')
                     ->findOneByName($name);
 
       return $textObject ? $textObject->getText() : "";
