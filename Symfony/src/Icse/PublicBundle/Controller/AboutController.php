@@ -9,22 +9,46 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AboutController extends Controller
 {
-  private function getSiteText($name)
+    private function getSiteSection($name)
     {
-      $textObject = $this->getDoctrine()
+        $section = $this->getDoctrine()
                     ->getRepository('IcsePublicBundle:SiteSection')
                     ->findOneByName($name);
-
-      return $textObject ? $textObject->getText() : "";
+        if ($section->getPicture() !== null) {
+            $imageFile = $section->getPicture()->getFile();
+        } else {
+            $imageFile = null;
+        }
+        return array('text' => $section->getText(), 'image' => $imageFile);
     }
 
     public function ensembleAction()
     {
-        return $this->render('IcsePublicBundle:About:ensemble.html.twig', array('pageBody' => $this->getSiteText('about_ensemble')));
+        $section = $this->getSiteSection('about_ensemble');
+        return $this->render('IcsePublicBundle:About:generic_page.html.twig', array('pageBody' => $section['text'],
+                                                                                'imageFile' => $section['image'],
+                                                                                'pageTitle' => 'About the Ensemble',
+                                                                                'currentSubPage' => 'ensemble'
+                                                                             ));
     }
 
     public function conductorAction()
     {
-        return $this->render('IcsePublicBundle:About:conductor.html.twig', array('pageBody' => $this->getSiteText('about_conductor')));
+        $section = $this->getSiteSection('about_conductor');
+        return $this->render('IcsePublicBundle:About:generic_page.html.twig', array('pageBody' => $section['text'],
+                                                                                'imageFile' => $section['image'],
+                                                                                'pageTitle' => 'The Conductor',
+                                                                                'currentSubPage' => 'conductor'
+                                                                             ));
+    }
+
+    public function committeeAction()
+    {
+        $section = $this->getSiteSection('about_committee');
+        return $this->render('IcsePublicBundle:About:generic_page.html.twig', array('pageBody' => $section['text'],
+                                                                                'imageFile' => $section['image'],
+                                                                                'pageTitle' => 'The Committee',
+                                                                                'currentSubPage' => 'committee'
+                                                                             ));
     }
 }

@@ -14,6 +14,10 @@ IcsePublicBundle_about_conductor:
     pattern:  /about/conductor
     defaults: { _controller: IcsePublicBundle:About:conductor }
 
+IcsePublicBundle_about_committee:
+    pattern:  /about/committee
+    defaults: { _controller: IcsePublicBundle:About:committee }
+
 IcsePublicBundle_event:
     pattern:  /events/{id}/{slug}
     defaults: {_controller: IcsePublicBundle:Events:event, slug: ''}

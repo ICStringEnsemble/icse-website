@@ -1,0 +1,16 @@
+{% extends 'IcsePublicBundle:About:template.html.twig' %} 
+
+{% block content %}
+
+{% if imageFile != null %}
+{% set splitBody = pageBody | split('<p>', 2) %}
+{% if splitBody | length == 2 %}
+  {% set pageBody = '<p>' ~ splitBody[1] %}
+  {{ splitBody[0] | raw }}
+{% endif %}
+<img class='article_pic' src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':imageFile, 'size':'article'}) }}" /> 
+{% endif %}
+
+{{ pageBody | raw }}
+
+{% endblock %}

@@ -63,15 +63,19 @@ class ResourcesController extends Controller
 
               if ($size_id == 'thumb')
                 {
-                  $path = $this->resizeImage($path, '_thumb', 100, 100);
+                  $path = $this->resizeImage($path, '_'.$size_id, 100, 100);
                 }
               else if ($size_id == 'hpslideshow')
                 {
-                  $path = $this->resizeImage($path, '_hpslideshow', 334, 254, true);
+                  $path = $this->resizeImage($path, '_'.$size_id, 334, 254, true);
                 }
               else if ($size_id == 'hpmainthumb')
                 {
-                  $path = $this->resizeImage($path, '_hpmainthumb', 200, null);
+                  $path = $this->resizeImage($path, '_'.$size_id, 200, null);
+                }
+              else if ($size_id == 'article')
+                {
+                  $path = $this->resizeImage($path, '_'.$size_id, 380, 380);
                 }
               else if ($size_id == 'original')
                 {

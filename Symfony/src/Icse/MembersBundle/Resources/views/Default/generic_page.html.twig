@@ -2,8 +2,6 @@
 
 {% block content %}
 
-{% autoescape false %} 
-{{ pageBody }}
-{% endautoescape %} 
+{{ pageBody | raw }}
 
 {% endblock %}

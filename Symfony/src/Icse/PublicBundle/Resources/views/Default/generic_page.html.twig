@@ -3,9 +3,7 @@
 
 {% block content %}
 
-{% autoescape false %} 
-{{ pageBody }}
-{% endautoescape %} 
+{{ pageBody | raw}}
 
 {% if reloadPeriod is defined %}
 <script>
