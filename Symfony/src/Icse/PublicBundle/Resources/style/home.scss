@@ -45,7 +45,7 @@ $col_left_width: 580px;
 .event img {
     float: left;
     margin-right: 1em;
-    outline: 1px solid #000;
+    border: 1px solid #000;
     .mouseover & {
       opacity: 0.8;
     }
