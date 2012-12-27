@@ -115,20 +115,21 @@ class EventRepository extends EntityRepository
 
     public function yearOfFirstEvent()
     {
-      return (new \DateTime(($this->getEntityManager()
-                  ->createQuery ('SELECT MIN(e.starts_at) from IcsePublicBundle:Event e')
-                  ->getSingleScalarResult())))->format('Y');
+      $date = new \DateTime(($this->getEntityManager()
+                                  ->createQuery ('SELECT MIN(e.starts_at) from IcsePublicBundle:Event e')
+                                  ->getSingleScalarResult()));
+      return $date->format('Y');
     }
 
     public function yearOfMostRecentEvent()
     {
-      return (new \DateTime(($this->getEntityManager()
+      $date = new \DateTime(($this->getEntityManager()
                                   ->createQuery ('SELECT MAX(e.starts_at)
                                                   FROM IcsePublicBundle:Event e
                                                   WHERE e.starts_at < :time')
                                   ->setParameters(array('time' => new \DateTime("today")))
-                                  ->getSingleScalarResult()))
-             )->format('Y');
+                                  ->getSingleScalarResult()));
+      return $date->format('Y');
     }
 
     public function findNMostRecentEventsWithPosters($n)
