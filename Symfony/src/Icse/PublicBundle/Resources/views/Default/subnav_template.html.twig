@@ -5,8 +5,19 @@
 <div id="sub_nav">
 <ul>
   {% for item in subnav_items %}
-  <li {% if currentSubPage == item.id %}class=current{% endif %}>
-    <a href="{{ item.url }}" >{{ item.label}}</a>
+  <li>
+      {% if currentSubSection != item.id or breadcrumbs is not defined %}
+        <a {% if currentSubSection == item.id %}class=current{% endif %} href="{{ item.url }}" >{{ item.label}}</a>
+      {% else %}
+        <ul>
+          <li><a class="crumb" href="{{ item.url }}" >{{ item.label}}</a></li>
+          {% for crumb in breadcrumbs %}
+            <li>
+            <a class={% if loop.last %}"current"{% else %}"crumb midcrumb"{% endif %} href="{{ crumb.url }}" >{{ crumb.label}}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
   </li>
   {% endfor %}
 </ul>

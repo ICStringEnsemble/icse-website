@@ -1,6 +1,6 @@
 {% macro navbar_item(currentId, id, label, route) %}
 {% spaceless %}
-<li {% if id == currentId %}class='current'{% endif %}><a href="{{ path(route) }}">{{ label }}</a></li>
+<li><a {% if id == currentId %}class='current'{% endif %} href="{{ path(route) }}">{{ label }}</a></li>
 {% endspaceless %}
 {% endmacro %}
 <!DOCTYPE HTML>
@@ -43,15 +43,16 @@
     {% block navbars %}
     <div id="top_nav">
       <ul>
-        {{ _self.navbar_item(currentPage, 'home', 'Home', 'IcsePublicBundle_home') }}
+        {{ _self.navbar_item(currentSection, 'home', 'Home', 'IcsePublicBundle_home') }}
         <li><a href="#">News</a></li>
-        {{ _self.navbar_item(currentPage, 'about', 'About Us', 'IcsePublicBundle_about') }}
-        <li><a href="#">Events</a></li>
-        {{ _self.navbar_item(currentPage, 'join', 'Join Us', 'IcsePublicBundle_join') }}
+        {{ _self.navbar_item(currentSection, 'about', 'About Us', 'IcsePublicBundle_about') }}
+        {{ _self.navbar_item(currentSection, 'events', 'Events', 'IcsePublicBundle_events') }}
+        {{ _self.navbar_item(currentSection, 'join', 'Join Us', 'IcsePublicBundle_join') }}
+        {{ _self.navbar_item(currentSection, 'support', 'Support Us', 'IcsePublicBundle_support') }}
+
         <div id="members_area_button" {% if status_code is not defined %}{% if is_granted('ROLE_USER') %}class="logged_in"{% endif %}{% endif %} >
-        {{ _self.navbar_item(currentPage, 'members', 'Members', 'IcseMembersBundle_home') }}
+        {{ _self.navbar_item(currentSection, 'members', 'Members', 'IcseMembersBundle_home') }}
         </div>
-        {{ _self.navbar_item(currentPage, 'support', 'Support Us', 'IcsePublicBundle_support') }}
       </ul>
     </div>
     {% endblock navbars %}

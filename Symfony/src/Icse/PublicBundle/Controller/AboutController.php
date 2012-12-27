@@ -28,7 +28,7 @@ class AboutController extends Controller
         return $this->render('IcsePublicBundle:About:generic_page.html.twig', array('pageBody' => $section['text'],
                                                                                 'imageFile' => $section['image'],
                                                                                 'pageTitle' => 'About the Ensemble',
-                                                                                'currentSubPage' => 'ensemble'
+                                                                                'currentSubSection' => 'ensemble'
                                                                              ));
     }
 
@@ -38,7 +38,7 @@ class AboutController extends Controller
         return $this->render('IcsePublicBundle:About:generic_page.html.twig', array('pageBody' => $section['text'],
                                                                                 'imageFile' => $section['image'],
                                                                                 'pageTitle' => 'The Conductor',
-                                                                                'currentSubPage' => 'conductor'
+                                                                                'currentSubSection' => 'conductor'
                                                                              ));
     }
 
@@ -48,7 +48,7 @@ class AboutController extends Controller
         return $this->render('IcsePublicBundle:About:generic_page.html.twig', array('pageBody' => $section['text'],
                                                                                 'imageFile' => $section['image'],
                                                                                 'pageTitle' => 'The Committee',
-                                                                                'currentSubPage' => 'committee'
+                                                                                'currentSubSection' => 'committee'
                                                                              ));
     }
 }

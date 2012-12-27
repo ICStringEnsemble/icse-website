@@ -1,0 +1,16 @@
+{% extends 'IcsePublicBundle:Events:past_events_template.html.twig' %} 
+
+{% set pageTitle = 'Past Events' %} 
+
+{% block content %}
+
+<h1>Past Events</h1>
+<p>Please select a year:</p>
+<ul>
+{% for year in last_year..first_year %}
+<li><a href="{{ path('IcsePublicBundle_past_events_in_year', {year: year}) }}">{{ year }}</a></li>
+{% endfor %}
+</ul>
+
+
+{% endblock %}

@@ -2,7 +2,7 @@
 <a {% if id == currentShow %}class='current'{% endif %} href="{{ path('IcsePublicBundle_signup_results_tmp', {'show':id}) }}">{{ label }}</a>{% endmacro %} 
 
 {% extends 'IcsePublicBundle:Default:template.html.twig' %}
-{% set currentPage = 'signup_results' %}
+{% set currentSection = 'signup_results' %}
 
 {% block stylesheets %}
 {{ parent() }}

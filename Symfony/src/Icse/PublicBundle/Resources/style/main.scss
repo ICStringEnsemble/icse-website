@@ -5,8 +5,11 @@ $footer-text-size: 0.8em;
 $footer-padding: 0.5em;
 $footer-overall-height: $footer-text-size * (1 + 2 * $footer-padding/1em);
 
+$h2_colour: #643906;
+
 $nav_colour1: #000;
 $nav_colour2: #333;
+$nav_colour3: #aaa;
 
 
 html, body {
@@ -40,7 +43,7 @@ hgroup {
 }
 
 #top_nav {
-  background: $nav_colour1;
+  background-color: $nav_colour1;
   height: 2em;
 }
 
@@ -48,7 +51,7 @@ hgroup {
   width: $page-width;
   margin: 0 auto;
   height: 2em;
-  background: $nav_colour2;
+  background-color: $nav_colour2;
 }
 
 nav ul {
@@ -57,40 +60,64 @@ nav ul {
   list-style: none;
 }
 
+#sub_nav ul ul {
+  width: auto;
+  background-color: $nav_colour3;
+}
+
 nav li {
   display: block;
   float: left;
 }
 
-#top_nav li.current a {
+nav a {
+  &:link, &:visited {
+    display: block;
+    padding: 0.5em 20px;
+    text-decoration:none;
+    color:#fff;
+    font-family: Verdana;
+  }
+  &:hover {
+    background-color: #444;
+  }
+}
+
+#sub_nav ul ul a.crumb {
+  background-image: url(@IcsePublicBundle/images/breadcrumb.png);
+  background-repeat: no-repeat;
+  background-position: right center; 
+  padding-right: 20px + 24px;
+  &:link, &:visited {
+    background-color: $nav_colour3;
+    color: #000;
+  }
+  &:hover {
+    background-color: lighten($nav_colour3, 10%);
+  }
+}
+
+#sub_nav ul ul a.midcrumb {
+  padding-left: 10px;
+}
+
+#top_nav a.current  {
   &:link, &:visited {
     background-color: $nav_colour2;
   }
   &:hover {
-    background: #444;
+    background-color: lighten($nav_colour2, 10%);
   }
 }
 
-#sub_nav li.current a {
+#sub_nav a.current {
   &:link, &:visited {
     background-color: #fff;
     color: #000;
   }
   &:hover {
-    background: #eee;
+    background-color: #eee;
   }
-}
-
-nav a:link, nav a:visited {
-  display: block;
-  padding: 0.5em 20px;
-  text-decoration:none;
-  color:#fff;
-  font-family: Verdana;
-}
-
-nav li a:hover {
-  background: #444;
 }
 
 #top_nav #members_area_button.logged_in a {
@@ -129,8 +156,15 @@ section h2 {
   margin-bottom: 0.5em;
   margin-top: 1em;
   font-family: Arial;
-  border-bottom: 3px solid #643906;
-  color: #643906; 
+  border-bottom: 3px solid $h2_colour;
+  color: $h2_colour; 
+}
+
+section h2 a {
+  &:link, &:visited {
+    color: $h2_colour;
+    text-decoration: none;
+  }
 }
 
 section h3 {
@@ -164,14 +198,28 @@ footer {
   clear:both;
 }
 
-footer a:link, footer a:visited {
-  text-decoration:none;
-  color: #fff;
+a {
+  &:link, &:visited {
+    text-decoration:none;
+    color: #111;
+  }
+  &:hover {
+    color: #996633;
+  }
 }
 
-footer a:hover {
-  color: #996633;
-} 
+footer a {
+  &:link, &:visited {
+    color: #fff;
+  }
+  &:hover {
+    color: #996633;
+  }
+}
+
+footer a {
+  color: #fff;
+}
 
 ::selection {
 	background: #d8c3a9;

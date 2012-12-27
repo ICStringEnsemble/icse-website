@@ -73,6 +73,10 @@ class ResourcesController extends Controller
                 {
                   $path = $this->resizeImage($path, '_'.$size_id, 200, null);
                 }
+              else if ($size_id == 'hpimagestrip')
+                {
+                  $path = $this->resizeImage($path, '_'.$size_id, 205, 205);
+                }
               else if ($size_id == 'article')
                 {
                   $path = $this->resizeImage($path, '_'.$size_id, 380, 380);

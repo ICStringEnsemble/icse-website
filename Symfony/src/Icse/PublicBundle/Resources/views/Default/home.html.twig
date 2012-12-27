@@ -1,5 +1,5 @@
 {% extends 'IcsePublicBundle:Default:template.html.twig' %}
-{% set currentPage = 'home' %}
+{% set currentSection = 'home' %}
 
 {% block stylesheets %}
 {{ parent() }}
@@ -15,6 +15,7 @@
 {% block javascripts %}
 {{ parent() }}
 <script src="{{ asset('bundles/icsepublic/js/lib/jquery.cycle.min.js') }}"></script> 
+<script src="{{ asset('bundles/icsepublic/js/lib/jquery.waitforimages.min.js') }}"></script> 
 {% endblock %} 
 
 {% block content %}
@@ -30,16 +31,19 @@
                                ?"Later This Week":"This Week"), events:thisweek_events},
                          {label:"Next Week", events:nextweek_events},
                          {label:((today_events or tomorrow_events or thisweek_events or nextweek_events)
-                               ?"Other Upcoming Events":"Upcoming Events"), events:future_events},
-                         {label:"Previous Events", events:past_events}] %}
+                               ?"Other Upcoming Events":"Upcoming Events"), url:path('IcsePublicBundle_future_events'), events:future_events}] %}
     {% if event_group.events %}
-      <h2>{{ event_group.label }}</h2>
+      {% if event_group.url is defined %}
+        <h2><a href="{{ event_group.url }}">{{ event_group.label }}</a></h2>
+      {% else %}
+        <h2>{{ event_group.label }}</h2>
+      {% endif %}
       {% for event in event_group.events %}
-        <div class=event >
+        <div><div class=event >
           {# Event Poster #}
           {% if event.getPoster() %}
-          <a href="{{ path('IcsePublicBundle_event', event) }}" title="{{ event.getName() }}" >
-            <img class=poster src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':event.getPoster().getFile(), 'size':'hpmainthumb'}) }}" />
+          <a class=poster href="{{ path('IcsePublicBundle_event', event) }}" title="{{ event.getName() }}" >
+            <img src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':event.getPoster().getFile(), 'size':'hpmainthumb'}) }}" />
           </a>
           {% endif %}
           {# Event Name #}
@@ -62,19 +66,67 @@
           {% if event.getDescription() %}
             <p>{{ event.getDescription() }}</p>
           {% endif %}
-        </div>
+        </div></div>
       {% endfor %}
     {% endif %}
   {% endfor %}
+  <h2><a href="{{ path('IcsePublicBundle_past_events') }}">Previous Events</a></h2>
+  <div id="past_events_strip">
+  {% spaceless %} 
+  {% for event in past_events %}
+      <a href="{{ path('IcsePublicBundle_event', event) }}" title="{{ event.getName() }}" >
+        <img src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':event.getPoster().getFile(), 'size':'hpimagestrip'}) }}" />
+      </a>
+  {% endfor %}
+  {% endspaceless %} 
+  </div>
+  <div id="past_events_more"><a href="{{ path('IcsePublicBundle_past_events') }}">more...</a></div>
+  <div id="past_event_title"></div>
 </div>
 
 <script>
-    $('.event img').mouseenter(function(e){
-        $(this).parents('.event').find('h3 a').addClass('mouseover'); 
+  $('#past_events_strip a').each(function(){
+    $(this).data('title', $(this).attr('title')).removeAttr('title'); 
+  });
+
+  $('#past_events_strip a').hover(function(){
+    $('#past_event_title').html($(this).data('title'));
+  }, function(){
+    $('#past_event_title').html('');
+  });
+
+  $('.event a').hover(function(){
+      $(this).parents('.event').parent().addClass('mouseover'); 
+  }, function(){
+      $(this).parents('.event').parent().removeClass('mouseover'); 
+  });
+
+  $('#past_events_strip').waitForImages(function() {
+    var images = $('#past_events_strip img');
+    var originalWidth = 0;
+    var originalWidthIE = 0;
+    var onloadsCompleted = 0;
+    var requiredWidth = 580;
+    images.each(function() {
+      console.log(this.naturalWidth);
+      var origImg = new Image(); 
+      origImg.onload = (function(visibleImg) {
+        return function(){
+          originalWidthIE += this.width;
+          $(visibleImg).data('origWidth', this.width);
+          onloadsCompleted += 1;
+          if (onloadsCompleted === images.size()) {
+            scaleFactor = requiredWidth / originalWidthIE;
+            if (scaleFactor > 1) scaleFactor = 1;
+            images.each(function(){
+              $(this).width($(this).data('origWidth')*scaleFactor);
+            });
+          }
+        }
+      })(this);
+      origImg.src = $(this).attr('src'); 
     });
-    $('.event img').mouseleave(function(e){
-        $(this).parents('.event').find('h3 a').removeClass('mouseover'); 
-    });
+  }); 
 </script>
 
 <div id=col_right>

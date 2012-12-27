@@ -41,10 +41,10 @@ class DefaultController extends Controller
                             ->findNextWeekEvents(); 
 
       $future_events = $dm->getRepository('IcsePublicBundle:Event')
-                          ->findFutureEvents();
+                          ->findOtherFutureEvents();
 
       $past_events = $dm->getRepository('IcsePublicBundle:Event')
-                        ->findPastEvents();
+                        ->findNMostRecentEventsWithPosters(4);
 
       $next_rehearsal = $dm->getRepository('IcseMembersBundle:Rehearsal')
                            ->findNext();

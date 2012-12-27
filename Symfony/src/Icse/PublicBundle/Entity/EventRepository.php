@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class EventRepository extends EntityRepository
 {
-  public function findPastEvents()
+    public function findPastEvents()
     {
       return $this->getEntityManager()
                   ->createQuery ('SELECT e 
@@ -23,7 +23,7 @@ class EventRepository extends EntityRepository
                   ->getResult();
     }
 
-  public function findTodayEvents()
+    public function findTodayEvents()
     {
       return $this->getEntityManager()
                   ->createQuery ('SELECT e 
@@ -36,7 +36,7 @@ class EventRepository extends EntityRepository
                   ->getResult();
     }
 
-  public function findTomorrowEvents()
+    public function findTomorrowEvents()
     {
       return $this->getEntityManager()
                   ->createQuery ('SELECT e 
@@ -49,7 +49,7 @@ class EventRepository extends EntityRepository
                   ->getResult();
     }
 
-  public function findLaterThisWeekEvents()
+    public function findLaterThisWeekEvents()
     {
       return $this->getEntityManager()
                   ->createQuery ('SELECT e 
@@ -63,7 +63,7 @@ class EventRepository extends EntityRepository
     }
 
 
-  public function findNextWeekEvents()
+    public function findNextWeekEvents()
     {
       return $this->getEntityManager()
                   ->createQuery ('SELECT e 
@@ -78,7 +78,7 @@ class EventRepository extends EntityRepository
 
 
 
-  public function findFutureEvents()
+    public function findOtherFutureEvents()
     {
       return $this->getEntityManager()
                   ->createQuery ('SELECT e 
@@ -87,5 +87,60 @@ class EventRepository extends EntityRepository
                                   ORDER BY e.starts_at ASC')
                   ->setParameters(array('time' => new \DateTime("next monday +1 week")))
                   ->getResult();
-    }  
+    }
+
+    public function findFutureEvents()
+    {
+      return $this->getEntityManager()
+                  ->createQuery ('SELECT e 
+                                  FROM IcsePublicBundle:Event e
+                                  WHERE e.starts_at >= :time
+                                  ORDER BY e.starts_at ASC')
+                  ->setParameters(array('time' => new \DateTime("today")))
+                  ->getResult();
+    }
+
+    public function findPastEventsInYear($year)
+    {
+      return $this->getEntityManager()
+                  ->createQuery ('SELECT e 
+                                  FROM IcsePublicBundle:Event e
+                                  WHERE e.starts_at >= :starttime
+                                  AND e.starts_at < :endtime
+                                  ORDER BY e.starts_at DESC')
+                  ->setParameters(array('starttime' => new \DateTime($year . "-01-01"),
+                                        'endtime' => min(new \DateTime($year + 1 . "-01-01"), new \DateTime("today"))))
+                  ->getResult();
+    }
+
+    public function yearOfFirstEvent()
+    {
+      return (new \DateTime(($this->getEntityManager()
+                  ->createQuery ('SELECT MIN(e.starts_at) from IcsePublicBundle:Event e')
+                  ->getSingleScalarResult())))->format('Y');
+    }
+
+    public function yearOfMostRecentEvent()
+    {
+      return (new \DateTime(($this->getEntityManager()
+                                  ->createQuery ('SELECT MAX(e.starts_at)
+                                                  FROM IcsePublicBundle:Event e
+                                                  WHERE e.starts_at < :time')
+                                  ->setParameters(array('time' => new \DateTime("today")))
+                                  ->getSingleScalarResult()))
+             )->format('Y');
+    }
+
+    public function findNMostRecentEventsWithPosters($n)
+    {
+      return $this->getEntityManager()
+                  ->createQuery ('SELECT e 
+                                  FROM IcsePublicBundle:Event e
+                                  WHERE e.starts_at < :time
+                                  AND e.poster IS NOT NULL
+                                  ORDER BY e.starts_at DESC')
+                  ->setParameters(array('time' => new \DateTime("today")))
+                  ->setMaxResults($n)
+                  ->getResult();
+    }
 }

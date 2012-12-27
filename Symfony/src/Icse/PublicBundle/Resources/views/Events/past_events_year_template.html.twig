@@ -1,0 +1,7 @@
+{% extends 'IcsePublicBundle:Events:past_events_template.html.twig' %}  
+ 
+{% set currentSubSection = 'past_events' %}
+
+{% set breadcrumbs = [{label: year, url: path('IcsePublicBundle_past_events_in_year', {year: year}) }] | merge(breadcrumbs | default([])) %} 
+
+ 

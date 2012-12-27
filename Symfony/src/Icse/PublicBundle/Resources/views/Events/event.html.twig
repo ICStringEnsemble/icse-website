@@ -1,5 +1,10 @@
-{% extends 'IcsePublicBundle:Default:template.html.twig' %} 
-{% set currentPage = 'events' %}
+{% extends (event.getStartsAt()|date('U') < 'tomorrow'|date('U'))?
+'IcsePublicBundle:Events:past_events_year_template.html.twig':
+'IcsePublicBundle:Events:future_events_template.html.twig'
+%} 
+
+{% set year = event.getStartsAt() | date('Y') %}
+{% set breadcrumbs = [{label: event.getName(), url: path('IcsePublicBundle_event', event)}] %} 
 
 {% set pageTitle = event.getName() %} 
 
