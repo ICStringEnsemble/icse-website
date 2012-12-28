@@ -6,37 +6,7 @@
 {% if events is empty %}
 There were no events in {{ year }} :(
 {% else %}
-      {% for event in events %}
-        <div class=event >
-          {# Event Poster #}
-          {% if event.getPoster() %}
-          <a href="{{ path('IcsePublicBundle_event', event) }}" title="{{ event.getName() }}" >
-            <img class=poster src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':event.getPoster().getFile(), 'size':'hpmainthumb'}) }}" />
-          </a>
-          {% endif %}
-          {# Event Name #}
-          <h3><a href="{{ path('IcsePublicBundle_event', event) }}">{{ event.getName() }}</a></h3>
-          {# Event Time #}
-          <div class="datetime">{{ event.getStartsAt() | date("l jS F Y, g:ia") }}</div>
-          {# Event Location #}
-          {% if event.getLocation() %}
-            <div class="location">{{ event.getLocation().getName() }}</div>
-          {% endif %}
-          {# Event Repertoire #}
-          {% if not event.getPerformances().isEmpty() %}
-          <ul class="repertoire">
-            {% for performance in event.getPerformances() %}
-            <li>{{ performance.getPiece().getComposer() }}: {{ performance.getPiece().getName() }}</li>
-            {% endfor %}
-          </ul>
-          {% endif %}
-          {# Event Description #}
-          {% if event.getDescription() %}
-            <p>{{ event.getDescription() }}</p>
-          {% endif %}
-        </div>
-        <hr>
-      {% endfor %}
+{% include 'IcsePublicBundle:Events:event_list_fragment.html.twig' with {'events': events} %}  
 {% endif %}
  
 {% endblock %}

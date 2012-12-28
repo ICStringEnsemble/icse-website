@@ -81,6 +81,10 @@ class ResourcesController extends Controller
                 {
                   $path = $this->resizeImage($path, '_'.$size_id, 380, 380);
                 }
+              else if ($size_id == 'enlarge')
+                {
+                  $path = $this->resizeImage($path, '_'.$size_id, 1920, 1920);
+                }
               else if ($size_id == 'original')
                 {
                 }

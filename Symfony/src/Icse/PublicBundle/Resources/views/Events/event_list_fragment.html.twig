@@ -1,0 +1,46 @@
+{% if firstInclude is not defined %}
+{% set firstInclude = true %}
+{% endif %}
+
+{% for event in events %}
+  <div><div class=event_listing >
+    {# Event Poster #}
+    {% if event.getPoster() %}
+    <a class=poster href="{{ path('IcsePublicBundle_event', event) }}" title="{{ event.getName() }}" >
+      <img src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':event.getPoster().getFile(), 'size':'hpmainthumb'}) }}" />
+    </a>
+    {% endif %}
+    {# Event Name #}
+    <h3><a href="{{ path('IcsePublicBundle_event', event) }}">{{ event.getName() }}</a></h3>
+    {# Event Time #}
+    <div class="datetime">{{ event.getStartsAt() | date("l jS F Y, g:ia") }}</div>
+    {# Event Location #}
+    {% if event.getLocation() %}
+      <div class="location">{{ event.getLocation().getName() }}</div>
+    {% endif %}
+    {# Event Repertoire #}
+    {% if not event.getPerformances().isEmpty() %}
+    <ul class="repertoire">
+      {% for performance in event.getPerformances() %}
+      <li>{{ performance.getPiece().getComposer() }}: {{ performance.getPiece().getName() }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {# Event Description #}
+    {% if event.getDescription() %}
+      <p>{{ event.getDescription() }}</p>
+    {% endif %}
+  </div></div>
+{% endfor %}
+
+{% if firstInclude %}
+<script>
+  $(document).ready(function(){
+    $('.event_listing a').hover(function(){
+        $(this).parents('.event_listing').parent().addClass('mouseover'); 
+    }, function(){
+        $(this).parents('.event_listing').parent().removeClass('mouseover'); 
+    }); 
+  })
+</script>
+{% endif %}

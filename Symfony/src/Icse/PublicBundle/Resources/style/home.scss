@@ -28,37 +28,6 @@ $col_left_width: 580px;
   margin-right: 20px;
 }
 
-.event {
-  clear: both;
-  margin-top: 1em;
-  overflow: hidden;
-}
-
-.event ul {
-  list-style: disc inside;
-}
-
-.event a.poster {
-  background: #fff;
-}
-
-.event img {
-    float: left;
-    margin-right: 1em;
-    border: 1px solid #000;
-    .mouseover & {
-      opacity: 0.8;
-    }
-}
-
-.event a {
-  color: #000;
-  text-decoration: none;
-  &:hover, .mouseover & {
-    color: #666;
-  }
-}
-
 #above_footer {
   background: url(@IcsePublicBundle/images/bg_home.png) #eee repeat-y center;
 }

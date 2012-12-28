@@ -201,10 +201,11 @@ footer {
 a {
   &:link, &:visited {
     text-decoration:none;
-    color: #111;
+    color: #996633;
   }
   &:hover {
-    color: #996633;
+    color: lighten(#996633, 10%);
+    text-decoration:underline;
   }
 }
 
@@ -395,3 +396,37 @@ img.article_pic {
   margin-left: 20px;
   margin-bottom: 20px;
 }
+
+.event_listing {
+  clear: both;
+  margin-top: 1em;
+  overflow: hidden;
+
+  ul {
+    list-style: disc inside;
+  }
+
+  a.poster {
+    background: #fff;
+  }
+
+  img {
+    float: left;
+    margin-right: 1em;
+    border: 1px solid #000;
+
+    .mouseover & {
+      opacity: 0.8;
+    }
+  }
+
+  a {
+    color: #000;
+    text-decoration: none;
+
+    &:hover, .mouseover & {
+      color: #666;
+    }
+  }
+}
+

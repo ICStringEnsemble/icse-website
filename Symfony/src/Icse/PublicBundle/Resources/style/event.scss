@@ -1,0 +1,24 @@
+section {
+  ul {
+    list-style: disc inside;
+  }
+
+  img {
+    float: left;
+    margin-right: 1em;
+    margin-bottom: 1em;
+    border: 1px solid #000;
+  }
+}
+
+.view_full_image:hover {
+  cursor: -webkit-zoom-in;
+  cursor: -moz-zoom-in; 
+  cursor: zoom-in; 
+}
+
+.fancybox-image {
+  cursor: -webkit-zoom-out;
+  cursor: -moz-zoom-out; 
+  cursor: zoom-out; 
+}

@@ -24,6 +24,7 @@
   {% autoescape false %} 
   {{ home_intro }}
   {% endautoescape %}
+  {% set includedEventList = false %}
 
   {% for event_group in [{label:"Today", events:today_events},
                          {label:"Tomorrow", events:tomorrow_events},
@@ -38,36 +39,8 @@
       {% else %}
         <h2>{{ event_group.label }}</h2>
       {% endif %}
-      {% for event in event_group.events %}
-        <div><div class=event >
-          {# Event Poster #}
-          {% if event.getPoster() %}
-          <a class=poster href="{{ path('IcsePublicBundle_event', event) }}" title="{{ event.getName() }}" >
-            <img src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':event.getPoster().getFile(), 'size':'hpmainthumb'}) }}" />
-          </a>
-          {% endif %}
-          {# Event Name #}
-          <h3><a href="{{ path('IcsePublicBundle_event', event) }}">{{ event.getName() }}</a></h3>
-          {# Event Time #}
-          <div class="datetime">{{ event.getStartsAt() | date("l jS F Y, g:ia") }}</div>
-          {# Event Location #}
-          {% if event.getLocation() %}
-            <div class="location">{{ event.getLocation().getName() }}</div>
-          {% endif %}
-          {# Event Repertoire #}
-          {% if not event.getPerformances().isEmpty() %}
-          <ul class="repertoire">
-            {% for performance in event.getPerformances() %}
-            <li>{{ performance.getPiece().getComposer() }}: {{ performance.getPiece().getName() }}</li>
-            {% endfor %}
-          </ul>
-          {% endif %}
-          {# Event Description #}
-          {% if event.getDescription() %}
-            <p>{{ event.getDescription() }}</p>
-          {% endif %}
-        </div></div>
-      {% endfor %}
+      {% include 'IcsePublicBundle:Events:event_list_fragment.html.twig' with {'events': event_group.events, 'firstInclude': not includedEventList} %}
+      {% set includedEventList = true %}
     {% endif %}
   {% endfor %}
   <h2><a href="{{ path('IcsePublicBundle_past_events') }}">Previous Events</a></h2>
@@ -93,12 +66,6 @@
     $('#past_event_title').html($(this).data('title'));
   }, function(){
     $('#past_event_title').html('');
-  });
-
-  $('.event a').hover(function(){
-      $(this).parents('.event').parent().addClass('mouseover'); 
-  }, function(){
-      $(this).parents('.event').parent().removeClass('mouseover'); 
   });
 
   $('#past_events_strip').waitForImages(function() {

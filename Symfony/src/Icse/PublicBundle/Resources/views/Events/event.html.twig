@@ -10,6 +10,13 @@
 
 {% block stylesheets %}
 {{ parent() }}
+{% stylesheets 
+  '@IcsePublicBundle/Resources/style/event.scss' 
+  filter='compass,css_url_rewrite,?yui_css'
+  output='bundles/icsepublic/css/event.css'
+%}
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+{% endstylesheets %}
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsepublic/fancybox/jquery.fancybox.css') }}" />
 {% endblock %}  
 
@@ -23,7 +30,7 @@
 <h1>{{ event.getName() }}</h1>
 
 {% if event.getPoster() %}
-<a class="view_full_image" href="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':event.getPoster().getFile(), 'size':'original'}) }}" title="{{ event.getName() }}" >
+<a class="view_full_image" href="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':event.getPoster().getFile(), 'size':'enlarge'}) }}" title="{{ event.getName() }}" >
 <img class=poster src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':event.getPoster().getFile(), 'size':'hpmainthumb'}) }}" />
 </a>
 {% endif %}
