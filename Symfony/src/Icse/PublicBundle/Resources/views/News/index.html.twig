@@ -1,0 +1,16 @@
+{% extends 'IcsePublicBundle:News:template.html.twig' %} 
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('bundles/icsepublic/js/lib/jquery.timeago.min.js') }}"></script> 
+{% endblock %} 
+
+{% block content %}
+<h1>News</h1>
+
+{% if articles is empty %}
+There's no news to announce yet.
+{% else %}
+{% include 'IcsePublicBundle:News:news_list_fragment.html.twig' with {'articles': articles} %}  
+{% endif %} 
+{% endblock %}

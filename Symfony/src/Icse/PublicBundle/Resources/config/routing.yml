@@ -2,6 +2,18 @@ IcsePublicBundle_home:
     pattern:  /
     defaults: { _controller: IcsePublicBundle:Default:index }
 
+IcsePublicBundle_news:
+    pattern:  /news
+    defaults: { _controller: IcsePublicBundle:News:index } 
+
+IcsePublicBundle_news_article:
+    pattern:  /news/{id}/{slug}
+    defaults: {_controller: IcsePublicBundle:News:article, slug: ''}
+
+IcsePublicBundle_news_article_endslash:
+    pattern:  /event/{id}/
+    defaults: {_controller: IcsePublicBundle:News:article, slug: ''}
+
 IcsePublicBundle_about:
     pattern:  /about/ensemble
     defaults: { _controller: IcsePublicBundle:About:ensemble }

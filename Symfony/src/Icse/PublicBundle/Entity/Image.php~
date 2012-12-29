@@ -198,4 +198,10 @@ class Image
             throw new \Exception('Could not relocate file');
           }
     }
+
+    public function getWidth()
+    {
+        list($width, $height) = getimagesize($this->image_dir.$this->getFile());
+        return $width;
+    }
 }

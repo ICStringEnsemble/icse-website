@@ -1,6 +1,21 @@
 section {
-  ul {
+  #TitleAndDate {
+    margin-bottom: 1em;
+  }
+
+  h1 {
+    padding-bottom: 0.3em;
+  }
+
+  h2 {
+    clear: both;
+  }
+
+  ul.repertoire {
     list-style: disc inside;
+    margin-left: 1em;
+    float: left;
+    margin-bottom: 1em;
   }
 
   img {
@@ -9,16 +24,9 @@ section {
     margin-bottom: 1em;
     border: 1px solid #000;
   }
+
+  #location #address {
+    margin-bottom: 0.5em;
+  }
 }
 
-.view_full_image:hover {
-  cursor: -webkit-zoom-in;
-  cursor: -moz-zoom-in; 
-  cursor: zoom-in; 
-}
-
-.fancybox-image {
-  cursor: -webkit-zoom-out;
-  cursor: -moz-zoom-out; 
-  cursor: zoom-out; 
-}

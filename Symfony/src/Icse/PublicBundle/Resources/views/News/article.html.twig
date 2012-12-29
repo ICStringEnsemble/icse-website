@@ -1,0 +1,49 @@
+{% extends 'IcsePublicBundle:News:template.html.twig' %}  
+{% set pageTitle = article.getHeadline() %} 
+
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsepublic/fancybox/jquery.fancybox.css') }}" />
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('bundles/icsepublic/fancybox/jquery.fancybox.js') }}"></script> 
+{% endblock %}  
+
+{% block content %}
+<div id="news_article">
+<div id="news_head">
+  <h1>{{ article.getHeadline() }}</h1>
+  <h2>{{ article.getSubHead() }}</h2>
+<div class="posted_at">Posted on {{ article.getPostedAt() | date("l jS F Y g:ia") }}</div> 
+</div>
+
+{% if article.getPicture() %}
+<a class="view_full_image" href="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':article.getPicture().getFile(), 'size':'enlarge'}) }}" title="{{ article.getHeadline() }}" >
+<img class='article_pic' src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':article.getPicture().getFile(), 'size':'article'}) }}" />
+</a> 
+{% endif %}
+
+{{ article.getBody() | raw }}
+<div class="posted_by">{{ article.getUpdatedBy().getFullName() }}</div> 
+</div>
+
+<script>
+  $('.view_full_image').fancybox({
+    padding: 0,
+    closeClick: true,
+    openEffect:'elastic',
+    closeEffect:'elastic',
+    helpers: {
+      orig: $(this),
+      overlay: {
+        css: {
+          'background': 'rgba(45, 45, 45, 0.5)' 
+        }
+      }
+    }
+  });
+</script>  
+
+{% endblock %}

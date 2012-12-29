@@ -1,0 +1,30 @@
+Icse\PublicBundle\Entity\NewsArticle:
+    type: entity
+    table: null
+    repositoryClass: Icse\PublicBundle\Entity\NewsArticleRepository
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        headline:
+            type: string
+            length: 255
+        subhead:
+            type: string
+            nullable: true
+        body:
+            type: text
+        posted_at:
+            type: datetime
+        updated_at:
+            type: datetime
+    manyToOne:
+        picture:
+            targetEntity: Image
+            nullable: true
+        updated_by: 
+            targetEntity: Icse\MembersBundle\Entity\Member
+    lifecycleCallbacks: {  }
+

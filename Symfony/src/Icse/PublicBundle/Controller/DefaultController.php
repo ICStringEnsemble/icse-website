@@ -49,6 +49,9 @@ class DefaultController extends Controller
       $next_rehearsal = $dm->getRepository('IcseMembersBundle:Rehearsal')
                            ->findNext();
 
+      $news_articles = $dm->getRepository('IcsePublicBundle:NewsArticle')
+                           ->listN(1);
+
       return $this->render('IcsePublicBundle:Default:home.html.twig', array('home_intro' => $this->getSiteText('home_intro'),
                                                                             'today_events' => $today_events,
                                                                             'tomorrow_events' => $tomorrow_events,
@@ -57,6 +60,7 @@ class DefaultController extends Controller
                                                                             'future_events' => $future_events,
                                                                             'past_events' => $past_events,
                                                                             'next_rehearsal' => $next_rehearsal,
+                                                                            'news_articles' => $news_articles,
                                                                             'slideshow_images' => $slideshow_images));
     }
 

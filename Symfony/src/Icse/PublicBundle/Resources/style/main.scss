@@ -143,7 +143,7 @@ section {
 
 
 section h1 {
-  font-size: 1.5em;
+  font-size: 1.6em;
   font-weight: bold;
   padding-bottom: 1em;
   font-family: Arial;
@@ -154,7 +154,6 @@ section h2 {
   font-weight: bold;
   padding-bottom: 0.1em;
   margin-bottom: 0.5em;
-  margin-top: 1em;
   font-family: Arial;
   border-bottom: 3px solid $h2_colour;
   color: $h2_colour; 
@@ -397,36 +396,93 @@ img.article_pic {
   margin-bottom: 20px;
 }
 
-.event_listing {
+.event_list, .news_list {
+  margin-bottom: 1em;
+}
+
+.event_listing, .news_listing {
   clear: both;
   margin-top: 1em;
   overflow: hidden;
 
-  ul {
-    list-style: disc inside;
+  a.picture+div.details {
+    padding-left: 201px + 16px;
   }
 
-  a.poster {
+  ul {
+    list-style: disc inside;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+    margin-left: 1em;
+  }
+
+  a.picture {
     background: #fff;
+    float: left;
+    display: block;
   }
 
   img {
-    float: left;
-    margin-right: 1em;
+    display: block;
     border: 1px solid #000;
-
-    .mouseover & {
-      opacity: 0.8;
-    }
   }
 
-  a {
+  a.picture, h3 a {
     color: #000;
     text-decoration: none;
 
     &:hover, .mouseover & {
       color: #666;
+
+      img {
+        opacity: 0.8;
+      }
     }
+  }
+
+  .posted_at {
+    color: #888;
+    font-size: 0.8em;
+  }
+
+
+}
+
+section #news_head {
+  margin-bottom: 1em;
+  padding-bottom: 0.4em;
+  border-bottom: 3px solid #000; 
+  h1 {
+    padding-bottom: 0.3em;
+  }
+
+  h2 {
+    margin-top: 0;
+    margin-bottom: 0;
+    border: none;
+    font-weight: normal;
   }
 }
 
+section #news_article {
+  .posted_at, .posted_by {
+    color: #888;
+    font-size: 0.8em;
+  } 
+
+  p.intro {
+    font-weight: bold;
+  }
+}
+
+.view_full_image:hover {
+  cursor: -webkit-zoom-in;
+  cursor: -moz-zoom-in; 
+  cursor: zoom-in; 
+}
+
+.fancybox-image {
+  cursor: -webkit-zoom-out;
+  cursor: -moz-zoom-out; 
+  cursor: zoom-out; 
+}

@@ -1,0 +1,40 @@
+{% if firstInclude is not defined %}
+{% set firstInclude = true %}
+{% endif %}
+
+{% if img_size is not defined %}
+{% set img_size = 'hpmainthumb' %}
+{% endif %}
+
+<div class="news_list">
+{% for article in articles %}
+  <div><div class="news_listing" >
+    {# Picture #}
+    {% if article.getPicture() %}
+    <a class=picture href="{{ path('IcsePublicBundle_news_article', article) }}" title="{{ article.getHeadline() }}" >
+      <img src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':article.getPicture().getFile(), 'size':img_size}) }}" />
+    </a>
+    {% endif %}
+    <div class="details">
+    {# Headline #}
+    <h3><a href="{{ path('IcsePublicBundle_news_article', article) }}">{{ article.getHeadline() }}</a></h3>
+    <h4>{{ article.getSubHead() }}</h4>
+    {# Time #}
+    <div class="posted_at">Posted <abbr class="timeago" title="{{ article.getPostedAt() | date('c') }}">on {{ article.getPostedAt() | date("l jS F Y g:ia") }}</abbr></div>
+    </div>
+  </div></div>
+</div>
+{% endfor %}
+
+{% if firstInclude %}
+<script>
+  $(document).ready(function(){
+    $("abbr.timeago").timeago(); 
+    $('.news_listing a').hover(function(){
+        $(this).parents('.news_listing').parent().addClass('mouseover'); 
+    }, function(){
+        $(this).parents('.news_listing').parent().removeClass('mouseover'); 
+    }); 
+  })
+</script>
+{% endif %}

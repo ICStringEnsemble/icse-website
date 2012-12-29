@@ -16,6 +16,7 @@
 {{ parent() }}
 <script src="{{ asset('bundles/icsepublic/js/lib/jquery.cycle.min.js') }}"></script> 
 <script src="{{ asset('bundles/icsepublic/js/lib/jquery.waitforimages.min.js') }}"></script> 
+<script src="{{ asset('bundles/icsepublic/js/lib/jquery.timeago.min.js') }}"></script> 
 {% endblock %} 
 
 {% block content %}
@@ -75,7 +76,6 @@
     var onloadsCompleted = 0;
     var requiredWidth = 580;
     images.each(function() {
-      console.log(this.naturalWidth);
       var origImg = new Image(); 
       origImg.onload = (function(visibleImg) {
         return function(){
@@ -116,18 +116,34 @@
   <div class="location">{{ next_rehearsal.getLocation().getName() }}</div>
   {% endif %}
 
-  <h2>News</h2>
   {#
   <img id="news_pic" src="http://Placekitten.com/64/70"/>
   <h3>Lorem Ipsum</h3>
   <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr</p>
   #}
-  <p>Coming soon...</p>
+  {% if news_articles is not empty %}
+  <h2>News</h2>
+  {% include 'IcsePublicBundle:News:news_list_fragment.html.twig' with {'articles': news_articles, 'img_size': 'hpsidethumb'} %}  
+  {% endif %}
+
+  <h2>Facebook</h2>
+  <iframe id="facebook_widget" src="//www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2FImperialCollegeStringEnsemble&amp;width=334&amp;height=290&amp;show_faces=true&amp;colorscheme=light&amp;stream=false&amp;border_color&amp;header=true" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:334px; height:290px;" allowTransparency="true"></iframe>
 
   <h2>Twitter</h2>
-
   <a class="twitter-timeline" href="https://twitter.com/ICStrings" data-widget-id="248604844275929088">Tweets by @ICStrings</a>
   <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+  <h2>Google+</h2>
+  <div class="g-plus" data-width="334" data-href="//plus.google.com/103940088893023414758" data-rel="publisher"></div>
+  <script type="text/javascript">
+    window.___gcfg = {lang: 'en-GB'};
+
+    (function() {
+      var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+      po.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+    })();
+  </script> 
  
 </div>
 

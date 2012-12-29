@@ -1,5 +1,5 @@
 {
-    "hash": "c03e7531cc4963b0443c8445f160156d",
+    "hash": "76e1fd077b8f5f42c4c8ae6089465a94",
     "packages": [
         {
             "name": "doctrine/common",
@@ -494,7 +494,7 @@
                 "symfony/serializer": ">=2.0,<2.3-dev",
                 "symfony/console": ">=2.0,<2.3-dev"
             },
-            "time": "1356175671",
+            "time": "2012-12-22 11:27:51",
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {

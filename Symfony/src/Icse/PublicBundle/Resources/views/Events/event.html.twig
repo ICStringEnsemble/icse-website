@@ -27,20 +27,18 @@
 
 {% block content %}
 
+<div id="TitleAndDate">
 <h1>{{ event.getName() }}</h1>
+{# Event Time #}
+<div class="datetime">{{ event.getStartsAt() | date("l jS F Y, g:ia") |nl2br }}</div>
+</div>
 
 {% if event.getPoster() %}
 <a class="view_full_image" href="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':event.getPoster().getFile(), 'size':'enlarge'}) }}" title="{{ event.getName() }}" >
-<img class=poster src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':event.getPoster().getFile(), 'size':'hpmainthumb'}) }}" />
+<img class=poster src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':event.getPoster().getFile(), 'size':'article'}) }}" />
 </a>
 {% endif %}
 
-{# Event Time #}
-<div class="datetime">{{ event.getStartsAt() | date("l jS F Y, g:ia") }}</div>
-{# Event Location #}
-{% if event.getLocation() %}
-<div class="location">{{ event.getLocation().getName() }}</div>
-{% endif %}
 {# Event Repertoire #}
 {% if not event.getPerformances().isEmpty() %}
 <ul class="repertoire">
@@ -49,10 +47,26 @@
 {% endfor %}
 </ul>
 {% endif %}
+
 {# Event Description #}
 {% if event.getDescription() %}
-<p>{{ event.getDescription() }}</p>
+<h2>Information</h2>
+{{ event.getDescription() | raw }}
 {% endif %}
+
+
+{# Map #}
+{% if event.getLocation() %}
+<div id="location">
+  <h2>Location</h2>
+  <div id=address>
+    <h3>{{ event.getLocation().getName() }}</h3>
+    <div>{{ event.getLocation().getAddress() | nl2br }}</div>
+  </div>
+  <div>{{ event.getLocation.getEmbedMap() | raw }}</div>
+</div>
+{% endif %}
+
 
 <script>
   $('.view_full_image').fancybox({

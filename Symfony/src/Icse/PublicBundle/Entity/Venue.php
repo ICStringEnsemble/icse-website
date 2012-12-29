@@ -52,4 +52,60 @@ class Venue
     {
         return $this->name;
     }
+    /**
+     * @var string
+     */
+    private $embedMap;
+
+
+    /**
+     * Set embedMap
+     *
+     * @param string $embedMap
+     * @return Venue
+     */
+    public function setEmbedMap($embedMap)
+    {
+        $this->embedMap = $embedMap;
+    
+        return $this;
+    }
+
+    /**
+     * Get embedMap
+     *
+     * @return string 
+     */
+    public function getEmbedMap()
+    {
+        return $this->embedMap;
+    }
+    /**
+     * @var string
+     */
+    private $address;
+
+
+    /**
+     * Set address
+     *
+     * @param string $address
+     * @return Venue
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+    
+        return $this;
+    }
+
+    /**
+     * Get address
+     *
+     * @return string 
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
 }

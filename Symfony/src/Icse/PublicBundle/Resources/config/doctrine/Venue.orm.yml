@@ -11,4 +11,10 @@ Icse\PublicBundle\Entity\Venue:
         name:
             type: string
             length: 255
+        address:
+            type: text
+            nullable: true
+        embedMap:
+            type: text
+            nullable: true
     lifecycleCallbacks: {  }

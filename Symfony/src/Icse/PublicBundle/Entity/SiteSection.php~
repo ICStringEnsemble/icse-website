@@ -124,4 +124,32 @@ class SiteSection
     {
         return $this->updated_by;
     }
+    /**
+     * @var \Icse\PublicBundle\Entity\Image
+     */
+    private $picture;
+
+
+    /**
+     * Set picture
+     *
+     * @param \Icse\PublicBundle\Entity\Image $picture
+     * @return SiteSection
+     */
+    public function setPicture(\Icse\PublicBundle\Entity\Image $picture = null)
+    {
+        $this->picture = $picture;
+    
+        return $this;
+    }
+
+    /**
+     * Get picture
+     *
+     * @return \Icse\PublicBundle\Entity\Image 
+     */
+    public function getPicture()
+    {
+        return $this->picture;
+    }
 }
