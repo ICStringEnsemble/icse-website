@@ -112,8 +112,12 @@
 
   {% if next_rehearsal %}
   <h2>Next Rehearsal</h2>
+  <div id="next_rehearsal">
   <div class="datetime">{{ next_rehearsal.getStartsAt() | date("l jS F Y, g:ia") }}</div>
+  {% if next_rehearsal.getLocation() %}
   <div class="location">{{ next_rehearsal.getLocation().getName() }}</div>
+  {% endif %}
+  </div>
   {% endif %}
 
   {#
