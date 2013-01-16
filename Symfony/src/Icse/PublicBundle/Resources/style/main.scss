@@ -1,8 +1,9 @@
 @import "compass/reset";
 @import "compass/css3/transform"; 
+$default-font-size: 16px;
 $page-width:  994px;
 $page-side-padding: 20px;
-$footer-text-size: 0.8em;
+$footer-text-size: (12px/$default-font-size) * 1em;
 $footer-padding: 0.5em;
 $footer-overall-height: $footer-text-size * (1 + 2 * $footer-padding/1em);
 
@@ -19,7 +20,7 @@ html, body {
 
 body {
   font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
-  font-size: 16px;
+  font-size: $default-font-size;
 } 
 
 #above_footer {
@@ -194,7 +195,7 @@ footer {
   color:#fff;
   background-color: #000;
   text-align: center;
-  margin-top: -2em;
+  margin-top: - (2 * $footer-padding + 1em);
 }
 
 .footer_push {
