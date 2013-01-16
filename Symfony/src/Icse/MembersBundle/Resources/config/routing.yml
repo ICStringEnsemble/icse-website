@@ -21,6 +21,14 @@ IcseMembersBundle_confirm_upload:
     pattern:  /members/admin/uploadconfirm
     defaults: { _controller: IcseMembersBundle:Admin:confirmUpload }
 
+IcseMembersBundle_members_list:
+    pattern:  /members/superadmin/members
+    defaults: { _controller: IcseMembersBundle:SuperAdmin:membersList }
+
+IcseMembersBundle_site_dev:
+    pattern:  /members/superadmin/sitedev
+    defaults: { _controller: IcseMembersBundle:SuperAdmin:siteDev }
+
 IcseMembersBundle_migrateDB:
     pattern:  /members/superadmin/migratedb
     defaults: { _controller: IcseMembersBundle:SuperAdmin:migrateDB }

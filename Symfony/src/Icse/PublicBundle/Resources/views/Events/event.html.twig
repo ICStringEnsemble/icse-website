@@ -34,8 +34,8 @@
 </div>
 
 {% if event.getPoster() %}
-<a class="view_full_image" href="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':event.getPoster().getFile(), 'size':'enlarge'}) }}" title="{{ event.getName() }}" >
-<img class=poster src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':event.getPoster().getFile(), 'size':'article'}) }}" />
+<a class="poster view_full_image" href="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':event.getPoster().getFile(), 'size':'enlarge'}) }}" title="{{ event.getName() }}" >
+<img src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':event.getPoster().getFile(), 'size':'article'}) }}" />
 </a>
 {% endif %}
 

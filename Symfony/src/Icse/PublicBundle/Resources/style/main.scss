@@ -1,4 +1,5 @@
 @import "compass/reset";
+@import "compass/css3/transform"; 
 $page-width:  994px;
 $page-side-padding: 20px;
 $footer-text-size: 0.8em;
@@ -130,6 +131,10 @@ nav a {
 
 #header_to_footer {
 }
+
+.ui-widget {
+    font-size: 96% !important;
+} 
 
 section {
   clear: both;
@@ -374,23 +379,14 @@ textarea#email_textarea {
 } 
 
 .flip-h {
-  -moz-transform: scaleX(-1);
-  -webkit-transform: scaleX(-1);
-  -o-transform: scaleX(-1);
-  transform: scaleX(-1);
-  -ms-filter: fliph;
-  filter: fliph;
+  @include scaleX(-1);
 } 
 
 .rotate-180 {
-  -moz-transform: rotate(-180deg);
-  -webkit-transform: rotate(-180deg);
-  -o-transform: rotate(-180deg);
-  transform: rotate(-180deg);
-  -ms-transform:rotate(-180deg); 
+  @include rotate(-180deg);
 } 
 
-img.article_pic {
+.article_pic {
   float: right;
   margin-left: 20px;
   margin-bottom: 20px;

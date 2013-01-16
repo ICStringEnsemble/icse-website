@@ -1,9 +1,16 @@
+@import "compass/css3/transform"; 
+@import "compass/css3/transition"; 
+$nav_col_width: 240px;
+$hidden_nav_col_width: 34px;
+$nav_col_edge_width: 2px;
+$nav_col_side_padding: 8px;
+$sidebar_animation_time: 0.2s;
+$sidebar_button_flip_animation_time: 1s;
+$nav_col_colour: #d4b896;
+
 #above_footer {
   background: url(@IcseMembersBundle/images/bg.png) #fff repeat-y left;
-  transition: background 1s;
-  -moz-transition: background 1s;
-  -webkit-transition: background 1s;
-  -o-transition: background 1s; 
+  @include transition(background $sidebar_animation_time); 
 }
 
 #above_footer.nav_col_hidden {
@@ -17,28 +24,16 @@
 
 #nav_column {
   float: left;
-  position:absolute;
-  width: 238px;
+  position:relative;
+  width: 0px;
   left: 0;
-  transition: left 1s;
-  -moz-transition: left 1s;
-  -webkit-transition: left 1s;
-  -o-transition: left 1s;  
+  @include transition(left $sidebar_animation_time);
   height: auto !important;
 }
 
 .nav_col_hidden #nav_column {
-  left: -206px;
+  left: $hidden_nav_col_width - $nav_col_width;
 }
-
-/*
-#nav_column li.category {
-  font-weight: bold;
-  font-family: Arial;
-  padding: 0.5em 20px;
-  background: #99764d;
-  width: 198px;
-}*/
 
 #nav_column li {
   display: block;
@@ -47,60 +42,49 @@
 }
 
 #nav_col_head, #nav_column li.category {
-  width: 224px;
-  padding: 0.5em 8px;
+  width: $nav_col_width - 2 * $nav_col_side_padding;
+  padding: 0.5em $nav_col_side_padding;
   color: #fff;
   background: #000;
-  transition: color 1s;
-  -moz-transition: color 1s;
-  -webkit-transition: color 1s;
-  -o-transition: color 1s;  
 }
 
-.nav_col_hidden #nav_col_head, .nav_col_hidden #nav_column li.category {
-  color: #000;
-}
+#nav_column li a {
 
-#nav_col_head {
-  position: absolute;
-  z-index: 1;
-}
+  &:link, &:visited {
+    display: block;
+    width: $nav_col_width - 2 * $nav_col_side_padding - $nav_col_edge_width;
+    padding: 0.5em $nav_col_side_padding;
+    text-decoration: none;
+    color: #000;
+    background-color: $nav_col_colour; 
 
-#nav_column li a:link, #nav_column li a:visited {
-  display: block;
-  width: 222px;
-  padding: 0.5em 8px;
-  text-decoration: none;
-  color: #000;
-}
+    &.current {
+      background-color: lighten($nav_col_colour, 10%);
+    }
+  }
 
-#nav_column li a:hover {
-  background: #ae8a60; 
-}
+  &:hover {
+      background-color: darken($nav_col_colour, 10%); 
+    &.current {
+      background-color: lighten($nav_col_colour, 20%);
+    }
+  }
 
-.nav_col_hidden #nav_column li a:hover {
-  background: none; 
-} 
+}
 
 #section_container {
-  margin-left: 240px;
+  margin-left: $nav_col_width;
   overflow: hidden; 
-  transition: margin-left 1s;
-  -moz-transition: margin-left 1s;
-  -webkit-transition: margin-left 1s;
-  -o-transition: margin-left 1s;  
+  @include transition(margin-left $sidebar_animation_time);  
 }
 
 .nav_col_hidden #section_container {
-  margin-left: 32px;
+  margin-left: $hidden_nav_col_width;
 }
 
 #hide_nav_col_button {
   float: right;
-  transition: transform 1s;
-  -moz-transition: -moz-transform 1s;
-  -webkit-transition: -webkit-transform 1s;
-  -o-transition: -o-transform 1s;
+  @include transition(transform $sidebar_button_flip_animation_time); 
 }
 
 #hide_nav_col_button:hover {
@@ -129,43 +113,34 @@ p.success {
   color: #090;
 }
 
-#hidden_nav_col_edge {
+#hidden_nav_col_cover {
   visibility: hidden;
   opacity: 0;
-  width: 34px;
+  width: $nav_col_width;
   height:100%;
   position: absolute;
-  right: -2px;
+  left: 0;
   z-index: 0;
-  transition: visibility 0s linear 1s, opacity 1s;
-  -moz-transition: visibility 0s linear 1s, opacity 1s;
-  -webkit-transition: visibility 0s linear 1s, opacity 1s;
-  -o-transition: visibility 0s linear 1s, opacity 1s; 
+  background-color: #000;
+  @include transition(visibility 0s linear $sidebar_animation_time, opacity $sidebar_animation_time); 
 }
 
-.nav_col_hidden #hidden_nav_col_edge {
+.nav_col_hidden #hidden_nav_col_cover {
   visibility: visible;
   opacity: 1;
-  transition-delay:0s; 
-  -moz-transition-delay:0s; 
-  -webkit-transition-delay:0s; 
-  -o-transition-delay:0s; 
+  @include transition-delay(0s); 
 } 
 
 
-#hidden_nav_col_edge div {
+#hidden_nav_col_cover div {
   color: #fff;
   position:absolute;
   top: 1em;
-  left: 0.6em;
-  transform: rotate(90deg);
-  transform-origin: bottom left;
-  -moz-transform: rotate(90deg);
-  -moz-transform-origin: bottom left;
-  -webkit-transform: rotate(90deg);
-  -webkit-transform-origin: bottom left;
-  -o-transform: rotate(90deg);
-  -o-transform-origin: bottom left;
-  -ms-transform:rotate(90deg);  
-  -ms-transform-origin: bottom left;
+  right: -0.9em;
+  @include rotate(90deg);
+  @include apply-origin(bottom left, false);
 } 
+
+.loading_spinner {
+  vertical-align: middle;
+}

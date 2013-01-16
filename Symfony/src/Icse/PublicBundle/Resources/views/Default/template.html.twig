@@ -1,8 +1,12 @@
-{% macro navbar_item(currentId, id, label, route) %}
-{% spaceless %}
-<li><a {% if id == currentId %}class='current'{% endif %} href="{{ path(route) }}">{{ label }}</a></li>
-{% endspaceless %}
-{% endmacro %}
+{% set main_nav_items = [
+              {label: 'Home', id:'home', url: path('IcsePublicBundle_home')},
+              {label: 'News', id:'news', url: path('IcsePublicBundle_news')},
+              {label: 'About Us', id:'about', url:path('IcsePublicBundle_about')},
+              {label: 'Events', id:'events', url:path('IcsePublicBundle_events')},
+              {label: 'Join Us', id:'join', url:path('IcsePublicBundle_join')},
+              {label: 'Support Us', id:'support', url:path('IcsePublicBundle_support')},
+              {label: 'Members', id:'members', url:path('IcseMembersBundle_home')}
+] %}
 <!DOCTYPE HTML>
 <html>
 {% spaceless %}
@@ -43,16 +47,15 @@
     {% block navbars %}
     <div id="top_nav">
       <ul>
-        {{ _self.navbar_item(currentSection, 'home', 'Home', 'IcsePublicBundle_home') }}
-        {{ _self.navbar_item(currentSection, 'news', 'News', 'IcsePublicBundle_news') }}
-        {{ _self.navbar_item(currentSection, 'about', 'About Us', 'IcsePublicBundle_about') }}
-        {{ _self.navbar_item(currentSection, 'events', 'Events', 'IcsePublicBundle_events') }}
-        {{ _self.navbar_item(currentSection, 'join', 'Join Us', 'IcsePublicBundle_join') }}
-        {{ _self.navbar_item(currentSection, 'support', 'Support Us', 'IcsePublicBundle_support') }}
-
-        <div id="members_area_button" {% if status_code is not defined %}{% if is_granted('ROLE_USER') %}class="logged_in"{% endif %}{% endif %} >
-        {{ _self.navbar_item(currentSection, 'members', 'Members', 'IcseMembersBundle_home') }}
-        </div>
+        {% for item in main_nav_items %}
+        <li {% if item.id == 'members' %}
+                id="members_area_button" 
+                {% if status_code is not defined %}{% if is_granted('ROLE_USER') %}class="logged_in"{% endif %}{% endif %}
+            {% endif %}
+        >
+            <a {% if item.id == currentSection %}class='current'{% endif %} href="{{ item.url }}">{{ item.label }}</a>
+        </li> 
+        {% endfor %}
       </ul>
     </div>
     {% endblock navbars %}

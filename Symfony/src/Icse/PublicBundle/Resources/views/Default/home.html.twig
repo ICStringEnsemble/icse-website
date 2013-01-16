@@ -120,11 +120,6 @@
   </div>
   {% endif %}
 
-  {#
-  <img id="news_pic" src="http://Placekitten.com/64/70"/>
-  <h3>Lorem Ipsum</h3>
-  <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr</p>
-  #}
   {% if news_articles is not empty %}
   <h2>News</h2>
   {% include 'IcsePublicBundle:News:news_list_fragment.html.twig' with {'articles': news_articles, 'img_size': 'hpsidethumb'} %}  

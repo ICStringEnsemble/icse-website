@@ -18,12 +18,18 @@ section {
     margin-bottom: 1em;
   }
 
-  img {
+  a.poster {
     float: left;
-    margin-right: 1em;
-    margin-bottom: 1em;
-    border: 1px solid #000;
+
+    img {
+      float: left;
+      margin-right: 1em;
+      margin-bottom: 1em;
+      border: 1px solid #000;
+    }
+    
   }
+
 
   #location #address {
     margin-bottom: 0.5em;

@@ -1,0 +1,47 @@
+{% extends 'IcseMembersBundle:Default:template.html.twig' %}
+{% set pageTitle = 'Site Dev' %}
+{% set currentSubSection = 'sitedev' %}
+
+{% block content %}
+<h1>Site Dev</h1>
+<div id="db_migration">
+  <h2>Database Migration</h2>
+  <button type=button>Migrate</button> 
+  <img hidden class="loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" /> 
+  <div class="output">
+  </div>
+    <div id="confirm_migrate_db" title="Perform Database Migration?" hidden=hidden>
+      <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span>
+      WARNING! You are about to execute a database migration that could result in schema
+      changes and data lost. Are you sure you wish to continue?</p>
+    </div>
+
+    <script>
+      $('#confirm_migrate_db').dialog({
+        autoOpen: false,
+        resizable: false,
+        modal: true,
+        width: 400,
+        buttons : {
+          "Yes" : function(){
+            $('#db_migration .output').load("{{ path('IcseMembersBundle_migrateDB') }}", function(){
+              $('#db_migration .loading_spinner').hide();
+            });
+            $('#db_migration .loading_spinner').show();
+            $(this).dialog("close");
+          },
+          "No" : function(){
+            $(this).dialog("close");
+          }
+        }
+      });
+
+      $('#db_migration button').removeAttr('disabled');
+ 
+      $('#db_migration button').button().click(function(e){
+        $('#confirm_migrate_db').dialog('open');
+      })
+    </script> 
+
+</div>
+{% endblock %}
