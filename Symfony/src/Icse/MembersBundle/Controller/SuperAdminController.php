@@ -10,7 +10,21 @@ class SuperAdminController extends Controller
 {
     public function membersListAction()
     {
-        return $this->render('IcseMembersBundle:SuperAdmin:memberslist.html.twig');
+
+        $dm = $this->getDoctrine(); 
+        $members = $dm->getRepository('IcseMembersBundle:Member')
+                     ->findAll();
+
+        $table_columns = array(
+                            array('heading' => 'ID', 'cell' => function($member){return $member->getID();}),
+                            array('heading' => 'Name', 'cell' => function($member){return $member->getFullName();}),
+                            array('heading' => 'Username', 'cell' => function($member){return $member->getUsername();}),
+                            array('heading' => 'Email', 'cell' => function($member){return $member->getEmail();}),
+                            array('heading' => 'Active', 'cell' => function($member){return $member->getActive();}),
+                        );
+  
+        return $this->render('IcseMembersBundle:SuperAdmin:memberslist.html.twig', array('members' => $members,
+                                                                                         'table_columns' => $table_columns));
     }
 
     public function siteDevAction()

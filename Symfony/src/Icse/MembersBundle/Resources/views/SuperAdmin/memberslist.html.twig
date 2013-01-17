@@ -4,4 +4,7 @@
 
 {% block content %}
 <h1>Members List</h1>
+
+{% include 'IcseMembersBundle:Admin:table_fragment.html.twig' with {columns: table_columns, entities: members} %}
+
 {% endblock %}

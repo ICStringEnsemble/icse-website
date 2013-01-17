@@ -1,0 +1,15 @@
+<table class=admintable>
+  <tr>
+    {% for column in columns %}
+    <th>{{ column.heading }}</th>
+    {% endfor %}
+  </tr>
+  
+  {% for entity in entities %}
+  <tr data-entity="{{ entity | serialize }}" class="{{ cycle(['odd', 'even'], loop.index) }}">
+    {% for column in columns %}
+    <td>{{ entity | getCell(column) }}</td>
+    {% endfor %}
+  </tr>
+  {% endfor %}
+</table>
