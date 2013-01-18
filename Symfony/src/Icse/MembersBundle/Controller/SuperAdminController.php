@@ -20,7 +20,9 @@ class SuperAdminController extends Controller
                             array('heading' => 'Name', 'cell' => function($member){return $member->getFullName();}),
                             array('heading' => 'Username', 'cell' => function($member){return $member->getUsername();}),
                             array('heading' => 'Email', 'cell' => function($member){return $member->getEmail();}),
-                            array('heading' => 'Active', 'cell' => function($member){return $member->getActive();}),
+                            array('heading' => 'Password', 'cell' => function($member){return $member->getPassword()?"Stored":"Imperial";}),
+                            array('heading' => 'Active', 'cell' => function($member){return $member->getActive()? "Yes":"No";}),
+                            array('heading' => 'Role', 'cell' => function($member){return $member->getRole();}),
                         );
   
         return $this->render('IcseMembersBundle:SuperAdmin:memberslist.html.twig', array('members' => $members,

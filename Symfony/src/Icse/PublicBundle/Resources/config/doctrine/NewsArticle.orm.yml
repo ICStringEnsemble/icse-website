@@ -16,6 +16,8 @@ Icse\PublicBundle\Entity\NewsArticle:
             nullable: true
         body:
             type: text
+        featured_until:
+            type: datetime
         posted_at:
             type: datetime
         updated_at:

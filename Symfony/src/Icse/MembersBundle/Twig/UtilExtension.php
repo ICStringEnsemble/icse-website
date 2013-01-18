@@ -16,6 +16,11 @@ class UtilExtension extends \Twig_Extension
         return call_user_func($column['cell'], $entity);
     }
 
+    public function yesOrNo($value)
+    {
+        return $value ? "Yes" : No;
+    }
+
     public function getName()
     {
         return 'util_extension';

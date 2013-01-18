@@ -231,4 +231,32 @@ class NewsArticle
     {
         return $this->updated_by;
     }
+    /**
+     * @var \DateTime
+     */
+    private $featured_until;
+
+
+    /**
+     * Set featured_until
+     *
+     * @param \DateTime $featuredUntil
+     * @return NewsArticle
+     */
+    public function setFeaturedUntil($featuredUntil)
+    {
+        $this->featured_until = $featuredUntil;
+    
+        return $this;
+    }
+
+    /**
+     * Get featured_until
+     *
+     * @return \DateTime 
+     */
+    public function getFeaturedUntil()
+    {
+        return $this->featured_until;
+    }
 }

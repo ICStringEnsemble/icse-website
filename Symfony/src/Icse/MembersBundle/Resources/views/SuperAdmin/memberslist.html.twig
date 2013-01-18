@@ -2,9 +2,23 @@
 {% set pageTitle = 'Members List' %}
 {% set currentSubSection = 'memberslist' %} 
 
+
 {% block content %}
 <h1>Members List</h1>
 
-{% include 'IcseMembersBundle:Admin:table_fragment.html.twig' with {columns: table_columns, entities: members} %}
+{% set rowPrefixes %}
+<a class="delete">Delete</a>
+<a class="edit">Edit</a>
+<a class="impersonate">Impersonate</a>
+{% endset %}
+
+{% include 'IcseMembersBundle:Admin:table_fragment.html.twig' with {columns: table_columns, entities: members, row_prefixes: rowPrefixes} %}
+
+<script>
+  $('tr a.impersonate').click(function(){
+    var username = $(this).parents('tr').data('entity').username;
+    window.location = "{{ path('IcseMembersBundle_home') }}" + "?_switch_user=" + username ;
+  });
+</script>
 
 {% endblock %}
