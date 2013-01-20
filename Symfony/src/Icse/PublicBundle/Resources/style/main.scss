@@ -144,6 +144,9 @@ section {
   padding: 0 $page-side-padding;
   padding-top:1em;
   padding-bottom:3em;
+}
+
+section, .ui-dialog {
   line-height: 1.5em;
 }
 
@@ -231,6 +234,11 @@ footer a {
 	background: #d8c3a9;
 } 
 
+$form-margin-width_fullpage: 400px;
+$form-margin-width_narrowpage: 150px;
+$form-label-separation: 20px;
+
+
 form {
   margin-top: 1em;
 }
@@ -246,10 +254,14 @@ form input[type=text], form input[type=email], form input[type=password] {
 form label {
   float: left;
   clear: left;
-  width: 380px;
+  width: $form-margin-width_fullpage - $form-label-separation;
   text-align: right;
-  margin-right: 20px;
+  margin-right: $form-label-separation;
   padding-bottom: 1em;
+
+  .ui-dialog & {
+    width: $form-margin-width_narrowpage - $form-label-separation;
+  }
 }
 
 form .radio input {
@@ -304,7 +316,11 @@ form input[type=submit] {
   display: block;
   float: none;
   clear: both;
-  margin-left: 400px;
+  margin-left: $form-margin-width_fullpage;
+
+  .ui-dialog & {
+    margin-left: $form-margin-width_narrowpage;
+  } 
 }
 
 #username_or_email_lookup input[type=button] {

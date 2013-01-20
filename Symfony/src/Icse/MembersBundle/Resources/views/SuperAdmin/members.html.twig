@@ -12,9 +12,32 @@
 <a class="impersonate">Impersonate</a>
 {% endset %}
 
+<div id=edit_dialog title="Edit Member" hidden=hidden> 
+  <form action="" method="post" {{ form_enctype(form) }}>
+      {{ form_widget(form) }}
+
+      <input type="submit" />
+  </form>
+</div>
+
+<button id=create_button type=button>New Member</button> 
+
 {% include 'IcseMembersBundle:Admin:table_fragment.html.twig' with {columns: table_columns, entities: members, row_prefixes: rowPrefixes} %}
 
 <script>
+  /* Dialog */
+  $('#edit_dialog').dialog({
+    autoOpen: false,
+    modal: true,
+    width: 500,
+    height: 500
+  });
+  $('#create_button').button().click(function(){
+    $('#edit_dialog').dialog('open');
+  }); 
+
+
+  /* Impersonate */
   $('tr a.impersonate').click(function(){
     var username = $(this).parents('tr').data('entity').username;
     window.location = "{{ path('IcseMembersBundle_home') }}" + "?_switch_user=" + username ;

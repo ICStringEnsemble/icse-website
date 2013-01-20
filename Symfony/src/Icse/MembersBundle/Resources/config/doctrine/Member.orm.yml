@@ -37,4 +37,6 @@ Icse\MembersBundle\Entity\Member:
       type: boolean
     role:
       type: integer
+    created_at:
+        type: datetime 
   lifecycleCallbacks: {  }

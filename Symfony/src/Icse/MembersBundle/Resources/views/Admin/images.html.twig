@@ -7,7 +7,7 @@
 
 <h1>Image Uploads</h1>
 
-<button id=new_image_button disabled=disabled type=button>New Images</button>
+<button id=new_image_button type=button>New Images</button>
 
 <div id=new_image_dialog title="Add New Images" hidden=hidden>
   <form method="post" enctype="multipart/form-data" action={{ path('IcseMembersBundle_receive_upload') }}>
@@ -18,9 +18,6 @@
 </div>
 
 <script>
-  /* Undo fallback */
-  $('#new_image_button').removeAttr('disabled');
-
   /* New image dialog */
   $('#new_image_dialog').dialog({
     autoOpen: false,

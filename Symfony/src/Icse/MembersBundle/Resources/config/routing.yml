@@ -9,6 +9,7 @@ IcseMembersBundle_account_settings:
     pattern:  /members/account
     defaults: { _controller: IcseMembersBundle:AccountSettings:index }
 
+#Admin
 IcseMembersBundle_image_uploads:
     pattern:  /members/admin/images
     defaults: { _controller: IcseMembersBundle:Admin:imageUploads }
@@ -21,14 +22,24 @@ IcseMembersBundle_confirm_upload:
     pattern:  /members/admin/uploadconfirm
     defaults: { _controller: IcseMembersBundle:Admin:confirmUpload }
 
-IcseMembersBundle_members_list:
+# Members List #
+IcseMembersBundle_members:
     pattern:  /members/superadmin/members
-    defaults: { _controller: IcseMembersBundle:SuperAdmin:membersList }
+    defaults: { _controller: IcseMembersBundle:SuperAdmin/Members:index }
+    requirements:
+        _method: GET 
 
+IcseMembersBundle_members_create:
+    pattern:  /members/superadmin/members
+    defaults: { _controller: IcseMembersBundle:SuperAdmin/Members:create }
+    requirements:
+        _method: POST
+
+# Misc SuperAdmin #
 IcseMembersBundle_site_dev:
     pattern:  /members/superadmin/sitedev
-    defaults: { _controller: IcseMembersBundle:SuperAdmin:siteDev }
+    defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:siteDev }
 
 IcseMembersBundle_migrateDB:
-    pattern:  /members/superadmin/migratedb
-    defaults: { _controller: IcseMembersBundle:SuperAdmin:migrateDB }
+    pattern:  /tmp/members/superadmin/migratedb
+    defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:migrateDB }

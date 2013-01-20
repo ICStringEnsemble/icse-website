@@ -43,32 +43,33 @@ if (!function_exists('ldap_get_info'))
 
 class SignUpController extends Controller
 {
-  private function getSiteText($name)
+    private function getSiteText($name)
     {
-      $textObject = $this->getDoctrine()
+        $textObject = $this->getDoctrine()
                     ->getRepository('IcsePublicBundle:SiteSection')
                     ->findOneByName($name);
 
-      return $textObject ? $textObject->getText() : "";
+        return $textObject ? $textObject->getText() : "";
     }
 
-  public function joinAction(Request $request, $freshers)
+    public function joinAction(Request $request, $freshers)
     {
-      if ($request->query->has('sn'))
+        /* If redirection due to success, show success message */
+        if ($request->query->has('sn'))
         {
-          $parameters = array('pageId' => 'join',
+            $parameters = array('pageId' => 'join',
                               'pageTitle' => 'Join Us',
                               'pageBody' => "Thanks " .  $request->query->get('sn') . ", we'll get back to you shortly.",
                               'freshers' => $freshers);
-          if ($freshers)
+            if ($freshers)
             {
-              $parameters['reloadPeriod'] = 3000;
+                $parameters['reloadPeriod'] = 3000;
             }
-          return $this->render('IcsePublicBundle:Default:generic_page.html.twig', $parameters);
+            return $this->render('IcsePublicBundle:Default:generic_page.html.twig', $parameters);
         }
-      $username_or_email = "";
-      $subscriber = new Subscriber();
-      $form = $this->createFormBuilder($subscriber)
+        $username_or_email = "";
+        $subscriber = new Subscriber();
+        $form = $this->createFormBuilder($subscriber)
               ->add('first_name', 'text')
               ->add('last_name', 'text')
               ->add('email', 'email')
@@ -164,23 +165,23 @@ class SignUpController extends Controller
                                                                             'freshers' => $freshers));
     }
 
-  private function isValidEmail($input)
+    private function isValidEmail($input)
     {
-      $emailConstraint = new \Symfony\Component\Validator\Constraints\Email;
-      $emailConstraint->checkMX = true;
-      $errorList = $this->get('validator')->validateValue($input, $emailConstraint); 
-      return count($errorList) == 0; 
+        $emailConstraint = new \Symfony\Component\Validator\Constraints\Email;
+        $emailConstraint->checkMX = true;
+        $errorList = $this->get('validator')->validateValue($input, $emailConstraint); 
+        return count($errorList) == 0; 
     }
   
-  public function query_usernameAction(Request $request)
+    public function query_usernameAction(Request $request)
     {
-      $input = $request->query->get('input');
-      $output = array();
-      if ($input != "" && $this->isValidEmail($input))
+        $input = $request->query->get('input');
+        $output = array();
+        if ($input != "" && $this->isValidEmail($input))
         {
           $output['type'] = 'email';
         }
-      else
+        else
         {
           $ldap_info = ldap_get_info($input);
           if ($ldap_info == false)
@@ -210,6 +211,6 @@ class SignUpController extends Controller
               $output['department'] = $ldap_info[2];
             }
         }
-      return new Response(json_encode($output));
+        return new Response(json_encode($output));
     }
 }

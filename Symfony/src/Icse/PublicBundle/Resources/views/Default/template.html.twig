@@ -17,6 +17,9 @@
   {% endif %}
   Imperial College String Ensemble
 </title>
+<!--[if lt IE 9]>
+<script src="{{ asset('bundles/icsepublic/js/lib/html5shiv-printshiv.js') }}"></script>
+<![endif]--> 
 <meta charset="UTF-8"> 
 <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon"> 
@@ -70,9 +73,19 @@
   <footer>
   Copyright &copy; 2005&ndash;{{ "now" | date ("Y") }} Imperial College String Ensemble | <a href="{{ path('IcsePublicBundle_contact') }}">Contact Us</a>
   </footer>
-  {# Google Analytics #}
-  <script type="text/javascript">
-
+  <script type="text/javascript"> 
+    {# Notify old browser #}
+    var $buoop = {} 
+    $buoop.ol = window.onload; 
+    window.onload=function(){ 
+     try {if ($buoop.ol) $buoop.ol();}catch (e) {} 
+     var e = document.createElement("script"); 
+     e.setAttribute("type", "text/javascript"); 
+     e.setAttribute("src", "http://browser-update.org/update.js"); 
+     document.body.appendChild(e); 
+    } 
+	  
+    {# Google Analytics #}
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-37318585-1']);
     _gaq.push(['_setCookiePath', '/arts/stringensemble']); 
