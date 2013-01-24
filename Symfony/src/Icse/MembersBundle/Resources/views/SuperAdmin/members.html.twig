@@ -7,14 +7,18 @@
 <h1>Members List</h1>
 
 <ul class="table_buttons">
-  <li><button id=refresh class="show_if_none_selected" type=button>Refresh</button></li>
-  <li><button id=create class="show_if_none_selected" type=button>New Member</button></li>
-  <li><button id=edit class="show_if_one_selected" type=button>Edit</button></li>
-  <li><button id=delete class="show_if_any_selected" type=button>Delete</button></li>
-  <li><button id=impersonate class="show_if_one_selected" type=button>Impersonate</button></li>
+  <li><button class="refresh show_if_none_selected" type=button>Refresh</button></li>
+  <li><button class="create show_if_none_selected" type=button>New Member</button></li>
+  <li><button class="edit show_if_one_selected" type=button>Edit</button></li>
+  <li><button class="delete show_if_any_selected" type=button>Delete</button></li>
+  <li><button class="impersonate show_if_one_selected" type=button>Impersonate</button></li>
+  <li><button class="unselectall show_if_any_selected" type=button>Unselect All</button></li>
+  <img hidden class="loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" /> 
 </ul>
 
-{% include 'IcseMembersBundle:Admin:table_fragment.html.twig' with {columns: table_columns, entities: members} %}
+<div id="admin_table_container">
+{% include 'IcseMembersBundle:Admin:table_fragment.html.twig' %}
+</div>
 
 <div id=edit_dialog title="Edit Member" hidden=hidden> 
   <form id="edit_form" action="" method="post" {{ form_enctype(form) }}>
@@ -36,6 +40,20 @@
 </div>
 
 <script>
+	var loadingIndicatorJobs = 0; 
+
+	function startLoading() {
+		loadingIndicatorJobs += 1;
+		$('.table_buttons .loading_spinner').show();
+	}
+	
+	function stopLoading() {
+		loadingIndicatorJobs -= 1;
+		if (loadingIndicatorJobs == 0) {
+			$('.table_buttons .loading_spinner').hide();
+		}
+	} 
+
   var frm = $('form#edit_form');
 
   /* Dialog */
@@ -46,7 +64,7 @@
     height: 500
   });
   $('button, input:submit').button(); 
-  $('button#create').vclick(function(){
+  $('button.create').click(function(){
     $('#edit_dialog').dialog('open');
     frm.attr('method', 'POST');
     frm.attr('action', "{{ path('IcseMembersBundle_members_create') }}");
@@ -54,39 +72,47 @@
   }); 
 
   /* Table Row Selection */
+  
   $.fn.isAnyTableRowSelected = function(){
-    return $(this).hasClass('selected');
+    return $(this).hasClass('ui-selected');
   };
   $.fn.areAllTableRowsSelected = function(){
-    return $(this).not('thead tr').not('.selected').length == 0;
+    return $(this).not('thead tr').not('.ui-selected').length == 0;
   };
   $.fn.isExactlyOneTableRowSelected = function(){
-    return $(this).filter('.selected').length == 1;
+    return $(this).filter('.ui-selected').length == 1;
   };
 
-  function hideShowControlButtons() {
+  function hideShowControlButtons(time) {
+    if(typeof time === "undefined") {
+      time = 200;
+    } 
     if (!$('tbody tr').isAnyTableRowSelected()) {
-      $('.show_if_none_selected').show(200);
-      $('.show_if_one_selected, .show_if_any_selected').hide(200);
+      $('.show_if_none_selected').show(time);
+      $('.show_if_one_selected, .show_if_any_selected').hide(time);
     } else if ($('tbody tr').isExactlyOneTableRowSelected()) {
-      $('.show_if_one_selected, .show_if_any_selected').show(200);
-      $('.show_if_none_selected').hide(200);
+      $('.show_if_one_selected, .show_if_any_selected').show(time);
+      $('.show_if_none_selected').hide(time);
     } else {
-      $('.show_if_any_selected').show(200);
-      $('.show_if_none_selected, .show_if_one_selected').hide(200);
+      $('.show_if_any_selected').show(time);
+      $('.show_if_none_selected, .show_if_one_selected').hide(time);
     }
   }
-  hideShowControlButtons();
+  hideShowControlButtons(0);
 
-  $.fn.selectTableRow = function(){
+  /*
+  $.fn.selectTableRow = function(updateButtons){
+    if(typeof updateButtons === "undefined") {
+      updateButtons = true;
+    } 
     $(this).each(function(){
       $(this).addClass('selected');
       $(this).find('input:checkbox').prop('checked', true);
     });
-    if ($('tbody tr').areAllTableRowsSelected()) {
+    if ($('tbody tr').  areAllTableRowsSelected()) {
       $('table thead input:checkbox').prop('checked', true);
     }
-    hideShowControlButtons();
+    if (updateButtons) hideShowControlButtons();
   };
   $.fn.unselectTableRow = function(){
     $(this).each(function(){
@@ -97,36 +123,68 @@
       $('table thead input:checkbox').prop('checked', false);
     }
     hideShowControlButtons();
-  };
-  $('table tbody tr').vclick(function(){
-    if ($(this).isAnyTableRowSelected()) {
-      $(this).unselectTableRow();
-    } else {
-      $(this).selectTableRow();
-    }
-  });
-  $('table thead input:checkbox').vclick(function(){
-    if ($('tbody tr').isAnyTableRowSelected()) {
-      $('tbody tr').unselectTableRow();
-    } else {
-      $('tbody tr').selectTableRow();
-    }
-  });
+  };*/
+  function attachTableHandlers() {
+    /*
+    $('table tbody tr').click(function(e){
+      if (e.which == 1) {
+        if ($(this).isAnyTableRowSelected()) {
+          $(this).unselectTableRow();
+        } else {
+          $(this).selectTableRow();
+        }
+      } else if (e.which == 2) {
+        $(this).selectTableRow(false);
+        $('tbody tr').not(this).unselectTableRow();
+      }
+    });
+    $('table thead input:checkbox').click(function(){
+      if ($('tbody tr').isAnyTableRowSelected()) {
+        $('tbody tr').unselectTableRow();
+      } else {
+        $('tbody tr').selectTableRow();
+      }
+    });
+    */
+    $('tbody').selectable({
+      filter: 'tr',
+      stop: hideShowControlButtons
+    });
+
+  }
+  attachTableHandlers();
+  
+  function reloadTable(){
+    $('#admin_table_container').load("{{ path('IcseMembersBundle_members_table') }}", function(){
+      attachTableHandlers();
+      stopLoading();
+    });
+    startLoading();
+  }
 
   /* Impersonate */
-  $('table tr a.impersonate').vclick(function(){
-    var username = $(this).parents('tr').data('entity').username;
+  $('button.impersonate').click(function(){
+    var username = $('tbody tr.ui-selected').data('entity').username;
     window.location = "{{ path('IcseMembersBundle_home') }}" + "?_switch_user=" + username ;
   });
 
-  $('table tr a.delete').vclick(function(){
-    var id = $(this).parents('tr').data('entity').id;
-    $.ajax({
-      type: 'DELETE',
-      url: "{{ path('IcseMembersBundle_members_delete', {id: ''}) }}" + '/' + id,
-      dataType: 'json'
-    });
+  $('button.refresh').click(reloadTable);
+
+  $('button.unselectall').click(function(){
+    $('tbody tr').removeClass('ui-selected')
+    hideShowControlButtons();
   });
+
+  $('button.delete').click(function(){
+    $('tbody tr.ui-selected').each(function(){
+      var id = $(this).data('entity').id;
+       $.ajax({
+        type: 'DELETE',
+        url: "{{ path('IcseMembersBundle_members_delete', {id: ''}) }}" + '/' + id,
+        dataType: 'json'
+      }); 
+    });
+  })
 
   /* Form submit */
   frm.submit(function () {
@@ -136,9 +194,11 @@
           data: frm.serialize(),
           dataType: 'json', 
           success: function (result) {
-            if (result == "success"){
-            }
             frm.find('.loading_spinner').hide();
+            if (result == "success"){
+              $('#edit_dialog').dialog('close');
+              reloadTable();
+            }
           }
       });
       frm.find('.loading_spinner').show();

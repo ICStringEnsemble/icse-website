@@ -4,21 +4,19 @@
       {% if row_prefixes is defined %}
       <th></th>
       {% endif %}
-      <th><input type="checkbox" /></th>
-      {% for column in columns %}
+      {% for column in table_content.columns %}
       <th>{{ column.heading }}</th>
       {% endfor %}
     </tr>
   </thead>
   
   <tbody>
-    {% for entity in entities %}
+    {% for entity in table_content.entities %}
       <tr data-entity="{{ entity | serialize }}">
         {% if row_prefixes is defined %}
         <td>{{ rowPrefixes }}</td>
         {% endif %}
-        <td><input type="checkbox" /></td>
-        {% for column in columns %}
+        {% for column in table_content.columns %}
         <td>{{ entity | getCell(column) }}</td>
         {% endfor %}
       </tr>

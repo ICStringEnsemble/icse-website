@@ -11,6 +11,24 @@ use Icse\MembersBundle\Entity\Member;
 
 class MembersController extends Controller
 {
+    private function getTableContent()
+    {
+        $dm = $this->getDoctrine(); 
+        $members = $dm->getRepository('IcseMembersBundle:Member')
+                     ->findAll();
+
+        $columns = array(
+                            array('heading' => 'ID', 'cell' => function($member){return $member->getID();}),
+                            array('heading' => 'Name', 'cell' => function($member){return $member->getFullName();}),
+                            array('heading' => 'Username', 'cell' => function($member){return $member->getUsername();}),
+                            array('heading' => 'Email', 'cell' => function($member){return $member->getEmail();}),
+                            array('heading' => 'Password', 'cell' => function($member){return $member->getPassword()?"Stored":"Imperial";}),
+                            array('heading' => 'Active', 'cell' => function($member){return $member->getActive()? "Yes":"No";}),
+                            array('heading' => 'Role', 'cell' => function($member){return $member->getRole();}),
+                        );
+        return array("columns" => $columns, "entities" => $members);
+    }
+
     private function getForm($member)
     {
         $form = $this->createFormBuilder($member)
@@ -39,25 +57,17 @@ class MembersController extends Controller
     {
         $member = new Member();
         $form = $this->getForm($member);
-
-        $dm = $this->getDoctrine(); 
-        $members = $dm->getRepository('IcseMembersBundle:Member')
-                     ->findAll();
-
-        $table_columns = array(
-                            array('heading' => 'ID', 'cell' => function($member){return $member->getID();}),
-                            array('heading' => 'Name', 'cell' => function($member){return $member->getFullName();}),
-                            array('heading' => 'Username', 'cell' => function($member){return $member->getUsername();}),
-                            array('heading' => 'Email', 'cell' => function($member){return $member->getEmail();}),
-                            array('heading' => 'Password', 'cell' => function($member){return $member->getPassword()?"Stored":"Imperial";}),
-                            array('heading' => 'Active', 'cell' => function($member){return $member->getActive()? "Yes":"No";}),
-                            array('heading' => 'Role', 'cell' => function($member){return $member->getRole();}),
-                        );
+        $table_content = $this->getTableContent();
   
-        return $this->render('IcseMembersBundle:SuperAdmin:members.html.twig', array('members' => $members,
-                                                                                        'table_columns' => $table_columns,
+        return $this->render('IcseMembersBundle:SuperAdmin:members.html.twig', array('table_content' => $table_content,
                                                                                         'form' => $form->createView()
                                                                                     ));
+    }
+
+    public function tableAction()
+    {
+        $table_content = $this->getTableContent();
+        return $this->render('IcseMembersBundle:Admin:table_fragment.html.twig', array('table_content' => $table_content)); 
     }
 
     public function createAction(Request $request)
@@ -71,9 +81,9 @@ class MembersController extends Controller
             $em->persist($member);
             $em->flush();
 
-            return new Response(json_encode("Success"));
+            return new Response(json_encode("success"));
         } else {
-            return new Response(json_encode("Fail"));
+            return new Response(json_encode("fail"));
         }
     }
 
@@ -83,11 +93,11 @@ class MembersController extends Controller
         $member = $dm->getRepository('IcseMembersBundle:Member')
             ->findOneById($id);
         } catch (\Doctrine\Orm\NoResultException $e) {
-            return new Response(json_encode("Fail"));
+            return new Response(json_encode("fail"));
         } 
         $em = $dm->getManager();
         $em->remove($member);
         $em->flush();
-        return new Response(json_encode("Success"));
+        return new Response(json_encode("success"));
     }
 }

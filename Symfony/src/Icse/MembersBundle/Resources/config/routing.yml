@@ -29,6 +29,12 @@ IcseMembersBundle_members:
     requirements:
         _method: GET 
 
+IcseMembersBundle_members_table:
+    pattern:  /members/superadmin/members/table
+    defaults: { _controller: IcseMembersBundle:SuperAdmin/Members:table }
+    requirements:
+        _method: GET 
+
 IcseMembersBundle_members_create:
     pattern:  /members/superadmin/members
     defaults: { _controller: IcseMembersBundle:SuperAdmin/Members:create }

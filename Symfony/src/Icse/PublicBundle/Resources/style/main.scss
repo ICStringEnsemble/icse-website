@@ -417,14 +417,20 @@ table.admintable {
   tbody tr {
     &:nth-child(odd) {
       background-color: #e3c9ab; 
-      &.selected {
+      &.ui-selected {
         background-color: #AFC9D4;
+      }
+      &.ui-selecting {
+        background-color: lighten(#AFC9D4, 5%);
       }
     }
     &:nth-child(even) {
       background-color: #fff; 
-      &.selected {
+      &.ui-selected {
         background-color: lighten(#AFC9D4, 10%);
+      }
+      &.ui-selecting {
+        background-color: lighten(#AFC9D4, 15%);
       }
     }
   }
