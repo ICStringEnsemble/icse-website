@@ -1,23 +1,23 @@
-/* line 6, assetic_compass8agmvs.scss */
+/* line 6, assetic_compassRjSUse.scss */
 #col_left, #col_right {
   float: left;
 }
 
-/* line 10, assetic_compass8agmvs.scss */
+/* line 10, assetic_compassRjSUse.scss */
 #col_left {
   width: 580px;
   margin-right: 20px;
   padding-top: 1em;
 }
 
-/* line 16, assetic_compass8agmvs.scss */
+/* line 16, assetic_compassRjSUse.scss */
 #col_right {
   width: 334px;
   margin-left: 20px;
   padding-top: 20px;
 }
 
-/* line 22, assetic_compass8agmvs.scss */
+/* line 22, assetic_compassRjSUse.scss */
 #col_right #slideshow {
   float: left;
   height: 254px;
@@ -26,40 +26,40 @@
   overflow: hidden;
 }
 
-/* line 30, assetic_compass8agmvs.scss */
+/* line 30, assetic_compassRjSUse.scss */
 #above_footer {
   background: url(../../../../bundles/icsepublic/images/bg_home.png) #eeeeee repeat-y center;
 }
 
-/* line 34, assetic_compass8agmvs.scss */
+/* line 34, assetic_compassRjSUse.scss */
 section {
   padding-top: 0;
 }
 
-/* line 38, assetic_compass8agmvs.scss */
+/* line 38, assetic_compassRjSUse.scss */
 #past_events_strip a {
   background: #fff;
   display: inline-block;
 }
-/* line 41, assetic_compass8agmvs.scss */
+/* line 41, assetic_compassRjSUse.scss */
 #past_events_strip a img {
   vertical-align: middle;
   outline: 1px solid black;
   width: 145px;
 }
-/* line 46, assetic_compass8agmvs.scss */
+/* line 46, assetic_compassRjSUse.scss */
 #past_events_strip a:hover img {
   opacity: 0.8;
 }
 
-/* line 51, assetic_compass8agmvs.scss */
+/* line 51, assetic_compassRjSUse.scss */
 #past_events_more {
   margin-top: 0.4em;
   margin-bottom: -0.5em;
   float: right;
 }
 
-/* line 57, assetic_compass8agmvs.scss */
+/* line 57, assetic_compassRjSUse.scss */
 #past_event_title {
   margin-top: 1.5em;
   margin-bottom: 2em;
@@ -67,18 +67,18 @@ section {
   text-align: center;
 }
 
-/* line 66, assetic_compass8agmvs.scss */
+/* line 66, assetic_compassRjSUse.scss */
 .news_listing a.picture + div.details {
   padding-left: 116px;
 }
 
-/* line 71, assetic_compass8agmvs.scss */
+/* line 71, assetic_compassRjSUse.scss */
 #facebook_widget {
   background-color: #fff;
   margin-bottom: 1em;
 }
 
-/* line 76, assetic_compass8agmvs.scss */
+/* line 76, assetic_compassRjSUse.scss */
 #twitter-widget-0, a.twitter-timeline, #next_rehearsal {
   margin-bottom: 1em;
 }
