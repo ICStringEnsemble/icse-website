@@ -46,7 +46,7 @@
     height: 500
   });
   $('button, input:submit').button(); 
-  $('button#create').click(function(){
+  $('button#create').vclick(function(){
     $('#edit_dialog').dialog('open');
     frm.attr('method', 'POST');
     frm.attr('action', "{{ path('IcseMembersBundle_members_create') }}");
@@ -98,14 +98,14 @@
     }
     hideShowControlButtons();
   };
-  $('table tbody tr').click(function(){
+  $('table tbody tr').vclick(function(){
     if ($(this).isAnyTableRowSelected()) {
       $(this).unselectTableRow();
     } else {
       $(this).selectTableRow();
     }
   });
-  $('table thead input:checkbox').click(function(){
+  $('table thead input:checkbox').vclick(function(){
     if ($('tbody tr').isAnyTableRowSelected()) {
       $('tbody tr').unselectTableRow();
     } else {
@@ -114,12 +114,12 @@
   });
 
   /* Impersonate */
-  $('table tr a.impersonate').click(function(){
+  $('table tr a.impersonate').vclick(function(){
     var username = $(this).parents('tr').data('entity').username;
     window.location = "{{ path('IcseMembersBundle_home') }}" + "?_switch_user=" + username ;
   });
 
-  $('table tr a.delete').click(function(){
+  $('table tr a.delete').vclick(function(){
     var id = $(this).parents('tr').data('entity').id;
     $.ajax({
       type: 'DELETE',
