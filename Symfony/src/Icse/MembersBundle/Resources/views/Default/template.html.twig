@@ -77,18 +77,26 @@
 <script>
   $(document).ready(function(){
     var nav_col_enabled = true;
-    $('#hide_nav_col_button, #hidden_nav_col_cover').click(function(){
-      if (nav_col_enabled) {
+    function hideNavColumn(){
         $('#above_footer').addClass("nav_col_hidden"); 
         $('#hide_nav_col_button').addClass("rotate-180");
         nav_col_enabled = false;
-      }
-      else {
+    }
+    function showNavColumn(){
         $('#above_footer').removeClass("nav_col_hidden"); 
         $('#hide_nav_col_button').removeClass("rotate-180");
         nav_col_enabled = true;
+    }
+    $('#hide_nav_col_button, #hidden_nav_col_cover').click(function(){
+      if (nav_col_enabled) {
+        hideNavColumn();
+      }
+      else {
+        showNavColumn();
       }
     });
+    $('#nav_column li').bind('swipeleft', hideNavColumn);
+    $('#hidden_nav_col_cover').bind('swiperight', showNavColumn);
   })
 </script>
 {% endblock %}
