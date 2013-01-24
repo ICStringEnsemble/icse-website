@@ -35,11 +35,23 @@ IcseMembersBundle_members_create:
     requirements:
         _method: POST
 
+IcseMembersBundle_members_update:
+    pattern:  /members/superadmin/members/{id}
+    defaults: { _controller: IcseMembersBundle:SuperAdmin/Members:update }
+    requirements:
+        _method: PUT 
+
+IcseMembersBundle_members_delete:
+    pattern:  /members/superadmin/members/{id}
+    defaults: { _controller: IcseMembersBundle:SuperAdmin/Members:delete }
+    requirements:
+        _method: DELETE 
+
 # Misc SuperAdmin #
 IcseMembersBundle_site_dev:
     pattern:  /members/superadmin/sitedev
     defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:siteDev }
 
 IcseMembersBundle_migrateDB:
-    pattern:  /tmp/members/superadmin/migratedb
+    pattern:  /members/superadmin/migratedb
     defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:migrateDB }

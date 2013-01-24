@@ -6,25 +6,38 @@
 {% block content %}
 <h1>Members List</h1>
 
-{% set rowPrefixes %}
-<a class="delete">Delete</a>
-<a class="edit">Edit</a>
-<a class="impersonate">Impersonate</a>
-{% endset %}
+<ul class="table_buttons">
+  <li><button id=refresh class="show_if_none_selected" type=button>Refresh</button></li>
+  <li><button id=create class="show_if_none_selected" type=button>New Member</button></li>
+  <li><button id=edit class="show_if_one_selected" type=button>Edit</button></li>
+  <li><button id=delete class="show_if_any_selected" type=button>Delete</button></li>
+  <li><button id=impersonate class="show_if_one_selected" type=button>Impersonate</button></li>
+</ul>
+
+{% include 'IcseMembersBundle:Admin:table_fragment.html.twig' with {columns: table_columns, entities: members} %}
 
 <div id=edit_dialog title="Edit Member" hidden=hidden> 
-  <form action="" method="post" {{ form_enctype(form) }}>
+  <form id="edit_form" action="" method="post" {{ form_enctype(form) }}>
       {{ form_widget(form) }}
 
-      <input type="submit" />
+      <div class="submit_and_loading_container">
+        <input type="submit" />
+        <img hidden class="loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" /> 
+      </div>
   </form>
 </div>
 
-<button id=create_button type=button>New Member</button> 
 
-{% include 'IcseMembersBundle:Admin:table_fragment.html.twig' with {columns: table_columns, entities: members, row_prefixes: rowPrefixes} %}
+<div id=delete_dialog title="Delete Member" hidden=hidden> 
+  <form id="delete_form" action="" method="DELETE" {{ form_enctype(form) }}>
+      <input type="submit" />
+      <img hidden class="loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" /> 
+  </form>
+</div>
 
 <script>
+  var frm = $('form#edit_form');
+
   /* Dialog */
   $('#edit_dialog').dialog({
     autoOpen: false,
@@ -32,16 +45,106 @@
     width: 500,
     height: 500
   });
-  $('#create_button').button().click(function(){
+  $('button, input:submit').button(); 
+  $('button#create').click(function(){
     $('#edit_dialog').dialog('open');
+    frm.attr('method', 'POST');
+    frm.attr('action', "{{ path('IcseMembersBundle_members_create') }}");
+    frm.find('input').not(':button, :submit, :reset, :hidden, :radio, :checkbox').val(''); 
   }); 
 
+  /* Table Row Selection */
+  $.fn.isAnyTableRowSelected = function(){
+    return $(this).hasClass('selected');
+  };
+  $.fn.areAllTableRowsSelected = function(){
+    return $(this).not('thead tr').not('.selected').length == 0;
+  };
+  $.fn.isExactlyOneTableRowSelected = function(){
+    return $(this).filter('.selected').length == 1;
+  };
+
+  function hideShowControlButtons() {
+    if (!$('tbody tr').isAnyTableRowSelected()) {
+      $('.show_if_none_selected').show(200);
+      $('.show_if_one_selected, .show_if_any_selected').hide(200);
+    } else if ($('tbody tr').isExactlyOneTableRowSelected()) {
+      $('.show_if_one_selected, .show_if_any_selected').show(200);
+      $('.show_if_none_selected').hide(200);
+    } else {
+      $('.show_if_any_selected').show(200);
+      $('.show_if_none_selected, .show_if_one_selected').hide(200);
+    }
+  }
+  hideShowControlButtons();
+
+  $.fn.selectTableRow = function(){
+    $(this).each(function(){
+      $(this).addClass('selected');
+      $(this).find('input:checkbox').prop('checked', true);
+    });
+    if ($('tbody tr').areAllTableRowsSelected()) {
+      $('table thead input:checkbox').prop('checked', true);
+    }
+    hideShowControlButtons();
+  };
+  $.fn.unselectTableRow = function(){
+    $(this).each(function(){
+      $(this).removeClass('selected');
+      $(this).find('input:checkbox').prop('checked', false);
+    });
+    if (!$('tbody tr').areAllTableRowsSelected()) {
+      $('table thead input:checkbox').prop('checked', false);
+    }
+    hideShowControlButtons();
+  };
+  $('table tbody tr').click(function(){
+    if ($(this).isAnyTableRowSelected()) {
+      $(this).unselectTableRow();
+    } else {
+      $(this).selectTableRow();
+    }
+  });
+  $('table thead input:checkbox').click(function(){
+    if ($('tbody tr').isAnyTableRowSelected()) {
+      $('tbody tr').unselectTableRow();
+    } else {
+      $('tbody tr').selectTableRow();
+    }
+  });
 
   /* Impersonate */
-  $('tr a.impersonate').click(function(){
+  $('table tr a.impersonate').click(function(){
     var username = $(this).parents('tr').data('entity').username;
     window.location = "{{ path('IcseMembersBundle_home') }}" + "?_switch_user=" + username ;
   });
+
+  $('table tr a.delete').click(function(){
+    var id = $(this).parents('tr').data('entity').id;
+    $.ajax({
+      type: 'DELETE',
+      url: "{{ path('IcseMembersBundle_members_delete', {id: ''}) }}" + '/' + id,
+      dataType: 'json'
+    });
+  });
+
+  /* Form submit */
+  frm.submit(function () {
+      $.ajax({
+          type: frm.attr('method'),
+          url: frm.attr('action'),
+          data: frm.serialize(),
+          dataType: 'json', 
+          success: function (result) {
+            if (result == "success"){
+            }
+            frm.find('.loading_spinner').hide();
+          }
+      });
+      frm.find('.loading_spinner').show();
+
+      return false; 
+  }); 
 </script>
 
 {% endblock %}

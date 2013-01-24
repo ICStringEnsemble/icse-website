@@ -75,6 +75,7 @@
   </footer>
   <script type="text/javascript"> 
     {# Notify old browser #}
+    {#
     var $buoop = {} 
     $buoop.ol = window.onload; 
     window.onload=function(){ 
@@ -83,7 +84,7 @@
      e.setAttribute("type", "text/javascript"); 
      e.setAttribute("src", "http://browser-update.org/update.js"); 
      document.body.appendChild(e); 
-    } 
+    }#} 
 	  
     {# Google Analytics #}
     var _gaq = _gaq || [];

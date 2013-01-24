@@ -1,21 +1,27 @@
 <table class=admintable>
-  <tr>
-    {% if row_prefixes is defined %}
-    <th></th>
-    {% endif %}
-    {% for column in columns %}
-    <th>{{ column.heading }}</th>
-    {% endfor %}
-  </tr>
+  <thead>
+    <tr>
+      {% if row_prefixes is defined %}
+      <th></th>
+      {% endif %}
+      <th><input type="checkbox" /></th>
+      {% for column in columns %}
+      <th>{{ column.heading }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
   
-  {% for entity in entities %}
-  <tr data-entity="{{ entity | serialize }}" class="{{ cycle(['odd', 'even'], loop.index) }}">
-    {% if row_prefixes is defined %}
-    <td>{{ rowPrefixes }}</td>
-    {% endif %}
-    {% for column in columns %}
-    <td>{{ entity | getCell(column) }}</td>
+  <tbody>
+    {% for entity in entities %}
+      <tr data-entity="{{ entity | serialize }}">
+        {% if row_prefixes is defined %}
+        <td>{{ rowPrefixes }}</td>
+        {% endif %}
+        <td><input type="checkbox" /></td>
+        {% for column in columns %}
+        <td>{{ entity | getCell(column) }}</td>
+        {% endfor %}
+      </tr>
     {% endfor %}
-  </tr>
-  {% endfor %}
+  </tbody>
 </table>

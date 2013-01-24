@@ -144,3 +144,12 @@ p.success {
 .loading_spinner {
   vertical-align: middle;
 }
+
+ul.table_buttons {
+  height: 2.5em;
+  margin-bottom: 0;
+  li {
+    display: block;
+    float: left;
+  }
+}
