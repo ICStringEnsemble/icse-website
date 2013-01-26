@@ -4,16 +4,7 @@ namespace Icse\MembersBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-
-function randString($length) {
-	$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";	
-	$size = strlen( $chars );
-  $str = "";
-	for( $i = 0; $i < $length; $i++ ) {
-		$str .= $chars[mt_rand(0, $size-1)];
-	}
-	return $str;
-} 
+use Common\Tools; 
 
 class AccountSettingsController extends Controller
 {
@@ -49,7 +40,7 @@ class AccountSettingsController extends Controller
         } elseif (strlen($request->request->get('new_password')) < 8) {
           $cpResponse['newpass'] = "Password must be at least 8 characters";
         } else {
-          $user->setSalt(randString(40));
+          $user->setSalt(Tools::randString(40));
           $pass_hash = $encoder->getEncoder($user)->encodePassword($request->request->get('new_password'), $user->getSalt());
           $user->setPassword($pass_hash);
           $cpResponse['success'] = "Password was sucessfully changed";

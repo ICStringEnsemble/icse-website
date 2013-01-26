@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 use Icse\MembersBundle\Entity\Member; 
-
+use Common\Tools; 
 
 class MembersController extends Controller
 {
@@ -52,7 +52,6 @@ class MembersController extends Controller
                 'type' => 'password',
                 'required' => false,
                 'mapped' => false,
-'options' => array('attr' => array('class' => 'password-field')), 
                 'first_options' => array('label' => 'New Password'),
                 'second_options' => array('label' => 'Repeat Password'),
             ))
@@ -62,13 +61,42 @@ class MembersController extends Controller
 
     private function putData($request, $member)
     {
+        $other_errors = false;
         $form = $this->getForm($member);
-        $form->bind($request); 
-        if ($form->isValid()) {
+        $form->bind($request);
+
+        $password_type = $form->get('password_choice')->getData();
+        
+        if ($password_type == 'no_change') {
+        
+        } else if ($password_type == 'imperial') {
+            $member->setSalt(null);
+            $member->setPassword(null);
+        } else { // set a password
+            if ($password_type == 'random') {
+                $plain_password = Tools::randString(10);
+            } else if ($password_type == 'set') {
+                $plain_password = $form->get('plain_password')->getData();
+                if (strlen($plain_password) < 8) {
+                    $other_errors = true;
+                }
+            } else {
+                $other_errors = true;
+            }
+
+            if (!$other_errors) {
+                $member->setSalt(Tools::randString(40));
+                $encoder = $this->get('security.encoder_factory');  
+                $pass_hash = $encoder->getEncoder($member)->encodePassword($plain_password, $member->getSalt()); 
+                $member->setPassword($pass_hash);
+            }
+ 
+        }
+
+        if ($form->isValid() && !$other_errors) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($member);
             $em->flush();
-
             return new Response(json_encode("success"));
         } else {
             return new Response(json_encode("fail"));

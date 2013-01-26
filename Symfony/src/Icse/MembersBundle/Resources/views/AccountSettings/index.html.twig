@@ -51,12 +51,12 @@ You are currently using a separate ICSE password.
     <label for="form_old_password">Old Password</label>
     <input type="password" id="form_old_password" name="old_password" required="required" />
   </div>
-  <div class="radio">
+  <div>
     {% if cpResponse['icsepass'] is defined %}
     <p class="error">{{ cpResponse['icsepass'] }}</p>
     {% endif %}
     <label>Create a new ICSE password?</label>
-    <div id="form_pass_type">
+    <div class="choices_list" id="form_pass_type">
       <input type="radio" id="form_icse_passwd" name="icse_passwd" required="required" value="2" {% if cpResponse['passtype'] is defined and cpResponse['passtype'] == 2 %}checked="yes"{% endif %}/>
       <label for="form_icse_passwd" class=" required">Yes, make a separate password for ICSE.</label>
       <input type="radio" id="form_ic_passwd" name="icse_passwd" required="required" value="1" {% if cpResponse['passtype'] is defined and cpResponse['passtype'] == 1 %}checked="yes"{% endif %}/>

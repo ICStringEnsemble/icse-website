@@ -10,7 +10,8 @@
 <form action="{{ path('IcsePublicBundle_login_check') }}" method="post">
   <ul class="global_errors"><li>
   {% if error %}
-  {{ error.message }}
+  Incorrect username or password
+  {# {{ error.message }} #}
   {% endif %}
   </li></ul>
   <div>

@@ -38,7 +38,6 @@
 <div id=delete_dialog title="Delete Member" > 
 <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span>
 Are you sure you want to permanently delete all of the selected members?</p>
-<img hidden class="loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" />
 </div>
 
 <script>
@@ -49,6 +48,7 @@ Are you sure you want to permanently delete all of the selected members?</p>
     } else {
         $('.new_password_fields').slideUp(slideTime);
         $('.new_password_fields input').prop('required', false);
+        $('.new_password_fields input').val('');
     }
   }
   $('#form_password_choice').change(200, enableDisableNewPasswordFields);
@@ -159,6 +159,7 @@ Are you sure you want to permanently delete all of the selected members?</p>
         var deletions_remaining = $('tbody tr.ui-selected').length;
         if (deletions_remaining > 0) {
           $('.delete_dialog .ui-dialog-buttonset .loading_spinner').show();
+          $('.delete_dialog .ui-dialog-buttonset button').button('disable');
           $('tbody tr.ui-selected').each(function(){
             var id = $(this).data('entity').id;
             $.ajax({
@@ -169,6 +170,7 @@ Are you sure you want to permanently delete all of the selected members?</p>
                 deletions_remaining -= 1;
                 if (deletions_remaining === 0) {
                   $('.delete_dialog .ui-dialog-buttonset .loading_spinner').hide();
+                  $('.delete_dialog .ui-dialog-buttonset button').button('enable');
                   $('#delete_dialog').dialog('close');
                   reloadTable();
                 }
@@ -257,6 +259,7 @@ Are you sure you want to permanently delete all of the selected members?</p>
           dataType: 'json', 
           success: $.proxy(function (result) {
             $('.edit_dialog .ui-dialog-buttonset .loading_spinner').hide();
+            $('.edit_dialog .ui-dialog-buttonset button').button('enable');
             if (result == "success"){
               $('#edit_dialog').dialog('close');
               reloadTable();
@@ -264,6 +267,7 @@ Are you sure you want to permanently delete all of the selected members?</p>
           }, this)
       });
       $('.edit_dialog .ui-dialog-buttonset .loading_spinner').show();
+      $('.edit_dialog .ui-dialog-buttonset button').button('disable');
 
       return false; 
   }); 
