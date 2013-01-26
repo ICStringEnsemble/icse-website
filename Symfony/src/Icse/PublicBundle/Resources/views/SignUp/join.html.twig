@@ -3,18 +3,6 @@
 
 {% set pageTitle = 'Join Us' %}  
 
-{% form_theme form _self %}
-
-{% block _form_instrument_widget %}
-{% spaceless %}
-    <div {{ block('widget_container_attributes') }}>
-    {% for child in form %}
-        {{ form_widget(child) }}
-        {{ form_label(child) }}
-    {% endfor %}
-{% endspaceless %} 
-{% endblock %} 
-
 {% block javascripts %}
 {{ parent() }}
 <script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
@@ -39,9 +27,7 @@
     {{ form_errors(form) }} 
   </div>
 
-  <div class="radio">
-    {{ form_row(form.player) }} 
-  </div>
+  {{ form_row(form.player) }} 
 
   <div id="username_or_email_lookup" hidden >
     <label for="username_or_email_field">Enter your Imperial username <br>(or e-mail address if you don't have one)</label>
@@ -63,16 +49,16 @@
     {{ form_row(form.email) }} 
     {{ form_row(form.department) }} 
   </div>
-  <div class="show_if_player">
-    <div class="radio">
-        {{ form_label(form.instrument) }}
-        {{ form_errors(form.instrument) }}
-        {{ form_widget(form.instrument) }} 
+  {% set other_instrument_input %}
         <div id="other_instrument">
           {{ form_row(form.other_instrument) }} 
         </div>
-    </div> 
-    </div> {# Don't ask #}
+  {% endset %}
+  <div class="show_if_player">
+    {{ form_label(form.instrument) }}
+    {{ form_errors(form.instrument) }}
+    {{ form_widget(form.instrument, {'extra_list_item': other_instrument_input}) }} 
+
     {{ form_row(form.standard) }} 
   </div>
   {{ form_rest(form) }} 

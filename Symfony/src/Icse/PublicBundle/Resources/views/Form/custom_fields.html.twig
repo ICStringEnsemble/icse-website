@@ -1,0 +1,15 @@
+{% extends 'form_div_layout.html.twig' %}
+
+{% block choice_widget_expanded %}
+{% spaceless %} 
+<div class="choices_list">
+    <div {{ block('widget_container_attributes') }}>
+    {% for child in form %}
+        {{ form_widget(child) }}
+        {{ form_label(child) }}
+    {% endfor %}
+    {% if extra_list_item is defined %}{{ extra_list_item }}{% endif %}
+    </div>
+</div>
+{% endspaceless %} 
+{% endblock choice_widget_expanded %}

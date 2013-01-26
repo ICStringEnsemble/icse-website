@@ -2,6 +2,13 @@
 {% set pageTitle = 'Members List' %}
 {% set currentSubSection = 'memberslist' %} 
 
+{% form_theme form _self %}
+
+{% block _form_plain_password_row %}
+    <div class="new_password_fields">
+      {{ form_row(form) }} 
+    </div>
+{% endblock %} 
 
 {% block content %}
 <h1>Members List</h1>
@@ -20,31 +27,45 @@
 {% include 'IcseMembersBundle:Admin:table_fragment.html.twig' %}
 </div>
 
-<div id=edit_dialog title="Edit Member" hidden=hidden> 
+<div id=edit_dialog > 
   <form id="edit_form" action="" method="post" {{ form_enctype(form) }}>
-      {{ form_widget(form) }}
-
-      <div class="submit_and_loading_container">
-        <input type="submit" />
-        <img hidden class="loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" /> 
-      </div>
+    {{ form_widget(form) }}
+    <input hidden type="submit" />
   </form>
 </div>
 
 
-<div id=delete_dialog title="Delete Member" hidden=hidden> 
-  <form id="delete_form" action="" method="DELETE" {{ form_enctype(form) }}>
-      <input type="submit" />
-      <img hidden class="loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" /> 
-  </form>
+<div id=delete_dialog title="Delete Member" > 
+<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span>
+Are you sure you want to permanently delete all of the selected members?</p>
+<img hidden class="loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" />
 </div>
 
 <script>
-	var loadingIndicatorJobs = 0; 
+  function enableDisableNewPasswordFields(slideTime){
+    if ($('#form_password_choice input[value="set"]').is(':checked')){
+        $('.new_password_fields').slideDown(slideTime);
+        $('.new_password_fields input').prop('required', true);
+    } else {
+        $('.new_password_fields').slideUp(slideTime);
+        $('.new_password_fields input').prop('required', false);
+    }
+  }
+  $('#form_password_choice').change(200, enableDisableNewPasswordFields);
+</script>
 
-	function startLoading() {
-		loadingIndicatorJobs += 1;
-		$('.table_buttons .loading_spinner').show();
+<script>
+  /* Misc Initialisation */
+  $('button').button(); 
+  $('#edit_form input:submit').hide();
+
+
+  /* Loading Indicator Handling */
+  var loadingIndicatorJobs = 0; 
+
+  function startLoading() {
+    loadingIndicatorJobs += 1;
+    $('.table_buttons .loading_spinner').show();
 	}
 	
 	function stopLoading() {
@@ -54,25 +75,7 @@
 		}
 	} 
 
-  var frm = $('form#edit_form');
-
-  /* Dialog */
-  $('#edit_dialog').dialog({
-    autoOpen: false,
-    modal: true,
-    width: 500,
-    height: 500
-  });
-  $('button, input:submit').button(); 
-  $('button.create').click(function(){
-    $('#edit_dialog').dialog('open');
-    frm.attr('method', 'POST');
-    frm.attr('action', "{{ path('IcseMembersBundle_members_create') }}");
-    frm.find('input').not(':button, :submit, :reset, :hidden, :radio, :checkbox').val(''); 
-  }); 
-
   /* Table Row Selection */
-  
   $.fn.isAnyTableRowSelected = function(){
     return $(this).hasClass('ui-selected');
   };
@@ -100,52 +103,7 @@
   }
   hideShowControlButtons(0);
 
-  /*
-  $.fn.selectTableRow = function(updateButtons){
-    if(typeof updateButtons === "undefined") {
-      updateButtons = true;
-    } 
-    $(this).each(function(){
-      $(this).addClass('selected');
-      $(this).find('input:checkbox').prop('checked', true);
-    });
-    if ($('tbody tr').  areAllTableRowsSelected()) {
-      $('table thead input:checkbox').prop('checked', true);
-    }
-    if (updateButtons) hideShowControlButtons();
-  };
-  $.fn.unselectTableRow = function(){
-    $(this).each(function(){
-      $(this).removeClass('selected');
-      $(this).find('input:checkbox').prop('checked', false);
-    });
-    if (!$('tbody tr').areAllTableRowsSelected()) {
-      $('table thead input:checkbox').prop('checked', false);
-    }
-    hideShowControlButtons();
-  };*/
   function attachTableHandlers() {
-    /*
-    $('table tbody tr').click(function(e){
-      if (e.which == 1) {
-        if ($(this).isAnyTableRowSelected()) {
-          $(this).unselectTableRow();
-        } else {
-          $(this).selectTableRow();
-        }
-      } else if (e.which == 2) {
-        $(this).selectTableRow(false);
-        $('tbody tr').not(this).unselectTableRow();
-      }
-    });
-    $('table thead input:checkbox').click(function(){
-      if ($('tbody tr').isAnyTableRowSelected()) {
-        $('tbody tr').unselectTableRow();
-      } else {
-        $('tbody tr').selectTableRow();
-      }
-    });
-    */
     $('tbody').selectable({
       filter: 'tr',
       stop: hideShowControlButtons
@@ -154,54 +112,158 @@
   }
   attachTableHandlers();
   
+  /* Reload Table */
   function reloadTable(){
     $('#admin_table_container').load("{{ path('IcseMembersBundle_members_table') }}", function(){
       attachTableHandlers();
       stopLoading();
+      hideShowControlButtons();
     });
     startLoading();
   }
 
-  /* Impersonate */
-  $('button.impersonate').click(function(){
+  /* Dialogs */
+  $('#edit_dialog').dialog({
+    autoOpen: false,
+    modal: true,
+    width: 500,
+    minWidth: 500,
+    height: 500,
+    dialogClass: 'edit_dialog',
+    buttons: [
+      {
+        text: "Create",
+        click: function(){
+          $('#edit_form input:submit').click();
+        },
+        'class': 'submit_button'
+      },
+      {
+        text: "Cancel",
+        click: function(){
+          $(this).dialog("close");
+        },
+        'class': 'cancel_button'
+      }
+    ]
+  });
+
+  $('#delete_dialog').dialog({
+    autoOpen: false,
+    resizable: false,
+    modal: true,
+    width: 400,
+    dialogClass: 'delete_dialog',
+    buttons : {
+      "Delete" : function(){
+        var deletions_remaining = $('tbody tr.ui-selected').length;
+        if (deletions_remaining > 0) {
+          $('.delete_dialog .ui-dialog-buttonset .loading_spinner').show();
+          $('tbody tr.ui-selected').each(function(){
+            var id = $(this).data('entity').id;
+            $.ajax({
+              type: 'DELETE',
+              url: "{{ path('IcseMembersBundle_members_delete', {id: ''}) }}" + '/' + id,
+              dataType: 'json',
+              success: function(result){
+                deletions_remaining -= 1;
+                if (deletions_remaining === 0) {
+                  $('.delete_dialog .ui-dialog-buttonset .loading_spinner').hide();
+                  $('#delete_dialog').dialog('close');
+                  reloadTable();
+                }
+              }
+            }); 
+          });
+        } else {
+          $(this).dialog("close");
+        }
+      },
+      "Cancel" : function(){
+        $(this).dialog("close");
+      }
+    }
+  });
+
+  $('.table_buttons .loading_spinner').clone().prependTo('.ui-dialog-buttonset');
+
+  /* Button Handlers */
+  $('button.create').click(function(){ // Create button
+    $('.edit_dialog .ui-dialog-buttonset .submit_button .ui-button-text').html('Create');
+    $('#edit_dialog').dialog('open').dialog({ title: "Create Member" });
+    $('#edit_form').attr('method', 'POST');
+    $('#edit_form').attr('action', "{{ path('IcseMembersBundle_members_create') }}");
+    $('#edit_form').find('input').not(':button, :submit, :reset, :hidden, :radio, :checkbox').val(''); 
+    // Member specific stuff
+    $("#edit_form input[name='form[password_choice]'][value=imperial]").prop('checked', true); 
+    enableDisableNewPasswordFields(0);
+    $("#edit_form input[name='form[password_choice]'][value=no_change]").each(function(){
+      $(this).hide();
+      $("#edit_form label[for=" + $(this).attr('id') + "]").hide();
+    });
+  });
+
+  $('button.edit').click(function(){ // Edit button
+    $('.edit_dialog .ui-dialog-buttonset .submit_button .ui-button-text').html('Save Changes');
+    $('#edit_dialog').dialog('open').dialog({ title: "Edit Member" });
+    $('#edit_form').attr('method', 'PUT');
+    var entity = $('tbody tr.ui-selected').data('entity');
+    $('#edit_form').attr('action', "{{ path('IcseMembersBundle_members_update', {id: ''}) }}" + '/' + entity.id);
+    $('#edit_form').find('input, select').not(':button, :submit, :reset, :hidden, :radio, :checkbox').each(function(){
+      var name = $(this).attr('name').split('[')[1].split(']')[0];
+      if (entity.hasOwnProperty(name)) {
+        var value = entity[name];
+        if (value === false) value = 0;
+        else if (value === true) value = 1;
+        $(this).val(value);
+      } else {
+        $(this).val('');
+      }
+    });
+    // Member specific stuff
+    $("#edit_form input[name='form[password_choice]'][value=no_change]").prop('checked', true); 
+    enableDisableNewPasswordFields(0);
+    $("#edit_form input[name='form[password_choice]'][value=no_change]").each(function(){
+      $(this).show();
+      $("#edit_form label[for=" + $(this).attr('id') + "]").show();
+    }); 
+  });
+
+  $('button.impersonate').click(function(){ // Impersonate button
     var username = $('tbody tr.ui-selected').data('entity').username;
     window.location = "{{ path('IcseMembersBundle_home') }}" + "?_switch_user=" + username ;
   });
 
-  $('button.refresh').click(reloadTable);
+  $('button.refresh').click(reloadTable); // Refresh button
 
-  $('button.unselectall').click(function(){
+  $('button.unselectall, #above_footer').click(function(){ // Unselect all button/area
     $('tbody tr').removeClass('ui-selected')
     hideShowControlButtons();
   });
+  $('.table_buttons button').click(function(e){
+    e.stopPropagation();
+  });
 
-  $('button.delete').click(function(){
-    $('tbody tr.ui-selected').each(function(){
-      var id = $(this).data('entity').id;
-       $.ajax({
-        type: 'DELETE',
-        url: "{{ path('IcseMembersBundle_members_delete', {id: ''}) }}" + '/' + id,
-        dataType: 'json'
-      }); 
-    });
+  $('button.delete').click(function(){ // Delete button
+    $('#delete_dialog').dialog('open');
   })
 
   /* Form submit */
-  frm.submit(function () {
+  $('#edit_form').submit(function () {
       $.ajax({
-          type: frm.attr('method'),
-          url: frm.attr('action'),
-          data: frm.serialize(),
+          type: $(this).attr('method'),
+          url: $(this).attr('action'),
+          data: $(this).serialize(),
           dataType: 'json', 
-          success: function (result) {
-            frm.find('.loading_spinner').hide();
+          success: $.proxy(function (result) {
+            $('.edit_dialog .ui-dialog-buttonset .loading_spinner').hide();
             if (result == "success"){
               $('#edit_dialog').dialog('close');
               reloadTable();
             }
-          }
+          }, this)
       });
-      frm.find('.loading_spinner').show();
+      $('.edit_dialog .ui-dialog-buttonset .loading_spinner').show();
 
       return false; 
   }); 

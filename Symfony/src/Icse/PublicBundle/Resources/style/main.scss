@@ -21,6 +21,7 @@ html, body {
 body {
   font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
   font-size: $default-font-size;
+  overflow-y: scroll;
 } 
 
 #above_footer {
@@ -143,7 +144,7 @@ section {
   margin: 0 auto;
   padding: 0 $page-side-padding;
   padding-top:1em;
-  padding-bottom:3em;
+  padding-bottom:0em;
 }
 
 section, .ui-dialog {
@@ -261,6 +262,7 @@ form {
       float: left;
       clear: both;
       margin-left: $form-margin-width_fullpage;
+      margin-bottom: 1.5em;
 
       .ui-dialog & {
         margin-left: $form-margin-width_narrowpage;
@@ -282,7 +284,7 @@ form {
     }
   }
 
-  .radio input {
+  .choices_list input {
     display: block;
     float: left;
     margin-right: 0px;
@@ -290,8 +292,15 @@ form {
     clear: both;
   }
 
+  /* div containing the radio list */
+  .choices_list {
+    float: left;
+    clear: none;
+    margin-bottom: 0.5em;
+  }
+
   /* Radio labels */
-  .radio label[for^="form"] {
+  .choices_list label {
     width: auto;
     float:left;
     vertical-align: middle; 
@@ -299,10 +308,6 @@ form {
     clear: none;
     padding-bottom: 0.5em;
     padding-left: 10px;
-  }
-
-  .radio input:first-of-type {
-    clear: none;
   }
 
   div {
@@ -316,14 +321,7 @@ form {
   }
 
   label[for=form_other_instrument] {
-    width: 0;
-  }
-
-  /* div containing the radio list */
-  .radio div[id^="form"] {
-    float: left;
-    clear: none;
-    margin-bottom: 1em;
+    display: none;
   }
 
   #username_or_email_lookup input[type=button] {
@@ -383,6 +381,10 @@ form {
   }
 }
 
+.ui-dialog-buttonset .loading_spinner {
+  margin-right: 10px;
+}
+
 div#end_form {
   clear: both;
 }
@@ -436,6 +438,10 @@ table.admintable {
   }
 
 }
+
+*[hidden] {
+  display: none;
+} 
 
 .flip-h {
   @include scaleX(-1);
