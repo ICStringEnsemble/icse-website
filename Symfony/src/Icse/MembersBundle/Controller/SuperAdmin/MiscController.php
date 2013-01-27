@@ -71,7 +71,8 @@ class MiscController extends Controller
                 $search_result = ldap_search($ldap, 'o=Imperial College,c=GB', 'uid=' . $login);
                 $entry = ldap_first_entry($ldap, $search_result);
                 if ($entry) {
-                    $email = ldap_get_attributes($ldap, $entry)['mail'][0];
+                    $attrs = ldap_get_attributes($ldap, $entry); 
+                    $email = $attrs['mail'][0];
                     $s->setEmail($email);
                     $em->persist($s);
                     $em->flush();

@@ -45,7 +45,8 @@ if (!function_exists('ldap_get_info')) { // If in testing environment
         $search_result = ldap_search($ldap, 'o=Imperial College,c=GB', 'uid=' . $login);
         $entry = ldap_first_entry($ldap, $search_result);
         if ($entry) {
-            return ldap_get_attributes($ldap, $entry)['mail'][0];
+            $attrs = ldap_get_attributes($ldap, $entry);
+            return $attrs['mail'][0];
         } else {
             return false;
         } 
