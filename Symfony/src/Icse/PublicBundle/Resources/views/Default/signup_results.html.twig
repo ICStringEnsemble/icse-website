@@ -44,7 +44,8 @@ All e-mail addresses:
 </script>
 
 
-<table id=signupstable>
+<table class='admintable' id=signupstable>
+  <thead>
   <tr>
     <th>Email</th>
     <th>Name</th>
@@ -55,6 +56,7 @@ All e-mail addresses:
     <th>Standard</th>
     <th>Submitted at</th>
   </tr>
+</thead>
   
   {% for signup in signups %}
   <tr class={{ cycle(['odd', 'even'], loop.index) }}>

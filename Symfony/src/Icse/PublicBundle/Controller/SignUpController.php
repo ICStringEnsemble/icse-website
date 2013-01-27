@@ -9,9 +9,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Icse\PublicBundle\Entity\Subscriber;
 
 
-if (!function_exists('ldap_get_info'))
-  {
-    function ldap_get_mail($login)
+if (!function_exists('ldap_get_info')) { // If in testing environment
+    function get_ldap_email($login)
     {
       if ($login == "js10")
         {
@@ -39,7 +38,19 @@ if (!function_exists('ldap_get_info'))
           return false;
         }
     }
-  }
+} else { // If in college
+    function get_ldap_email($login)
+    {
+        $ldap = ldap_connect('addressbook.imperial.ac.uk');
+        $search_result = ldap_search($ldap, 'o=Imperial College,c=GB', 'uid=' . $login);
+        $entry = ldap_first_entry($ldap, $search_result);
+        if ($entry) {
+            return ldap_get_attributes($ldap, $entry)['mail'][0];
+        } else {
+            return false;
+        } 
+    }
+}
 
 class SignUpController extends Controller
 {
@@ -194,7 +205,7 @@ class SignUpController extends Controller
               $attempts = 0;
               do
                 {
-                  $email = ldap_get_mail($input);
+                  $email = get_ldap_email($input);
                   $attempts += 1;
                 } while ($email == false && $attempts < 10);
               if ($email == false) $email = "";
