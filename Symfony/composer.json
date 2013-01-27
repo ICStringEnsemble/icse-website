@@ -25,7 +25,9 @@
         "fkr/cssurlrewrite-bundle": "*@dev", 
         "friendsofsymfony/jsrouting-bundle": "1.1.*@dev",
         "doctrine/doctrine-migrations-bundle": "*@dev",
-        "jms/serializer-bundle": "*@dev"
+        "jms/serializer-bundle": "*@dev",
+        "tijsverkoyen/css-to-inline-styles": "dev-master",
+        "robertotru/to-inline-style-email-bundle": "dev-master" 
     },
     "scripts": {
         "post-install-cmd": [

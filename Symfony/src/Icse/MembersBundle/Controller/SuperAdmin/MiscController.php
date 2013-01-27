@@ -31,18 +31,21 @@ class MiscController extends Controller
 
     public function testEmailAction()
     {
-        $message = \Swift_Message::newInstance()
-            ->setSubject('Hello Email')
-            ->setFrom('send@example.com')
-            ->setTo('dphoyes@gmail.com')
-            ->setBody(
-                'hello world'
-            )
-        ;
-        $this->get('mailer')->send($message);
+        $converter = $this->get('css_to_inline_email_converter'); 
+        $converter->setCSS(file_get_contents($this->container->getParameter('kernel.root_dir').'/../src/Icse/MembersBundle/Resources/style/email.css')); 
+        $converter->setHTMLByView('IcseMembersBundle:Email:template.html.twig', array()); 
+        $html_body = $converter->generateStyledHTML();
+        $email = \Swift_Message::newInstance()
+                            ->setSubject('A Test Email From ICSE')
+                            ->setFrom(array('icse@imperial.ac.uk' => 'ICSE Website'))
+                            ->setTo('dphoyes@gmail.com')
+                            ->setBody('This is the raw content')
+                            ->addPart($html_body, 'text/html') 
+                            ;
+        $this->get('mailer')->send($email);
      
-        return new Response('hi');
-    }
+        return new Response($html_body);
+    } 
 
     public function testldapAction()
     {

@@ -1,0 +1,89 @@
+{% set width = 570 %}
+{% set side_margin = 40 %}
+{% set topbottom_margin = 15 %}
+<!DOCTYPE HTML>
+<html>
+  <body>
+    <table id="container_table">
+      <tr>
+        <td align="center">
+          <table id="border_table" width="{{ width }}" >
+            <tr>
+              <td align="center">
+                <a href="http://www.union.ic.ac.uk/arts/stringensemble">
+                  <img height="100" title="Imperial College String Ensemble" alt="Imperial College String Ensemble" src="http://{{ app.request.host ~ asset('bundles/icsemembers/images/email_header.png') }}">
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <table style="margin-top:{{ topbottom_margin }}px;margin-bottom:{{ topbottom_margin }}px;margin-left:{{ side_margin }}px;margin-right:{{ side_margin }}px" width="{{ width - 2 * side_margin }}">
+                  <tr>
+                    <td id="content_cell">
+
+                      <h1>Welcome to ICSE</h1>
+
+                      <h2>Hello!</h2>
+
+                      <p>
+                      Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                      tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
+                      vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+                      no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                      </p>
+
+                      <p>
+                      Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                      tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
+                      vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+                      no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                      </p>
+
+                      <ul>
+                        <li>Friday 25/1/13 - Queens Tower Rooms, 6pm</li>
+                        <li>Friday 1/2/13 - Great Hall, 6pm</li>
+                      </ul>
+
+                      <p>
+                      Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                      tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
+                      vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+                      no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                      </p>
+                      <p>
+                      Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                      tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
+                      vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+                      no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                      </p>
+                      <h2>Upcoming Rehearsals</h2>
+
+                      <ul>
+                        <li>Friday 25/1/13 - Queens Tower Rooms, 6pm</li>
+                        <li>Friday 1/2/13 - Great Hall, 6pm</li>
+                      </ul>
+                      <h2>Upcoming Socials</h2>
+
+                      <ul>
+                        <li>Friday 25/1/13 - Chill Out Sesh - Rufus' house after rehearsal</li>
+                        <li>Friday 8/2/13 - Cinema to see 'Flight' - let me know if you want to go by 1/2/13</li>
+                      </ul>
+
+
+                    </td>
+                  </tr>
+                  {# Footer #}
+                  <tr>
+                    <td id="footer_cell">
+                          Want to <a href="https://mailman.ic.ac.uk/mailman/listinfo/icse-talk">unsubscribe</a>? <a href="mailto:icse@imperial.ac.uk">Contact us</a>? Visit our <a href="http://www.union.ic.ac.uk/arts/stringensemble/" >website</a>? 
+                    </td>
+                  </tr> 
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html> 

@@ -24,6 +24,7 @@ class AppKernel extends Kernel
             new Fkr\CssURLRewriteBundle\FkrCssURLRewriteBundle(), 
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle($this), 
+            new RobertoTru\ToInlineStyleEmailBundle\RobertoTruToInlineStyleEmailBundle(), 
             new Icse\PublicBundle\IcsePublicBundle(),
             new Icse\MembersBundle\IcseMembersBundle() 
         );
