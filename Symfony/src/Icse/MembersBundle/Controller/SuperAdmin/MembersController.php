@@ -77,7 +77,7 @@ class MembersController extends Controller
             $member->setPassword(null);
         } else { // set a password
             if ($password_type == 'random') {
-                $plain_password = Tools::randString(10);
+                $plain_password = Tools::randString(15);
             } else if ($password_type == 'set') {
                 $plain_password = $form->get('plain_password')->getData();
                 if (strlen($plain_password) < 8) {

@@ -135,10 +135,11 @@ p.success {
 #hidden_nav_col_cover div {
   color: #fff;
   position:absolute;
-  top: 1em;
-  right: -0.9em;
+  top: 2em;
+  right: 0.5em;
+  width: 0px;
   @include rotate(90deg);
-  @include apply-origin(bottom left, false);
+  @include apply-origin(top left, false);
 } 
 
 .loading_spinner {
