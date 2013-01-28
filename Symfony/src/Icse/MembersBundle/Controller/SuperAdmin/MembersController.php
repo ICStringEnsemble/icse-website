@@ -114,8 +114,8 @@ class MembersController extends Controller
                     'subject' => 'ICSE Online Account Created', 
                     'to' => $member->getEmail()
                 )); 
-            } else if ($password_type == 'set') {
-                 $mailer->send(array(
+            } else if ($password_type == 'random') {
+                $mailer->send(array(
                     'template' => 'IcseMembersBundle:Email:temporary_password.html.twig',
                     'template_params' => array(
                             'first_name' => $member->getFirstName(),
