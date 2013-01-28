@@ -65,16 +65,17 @@ p {
   margin-bottom: 2em;
 }
 
-ul {
+ul, ol {
   margin-top: 0.5em;
   margin-bottom: 2em;
+}
+
+li {
+  margin-bottom: 0.5em;
 }
 
 a {
   color: #963;
   font-weight: normal;
   text-decoration:underline;
-}
-
-h1, p, ul {
 }

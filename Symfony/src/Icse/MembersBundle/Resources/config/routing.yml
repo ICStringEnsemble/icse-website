@@ -2,6 +2,10 @@ IcseMembersBundle_home:
     pattern:  /members
     defaults: { _controller: IcseMembersBundle:Default:index }
 
+IcseMembersBundle_practice_parts:
+    pattern:  /members/practiceparts
+    defaults: { _controller: IcseMembersBundle:Default:index }
+
 IcseMembersBundle_logout:
     pattern:   /logout
 
@@ -65,11 +69,3 @@ IcseMembersBundle_migrateDB:
 IcseMembersBundle_testEmail:
     pattern:  /members/superadmin/testemail
     defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:testEmail }
-
-IcseMembersBundle_testldap:
-    pattern:  /members/superadmin/testldap
-    defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:testldap }
-
-IcseMembersBundle_fix_emails:
-    pattern:  /members/superadmin/fixemails
-    defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:fixSubscriberEmails }

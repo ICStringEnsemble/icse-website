@@ -61,11 +61,14 @@ class MembersController extends Controller
 
     private function putData($request, $member)
     {
+        $is_new_account = ($member->getID() === null);
+        $mailer = $this->get('icse_mailer'); 
         $other_errors = false;
         $form = $this->getForm($member);
         $form->bind($request);
 
         $password_type = $form->get('password_choice')->getData();
+        $plain_password = '';
         
         if ($password_type == 'no_change') {
         
@@ -97,6 +100,34 @@ class MembersController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($member);
             $em->flush();
+
+            if ($is_new_account) {
+                $mailer->send(array(
+                    'template' => 'IcseMembersBundle:Email:account_created.html.twig',
+                    'template_params' => array(
+                            'first_name' => $member->getFirstName(),
+                            'username' => $member->getUsername(),
+                            'email' => $member->getEmail(),
+                            'password_type' => $password_type,
+                            'plain_password' => $plain_password,
+                    ),
+                    'subject' => 'ICSE Online Account Created', 
+                    'to' => $member->getEmail()
+                )); 
+            } else if ($password_type == 'set') {
+                 $mailer->send(array(
+                    'template' => 'IcseMembersBundle:Email:temporary_password.html.twig',
+                    'template_params' => array(
+                            'first_name' => $member->getFirstName(),
+                            'username' => $member->getUsername(),
+                            'email' => $member->getEmail(),
+                            'plain_password' => $plain_password,
+                    ),
+                    'subject' => 'ICSE Account Password Reset', 
+                    'to' => $member->getEmail()
+                ));            
+            }
+
             return new Response(json_encode("success"));
         } else {
             return new Response(json_encode("fail"));

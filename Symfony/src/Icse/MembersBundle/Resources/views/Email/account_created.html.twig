@@ -1,1 +1,43 @@
- 
+{% extends 'IcseMembersBundle:Email:template.html.twig' %} 
+
+{% block content %}
+<h1>Your ICSE Account has been created!</h1>
+
+<p>Hi {{ first_name }}<p>
+
+<p>You can now log in to the Members Section of the ICSE website
+to gain access to practice parts, rehearsal schedules, and more.
+Just follow the instructions below.
+</p>
+
+<h2>Getting Started</h2>
+
+<ul>
+  <li>From the ICSE website click on the "Members" button, or just <a href="{{ url('IcseMembersBundle_home') }}" >click here</a>.</li>
+  {% if username %}
+  <li>For your Username / Email, use either {{ username }} or {{ email }}</li>
+  {% else %}
+  <li>For your Username / Email, use {{ email }}</li>
+  {% endif %}
+  {% if password_type == 'imperial' %}
+  <li>For the password, enter your Imperial login password.</li>
+  <li>If you do not have an Imperial password, or you would prefer not to use your Imperial password, or you cannot log in for any other reason, then let us know and you will be able to set a different password.</li>
+  {% elseif password_type == 'random' %}
+  <li>For the password, enter your temporary password: {{ plain_password }}</li>
+  <li>We strongly encourage you to immediately change this password to a different one by going to the <a href="{{ url('IcseMembersBundle_account_settings') }}">Account Settings</a> page.</li>
+  {% elseif password_type == 'set' %}
+  <li>For the password, enter your chosen password.</li>
+  <li>If you do not have a password, or you cannot log in for any other reason, then let us know and you will be able to set a different password.</li>
+  {% endif %}
+  <li>After logging in, you can access the practice parts <a href="{{ url('IcseMembersBundle_practice_parts') }}">here</a>.</li>
+  {% if password_type != 'random' %}
+  <li>You can change your password or email address at any time through the <a href="{{ url('IcseMembersBundle_account_settings') }}">Account Settings</a> page.</li>
+  {% endif %}
+</ul>
+
+<p>Let us know if you have any problems.</p>
+
+<p>ICSE love,<br>The ICSE Website</p>
+
+
+{% endblock %}

@@ -31,20 +31,21 @@ class MiscController extends Controller
 
     public function testEmailAction()
     {
-        $converter = $this->get('css_to_inline_email_converter'); 
-        $converter->setCSS(file_get_contents($this->container->getParameter('kernel.root_dir').'/../src/Icse/MembersBundle/Resources/style/email.css')); 
-        $converter->setHTMLByView('IcseMembersBundle:Email:template.html.twig', array()); 
-        $html_body = $converter->generateStyledHTML();
-        $email = \Swift_Message::newInstance()
-                            ->setSubject('A Test Email From ICSE')
-                            ->setFrom(array('icse@imperial.ac.uk' => 'ICSE Website'))
-                            ->setTo('dphoyes@gmail.com')
-                            ->setBody('This is the raw content')
-                            ->addPart($html_body, 'text/html') 
-                            ;
-        $this->get('mailer')->send($email);
-     
-        return new Response($html_body);
+        $mailer = $this->get('icse_mailer');
+
+        return $mailer->send(array(
+            'template' => 'IcseMembersBundle:Email:temporary_password.html.twig',
+            'template_params' => array(
+                    'first_name' => 'Joe',
+                    'username' => 'joe10',
+                    'email' => 'joe.smith@imperial.ac.uk',
+                    'password_type' => 'set',
+                    'plain_password' => '1234567890',
+            ),
+            'subject' => 'ICSE Online Account Created', 
+            'to' => 'joe.smith@imperial.ac.uk',
+            'return_body' => true,
+        ));
     } 
 
     public function testldapAction()

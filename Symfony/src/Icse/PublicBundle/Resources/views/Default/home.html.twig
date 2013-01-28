@@ -121,11 +121,11 @@
   {% endif %}
 
   {% if news_articles is not empty %}
-  <h2>News</h2>
+  <h2><a href="{{ path('IcsePublicBundle_news') }}">News</a></h2>
   {% include 'IcsePublicBundle:News:news_list_fragment.html.twig' with {'articles': news_articles, 'img_size': 'hpsidethumb'} %}  
   {% endif %}
 
-  <h2>Facebook</h2>
+  <h2><a href="http://www.facebook.com/ImperialCollegeStringEnsemble">Facebook</a></h2>
   <iframe id="facebook_widget" src="//www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2FImperialCollegeStringEnsemble&amp;width=334&amp;height=290&amp;show_faces=true&amp;colorscheme=light&amp;stream=false&amp;border_color&amp;header=true" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:334px; height:290px;" allowTransparency="true"></iframe>
 
   <h2>Follow Us</h2>
