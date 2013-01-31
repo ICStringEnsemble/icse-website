@@ -16,6 +16,7 @@
 <ul class="table_buttons">
   <li><button class="refresh show_if_none_selected" type=button>Refresh</button></li>
   <li><button class="create show_if_none_selected" type=button>New Member</button></li>
+  <li><button class="import show_if_none_selected" type=button>Import CSV</button></li>
   <li><button class="edit show_if_one_selected" type=button>Edit</button></li>
   <li><button class="delete show_if_any_selected" type=button>Delete</button></li>
   <li><button class="impersonate show_if_one_selected" type=button>Impersonate</button></li>
@@ -40,6 +41,23 @@
 Are you sure you want to permanently delete all of the selected members?</p>
 </div>
 
+<div id=import_csv_dialog title="Import Membership List"> 
+  <ul>
+    <li>Go to <a href="https://eactivities.union.ic.ac.uk/admin/csp/details">eActivities</a></li>
+    <li>Log in</li>
+    <li>Switch role to ICSE committee member</li>
+    <li>Click "Members"</li>
+    <li><a href="https://eactivities.union.ic.ac.uk/common/data_handler.php?id=1700&type=csv&name=Members_Report">Download membership list</a></li>
+    <li>Upload the downloaded file:</li>
+  </ul>
+  <form id="import_csv_form" action="{{ path('IcseMembersBundle_members_create') }}" method="post" {{ form_enctype(csv_form) }}>
+    {{ form_widget(csv_form) }}
+    <input hidden type="submit" />
+  </form> 
+</div>
+
+
+
 <script>
   function enableDisableNewPasswordFields(slideTime){
     if ($('#form_password_choice input[value="set"]').is(':checked')){
@@ -52,12 +70,41 @@ Are you sure you want to permanently delete all of the selected members?</p>
     }
   }
   $('#form_password_choice').change(200, enableDisableNewPasswordFields);
+
+  $('#import_csv_dialog').dialog({
+    autoOpen: false,
+    modal: true,
+    width: 500,
+    minWidth: 500,
+    height: 500,
+    buttons: [
+      {
+        text: "Import",
+        click: function(){
+          $('#import_csv_form input:submit').click();
+        }
+      },
+      {
+        text: "Cancel",
+        click: function(){
+          $(this).dialog("close");
+        }
+      }
+    ]
+  });
+
+  $('button.import').click(function(){ // Delete button
+    $('#import_csv_dialog').dialog('open');
+  })
+
+ 
+
 </script>
 
 <script>
   /* Misc Initialisation */
   $('button').button(); 
-  $('#edit_form input:submit').hide();
+  $('#edit_form input:submit, #import_csv_form input:submit').hide();
 
 
   /* Loading Indicator Handling */
@@ -156,26 +203,32 @@ Are you sure you want to permanently delete all of the selected members?</p>
     dialogClass: 'delete_dialog',
     buttons : {
       "Delete" : function(){
-        var deletions_remaining = $('tbody tr.ui-selected').length;
-        if (deletions_remaining > 0) {
+        var requests_remaining = $('tbody tr.ui-selected').length;
+        var failures = 0;
+        if (requests_remaining > 0) {
           $('.delete_dialog .ui-dialog-buttonset .loading_spinner').show();
           $('.delete_dialog .ui-dialog-buttonset button').button('disable');
           $('tbody tr.ui-selected').each(function(){
             var id = $(this).data('entity').id;
+
             $.ajax({
               type: 'DELETE',
               url: "{{ path('IcseMembersBundle_members_delete', {id: ''}) }}" + '/' + id,
-              dataType: 'json',
-              success: function(result){
-                deletions_remaining -= 1;
-                if (deletions_remaining === 0) {
-                  $('.delete_dialog .ui-dialog-buttonset .loading_spinner').hide();
-                  $('.delete_dialog .ui-dialog-buttonset button').button('enable');
+              dataType: 'json'
+            }).fail(function(){
+              failures += 1;
+            }).always(function(result){
+              requests_remaining -= 1;
+              if (requests_remaining === 0) {
+                $('.delete_dialog .ui-dialog-buttonset .loading_spinner').hide();
+                $('.delete_dialog .ui-dialog-buttonset button').button('enable');
+                if (failures === 0) {
                   $('#delete_dialog').dialog('close');
                   reloadTable();
                 }
               }
-            }); 
+            });
+
           });
         } else {
           $(this).dialog("close");
@@ -251,25 +304,40 @@ Are you sure you want to permanently delete all of the selected members?</p>
   })
 
   /* Form submit */
-  $('#edit_form').submit(function () {
-      $.ajax({
-          type: $(this).attr('method'),
-          url: $(this).attr('action'),
-          data: $(this).serialize(),
-          dataType: 'json', 
-          success: $.proxy(function (result) {
-            $('.edit_dialog .ui-dialog-buttonset .loading_spinner').hide();
-            $('.edit_dialog .ui-dialog-buttonset button').button('enable');
-            if (result == "success"){
-              $('#edit_dialog').dialog('close');
-              reloadTable();
-            }
-          }, this)
-      });
-      $('.edit_dialog .ui-dialog-buttonset .loading_spinner').show();
-      $('.edit_dialog .ui-dialog-buttonset button').button('disable');
+  $('.ui-dialog form').submit(function () {
+    var form_element = $(this);
+    if (form_element.find('input:file').length !== 0) {      // if files, we have to use multipart/form-data; doesn't play nicely with PUT
+      var formData = new FormData(form_element[0]);
+      var contentType = false;
+      var processData = false;
+    } else {                                            // if no files, use urlencoded data; can use either POST or PUT
+      var formData = form_element.serialize();
+      var contentType = 'application/x-www-form-urlencoded; charset=UTF-8';
+      var processData = true;
+    }
+    $.ajax({
+        type: form_element.attr('method'),
+        url: form_element.attr('action'),
+        data: formData,
+        dataType: 'json', 
+        cache: false,
+        contentType: contentType,
+        processData: processData, 
+        complete: function (result) {
+        }
+    }).always(function(){
+      form_element.closest('.ui-dialog-content').nextAll('.ui-dialog-buttonpane').find('.loading_spinner').hide();
+      form_element.closest('.ui-dialog-content').nextAll('.ui-dialog-buttonpane').find('button').button('enable');
+    }).done(function(result){
+      if (result == "success"){
+        form_element.closest('.ui-dialog-content').dialog('close');
+        reloadTable();
+      }
+    });
+    form_element.closest('.ui-dialog-content').nextAll('.ui-dialog-buttonpane').find('.loading_spinner').show();
+    form_element.closest('.ui-dialog-content').nextAll('.ui-dialog-buttonpane').find('button').button('disable');
 
-      return false; 
+    return false; 
   }); 
 </script>
 

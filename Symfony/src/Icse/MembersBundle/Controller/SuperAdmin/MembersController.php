@@ -90,10 +90,14 @@ class MembersController extends Controller
             if (!$other_errors) {
                 $member->setSalt(Tools::randString(40));
                 $encoder = $this->get('security.encoder_factory');  
-                $pass_hash = $encoder->getEncoder($member)->encodePassword($plain_password, $member->getSalt()); 
+                $pass_hash = $encoder->getEncoder($member)->encodePassword($plain_password, $member->getSalt());
                 $member->setPassword($pass_hash);
             }
  
+        }
+
+        if ($is_new_account) {
+            $member->setCreatedAt(new \DateTime()); 
         }
 
         if ($form->isValid() && !$other_errors) {
@@ -130,7 +134,7 @@ class MembersController extends Controller
 
             return new Response(json_encode("success"));
         } else {
-            return new Response(json_encode("fail"));
+            return new Response(json_encode(array('errors' => Tools::getErrorMessages($form))));
         }  
     }
 
@@ -139,9 +143,14 @@ class MembersController extends Controller
         $member = new Member();
         $form = $this->getForm($member);
         $table_content = $this->getTableContent();
+
+        $csv_form = $this->createFormBuilder()
+                    ->add('csv_file', 'file', array('label' => 'CSV File'))
+                    ->getForm(); 
   
         return $this->render('IcseMembersBundle:SuperAdmin:members.html.twig', array('table_content' => $table_content,
-                                                                                        'form' => $form->createView()
+                                                                                    'form' => $form->createView(),
+                                                                                    'csv_form' => $csv_form->createView()
                                                                                     ));
     }
 
@@ -153,9 +162,56 @@ class MembersController extends Controller
 
     public function createAction(Request $request)
     {
-        $member = new Member();
-        $member->setCreatedAt(new \DateTime()); 
-        return $this->putData($request, $member);
+        $csv_file = $request->files->get('form')['csv_file'];
+        if ($csv_file) {
+            $file_handle = fopen($csv_file->getPathname(), 'r');
+            $csv_row = fgetcsv($file_handle);
+            if ($csv_row) {
+                $headings = array_flip($csv_row);
+                try {
+                    $login_index = Tools::arrayGet($headings, 'Login');
+                    $first_name_index = Tools::arrayGet($headings, 'First Name');
+                    $last_name_index = Tools::arrayGet($headings, 'Last Name');
+                    $email_index = Tools::arrayGet($headings, 'Email');
+                } catch (\UnexpectedValueException $e) {
+                    return new Response(json_encode("CSV headings not as expected."));
+                }
+                $csv_row = fgetcsv($file_handle);
+                $dm = $this->getDoctrine();
+                while ($csv_row) {
+                    if ($dm->getRepository('IcseMembersBundle:Member')
+                           ->isUnusedUsernameAndEmail($csv_row[$login_index], $csv_row[$email_index])) {
+                        $fakeRequestData = array(
+                            'form' => array(
+                                'first_name' => $csv_row[$first_name_index],
+                                'last_name' => $csv_row[$last_name_index],
+                                'username' => $csv_row[$login_index],
+                                'email' => $csv_row[$email_index],
+                                'active' => '1',
+                                'role' => '1',
+                                'password_choice' => 'imperial',
+                                'plain_password' => array(
+                                    'first' => '',
+                                    'second' => ''
+                                ),
+                                '_token' => $request->request->get('form')['_token'] 
+                            )
+                        ); 
+                        $fakeRequest = $request->duplicate(null, $fakeRequestData, null, null, array());
+                        $member = new Member();
+                        $return_status = $this->putData($fakeRequest, $member);
+                    }
+                    $csv_row = fgetcsv($file_handle);
+                }
+                return new Response(json_encode("success"));
+            } else {
+                return new Response(json_encode("Nothing in file"));
+            }
+
+        } else {
+            $member = new Member();
+            return $this->putData($request, $member);
+        }
     }
 
     public function updateAction(Request $request, $id)

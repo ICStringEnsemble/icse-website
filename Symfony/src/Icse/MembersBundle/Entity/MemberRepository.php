@@ -48,4 +48,24 @@ class MemberRepository extends EntityRepository implements UserProviderInterface
   {
     return $this->getEntityName() === $class || is_subclass_of($class, $this->getEntityName());
   }
+
+    public function isUnusedUsernameAndEmail($username, $email) {
+        $matching_usernames = $this->createQueryBuilder('u')
+                                   ->where('u.username = :username')
+                                   ->setParameter('username', $username)
+                                   ->getQuery()
+                                   ->getResult();
+        if (empty($matching_usernames)) {
+            $matching_emails = $this->createQueryBuilder('u')
+                                    ->where('u.email = :email')
+                                    ->setParameter('email', $email)
+                                    ->getQuery()
+                                    ->getResult();
+            if (empty($matching_emails)) {
+                return true;
+            }
+
+        }
+        return false;
+    } 
 }

@@ -161,3 +161,15 @@ ul.table_buttons {
 .ui-dialog #edit_dialog.ui-dialog-content {
   padding-bottom: 0;
 }
+
+#import_csv_dialog {
+  ul li {
+    list-style-type: disc;
+    margin-left: 30px;
+  }
+
+  label {
+    width: 100px;
+  }
+  
+}

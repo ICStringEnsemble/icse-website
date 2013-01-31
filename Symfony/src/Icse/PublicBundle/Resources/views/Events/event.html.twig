@@ -51,7 +51,9 @@
 {# Event Description #}
 {% if event.getDescription() %}
 <h2>Information</h2>
+<div class="main_content">
 {{ event.getDescription() | raw }}
+</div>
 {% endif %}
 
 

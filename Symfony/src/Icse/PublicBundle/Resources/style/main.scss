@@ -138,6 +138,10 @@ nav a {
     font-size: 96% !important;
 } 
 
+section, .ui-dialog {
+  line-height: 1.5em;
+}
+
 section {
   clear: both;
   width: $page-width - 2 * $page-side-padding;
@@ -145,50 +149,54 @@ section {
   padding: 0 $page-side-padding;
   padding-top:1em;
   padding-bottom:0em;
-}
-
-section, .ui-dialog {
-  line-height: 1.5em;
-}
-
-
-section h1 {
-  font-size: 1.6em;
-  font-weight: bold;
-  padding-bottom: 1em;
-  font-family: Arial;
-}
-
-section h2 {
-  font-size: 1.2em;
-  font-weight: bold;
-  padding-bottom: 0.1em;
-  margin-bottom: 0.5em;
-  font-family: Arial;
-  border-bottom: 3px solid $h2_colour;
-  color: $h2_colour; 
-}
-
-section h2 a {
-  &:link, &:visited {
-    color: $h2_colour;
-    text-decoration: none;
+  
+  h1 {
+    font-size: 1.6em;
+    font-weight: bold;
+    padding-bottom: 1em;
+    font-family: Arial;
   }
-}
 
-section h3 {
-  font-size: 1.1em;
-  font-weight: bold;
-  padding-bottom: 0.1em;
-  font-family: Arial;
-}
+  h2 {
+    font-size: 1.2em;
+    font-weight: bold;
+    padding-bottom: 0.1em;
+    margin-bottom: 0.5em;
+    font-family: Arial;
+    border-bottom: 3px solid $h2_colour;
+    color: $h2_colour;
 
-section p {
-  max-width: 714px;
-}
+    a {
+      &:link, &:visited {
+        color: $h2_colour;
+        text-decoration: none;
+      }
+    }
+  }
 
-section p, section ul {
-  margin-bottom: 1em;
+  h3 {
+    font-size: 1.1em;
+    font-weight: bold;
+    padding-bottom: 0.1em;
+    font-family: Arial;
+  }
+
+
+  p, ul {
+    margin-bottom: 1em;
+    max-width: 714px;
+  }
+
+  .main_content ul, ol {
+    list-style: disc;
+
+    li {
+      margin-left: 40px;
+      padding-left: 5px;
+      margin-bottom: 0.5em;
+    }
+  }
+
 }
 
 footer {
@@ -207,7 +215,7 @@ footer {
   clear:both;
 }
 
-a {
+a, .ui-widget-content a {
   &:link, &:visited {
     text-decoration:none;
     color: #996633;
@@ -472,7 +480,7 @@ table.admintable {
 
   ul {
     list-style: disc inside;
-    margin-top: 1em;
+    margin-top: 0.5em;
     margin-bottom: 0.5em;
     margin-left: 1em;
   }
@@ -526,6 +534,7 @@ section #news_head {
 }
 
 section #news_article {
+  margin-bottom: 1em;
   .posted_at, .posted_by {
     color: #888;
     font-size: 0.8em;

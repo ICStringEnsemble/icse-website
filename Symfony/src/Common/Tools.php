@@ -4,6 +4,14 @@ namespace Common;
 
 class Tools
 {
+    public static function arrayGet($array, $index) {
+        if (isset($array[$index])) {
+            return $array[$index];
+        } else {
+            throw new \UnexpectedValueException("\"" . $index . "\" does not exist in array."); 
+        }
+    }
+
     public static function randString($length) {
         $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";	
         $size = strlen( $chars );
@@ -42,4 +50,26 @@ class Tools
      
         return $text; 
     }
+
+    public static function getErrorMessages(\Symfony\Component\Form\Form $form) {
+        $errors = array();
+        foreach ($form->getErrors() as $key => $error) {
+            $template = $error->getMessageTemplate();
+            $parameters = $error->getMessageParameters();
+
+            foreach($parameters as $var => $value){
+                $template = str_replace($var, $value, $template);
+            }
+
+            $errors[$key] = $template;
+        }
+        if ($form->hasChildren()) {
+            foreach ($form->getChildren() as $child) {
+                if (!$child->isValid()) {
+                    $errors[$child->getName()] = Tools::getErrorMessages($child);
+                }
+            }
+        }
+        return $errors;
+    } 
 } 
