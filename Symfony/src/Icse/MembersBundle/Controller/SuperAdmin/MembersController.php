@@ -162,6 +162,7 @@ class MembersController extends Controller
 
     public function createAction(Request $request)
     {
+        /*
         $csv_file = $request->files->get('form')['csv_file'];
         if ($csv_file) {
             $file_handle = fopen($csv_file->getPathname(), 'r');
@@ -211,7 +212,7 @@ class MembersController extends Controller
         } else {
             $member = new Member();
             return $this->putData($request, $member);
-        }
+        }*/
     }
 
     public function updateAction(Request $request, $id)
