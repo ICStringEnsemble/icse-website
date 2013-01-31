@@ -162,9 +162,9 @@ class MembersController extends Controller
 
     public function createAction(Request $request)
     {
-        /*
-        $csv_file = $request->files->get('form')['csv_file'];
-        if ($csv_file) {
+        $uploadedFiles = $request->files->get('form');
+        if (isset($uploadedFiles['csv_file'])) {
+            $csv_file = $uploadedFiles['csv_file'];
             $file_handle = fopen($csv_file->getPathname(), 'r');
             $csv_row = fgetcsv($file_handle);
             if ($csv_row) {
@@ -182,22 +182,26 @@ class MembersController extends Controller
                 while ($csv_row) {
                     if ($dm->getRepository('IcseMembersBundle:Member')
                            ->isUnusedUsernameAndEmail($csv_row[$login_index], $csv_row[$email_index])) {
-                        $fakeRequestData = array(
-                            'form' => array(
-                                'first_name' => $csv_row[$first_name_index],
-                                'last_name' => $csv_row[$last_name_index],
-                                'username' => $csv_row[$login_index],
-                                'email' => $csv_row[$email_index],
-                                'active' => '1',
-                                'role' => '1',
-                                'password_choice' => 'imperial',
-                                'plain_password' => array(
-                                    'first' => '',
-                                    'second' => ''
-                                ),
-                                '_token' => $request->request->get('form')['_token'] 
-                            )
-                        ); 
+                        try {
+                            $fakeRequestData = array(
+                                'form' => array(
+                                    'first_name' => $csv_row[$first_name_index],
+                                    'last_name' => $csv_row[$last_name_index],
+                                    'username' => $csv_row[$login_index],
+                                    'email' => $csv_row[$email_index],
+                                    'active' => '1',
+                                    'role' => '1',
+                                    'password_choice' => 'imperial',
+                                    'plain_password' => array(
+                                        'first' => '',
+                                        'second' => ''
+                                    ),
+                                    '_token' => Tools::arrayGet($request->request->get('form'), '_token')
+                                )
+                            ); 
+                        } catch (\UnexpectedValueException $e) {
+                            return new Response(json_encode("No CSRF token."));
+                        }
                         $fakeRequest = $request->duplicate(null, $fakeRequestData, null, null, array());
                         $member = new Member();
                         $return_status = $this->putData($fakeRequest, $member);
@@ -212,7 +216,7 @@ class MembersController extends Controller
         } else {
             $member = new Member();
             return $this->putData($request, $member);
-        }*/
+        }
     }
 
     public function updateAction(Request $request, $id)
