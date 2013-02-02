@@ -92,8 +92,8 @@ $nav_col_colour: #d4b896;
 } 
 
 section {
-  clear: none;
   width: auto;
+  float: none;
 }
 
 form label {
@@ -171,5 +171,11 @@ ul.table_buttons {
   label {
     width: 100px;
   }
-  
+  .field_row_main {
+    margin-left: 100px;
+
+    input {
+      width: 300px;
+    }
+  }
 }

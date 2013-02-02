@@ -1,5 +1,17 @@
 {% extends 'form_div_layout.html.twig' %}
 
+{% block field_row %}
+{% spaceless %}
+    <div class="field_row">
+      {{ form_label(form) }}
+      <div class="field_row_main">
+        {{ form_errors(form) }}
+        {{ form_widget(form) }} 
+      </div>
+    </div>
+{% endspaceless %}
+{% endblock field_row %} 
+
 {% block choice_widget_expanded %}
 {% spaceless %} 
 <div class="choices_list">
@@ -13,3 +25,4 @@
 </div>
 {% endspaceless %} 
 {% endblock choice_widget_expanded %}
+

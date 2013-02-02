@@ -15,6 +15,9 @@ services:
         class: Icse\MembersBundle\Service\IcseMailer
         arguments: [@mailer, @css_to_inline_email_converter, %kernel.root_dir%] 
 
+    ajax_response_gen:
+        class: Icse\MembersBundle\Service\AjaxResponseGenerator
+
 #    icse_members.example:
 #        class: %icse_members.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]

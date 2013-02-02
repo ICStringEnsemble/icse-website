@@ -5,6 +5,7 @@ namespace Icse\MembersBundle\Controller\SuperAdmin;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\FormError;
 
 use Icse\MembersBundle\Entity\Member; 
 use Common\Tools; 
@@ -63,7 +64,6 @@ class MembersController extends Controller
     {
         $is_new_account = ($member->getID() === null);
         $mailer = $this->get('icse_mailer'); 
-        $other_errors = false;
         $form = $this->getForm($member);
         $form->bind($request);
 
@@ -81,13 +81,13 @@ class MembersController extends Controller
             } else if ($password_type == 'set') {
                 $plain_password = $form->get('plain_password')->getData();
                 if (strlen($plain_password) < 8) {
-                    $other_errors = true;
+                    $form->addError(new FormError("Password must be at least 8 characters."));
                 }
             } else {
-                $other_errors = true;
+                $form->addError(new FormError("Invalid password type."));
             }
 
-            if (!$other_errors) {
+            if ($form->isValid()) {
                 $member->setSalt(Tools::randString(40));
                 $encoder = $this->get('security.encoder_factory');  
                 $pass_hash = $encoder->getEncoder($member)->encodePassword($plain_password, $member->getSalt());
@@ -100,7 +100,7 @@ class MembersController extends Controller
             $member->setCreatedAt(new \DateTime()); 
         }
 
-        if ($form->isValid() && !$other_errors) {
+        if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($member);
             $em->flush();
@@ -132,9 +132,9 @@ class MembersController extends Controller
                 ));            
             }
 
-            return new Response(json_encode("success"));
+            return $this->get('ajax_response_gen')->returnSuccess();
         } else {
-            return new Response(json_encode(array('errors' => Tools::getErrorMessages($form))));
+            return $this->get('ajax_response_gen')->returnFail($form);
         }  
     }
 
@@ -175,9 +175,10 @@ class MembersController extends Controller
                     $last_name_index = Tools::arrayGet($headings, 'Last Name');
                     $email_index = Tools::arrayGet($headings, 'Email');
                 } catch (\UnexpectedValueException $e) {
-                    return new Response(json_encode("CSV headings not as expected."));
+                    return $this->get('ajax_response_gen')->returnFail("CSV headings not as expected.");
                 }
                 $csv_row = fgetcsv($file_handle);
+                $line_number = 2;
                 $dm = $this->getDoctrine();
                 while ($csv_row) {
                     if ($dm->getRepository('IcseMembersBundle:Member')
@@ -200,17 +201,21 @@ class MembersController extends Controller
                                 )
                             ); 
                         } catch (\UnexpectedValueException $e) {
-                            return new Response(json_encode("No CSRF token."));
+                            return $this->get('ajax_response_gen')->returnFail("No CSRF token.");
                         }
                         $fakeRequest = $request->duplicate(null, $fakeRequestData, null, null, array());
                         $member = new Member();
-                        $return_status = $this->putData($fakeRequest, $member);
+                        $return_response = $this->putData($fakeRequest, $member);
+                        if (!$this->get('ajax_response_gen')->isSuccessResponse($return_response)) {
+                            return $this->get('ajax_response_gen')->addErrorToResponse($return_response, "Error at line " . $line_number, true);
+                        }
                     }
                     $csv_row = fgetcsv($file_handle);
+                    $line_number += 1;
                 }
-                return new Response(json_encode("success"));
+                return $this->get('ajax_response_gen')->returnSuccess();
             } else {
-                return new Response(json_encode("Nothing in file"));
+                return $this->get('ajax_response_gen')->returnFail("Nothing in file");
             }
 
         } else {
@@ -232,13 +237,11 @@ class MembersController extends Controller
     public function deleteAction($id) {
         $dm = $this->getDoctrine(); 
         $member = $dm->getRepository('IcseMembersBundle:Member')->findOneById($id);
-        if (!$member) {
-            //throw $this->createNotFoundException('Entity does not exist'); 
-            return new Response(json_encode("success"));
+        if ($member) {
+            $em = $dm->getManager();
+            $em->remove($member);
+            $em->flush();
         }
-        $em = $dm->getManager();
-        $em->remove($member);
-        $em->flush();
-        return new Response(json_encode("success"));
+        return $this->get('ajax_response_gen')->returnSuccess();
     }
 }

@@ -165,6 +165,7 @@ Are you sure you want to permanently delete all of the selected members?</p>
       attachTableHandlers();
       stopLoading();
       hideShowControlButtons();
+      $('.ui-widget-overlay').height($(document).height()); 
     });
     startLoading();
   }
@@ -249,6 +250,7 @@ Are you sure you want to permanently delete all of the selected members?</p>
     $('#edit_form').attr('method', 'POST');
     $('#edit_form').attr('action', "{{ path('IcseMembersBundle_members_create') }}");
     $('#edit_form').find('input').not(':button, :submit, :reset, :hidden, :radio, :checkbox').val(''); 
+    $('#edit_form').find('.error').remove();
     // Member specific stuff
     $("#edit_form input[name='form[password_choice]'][value=imperial]").prop('checked', true); 
     enableDisableNewPasswordFields(0);
@@ -262,6 +264,7 @@ Are you sure you want to permanently delete all of the selected members?</p>
     $('.edit_dialog .ui-dialog-buttonset .submit_button .ui-button-text').html('Save Changes');
     $('#edit_dialog').dialog('open').dialog({ title: "Edit Member" });
     $('#edit_form').attr('method', 'PUT');
+    $('#edit_form').find('.error').remove();
     var entity = $('tbody tr.ui-selected').data('entity');
     $('#edit_form').attr('action', "{{ path('IcseMembersBundle_members_update', {id: ''}) }}" + '/' + entity.id);
     $('#edit_form').find('input, select').not(':button, :submit, :reset, :hidden, :radio, :checkbox').each(function(){
@@ -306,6 +309,8 @@ Are you sure you want to permanently delete all of the selected members?</p>
   /* Form submit */
   $('.ui-dialog form').submit(function () {
     var form_element = $(this);
+    var containing_dialog = form_element.closest('.ui-dialog-content');
+    var dialog_buttonpane = containing_dialog.nextAll('.ui-dialog-buttonpane');
     if (form_element.find('input:file').length !== 0) {      // if files, we have to use multipart/form-data; doesn't play nicely with PUT
       var formData = new FormData(form_element[0]);
       var contentType = false;
@@ -326,16 +331,37 @@ Are you sure you want to permanently delete all of the selected members?</p>
         complete: function (result) {
         }
     }).always(function(){
-      form_element.closest('.ui-dialog-content').nextAll('.ui-dialog-buttonpane').find('.loading_spinner').hide();
-      form_element.closest('.ui-dialog-content').nextAll('.ui-dialog-buttonpane').find('button').button('enable');
+      dialog_buttonpane.find('.loading_spinner').hide();
+      dialog_buttonpane.find('button').button('enable');
     }).done(function(result){
-      if (result == "success"){
-        form_element.closest('.ui-dialog-content').dialog('close');
+      if (result.status == "success"){
+        containing_dialog.dialog('close');
         reloadTable();
+      } else {
+        if (result.status == "partial") {
+          reloadTable();
+        }
+        for (var key in result.errors) {
+          var error_value =  typeof someVar === 'string'  
+          var error_element = $('<div/>',{
+              'class' : 'error',
+              'text' : (typeof result.errors[key]) === 'string' ? result.errors[key] : result.errors[key][0]
+            });
+          var bad_input_element = form_element.find('*[name*="[' + key + ']"]');
+          if (isNaN(key) && bad_input_element.length !== 0) {
+            bad_input_element.before(error_element);
+          } else {
+            if (isNaN(key)) { // if key is named but matching input can't be found
+              error_element.html(key + ': ' + error_element.html());
+            }
+            error_element.addClass('global_error').appendTo(form_element);
+          }
+        }
       }
     });
-    form_element.closest('.ui-dialog-content').nextAll('.ui-dialog-buttonpane').find('.loading_spinner').show();
-    form_element.closest('.ui-dialog-content').nextAll('.ui-dialog-buttonpane').find('button').button('disable');
+    dialog_buttonpane.find('.loading_spinner').show();
+    dialog_buttonpane.find('button').button('disable');
+    form_element.find('.error').remove();
 
     return false; 
   }); 

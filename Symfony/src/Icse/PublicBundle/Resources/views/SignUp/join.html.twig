@@ -29,7 +29,7 @@
 
   {{ form_row(form.player) }} 
 
-  <div id="username_or_email_lookup" hidden >
+  <div id="username_or_email_lookup" class="field_row" hidden >
     <label for="username_or_email_field">Enter your Imperial username <br>(or e-mail address if you don't have one)</label>
     <input id="username_or_email_field" type="text" placeholder="Eg. jfs10" value="{{ username_or_email }}" />
     <input type="button" id="lookup_button" value="Continue"/>
@@ -51,13 +51,18 @@
   </div>
   {% set other_instrument_input %}
         <div id="other_instrument">
-          {{ form_row(form.other_instrument) }} 
+          {{ form_errors(form.other_instrument) }} 
+          {{ form_widget(form.other_instrument) }} 
         </div>
   {% endset %}
   <div class="show_if_player">
-    {{ form_label(form.instrument) }}
-    {{ form_errors(form.instrument) }}
-    {{ form_widget(form.instrument, {'extra_list_item': other_instrument_input}) }} 
+    <div class="field_row">
+      {{ form_label(form.instrument) }}
+      <div class="field_row_main">
+        {{ form_errors(form.instrument) }}
+        {{ form_widget(form.instrument, {'extra_list_item': other_instrument_input}) }} 
+      </div>
+    </div>
 
     {{ form_row(form.standard) }} 
   </div>

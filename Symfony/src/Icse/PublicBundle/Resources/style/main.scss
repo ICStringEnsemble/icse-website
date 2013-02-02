@@ -132,6 +132,9 @@ nav a {
 }
 
 #header_to_footer {
+  clear: both;
+  width: $page-width;
+  margin: 0 auto;
 }
 
 .ui-widget {
@@ -143,12 +146,11 @@ section, .ui-dialog {
 }
 
 section {
-  clear: both;
-  width: $page-width - 2 * $page-side-padding;
-  margin: 0 auto;
   padding: 0 $page-side-padding;
   padding-top:1em;
   padding-bottom:0em;
+  float: left;
+  width: $page-width - 2 * $page-side-padding;
   
   h1 {
     font-size: 1.6em;
@@ -252,6 +254,34 @@ form {
   margin-top: 1em;
   overflow: auto;
 
+  div.field_row {
+    overflow: hidden;
+    margin-bottom: 0.9em;
+
+    .field_row_main {
+      clear: none;
+      margin-left: $form-margin-width_fullpage;
+
+      .ui-dialog & {
+        margin-left: $form-margin-width_narrowpage;
+      } 
+
+
+    }
+  }
+
+  .error {
+    clear: none;
+    float: right;
+    color: #f00;
+    clear: right;
+    text-align: right;
+  }
+
+  .global_error {
+    padding-bottom: 0.7em;
+  }
+
   input {
     &[type=text], &[type=email], &[type=password] {
       //display: block;
@@ -259,6 +289,7 @@ form {
       width: 200px;
       vertical-align: middle; 
       margin-top: 0;
+      margin-right: 10px;
     }
 
     &[type=radio], &[type=checkbox] {
@@ -285,7 +316,6 @@ form {
     width: $form-margin-width_fullpage - $form-label-separation;
     text-align: right;
     margin-right: $form-label-separation;
-    padding-bottom: 1em;
 
     .ui-dialog & {
       width: $form-margin-width_narrowpage - $form-label-separation;
@@ -304,7 +334,7 @@ form {
   .choices_list {
     float: left;
     clear: none;
-    margin-bottom: 0.5em;
+    margin-bottom: -0.5em;
   }
 
   /* Radio labels */
