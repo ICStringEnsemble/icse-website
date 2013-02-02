@@ -323,4 +323,32 @@ class Member implements AdvancedUserInterface
     {
         return $this->created_at;
     }
+    /**
+     * @var \DateTime
+     */
+    private $last_online_at;
+
+
+    /**
+     * Set last_online_at
+     *
+     * @param \DateTime $lastOnlineAt
+     * @return Member
+     */
+    public function setLastOnlineAt($lastOnlineAt)
+    {
+        $this->last_online_at = $lastOnlineAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get last_online_at
+     *
+     * @return \DateTime 
+     */
+    public function getLastOnlineAt()
+    {
+        return $this->last_online_at;
+    }
 }
