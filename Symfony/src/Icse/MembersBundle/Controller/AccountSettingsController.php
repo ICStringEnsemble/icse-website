@@ -46,11 +46,11 @@ class AccountSettingsController extends Controller
           $cpResponse['success'] = "Password was sucessfully changed";
         }
 
+        $em = $this->getDoctrine()->getEntityManager();
         if (isset($cpResponse['success'])) {
-          $em = $this->getDoctrine()->getEntityManager();
-          $em->persist($user);
           $em->flush();
         } else {
+          $em->refresh($user);
           $cpResponse['passtype'] = $request->request->get('icse_passwd');
         }
       }
@@ -59,7 +59,6 @@ class AccountSettingsController extends Controller
         if ($this->isValidEmail($request->request->get('new_email'))) {
           $user->setEmail($request->request->get('new_email'));
           $em = $this->getDoctrine()->getEntityManager();
-          $em->persist($user);
           $em->flush();
           $ceResponse['success'] = "Email address was successfully changed";
         } else {

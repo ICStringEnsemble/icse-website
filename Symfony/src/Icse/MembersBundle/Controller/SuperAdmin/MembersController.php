@@ -101,8 +101,8 @@ class MembersController extends Controller
             $member->setCreatedAt(new \DateTime()); 
         }
 
+        $em = $this->getDoctrine()->getManager();
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $em->persist($member);
             $em->flush();
 
@@ -135,6 +135,7 @@ class MembersController extends Controller
 
             return $this->get('ajax_response_gen')->returnSuccess();
         } else {
+            $em->refresh($member);
             return $this->get('ajax_response_gen')->returnFail($form);
         }  
     }
