@@ -1,28 +1,19 @@
 {% extends 'IcseMembersBundle:Default:template.html.twig' %}
 
 {% set pageTitle = 'Members' %}  
-{% set currentSubSection = 'index' %}  
+{% set currentSubSection = 'home' %}  
 
 {% block content %}
 
 <h1>Welcome to the Members Area!</h1>
 
-<p>
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-tempor invidunt ut l
+<p>Hi {{ app.user.getFirstName() }}!</p>
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
-vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
-no sea takimata sanctus est Lorem ipsum dolor sit amet.
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
-vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
-no sea takimata sanctus est Lorem ipsum dolor sit amet.
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
-vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
-no sea takimata sanctus est Lorem ipsum dolor sit amet.
+<p>This is our new Members Section. There isn't much to see at the moment, but hopefully it will grow in the future.
+For now, be sure to check out the practice parts!</p>
+
+<p>
+<-- Please use an option on the left to continue.
 </p>
 
 

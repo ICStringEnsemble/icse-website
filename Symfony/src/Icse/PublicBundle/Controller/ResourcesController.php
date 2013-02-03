@@ -118,24 +118,26 @@ class ResourcesController extends Controller
         }
     }
 
-  public function resourceAction($type, $file, Request $request)
+    public function resourceAction($type, $file, Request $request)
     {
-      $path = $this->dir . $type . '/' . $file;
-      if ($type == 'tmp')
-        {
-          if ($this->get('security.context')->isGranted('ROLE_ADMIN') == false)
-            {
-              throw new AccessDeniedException();
+        $path = $this->dir . $type . '/' . $file;
+        if ($type == 'tmp') {
+            if ($this->get('security.context')->isGranted('ROLE_ADMIN') == false) {
+                throw new AccessDeniedException();
             } 
-          return $this->serveFile($path, $request);
+            return $this->serveFile($path, $request);
         }
-      else if ($type == 'images')
-        {
-          return $this->serveFile($path, $request);
+        else if ($type == 'images') {
+            return $this->serveFile($path, $request);
         }
-      else
-        {
-          throw $this->createNotFoundException('Invalid Resource Type: '.$type);
+        else if ($type == 'legacypdf') {
+            if ($this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED') == false) {
+                throw new AccessDeniedException();
+            }
+            return $this->serveFile($path, $request);
+        }
+        else {
+            throw $this->createNotFoundException('Invalid Resource Type: '.$type);
         }
     }
 }

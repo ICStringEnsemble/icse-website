@@ -18,10 +18,12 @@ area, and we may also use it for contacting you.
 <form method="post" action="">
   <div>
     {% if ceResponse['newemail'] is defined %}
-    <p class="error">{{ ceResponse['newemail'] }}</p>
+    <p class="error_wide">{{ ceResponse['newemail'] }}</p>
     {% endif %}
-    <label for="form_new_email">New email address</label>
-    <input type="email" id="form_new_email" name="new_email" required="required" />
+    <div class="field_row">
+      <label for="form_new_email">New email address</label>
+      <input type="email" id="form_new_email" name="new_email" required="required" />
+    </div>
   </div>
   <input type="hidden" name="form_id" value="ce" /> 
   <input type="submit" value="Change Email Address"/>
@@ -46,33 +48,41 @@ You are currently using a separate ICSE password.
 <form method="post" action="">
   <div>
     {% if cpResponse['oldpass'] is defined %}
-    <p class="error">{{ cpResponse['oldpass'] }}</p>
+    <p class="error_wide">{{ cpResponse['oldpass'] }}</p>
     {% endif %}
-    <label for="form_old_password">Old Password</label>
-    <input type="password" id="form_old_password" name="old_password" required="required" />
+    <div class="field_row">
+      <label for="form_old_password">Old Password</label>
+      <input type="password" id="form_old_password" name="old_password" required="required" />
+    </div>
   </div>
   <div>
     {% if cpResponse['icsepass'] is defined %}
-    <p class="error">{{ cpResponse['icsepass'] }}</p>
+    <p class="error_wide">{{ cpResponse['icsepass'] }}</p>
     {% endif %}
-    <label>Create a new ICSE password?</label>
-    <div class="choices_list" id="form_pass_type">
-      <input type="radio" id="form_icse_passwd" name="icse_passwd" required="required" value="2" {% if cpResponse['passtype'] is defined and cpResponse['passtype'] == 2 %}checked="yes"{% endif %}/>
-      <label for="form_icse_passwd" class=" required">Yes, make a separate password for ICSE.</label>
-      <input type="radio" id="form_ic_passwd" name="icse_passwd" required="required" value="1" {% if cpResponse['passtype'] is defined and cpResponse['passtype'] == 1 %}checked="yes"{% endif %}/>
-      <label for="form_ic_passwd" class=" required">No, I'll use my Imperial College password.</label>
+    <div class="field_row">
+      <label>Create a new ICSE password?</label>
+      <div class="choices_list" id="form_pass_type">
+        <input type="radio" id="form_icse_passwd" name="icse_passwd" required="required" value="2" {% if cpResponse['passtype'] is defined and cpResponse['passtype'] == 2 %}checked="yes"{% endif %}/>
+        <label for="form_icse_passwd" class=" required">Yes, make a separate password for ICSE.</label>
+        <input type="radio" id="form_ic_passwd" name="icse_passwd" required="required" value="1" {% if cpResponse['passtype'] is defined and cpResponse['passtype'] == 1 %}checked="yes"{% endif %}/>
+        <label for="form_ic_passwd" class=" required">No, I'll use my Imperial College password.</label>
+      </div>
     </div>
   </div>
   <div class="show_if_newpass">
     {% if cpResponse['newpass'] is defined %}
-    <p class="error">{{ cpResponse['newpass'] }}</p>
+    <p class="error_wide">{{ cpResponse['newpass'] }}</p>
     {% endif %}
-    <label for="form_new_password">Choose a new password</label>
-    <input type="password" id="form_new_password" name="new_password" required="required" />
+    <div class="field_row">
+      <label for="form_new_password">Choose a new password</label>
+      <input type="password" id="form_new_password" name="new_password" required="required" />
+    </div>
   </div>
   <div class="show_if_newpass">
-    <label for="form_new_password_again">Enter your new password again</label>
-    <input type="password" id="form_new_password_again" name="new_password_again" required="required" />
+    <div class="field_row">
+      <label for="form_new_password_again">Enter your new password again</label>
+      <input type="password" id="form_new_password_again" name="new_password_again" required="required" />
+    </div>
   </div>
   <input type="hidden" name="form_id" value="cp" /> 
   <input type="submit" value="Change Password"/>

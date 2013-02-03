@@ -3,10 +3,8 @@
 
 {% set members_nav_items = [
             {id: 'main', items: [
-                            {label: 'Schedule', id: '', url: '#'},                           
-                            {label: 'Practice Parts', id: '', url: '#'},                           
-                            {label: 'Practice Parts', id: '', url: '#'},                           
-                            {label: 'Practice Parts', id: '', url: '#'},                           
+                            {label: 'Home', id: 'home', url: path('IcseMembersBundle_home')},                           
+                            {label: 'Practice Parts', id: 'practice_parts', url: path('IcseMembersBundle_practice_parts')},                           
             ]},
             {label: 'Admin', id: 'admin', items: [
                             {label: 'Music Library', id: '', url: '#'},                           

@@ -1,12 +1,16 @@
+IcseMembersBundle_return:
+    pattern:  /members/return
+    defaults: { _controller: IcseMembersBundle:Default:returnToLastPage }
+
 IcseMembersBundle_home:
     pattern:  /members
     defaults: { _controller: IcseMembersBundle:Default:index }
 
 IcseMembersBundle_practice_parts:
     pattern:  /members/practiceparts
-    defaults: { _controller: IcseMembersBundle:Default:index }
+    defaults: { _controller: IcseMembersBundle:PracticeParts:legacy }
 
-IcseMembersBundle_logout:
+IcseMembersBundle_logout: # Don't change this without changing listener!
     pattern:   /logout
 
 IcseMembersBundle_account_settings:
@@ -63,7 +67,8 @@ IcseMembersBundle_site_dev:
     defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:siteDev }
 
 IcseMembersBundle_migrateDB:
-    pattern:  /migratedb
+    #pattern:  /migratedb
+    pattern:  /members/superadmin/migratedb
     defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:migrateDB }
 
 IcseMembersBundle_testEmail:

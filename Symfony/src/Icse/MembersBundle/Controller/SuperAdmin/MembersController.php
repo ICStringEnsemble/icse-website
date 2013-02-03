@@ -26,6 +26,7 @@ class MembersController extends Controller
             array('heading' => 'Password', 'cell' => function($member){return $member->getPassword()?"Stored":"Imperial";}),
             array('heading' => 'Active', 'cell' => function($member){return $member->getActive()? "Yes":"No";}),
             array('heading' => 'Role', 'cell' => function($member){return $member->getRole() == 100? "Super Admin":($member->getRole() == 10?"Admin":"User");}),
+            array('heading' => 'Last Online', 'cell' => function($member){return $member->getLastOnlineAt()? $member->getLastOnlineAt()->format('Y-m-d H:i:s') : "Never";}),
         );
         return array("columns" => $columns, "entities" => $members);
     }

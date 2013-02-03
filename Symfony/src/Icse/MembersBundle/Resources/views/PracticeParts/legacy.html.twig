@@ -1,0 +1,40 @@
+{% extends 'IcseMembersBundle:Default:template.html.twig' %}
+
+{% set pageTitle = 'Practice Parts' %}  
+{% set currentSubSection = 'practice_parts' %}
+
+{% set pieces = [
+            {name: 'Copeland: Hoedown', folder: 'Copeland - Hoedown', parts: [
+                            {label: 'Violin 1', filename: 'violin1.pdf'},                           
+                            {label: 'Violin 2', filename: 'violin2.pdf'},                           
+                            {label: 'Viola', filename: 'viola.pdf'},                           
+                            {label: 'Cello', filename: 'cello.pdf'},                           
+                            {label: 'Bass', filename: 'bass.pdf'},                           
+            ]},
+            {name: 'Copeland: Hoedown', folder: 'Copeland - Hoedown', parts: [
+                            {label: 'Violin 1', filename: 'violin1.pdf'},                           
+                            {label: 'Violin 2', filename: 'violin2.pdf'},                           
+                            {label: 'Viola', filename: 'viola.pdf'},                           
+                            {label: 'Cello', filename: 'cello.pdf'},                           
+                            {label: 'Bass', filename: 'bass.pdf'},                           
+            ]},
+] %}
+
+{% block content %}
+
+<h1>Practice Parts</h1>
+
+<p>Well done for checking this page out! Parts for all of the pieces can be found below, for you to practise at any time.</p>
+
+{% for piece in pieces %}
+<h2>{{ piece.name }}</h2>
+
+<ul>
+  {% for part in piece.parts %}
+  <li><a href="{{ path('IcsePublicBundle_resource', {type: 'legacypdf', file: piece.folder ~ '/' ~ part.filename}) }}">{{ part.label }}</a></li>
+  {% endfor %}
+</ul>
+{% endfor %}
+
+
+{% endblock %}
