@@ -6,6 +6,7 @@ security:
             imperial_form_login:
                 login_path:  /login
                 check_path:  /login_check
+                default_target_path: /members 
             logout:
                 path: /logout
                 target: /
