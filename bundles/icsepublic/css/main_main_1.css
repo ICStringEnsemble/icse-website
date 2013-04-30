@@ -1,0 +1,669 @@
+/* line 17, ../usr/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+/* line 22, ../usr/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html {
+  line-height: 1;
+}
+
+/* line 24, ../usr/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+ol, ul {
+  list-style: none;
+}
+
+/* line 26, ../usr/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 28, ../usr/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+/* line 30, ../usr/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q, blockquote {
+  quotes: none;
+}
+/* line 103, ../usr/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+/* line 32, ../usr/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+a img {
+  border: none;
+}
+
+/* line 116, ../usr/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+  display: block;
+}
+
+/* line 17, assetic_compassFSLvCZ.scss */
+html, body {
+  height: 100%;
+}
+
+/* line 21, assetic_compassFSLvCZ.scss */
+body {
+  font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  overflow-y: scroll;
+}
+
+/* line 27, assetic_compassFSLvCZ.scss */
+#above_footer {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  min-width: 994px;
+  background: url(../../../../bundles/icsepublic/images/bg.png) #eeeeee repeat-y center;
+}
+
+/* line 35, assetic_compassFSLvCZ.scss */
+header {
+  background-color: #fff;
+}
+
+/* line 39, assetic_compassFSLvCZ.scss */
+hgroup {
+  width: 954px;
+  margin: 0 auto;
+  padding: 7px 20px;
+  background-image: url(../../../../bundles/icsepublic/images/banner_violin.png);
+  background-repeat: no-repeat;
+  background-position: bottom right;
+}
+
+/* line 48, assetic_compassFSLvCZ.scss */
+#top_nav {
+  background-color: black;
+  height: 2em;
+}
+
+/* line 53, assetic_compassFSLvCZ.scss */
+#sub_nav {
+  width: 994px;
+  margin: 0 auto;
+  height: 2em;
+  background-color: #333333;
+}
+
+/* line 60, assetic_compassFSLvCZ.scss */
+nav ul {
+  width: 994px;
+  margin: 0 auto;
+  list-style: none;
+}
+
+/* line 66, assetic_compassFSLvCZ.scss */
+#sub_nav ul ul {
+  width: auto;
+  background-color: #aaaaaa;
+}
+
+/* line 71, assetic_compassFSLvCZ.scss */
+nav li {
+  display: block;
+  float: left;
+}
+
+/* line 77, assetic_compassFSLvCZ.scss */
+nav a:link, nav a:visited {
+  display: block;
+  padding: 0.5em 20px;
+  text-decoration: none;
+  color: #fff;
+  font-family: Verdana;
+}
+/* line 84, assetic_compassFSLvCZ.scss */
+nav a:hover {
+  background-color: #444;
+}
+
+/* line 89, assetic_compassFSLvCZ.scss */
+#sub_nav ul ul a.crumb {
+  background-image: url(../../../../bundles/icsepublic/images/breadcrumb.png);
+  background-repeat: no-repeat;
+  background-position: right center;
+  padding-right: 44px;
+}
+/* line 94, assetic_compassFSLvCZ.scss */
+#sub_nav ul ul a.crumb:link, #sub_nav ul ul a.crumb:visited {
+  background-color: #aaaaaa;
+  color: #000;
+}
+/* line 98, assetic_compassFSLvCZ.scss */
+#sub_nav ul ul a.crumb:hover {
+  background-color: #c3c3c3;
+}
+
+/* line 103, assetic_compassFSLvCZ.scss */
+#sub_nav ul ul a.midcrumb {
+  padding-left: 10px;
+}
+
+/* line 108, assetic_compassFSLvCZ.scss */
+#top_nav a.current:link, #top_nav a.current:visited {
+  background-color: #333333;
+}
+/* line 111, assetic_compassFSLvCZ.scss */
+#top_nav a.current:hover {
+  background-color: #4d4d4d;
+}
+
+/* line 117, assetic_compassFSLvCZ.scss */
+#sub_nav a.current:link, #sub_nav a.current:visited {
+  background-color: #fff;
+  color: #000;
+}
+/* line 121, assetic_compassFSLvCZ.scss */
+#sub_nav a.current:hover {
+  background-color: #eee;
+}
+
+/* line 126, assetic_compassFSLvCZ.scss */
+#top_nav #members_area_button.logged_in a {
+  color: #ff0;
+}
+
+/* line 130, assetic_compassFSLvCZ.scss */
+#top_nav #members_area_button {
+  float: right;
+}
+
+/* line 134, assetic_compassFSLvCZ.scss */
+#header_to_footer {
+  clear: both;
+  width: 994px;
+  margin: 0 auto;
+}
+
+/* line 140, assetic_compassFSLvCZ.scss */
+.ui-widget {
+  font-size: 96% !important;
+}
+
+/* line 144, assetic_compassFSLvCZ.scss */
+section, .ui-dialog {
+  line-height: 1.5em;
+}
+
+/* line 148, assetic_compassFSLvCZ.scss */
+section {
+  padding: 0 20px;
+  padding-top: 1em;
+  padding-bottom: 0em;
+  float: left;
+  width: 954px;
+}
+/* line 155, assetic_compassFSLvCZ.scss */
+section h1 {
+  font-size: 1.6em;
+  font-weight: bold;
+  padding-bottom: 1em;
+  font-family: Arial;
+}
+/* line 162, assetic_compassFSLvCZ.scss */
+section h2 {
+  font-size: 1.2em;
+  font-weight: bold;
+  padding-bottom: 0.1em;
+  margin-bottom: 0.5em;
+  font-family: Arial;
+  border-bottom: 3px solid #643906;
+  color: #643906;
+}
+/* line 172, assetic_compassFSLvCZ.scss */
+section h2 a:link, section h2 a:visited {
+  color: #643906;
+  text-decoration: none;
+}
+/* line 179, assetic_compassFSLvCZ.scss */
+section h3 {
+  font-size: 1.1em;
+  font-weight: bold;
+  padding-bottom: 0.1em;
+  font-family: Arial;
+}
+/* line 187, assetic_compassFSLvCZ.scss */
+section p, section ul {
+  margin-bottom: 1em;
+  max-width: 714px;
+}
+/* line 192, assetic_compassFSLvCZ.scss */
+section .main_content ul, section ol {
+  list-style: disc;
+}
+/* line 195, assetic_compassFSLvCZ.scss */
+section .main_content ul li, section ol li {
+  margin-left: 40px;
+  padding-left: 5px;
+  margin-bottom: 0.5em;
+}
+
+/* line 204, assetic_compassFSLvCZ.scss */
+footer {
+  font-size: 0.75em;
+  padding: 0.5em 0;
+  min-width: 994px;
+  height: 1em;
+  color: #fff;
+  background-color: #000;
+  text-align: center;
+  margin-top: -2em;
+}
+
+/* line 215, assetic_compassFSLvCZ.scss */
+.footer_push {
+  height: 1.5em;
+  clear: both;
+}
+
+/* line 221, assetic_compassFSLvCZ.scss */
+a:link, a:visited, .ui-widget-content a:link, .ui-widget-content a:visited {
+  text-decoration: none;
+  color: #996633;
+}
+/* line 225, assetic_compassFSLvCZ.scss */
+a:hover, .ui-widget-content a:hover {
+  color: #bf8040;
+  text-decoration: underline;
+}
+
+/* line 232, assetic_compassFSLvCZ.scss */
+footer a:link, footer a:visited {
+  color: #fff;
+}
+/* line 235, assetic_compassFSLvCZ.scss */
+footer a:hover {
+  color: #996633;
+}
+
+/* line 240, assetic_compassFSLvCZ.scss */
+footer a {
+  color: #fff;
+}
+
+/* line 244, assetic_compassFSLvCZ.scss */
+::selection {
+  background: #d8c3a9;
+}
+
+/* line 253, assetic_compassFSLvCZ.scss */
+form {
+  margin-top: 1em;
+  overflow: auto;
+  /* div containing the radio list */
+  /* Radio labels */
+}
+/* line 257, assetic_compassFSLvCZ.scss */
+form div.field_row {
+  overflow: hidden;
+  margin-bottom: 0.9em;
+}
+/* line 261, assetic_compassFSLvCZ.scss */
+form div.field_row .field_row_main {
+  clear: none;
+  margin-left: 400px;
+}
+/* line 265, assetic_compassFSLvCZ.scss */
+.ui-dialog form div.field_row .field_row_main {
+  margin-left: 200px;
+}
+/* line 273, assetic_compassFSLvCZ.scss */
+form .error {
+  clear: none;
+  float: right;
+  color: #f00;
+  clear: right;
+  text-align: right;
+}
+/* line 281, assetic_compassFSLvCZ.scss */
+form .global_error {
+  padding-bottom: 0.7em;
+}
+/* line 286, assetic_compassFSLvCZ.scss */
+form input[type=text], form input[type=email], form input[type=password] {
+  width: 200px;
+  vertical-align: middle;
+  margin-top: 0;
+  margin-right: 10px;
+}
+/* line 295, assetic_compassFSLvCZ.scss */
+form input[type=radio], form input[type=checkbox] {
+  margin-top: 0.4em;
+}
+/* line 299, assetic_compassFSLvCZ.scss */
+form input[type=submit] {
+  display: block;
+  float: left;
+  clear: both;
+  margin-left: 400px;
+  margin-bottom: 1.5em;
+}
+/* line 306, assetic_compassFSLvCZ.scss */
+.ui-dialog form input[type=submit] {
+  margin-left: 200px;
+}
+/* line 313, assetic_compassFSLvCZ.scss */
+form label {
+  float: left;
+  clear: left;
+  width: 380px;
+  text-align: right;
+  margin-right: 20px;
+}
+/* line 320, assetic_compassFSLvCZ.scss */
+.ui-dialog form label {
+  width: 180px;
+}
+/* line 325, assetic_compassFSLvCZ.scss */
+form .choices_list input {
+  display: block;
+  float: left;
+  margin-right: 0px;
+  margin-left: 0px;
+  clear: both;
+}
+/* line 334, assetic_compassFSLvCZ.scss */
+form .choices_list {
+  float: left;
+  clear: none;
+  margin-bottom: -0.5em;
+}
+/* line 341, assetic_compassFSLvCZ.scss */
+form .choices_list label {
+  width: auto;
+  float: left;
+  vertical-align: middle;
+  margin: 0;
+  clear: none;
+  padding-bottom: 0.5em;
+  padding-left: 10px;
+}
+/* line 351, assetic_compassFSLvCZ.scss */
+form div {
+  clear: both;
+}
+/* line 355, assetic_compassFSLvCZ.scss */
+form div#other_instrument {
+  clear: none;
+  float: left;
+  margin-left: 20px;
+}
+/* line 361, assetic_compassFSLvCZ.scss */
+form label[for=form_other_instrument] {
+  display: none;
+}
+/* line 365, assetic_compassFSLvCZ.scss */
+form #username_or_email_lookup input[type=button] {
+  clear: none;
+  margin-left: 15px;
+}
+/* line 372, assetic_compassFSLvCZ.scss */
+form #login_button {
+  float: left;
+}
+/* line 376, assetic_compassFSLvCZ.scss */
+form input#remember_me {
+  float: left;
+  margin-top: 0.5em;
+  margin-left: 30px;
+}
+/* line 382, assetic_compassFSLvCZ.scss */
+form label#remember_me_label {
+  clear: none;
+  width: auto;
+  padding-left: 5px;
+}
+/* line 388, assetic_compassFSLvCZ.scss */
+form #username_or_email_error, form li {
+  color: #f00;
+  float: right;
+}
+/* line 393, assetic_compassFSLvCZ.scss */
+form .global_errors li {
+  float: left;
+  clear: both;
+  min-height: 2em;
+  margin-left: 400px;
+  margin-bottom: 0.5em;
+}
+/* line 401, assetic_compassFSLvCZ.scss */
+form .submit_and_loading_container {
+  display: block;
+  float: left;
+  clear: both;
+  margin-left: 400px;
+}
+/* line 407, assetic_compassFSLvCZ.scss */
+.ui-dialog form .submit_and_loading_container {
+  margin-left: 200px;
+}
+/* line 411, assetic_compassFSLvCZ.scss */
+form .submit_and_loading_container input[type=submit] {
+  display: inline;
+  margin: 0;
+}
+/* line 416, assetic_compassFSLvCZ.scss */
+form .submit_and_loading_container .loading_spinner {
+  margin: 0.2em 0.5em;
+}
+
+/* line 422, assetic_compassFSLvCZ.scss */
+.ui-dialog-buttonset .loading_spinner {
+  margin-right: 10px;
+}
+
+/* line 426, assetic_compassFSLvCZ.scss */
+div#end_form {
+  clear: both;
+}
+
+/* line 430, assetic_compassFSLvCZ.scss */
+textarea#email_textarea {
+  vertical-align: top;
+  height: 2.7em;
+}
+
+/* line 435, assetic_compassFSLvCZ.scss */
+#signupsfilter .current {
+  font-weight: bold;
+}
+
+/* line 440, assetic_compassFSLvCZ.scss */
+table.admintable {
+  margin-top: 2em;
+}
+/* line 443, assetic_compassFSLvCZ.scss */
+table.admintable, table.admintable td, table.admintable th {
+  padding: 0 10px;
+  text-align: center;
+  vertical-align: middle;
+}
+/* line 449, assetic_compassFSLvCZ.scss */
+table.admintable thead tr {
+  background-color: #a6681e;
+}
+/* line 451, assetic_compassFSLvCZ.scss */
+table.admintable thead tr th {
+  color: #fff;
+  font-weight: bold;
+}
+/* line 458, assetic_compassFSLvCZ.scss */
+table.admintable tbody tr:nth-child(odd) {
+  background-color: #e3c9ab;
+}
+/* line 460, assetic_compassFSLvCZ.scss */
+table.admintable tbody tr:nth-child(odd).ui-selected {
+  background-color: #AFC9D4;
+}
+/* line 463, assetic_compassFSLvCZ.scss */
+table.admintable tbody tr:nth-child(odd).ui-selecting {
+  background-color: #c0d4dd;
+}
+/* line 467, assetic_compassFSLvCZ.scss */
+table.admintable tbody tr:nth-child(even) {
+  background-color: #fff;
+}
+/* line 469, assetic_compassFSLvCZ.scss */
+table.admintable tbody tr:nth-child(even).ui-selected {
+  background-color: #d0dfe6;
+}
+/* line 472, assetic_compassFSLvCZ.scss */
+table.admintable tbody tr:nth-child(even).ui-selecting {
+  background-color: #e1ebef;
+}
+
+/* line 480, assetic_compassFSLvCZ.scss */
+*[hidden] {
+  display: none;
+}
+
+/* line 484, assetic_compassFSLvCZ.scss */
+.flip-h {
+  -webkit-transform: scaleX(-1);
+  -moz-transform: scaleX(-1);
+  -ms-transform: scaleX(-1);
+  -o-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+
+/* line 488, assetic_compassFSLvCZ.scss */
+.rotate-180 {
+  -webkit-transform: rotate(-180deg);
+  -moz-transform: rotate(-180deg);
+  -ms-transform: rotate(-180deg);
+  -o-transform: rotate(-180deg);
+  transform: rotate(-180deg);
+}
+
+/* line 492, assetic_compassFSLvCZ.scss */
+.article_pic {
+  float: right;
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+/* line 498, assetic_compassFSLvCZ.scss */
+.event_list, .news_list {
+  margin-bottom: 1em;
+}
+
+/* line 502, assetic_compassFSLvCZ.scss */
+.event_listing, .news_listing {
+  clear: both;
+  margin-top: 1em;
+  overflow: hidden;
+}
+/* line 507, assetic_compassFSLvCZ.scss */
+.event_listing a.picture + div.details, .news_listing a.picture + div.details {
+  padding-left: 217px;
+}
+/* line 511, assetic_compassFSLvCZ.scss */
+.event_listing ul, .news_listing ul {
+  list-style: disc inside;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  margin-left: 1em;
+}
+/* line 518, assetic_compassFSLvCZ.scss */
+.event_listing a.picture, .news_listing a.picture {
+  background: #fff;
+  float: left;
+  display: block;
+}
+/* line 524, assetic_compassFSLvCZ.scss */
+.event_listing img, .news_listing img {
+  display: block;
+  border: 1px solid #000;
+}
+/* line 529, assetic_compassFSLvCZ.scss */
+.event_listing a.picture, .event_listing h3 a, .news_listing a.picture, .news_listing h3 a {
+  color: #000;
+  text-decoration: none;
+}
+/* line 533, assetic_compassFSLvCZ.scss */
+.event_listing a.picture:hover, .mouseover .event_listing a.picture, .event_listing h3 a:hover, .mouseover .event_listing h3 a, .news_listing a.picture:hover, .mouseover .news_listing a.picture, .news_listing h3 a:hover, .mouseover .news_listing h3 a {
+  color: #666;
+}
+/* line 536, assetic_compassFSLvCZ.scss */
+.event_listing a.picture:hover img, .mouseover .event_listing a.picture img, .event_listing h3 a:hover img, .mouseover .event_listing h3 a img, .news_listing a.picture:hover img, .mouseover .news_listing a.picture img, .news_listing h3 a:hover img, .mouseover .news_listing h3 a img {
+  opacity: 0.8;
+}
+/* line 542, assetic_compassFSLvCZ.scss */
+.event_listing .posted_at, .news_listing .posted_at {
+  color: #888;
+  font-size: 0.8em;
+}
+
+/* line 550, assetic_compassFSLvCZ.scss */
+section #news_head {
+  margin-bottom: 1em;
+  padding-bottom: 0.4em;
+  border-bottom: 3px solid #000;
+}
+/* line 554, assetic_compassFSLvCZ.scss */
+section #news_head h1 {
+  padding-bottom: 0.3em;
+}
+/* line 558, assetic_compassFSLvCZ.scss */
+section #news_head h2 {
+  margin-top: 0;
+  margin-bottom: 0;
+  border: none;
+  font-weight: normal;
+}
+
+/* line 566, assetic_compassFSLvCZ.scss */
+section #news_article {
+  margin-bottom: 1em;
+}
+/* line 568, assetic_compassFSLvCZ.scss */
+section #news_article .posted_at, section #news_article .posted_by {
+  color: #888;
+  font-size: 0.8em;
+}
+/* line 573, assetic_compassFSLvCZ.scss */
+section #news_article p.intro {
+  font-weight: bold;
+}
+
+/* line 578, assetic_compassFSLvCZ.scss */
+.view_full_image:hover {
+  cursor: -webkit-zoom-in;
+  cursor: -moz-zoom-in;
+  cursor: zoom-in;
+}
+
+/* line 584, assetic_compassFSLvCZ.scss */
+.fancybox-image {
+  cursor: -webkit-zoom-out;
+  cursor: -moz-zoom-out;
+  cursor: zoom-out;
+}

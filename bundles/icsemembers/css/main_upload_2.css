@@ -1,0 +1,48 @@
+/* line 1, assetic_compassEf7pPt.scss */
+.upload_item {
+  background: #fff;
+  margin: 1em 0;
+  padding: 5px;
+  min-width: 445px;
+  overflow: hidden;
+}
+
+/* line 9, assetic_compassEf7pPt.scss */
+.upload_item .thumbnail {
+  float: left;
+  width: 100px;
+}
+
+/* line 14, assetic_compassEf7pPt.scss */
+.upload_item form {
+  float: left;
+  clear: none;
+}
+
+/* line 19, assetic_compassEf7pPt.scss */
+.upload_item label {
+  width: 100px;
+}
+
+/* line 26, assetic_compassEf7pPt.scss */
+.upload_item input[type=submit], .upload_item input[type=button] {
+  float: left;
+  clear: none;
+  margin-right: 6px;
+  margin-top: 0.3em;
+  margin-left: 0;
+  height: 1.6em;
+  padding: 0 8px;
+}
+
+/* line 36, assetic_compassEf7pPt.scss */
+.upload_item .loading_spinner {
+  margin-top: 0.3em;
+  height: 1.6em;
+}
+
+/* line 41, assetic_compassEf7pPt.scss */
+.upload_item .info {
+  float: left;
+  clear: none;
+}

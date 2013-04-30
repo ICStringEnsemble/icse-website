@@ -1,0 +1,38 @@
+/* line 2, assetic_compassb3Y323.scss */
+section #TitleAndDate {
+  margin-bottom: 1em;
+}
+/* line 6, assetic_compassb3Y323.scss */
+section h1 {
+  padding-bottom: 0.3em;
+}
+/* line 10, assetic_compassb3Y323.scss */
+section h2 {
+  clear: both;
+}
+/* line 14, assetic_compassb3Y323.scss */
+section ul.repertoire {
+  list-style: disc;
+  margin-left: 1.5em;
+  float: left;
+  margin-bottom: 1em;
+}
+/* line 21, assetic_compassb3Y323.scss */
+section a.poster {
+  float: left;
+}
+/* line 24, assetic_compassb3Y323.scss */
+section a.poster img {
+  float: left;
+  margin-right: 1em;
+  margin-bottom: 1em;
+  border: 1px solid #000;
+}
+/* line 34, assetic_compassb3Y323.scss */
+section #location {
+  margin-bottom: 1em;
+}
+/* line 37, assetic_compassb3Y323.scss */
+section #location #address {
+  margin-bottom: 0.5em;
+}

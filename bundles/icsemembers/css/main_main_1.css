@@ -1,0 +1,219 @@
+/* line 11, assetic_compassWMmhgQ.scss */
+#above_footer {
+  background: url(../../../../bundles/icsemembers/images/bg.png) white repeat-y left;
+  -webkit-transition: background 0.2s;
+  -moz-transition: background 0.2s;
+  -o-transition: background 0.2s;
+  transition: background 0.2s;
+}
+
+/* line 16, assetic_compassWMmhgQ.scss */
+#above_footer.nav_col_hidden {
+  background-position: -206px 0;
+  background-image: url(../../../../bundles/icsemembers/images/bg_hidden_nav.png);
+}
+
+/* line 21, assetic_compassWMmhgQ.scss */
+#above_footer.full_width {
+  background: #fff;
+}
+
+/* line 25, assetic_compassWMmhgQ.scss */
+#nav_column {
+  float: left;
+  position: relative;
+  width: 0px;
+  left: 0;
+  -webkit-transition: left 0.2s;
+  -moz-transition: left 0.2s;
+  -o-transition: left 0.2s;
+  transition: left 0.2s;
+  height: auto !important;
+}
+
+/* line 34, assetic_compassWMmhgQ.scss */
+.nav_col_hidden #nav_column {
+  left: -206px;
+}
+
+/* line 38, assetic_compassWMmhgQ.scss */
+#nav_column li {
+  display: block;
+  float: left;
+  clear: left;
+}
+
+/* line 44, assetic_compassWMmhgQ.scss */
+#nav_col_head, #nav_column li.category {
+  width: 224px;
+  padding: 0.5em 8px;
+  color: #fff;
+  background: #000;
+}
+
+/* line 53, assetic_compassWMmhgQ.scss */
+#nav_column li a:link, #nav_column li a:visited {
+  display: block;
+  width: 222px;
+  padding: 0.5em 8px;
+  text-decoration: none;
+  color: #000;
+  background-color: #d4b896;
+}
+/* line 61, assetic_compassWMmhgQ.scss */
+#nav_column li a:link.current, #nav_column li a:visited.current {
+  background-color: #e3d0ba;
+}
+/* line 66, assetic_compassWMmhgQ.scss */
+#nav_column li a:hover {
+  background-color: #c5a072;
+}
+/* line 68, assetic_compassWMmhgQ.scss */
+#nav_column li a:hover.current {
+  background-color: #f2e9de;
+}
+
+/* line 75, assetic_compassWMmhgQ.scss */
+#section_container {
+  margin-left: 240px;
+  overflow: hidden;
+  -webkit-transition: margin-left 0.2s;
+  -moz-transition: margin-left 0.2s;
+  -o-transition: margin-left 0.2s;
+  transition: margin-left 0.2s;
+}
+
+/* line 81, assetic_compassWMmhgQ.scss */
+.nav_col_hidden #section_container {
+  margin-left: 34px;
+}
+
+/* line 85, assetic_compassWMmhgQ.scss */
+#hide_nav_col_button {
+  float: right;
+  -webkit-transition: -webkit-transform 1s;
+  -moz-transition: -moz-transform 1s;
+  -o-transition: -o-transform 1s;
+  transition: transform 1s;
+}
+
+/* line 90, assetic_compassWMmhgQ.scss */
+#hide_nav_col_button:hover {
+  cursor: pointer;
+}
+
+/* line 94, assetic_compassWMmhgQ.scss */
+section {
+  width: auto;
+  float: none;
+}
+
+/* line 99, assetic_compassWMmhgQ.scss */
+form label {
+  width: 300px;
+}
+
+/* line 103, assetic_compassWMmhgQ.scss */
+form input[type=submit] {
+  margin-left: 320px;
+}
+
+/* line 107, assetic_compassWMmhgQ.scss */
+form p.error_wide {
+  color: #f00;
+  margin-left: 320px;
+}
+
+/* line 112, assetic_compassWMmhgQ.scss */
+p.success {
+  color: #090;
+}
+
+/* line 116, assetic_compassWMmhgQ.scss */
+#hidden_nav_col_cover {
+  visibility: hidden;
+  opacity: 0;
+  width: 240px;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  z-index: 0;
+  background-color: #000;
+  -webkit-transition: visibility 0s linear, opacity 0.2s;
+  -webkit-transition-delay: 0.2s, 0s;
+  -moz-transition: visibility 0s linear 0.2s, opacity 0.2s;
+  -o-transition: visibility 0s linear 0.2s, opacity 0.2s;
+  transition: visibility 0s linear 0.2s, opacity 0.2s;
+}
+
+/* line 128, assetic_compassWMmhgQ.scss */
+.nav_col_hidden #hidden_nav_col_cover {
+  visibility: visible;
+  opacity: 1;
+  -webkit-transition-delay: 0s;
+  -moz-transition-delay: 0s;
+  -o-transition-delay: 0s;
+  transition-delay: 0s;
+}
+
+/* line 135, assetic_compassWMmhgQ.scss */
+#hidden_nav_col_cover div {
+  color: #fff;
+  position: absolute;
+  top: 2em;
+  right: 0.5em;
+  width: 0px;
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+  -webkit-transform-origin: top left;
+  -moz-transform-origin: top left;
+  -ms-transform-origin: top left;
+  -o-transform-origin: top left;
+  transform-origin: top left;
+}
+
+/* line 145, assetic_compassWMmhgQ.scss */
+.loading_spinner {
+  vertical-align: middle;
+}
+
+/* line 149, assetic_compassWMmhgQ.scss */
+ul.table_buttons {
+  height: 2.5em;
+  margin-bottom: 0;
+}
+/* line 152, assetic_compassWMmhgQ.scss */
+ul.table_buttons li {
+  display: block;
+  float: left;
+}
+/* line 156, assetic_compassWMmhgQ.scss */
+ul.table_buttons .loading_spinner {
+  margin: 0.45em 0.45em;
+}
+
+/* line 161, assetic_compassWMmhgQ.scss */
+.ui-dialog #edit_dialog.ui-dialog-content {
+  padding-bottom: 0;
+}
+
+/* line 166, assetic_compassWMmhgQ.scss */
+#import_csv_dialog ul li {
+  list-style-type: disc;
+  margin-left: 30px;
+}
+/* line 171, assetic_compassWMmhgQ.scss */
+#import_csv_dialog label {
+  width: 100px;
+}
+/* line 174, assetic_compassWMmhgQ.scss */
+#import_csv_dialog .field_row_main {
+  margin-left: 100px;
+}
+/* line 177, assetic_compassWMmhgQ.scss */
+#import_csv_dialog .field_row_main input {
+  width: 300px;
+}
