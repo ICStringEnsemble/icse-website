@@ -73,3 +73,7 @@ IcseMembersBundle_migrateDB:
 IcseMembersBundle_testEmail:
     pattern:  /members/superadmin/testemail
     defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:testEmail }
+
+IcseMembersBundle_test:
+    pattern:  /members/superadmin/test
+    defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:test }

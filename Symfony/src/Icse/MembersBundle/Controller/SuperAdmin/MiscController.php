@@ -86,4 +86,16 @@ class MiscController extends Controller
         }
         return new Response('done');
     }
+
+    public function testAction()
+    {
+        $mm = $this->get('icsepublic_mailman');
+//get a list of lists as an array
+//print_r($mm->lists());
+//echo $mm->unsubscribe('user@example.co.uk');
+$members=$mm->members();
+print_r($members[0]);
+//echo count($members[0]); 
+        return new Response('hi');
+    }
 }

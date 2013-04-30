@@ -3,8 +3,14 @@ parameters:
 #    icse_public.example.class: Icse\PublicBundle\Example
 
 services:
-    Utility:
-        class: Icse\PublicBundle\Utility\Wobble
+    icsemembers_mailman:
+        class: Common\Mailman
+        arguments: [%icmailman_admin_url%, %icsemembers_mailman_list%, %icsemembers_mailman_pw%]  
+
+    icsepublic_mailman:
+        class: Common\Mailman
+        arguments: [%icmailman_admin_url%, %icsepublic_mailman_list%, %icsepublic_mailman_pw%]  
+
 #    icse_public.example:
 #        class: %icse_public.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
