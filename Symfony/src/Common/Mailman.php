@@ -21,10 +21,18 @@ class Mailman {
 		$this->list=$list;
 		$this->adminpw=$adminpw;
 	}
-	function fetch ($url) {
-		return file_get_contents($url);
-	}
-	/*List lists: 
+
+    function fetch ($Url) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $Url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $output = curl_exec($ch);
+        curl_close($ch);
+        return $output;
+        //return file_get_contents($url);
+    }  
+
+    /*List lists: 
 	<domain.com>/mailman/admin*/
 	function lists ($assoc=true) {
 		$html=$this->fetch($this->adminurl);

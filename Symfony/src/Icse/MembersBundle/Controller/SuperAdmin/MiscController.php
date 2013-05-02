@@ -93,9 +93,11 @@ class MiscController extends Controller
 //get a list of lists as an array
 //print_r($mm->lists());
 //echo $mm->unsubscribe('user@example.co.uk');
-$members=$mm->members();
-print_r($members[0]);
 //echo count($members[0]); 
+
+    var_dump ($mm->members()); 
+    //var_dump ($mm->subscribe('user@example.co.uk')); 
+
         return new Response('hi');
     }
 }

@@ -90,7 +90,7 @@ class SignUpController extends Controller
               ->add('player', 'choice', array(
                       'choices' => array(
                         true => 'Yes! I play an instrument and would like to join in.',
-                        false => 'No, but notify me about any concerts.'
+                        false => 'Nope, but notify me about any concerts!'
                       ),
                       'expanded' => true,
                       'multiple' => false,
@@ -161,6 +161,21 @@ class SignUpController extends Controller
               $em = $this->getDoctrine()->getEntityManager();
               $em->persist($subscriber);
               $em->flush();
+
+              /* Add to Mailman */
+              if ($subscriber->isPlayer())
+              {
+                  $mailman = $this->get('icsemembers_mailman');
+              }
+              else
+              {
+                  $mailman = $this->get('icsepublic_mailman');
+              } 
+              if (!$mailman->subscribe($subscriber->getEmail()))
+              {
+                  throw new \Exception('Adding to mailman failed.'); 
+              }
+
               return $this->redirect($this->generateUrl($freshers ? 'IcsePublicBundle_join_freshers' : 'IcsePublicBundle_join') . '?' . http_build_query (array('sn' => $subscriber->getFirstName())));
             }
           else
