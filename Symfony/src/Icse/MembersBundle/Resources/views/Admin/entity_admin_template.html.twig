@@ -1,0 +1,76 @@
+{% extends 'IcseMembersBundle:Default:template.html.twig' %}
+
+{% set entityPlural = entityPlural | default(entitySingular ~ 's') %}
+{% set readOnly = readOnly | default(false) %}
+
+{% form_theme form _self %}
+
+{% block _form_plain_password_row %}
+    <div class="new_password_fields">
+      {{ form_row(form) }} 
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsepublic/lib/timepicker/jquery.timepicker.css') }}" />
+{% endblock %}  
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('bundles/icsepublic/lib/timepicker/jquery.timepicker.min.js') }}"></script> 
+<script src="{{ asset('bundles/icsepublic/lib/js/moment.min.js') }}"></script> 
+{% endblock %}
+
+{% block content %}
+<h1>{{ pageTitle }}</h1>
+
+<ul class="table_buttons">
+  <li><button class="refresh show_if_none_selected" type=button>Refresh</button></li>
+  {% if not readOnly %}
+  <li><button class="create show_if_none_selected" type=button>Add {{ entitySingular | capitalize }}</button></li>
+  <li><button class="edit show_if_one_selected" type=button>Edit</button></li>
+  <li><button class="delete show_if_any_selected" type=button>Delete</button></li>
+  {% endif %}
+  {% block extra_table_buttons %}{% endblock %}
+  <li><button class="unselectall show_if_any_selected" type=button>Unselect All</button></li>
+  <img hidden class="loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" /> 
+</ul>
+
+<div id="admin_table_container">
+{% include 'IcseMembersBundle:Admin:table_fragment.html.twig' %}
+</div>
+
+{% if not readOnly %}
+
+<div hidden id=edit_dialog > 
+  <form id="edit_form" action="" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <input hidden type="submit" />
+  </form>
+</div>
+<div hidden id=delete_dialog title="Delete {{ entitySingular | capitalize }}" > 
+<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span>
+Are you sure you want to permanently delete all of the selected {{ entityPlural }}?</p>
+</div>
+
+{% endif %}
+
+{% block extra_content %}{% endblock %}
+
+<script>
+  var currentPath = "{{ path(app.request.get('_route')) }}";
+  var entitySingular = "{{ entitySingular }}";
+  var entityPlural = "{{ entityPlural }}";
+</script>
+
+{% javascripts 
+  '@IcseMembersBundle/Resources/script/entityadmin.js'
+  filter='?yui_js'
+  output='bundles/icsepublic/js/entityadmin.js'
+%}
+<script src="{{ asset_url }}"></script> 
+{% endjavascripts %}
+
+
+{% endblock %}

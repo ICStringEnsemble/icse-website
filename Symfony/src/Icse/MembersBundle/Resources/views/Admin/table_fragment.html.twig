@@ -12,12 +12,21 @@
   
   <tbody>
     {% for entity in table_content.entities %}
-      <tr data-entity="{{ entity | serialize }}">
+
+      {% set row_classes = [] %}
+      {% if entity.getStartsAt() is defined and date(entity.getStartsAt()) > date("today") %}
+          {% set row_classes = row_classes | merge(['future_date']) %}
+      {% endif %}
+      {% if entity.getUpdatedAt() is defined and date(entity.getUpdatedAt()) > date("3 seconds ago") %}
+          {% set row_classes = row_classes | merge(['just_updated']) %}
+      {% endif %}
+
+      <tr data-entity="{{ entity | serialize }}" class="{{ row_classes | join(' ') }}">
         {% if row_prefixes is defined %}
         <td>{{ rowPrefixes }}</td>
         {% endif %}
         {% for column in table_content.columns %}
-        <td>{{ entity | getCell(column) }}</td>
+        <td>{{ entity | getCell(column) | raw }}</td>
         {% endfor %}
       </tr>
     {% endfor %}

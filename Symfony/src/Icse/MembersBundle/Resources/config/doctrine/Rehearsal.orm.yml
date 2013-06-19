@@ -19,10 +19,10 @@ Icse\MembersBundle\Entity\Rehearsal:
             type: datetime
         updated_at:
             type: datetime
-        updated_by:
-            type: integer
     manyToOne:
         location:
             targetEntity: Icse\PublicBundle\Entity\Venue
             nullable: true
+        updated_by: 
+            targetEntity: Member
     lifecycleCallbacks: {  }

@@ -12,6 +12,7 @@ $loader = new ApcClassLoader('sf2', $loader);
 $loader->register(true);
 */
 
+
 require_once __DIR__.'/Symfony/app/AppKernel.php';
 //require_once __DIR__.'/Symfony/app/AppCache.php';
 

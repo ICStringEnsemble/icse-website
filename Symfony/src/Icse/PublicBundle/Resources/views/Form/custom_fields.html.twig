@@ -26,3 +26,14 @@
 {% endspaceless %} 
 {% endblock choice_widget_expanded %}
 
+{% block time_widget %}
+{% set type = 'text' %}
+{% set attr = {'class': 'time'} %}
+{{ parent() }}
+{% endblock time_widget %}
+
+{% block date_widget %}
+{% set type = 'text' %}
+{% set attr = {'class': 'date'} %}
+{{ parent() }}
+{% endblock date_widget %}

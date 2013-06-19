@@ -1,45 +1,15 @@
-{% extends 'IcseMembersBundle:Default:template.html.twig' %}
+{% extends 'IcseMembersBundle:Admin:entity_admin_template.html.twig' %}
 {% set pageTitle = 'Members List' %}
-{% set currentSubSection = 'memberslist' %} 
+{% set currentSubSection = 'memberslist' %}
+{% set entitySingular = 'member' %}
 
-{% form_theme form _self %}
 
-{% block _form_plain_password_row %}
-    <div class="new_password_fields">
-      {{ form_row(form) }} 
-    </div>
-{% endblock %} 
-
-{% block content %}
-<h1>Members List</h1>
-
-<ul class="table_buttons">
-  <li><button class="refresh show_if_none_selected" type=button>Refresh</button></li>
-  <li><button class="create show_if_none_selected" type=button>New Member</button></li>
+{% block extra_table_buttons %}
   <li><button class="import show_if_none_selected" type=button>Import CSV</button></li>
-  <li><button class="edit show_if_one_selected" type=button>Edit</button></li>
-  <li><button class="delete show_if_any_selected" type=button>Delete</button></li>
   <li><button class="impersonate show_if_one_selected" type=button>Impersonate</button></li>
-  <li><button class="unselectall show_if_any_selected" type=button>Unselect All</button></li>
-  <img hidden class="loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" /> 
-</ul>
+{% endblock %}
 
-<div id="admin_table_container">
-{% include 'IcseMembersBundle:Admin:table_fragment.html.twig' %}
-</div>
-
-<div id=edit_dialog > 
-  <form id="edit_form" action="" method="post" {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
-    <input hidden type="submit" />
-  </form>
-</div>
-
-
-<div id=delete_dialog title="Delete Member" > 
-<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span>
-Are you sure you want to permanently delete all of the selected members?</p>
-</div>
+{% block extra_content %}
 
 <div id=import_csv_dialog title="Import Membership List"> 
   <ul>
@@ -50,13 +20,11 @@ Are you sure you want to permanently delete all of the selected members?</p>
     <li><a href="https://eactivities.union.ic.ac.uk/common/data_handler.php?id=1700&type=csv&name=Members_Report">Download membership list</a></li>
     <li>Upload the downloaded file:</li>
   </ul>
-  <form id="import_csv_form" action="{{ path('IcseMembersBundle_members_create') }}" method="post" {{ form_enctype(csv_form) }}>
+  <form id="import_csv_form" action="{{ path(app.request.get('_route')) }}" method="post" {{ form_enctype(csv_form) }}>
     {{ form_widget(csv_form) }}
     <input hidden type="submit" />
   </form> 
 </div>
-
-
 
 <script>
   function enableDisableNewPasswordFields(slideTime){
@@ -68,7 +36,7 @@ Are you sure you want to permanently delete all of the selected members?</p>
         $('.new_password_fields input').prop('required', false);
         $('.new_password_fields input').val('');
     }
-  }
+  };
   $('#form_password_choice').change(200, enableDisableNewPasswordFields);
 
   $('#import_csv_dialog').dialog({
@@ -93,164 +61,16 @@ Are you sure you want to permanently delete all of the selected members?</p>
     ]
   });
 
-  $('button.import').click(function(){ // Delete button
+  $('button.import').click(function(){
     $('#import_csv_dialog').dialog('open');
   })
 
- 
-
-</script>
-
-<script>
-  /* Misc Initialisation */
-  $('button').button(); 
-  $('#edit_form input:submit, #import_csv_form input:submit').hide();
-
-
-  /* Loading Indicator Handling */
-  var loadingIndicatorJobs = 0; 
-
-  function startLoading() {
-    loadingIndicatorJobs += 1;
-    $('.table_buttons .loading_spinner').show();
-	}
-	
-	function stopLoading() {
-		loadingIndicatorJobs -= 1;
-		if (loadingIndicatorJobs == 0) {
-			$('.table_buttons .loading_spinner').hide();
-		}
-	} 
-
-  /* Table Row Selection */
-  $.fn.isAnyTableRowSelected = function(){
-    return $(this).hasClass('ui-selected');
-  };
-  $.fn.areAllTableRowsSelected = function(){
-    return $(this).not('thead tr').not('.ui-selected').length == 0;
-  };
-  $.fn.isExactlyOneTableRowSelected = function(){
-    return $(this).filter('.ui-selected').length == 1;
-  };
-
-  function hideShowControlButtons(time) {
-    if(typeof time === "undefined") {
-      time = 200;
-    } 
-    if (!$('tbody tr').isAnyTableRowSelected()) {
-      $('.show_if_none_selected').show(time);
-      $('.show_if_one_selected, .show_if_any_selected').hide(time);
-    } else if ($('tbody tr').isExactlyOneTableRowSelected()) {
-      $('.show_if_one_selected, .show_if_any_selected').show(time);
-      $('.show_if_none_selected').hide(time);
-    } else {
-      $('.show_if_any_selected').show(time);
-      $('.show_if_none_selected, .show_if_one_selected').hide(time);
-    }
-  }
-  hideShowControlButtons(0);
-
-  function attachTableHandlers() {
-    $('tbody').selectable({
-      filter: 'tr',
-      stop: hideShowControlButtons
-    });
-
-  }
-  attachTableHandlers();
-  
-  /* Reload Table */
-  function reloadTable(){
-    $('#admin_table_container').load("{{ path('IcseMembersBundle_members_table') }}", function(){
-      attachTableHandlers();
-      stopLoading();
-      hideShowControlButtons();
-      $('.ui-widget-overlay').height($(document).height()); 
-    });
-    startLoading();
-  }
-
-  /* Dialogs */
-  $('#edit_dialog').dialog({
-    autoOpen: false,
-    modal: true,
-    width: 500,
-    minWidth: 500,
-    height: 500,
-    dialogClass: 'edit_dialog',
-    buttons: [
-      {
-        text: "Create",
-        click: function(){
-          $('#edit_form input:submit').click();
-        },
-        'class': 'submit_button'
-      },
-      {
-        text: "Cancel",
-        click: function(){
-          $(this).dialog("close");
-        },
-        'class': 'cancel_button'
-      }
-    ]
+  $('button.impersonate').click(function(){ // Impersonate button
+    var username = $('tbody tr.ui-selected').data('entity').username;
+    window.location = "{{ path('IcseMembersBundle_home') }}" + "?_switch_user=" + username ;
   });
 
-  $('#delete_dialog').dialog({
-    autoOpen: false,
-    resizable: false,
-    modal: true,
-    width: 400,
-    dialogClass: 'delete_dialog',
-    buttons : {
-      "Delete" : function(){
-        var requests_remaining = $('tbody tr.ui-selected').length;
-        var failures = 0;
-        if (requests_remaining > 0) {
-          $('.delete_dialog .ui-dialog-buttonset .loading_spinner').show();
-          $('.delete_dialog .ui-dialog-buttonset button').button('disable');
-          $('tbody tr.ui-selected').each(function(){
-            var id = $(this).data('entity').id;
-
-            $.ajax({
-              type: 'DELETE',
-              url: "{{ path('IcseMembersBundle_members_delete', {id: ''}) }}" + '/' + id,
-              dataType: 'json'
-            }).fail(function(){
-              failures += 1;
-            }).always(function(result){
-              requests_remaining -= 1;
-              if (requests_remaining === 0) {
-                $('.delete_dialog .ui-dialog-buttonset .loading_spinner').hide();
-                $('.delete_dialog .ui-dialog-buttonset button').button('enable');
-                if (failures === 0) {
-                  $('#delete_dialog').dialog('close');
-                  reloadTable();
-                }
-              }
-            });
-
-          });
-        } else {
-          $(this).dialog("close");
-        }
-      },
-      "Cancel" : function(){
-        $(this).dialog("close");
-      }
-    }
-  });
-
-  $('.table_buttons .loading_spinner').clone().prependTo('.ui-dialog-buttonset');
-
-  /* Button Handlers */
-  $('button.create').click(function(){ // Create button
-    $('.edit_dialog .ui-dialog-buttonset .submit_button .ui-button-text').html('Create');
-    $('#edit_dialog').dialog('open').dialog({ title: "Create Member" });
-    $('#edit_form').attr('method', 'POST');
-    $('#edit_form').attr('action', "{{ path('IcseMembersBundle_members_create') }}");
-    $('#edit_form').find('input').not(':button, :submit, :reset, :hidden, :radio, :checkbox').val(''); 
-    $('#edit_form').find('.error').remove();
+  var initCreateForm = function() {
     // Member specific stuff
     $("#edit_form input[name='form[password_choice]'][value=imperial]").prop('checked', true); 
     enableDisableNewPasswordFields(0);
@@ -258,26 +78,9 @@ Are you sure you want to permanently delete all of the selected members?</p>
       $(this).hide();
       $("#edit_form label[for=" + $(this).attr('id') + "]").hide();
     });
-  });
+  };
 
-  $('button.edit').click(function(){ // Edit button
-    $('.edit_dialog .ui-dialog-buttonset .submit_button .ui-button-text').html('Save Changes');
-    $('#edit_dialog').dialog('open').dialog({ title: "Edit Member" });
-    $('#edit_form').attr('method', 'PUT');
-    $('#edit_form').find('.error').remove();
-    var entity = $('tbody tr.ui-selected').data('entity');
-    $('#edit_form').attr('action', "{{ path('IcseMembersBundle_members_update', {id: ''}) }}" + '/' + entity.id);
-    $('#edit_form').find('input, select').not(':button, :submit, :reset, :hidden, :radio, :checkbox').each(function(){
-      var name = $(this).attr('name').split('[')[1].split(']')[0];
-      if (entity.hasOwnProperty(name)) {
-        var value = entity[name];
-        if (value === false) value = 0;
-        else if (value === true) value = 1;
-        $(this).val(value);
-      } else {
-        $(this).val('');
-      }
-    });
+  var initEditForm = function() {
     // Member specific stuff
     $("#edit_form input[name='form[password_choice]'][value=no_change]").prop('checked', true); 
     enableDisableNewPasswordFields(0);
@@ -285,86 +88,8 @@ Are you sure you want to permanently delete all of the selected members?</p>
       $(this).show();
       $("#edit_form label[for=" + $(this).attr('id') + "]").show();
     }); 
-  });
+  };
 
-  $('button.impersonate').click(function(){ // Impersonate button
-    var username = $('tbody tr.ui-selected').data('entity').username;
-    window.location = "{{ path('IcseMembersBundle_home') }}" + "?_switch_user=" + username ;
-  });
-
-  $('button.refresh').click(reloadTable); // Refresh button
-
-  $('button.unselectall, #above_footer').click(function(){ // Unselect all button/area
-    $('tbody tr').removeClass('ui-selected')
-    hideShowControlButtons();
-  });
-  $('.table_buttons button').click(function(e){
-    e.stopPropagation();
-  });
-
-  $('button.delete').click(function(){ // Delete button
-    $('#delete_dialog').dialog('open');
-  })
-
-  /* Form submit */
-  $('.ui-dialog form').submit(function () {
-    var form_element = $(this);
-    var containing_dialog = form_element.closest('.ui-dialog-content');
-    var dialog_buttonpane = containing_dialog.nextAll('.ui-dialog-buttonpane');
-    if (form_element.find('input:file').length !== 0) {      // if files, we have to use multipart/form-data; doesn't play nicely with PUT
-      var formData = new FormData(form_element[0]);
-      var contentType = false;
-      var processData = false;
-    } else {                                            // if no files, use urlencoded data; can use either POST or PUT
-      var formData = form_element.serialize();
-      var contentType = 'application/x-www-form-urlencoded; charset=UTF-8';
-      var processData = true;
-    }
-    $.ajax({
-        type: form_element.attr('method'),
-        url: form_element.attr('action'),
-        data: formData,
-        dataType: 'json', 
-        cache: false,
-        contentType: contentType,
-        processData: processData, 
-        complete: function (result) {
-        }
-    }).always(function(){
-      dialog_buttonpane.find('.loading_spinner').hide();
-      dialog_buttonpane.find('button').button('enable');
-    }).done(function(result){
-      if (result.status == "success"){
-        containing_dialog.dialog('close');
-        reloadTable();
-      } else {
-        if (result.status == "partial") {
-          reloadTable();
-        }
-        for (var key in result.errors) {
-          var error_value =  typeof someVar === 'string'  
-          var error_element = $('<div/>',{
-              'class' : 'error',
-              'text' : (typeof result.errors[key]) === 'string' ? result.errors[key] : result.errors[key][0]
-            });
-          var bad_input_element = form_element.find('*[name*="[' + key + ']"]');
-          if (isNaN(key) && bad_input_element.length !== 0) {
-            bad_input_element.before(error_element);
-          } else {
-            if (isNaN(key)) { // if key is named but matching input can't be found
-              error_element.html(key + ': ' + error_element.html());
-            }
-            error_element.addClass('global_error').appendTo(form_element);
-          }
-        }
-      }
-    });
-    dialog_buttonpane.find('.loading_spinner').show();
-    dialog_buttonpane.find('button').button('disable');
-    form_element.find('.error').remove();
-
-    return false; 
-  }); 
 </script>
 
 {% endblock %}

@@ -1,6 +1,6 @@
 <?php
 
-namespace Icse\MembersBundle\Controller;
+namespace Icse\MembersBundle\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request; 
@@ -10,7 +10,7 @@ use Icse\MembersBundle\Form\Type\FileInfoType;
 use Icse\PublicBundle\Entity\Image;
 
 
-class AdminController extends Controller
+class ImageController extends Controller
 {
   private $tmp_dir = 'Symfony/uploads/tmp/';
 

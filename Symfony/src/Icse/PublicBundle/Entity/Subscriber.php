@@ -153,6 +153,16 @@ class Subscriber
     }
 
     /**
+     * Get Full name; first and last names concatenated together
+     *
+     * @return string 
+     */
+    public function getFullName()
+    {
+        return $this->getFirstName() .' '. $this->getLastName();
+    }
+
+    /**
      * Set department
      *
      * @param string $department

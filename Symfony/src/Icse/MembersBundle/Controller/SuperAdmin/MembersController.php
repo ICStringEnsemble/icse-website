@@ -7,16 +7,31 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormError;
 
-use Icse\MembersBundle\Entity\Member; 
+use Icse\MembersBundle\Entity\Member;
+use Icse\MembersBundle\Controller\Admin\EntityAdminController;
 use Common\Tools; 
 
-class MembersController extends Controller
+class MembersController extends EntityAdminController
 {
-    private function getTableContent()
+    protected function repository()
+    {
+        return $this->getDoctrine()->getRepository('IcseMembersBundle:Member');
+    }
+
+    protected function viewName()
+    {
+        return 'IcseMembersBundle:SuperAdmin:members.html.twig';
+    }
+
+    protected function newInstance()
+    {
+        return new Member();
+    }
+
+    protected function getTableContent()
     {
         $dm = $this->getDoctrine(); 
-        $members = $dm->getRepository('IcseMembersBundle:Member')
-                     ->findAll();
+        $members = $dm->getRepository('IcseMembersBundle:Member')->findBy(array(), array('last_name'=>'asc'));
 
         $columns = array(
             array('heading' => 'ID', 'cell' => function($member){return $member->getID();}),
@@ -26,12 +41,12 @@ class MembersController extends Controller
             array('heading' => 'Password', 'cell' => function($member){return $member->getPassword()?"Stored":"Imperial";}),
             array('heading' => 'Active', 'cell' => function($member){return $member->getActive()? "Yes":"No";}),
             array('heading' => 'Role', 'cell' => function($member){return $member->getRole() == 100? "Super Admin":($member->getRole() == 10?"Admin":"User");}),
-            array('heading' => 'Last Online', 'cell' => function($member){return $member->getLastOnlineAt()? $member->getLastOnlineAt()->format('Y-m-d H:i:s') : "Never";}),
+            array('heading' => 'Last Online', 'cell' => function($member){return $member->getLastOnlineAt()? $this->timeagoDate($member->getLastOnlineAt()) : "Never";}),
         );
         return array("columns" => $columns, "entities" => $members);
     }
 
-    private function getForm($member)
+    protected function getForm($member)
     {
         $form = $this->createFormBuilder($member)
             ->add('first_name', 'text')
@@ -54,6 +69,7 @@ class MembersController extends Controller
                 'type' => 'password',
                 'required' => false,
                 'mapped' => false,
+                'invalid_message' => "Passwords must match",
                 'first_options' => array('label' => 'New Password'),
                 'second_options' => array('label' => 'Repeat Password'),
             ))
@@ -61,7 +77,7 @@ class MembersController extends Controller
         return $form;
     }
 
-    private function putData($request, $member)
+    protected function putData($request, $member)
     {
         $is_new_account = ($member->getID() === null);
         $mailer = $this->get('icse_mailer'); 
@@ -82,10 +98,10 @@ class MembersController extends Controller
             } else if ($password_type == 'set') {
                 $plain_password = $form->get('plain_password')->getData();
                 if (strlen($plain_password) < 8) {
-                    $form->addError(new FormError("Password must be at least 8 characters."));
+                    $form->addError(new FormError("Password must be at least 8 characters"));
                 }
             } else {
-                $form->addError(new FormError("Invalid password type."));
+                $form->addError(new FormError("Invalid password type"));
             }
 
             if ($form->isValid()) {
@@ -156,11 +172,6 @@ class MembersController extends Controller
                                                                                     ));
     }
 
-    public function tableAction()
-    {
-        $table_content = $this->getTableContent();
-        return $this->render('IcseMembersBundle:Admin:table_fragment.html.twig', array('table_content' => $table_content)); 
-    }
 
     public function createAction(Request $request)
     {
@@ -226,24 +237,4 @@ class MembersController extends Controller
         }
     }
 
-    public function updateAction(Request $request, $id)
-    {
-        $dm = $this->getDoctrine(); 
-        $member = $dm->getRepository('IcseMembersBundle:Member')->findOneById($id);
-        if (!$member) {
-            throw $this->createNotFoundException('Entity does not exist'); 
-        }
-        return $this->putData($request, $member);
-    }
-
-    public function deleteAction($id) {
-        $dm = $this->getDoctrine(); 
-        $member = $dm->getRepository('IcseMembersBundle:Member')->findOneById($id);
-        if ($member) {
-            $em = $dm->getManager();
-            $em->remove($member);
-            $em->flush();
-        }
-        return $this->get('ajax_response_gen')->returnSuccess();
-    }
 }

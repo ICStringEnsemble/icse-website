@@ -6,8 +6,17 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
 
+use JMS\SerializerBundle\Annotation\ExclusionPolicy;
+use JMS\SerializerBundle\Annotation\Expose;
+use JMS\SerializerBundle\Annotation\Exclude;
+
+// use JMS\Serializer\Annotation\ExclusionPolicy;
+// use JMS\Serializer\Annotation\Expose;
+// use JMS\Serializer\Annotation\Exclude;
+
 /**
  * Icse\MembersBundle\Entity\Member
+ * @ExclusionPolicy("None")
  */
 class Member implements AdvancedUserInterface
 {
@@ -23,11 +32,13 @@ class Member implements AdvancedUserInterface
 
     /**
      * @var string $salt
+     * @Exclude
      */
     private $salt;
 
     /**
      * @var string $password
+     * @Exclude
      */
     private $password;
 
@@ -270,6 +281,7 @@ class Member implements AdvancedUserInterface
     {
         return $this->getFirstName() .' '. $this->getLastName();
     }
+    
     /**
      * @var integer $role
      */
@@ -325,6 +337,7 @@ class Member implements AdvancedUserInterface
     }
     /**
      * @var \DateTime
+     * @Exclude
      */
     private $last_online_at;
 
@@ -351,4 +364,5 @@ class Member implements AdvancedUserInterface
     {
         return $this->last_online_at;
     }
+
 }

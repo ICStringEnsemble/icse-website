@@ -179,3 +179,65 @@ ul.table_buttons {
     }
   }
 }
+
+#admin_table_container {
+  overflow: auto;
+}
+
+table.admintable {
+  margin-top: 2em;
+
+  &, td, th {
+    padding: 0 10px;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  thead tr {
+    background-color: #a6681e; 
+    th {
+      color: #fff;
+      font-weight: bold;
+    }
+  }
+
+  tbody tr {
+    &:nth-child(odd) {
+      background-color: #e3c9ab; 
+      &.ui-selected {
+        background-color: #AFC9D4;
+      }
+      &.ui-selecting {
+        background-color: lighten(#AFC9D4, 5%);
+      }
+    }
+    &:nth-child(even) {
+      background-color: #fff; 
+      &.ui-selected {
+        background-color: lighten(#AFC9D4, 10%);
+      }
+      &.ui-selecting {
+        background-color: lighten(#AFC9D4, 15%);
+      }
+    }
+
+    &.past_date {
+      color: #858585;
+
+    }
+
+    &.future_date {
+      color: #00a;
+    }
+
+    &.just_updated {
+      background-color: #C3FF42;
+    }
+
+    &.ui-selected.just_deleted {
+      background-color: #E95D58;
+    }
+  }
+
+
+}

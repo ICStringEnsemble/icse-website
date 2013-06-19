@@ -1,0 +1,34 @@
+{% extends 'IcseMembersBundle:Admin:entity_admin_template.html.twig' %}
+
+{% set pageTitle = 'Rehearsals' %}
+{% set currentSubSection = 'rehearsaladmin' %}
+
+{% set entitySingular = 'rehearsal' %}
+
+{% block extra_content %}
+
+<script>
+
+
+
+var initCreateForm = function() {
+  // $("#edit_form input[name='form[starts_at][time]']").val('18:00');
+
+  (function(){
+    var rows = $('tbody tr');
+    if (rows.length == 0) return;
+    var last_starts_at = moment(rows.first().data('entity')['starts_at']);
+    var default_next_date = last_starts_at.add('weeks', 1);
+    $("#edit_form input[name='form[starts_at][date]']").val(default_next_date.format('DD/MM/YYYY'));
+    $("#edit_form input[name='form[starts_at][time]']").val(default_next_date.format('HH:mm'));
+  })();
+
+};
+
+var initEditForm = function() {
+
+};
+
+</script>
+
+{% endblock %}

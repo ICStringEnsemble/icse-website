@@ -163,17 +163,20 @@ class SignUpController extends Controller
               $em->flush();
 
               /* Add to Mailman */
-              if ($subscriber->isPlayer())
+              if(!$this->get('kernel')->isDebug())
               {
+                if ($subscriber->isPlayer())
+                {
                   $mailman = $this->get('icsemembers_mailman');
-              }
-              else
-              {
+                }
+                else
+                {
                   $mailman = $this->get('icsepublic_mailman');
-              } 
-              if (!$mailman->subscribe($subscriber->getEmail()))
-              {
+                } 
+                if (!$mailman->subscribe($subscriber->getEmail()))
+                {
                   throw new \Exception('Adding to mailman failed.'); 
+                }
               }
 
               return $this->redirect($this->generateUrl($freshers ? 'IcsePublicBundle_join_freshers' : 'IcsePublicBundle_join') . '?' . http_build_query (array('sn' => $subscriber->getFirstName())));
