@@ -43,7 +43,7 @@ class MembersController extends EntityAdminController
             array('heading' => 'Role', 'cell' => function($member){return $member->getRole() == 100? "Super Admin":($member->getRole() == 10?"Admin":"User");}),
             array('heading' => 'Last Online', 'cell' => function($member){return $member->getLastOnlineAt()? $this->timeagoDate($member->getLastOnlineAt()) : "Never";}),
         );
-        return array("columns" => $columns, "entities" => $members);
+        return array("columns" => $columns, "entities" => $members, "serial_groups" => ['superadmin']);
     }
 
     protected function getForm($member)

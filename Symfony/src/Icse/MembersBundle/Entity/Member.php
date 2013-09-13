@@ -6,9 +6,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
 
-use JMS\SerializerBundle\Annotation\ExclusionPolicy;
-use JMS\SerializerBundle\Annotation\Expose;
-use JMS\SerializerBundle\Annotation\Exclude;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Exclude;
+use JMS\Serializer\Annotation\Groups;
 
 // use JMS\Serializer\Annotation\ExclusionPolicy;
 // use JMS\Serializer\Annotation\Expose;
@@ -16,39 +17,42 @@ use JMS\SerializerBundle\Annotation\Exclude;
 
 /**
  * Icse\MembersBundle\Entity\Member
- * @ExclusionPolicy("None")
  */
 class Member implements AdvancedUserInterface
 {
     /**
      * @var integer $id
+     * @Expose
      */
     private $id;
 
     /**
      * @var string $username
+     * @Expose
      */
     private $username;
 
     /**
      * @var string $salt
-     * @Exclude
+     * @Groups({"superadmin"})
      */
     private $salt;
 
     /**
      * @var string $password
-     * @Exclude
+     * @Groups({"superadmin"})
      */
     private $password;
 
     /**
      * @var string $email
+     * @Groups({"superadmin"})
      */
     private $email;
 
     /**
      * @var boolean $active
+     * @Groups({"superadmin"})
      */
     private $active;
 
@@ -284,6 +288,7 @@ class Member implements AdvancedUserInterface
     
     /**
      * @var integer $role
+     * @Groups({"superadmin"})
      */
     private $role;
 
@@ -309,6 +314,7 @@ class Member implements AdvancedUserInterface
     }
     /**
      * @var \DateTime
+     * @Groups({"superadmin"})
      */
     private $created_at;
 
@@ -337,7 +343,7 @@ class Member implements AdvancedUserInterface
     }
     /**
      * @var \DateTime
-     * @Exclude
+     * @Groups({"superadmin"})
      */
     private $last_online_at;
 

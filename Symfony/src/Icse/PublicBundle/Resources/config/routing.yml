@@ -89,4 +89,4 @@ IcsePublicBundle_resource:
     pattern:   /resources/{type}/{file}
     defaults: { _controller: IcsePublicBundle:Resources:resource }
     requirements: 
-        file: "[^\.]+\.?[^\.]*" # Directory traversal protection, but slashes allowed
+        file: "[^\.]*\.?[^\.]*" # Directory traversal protection, but slashes allowed

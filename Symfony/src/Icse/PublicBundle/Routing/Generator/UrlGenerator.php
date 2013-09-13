@@ -13,7 +13,8 @@ use Doctrine\Common\Util\Inflector;
  */
 class UrlGenerator extends BaseUrlGenerator
 {
-    protected function doGenerate($variables, $defaults, $requirements, $tokens, $parameters, $name, $absolute)
+
+    protected function doGenerate($variables, $defaults, $requirements, $tokens, $parameters, $name, $referenceType, $hostTokens)
     {
         if (is_object($parameters)) {
             $object = $parameters;
@@ -28,7 +29,7 @@ class UrlGenerator extends BaseUrlGenerator
             $parameters = $this->getParametersFromObject($variables, $object);
         }
  
-        return parent::doGenerate($variables, $defaults, $requirements, $tokens, $parameters, $name, $absolute);
+        return parent::doGenerate($variables, $defaults, $requirements, $tokens, $parameters, $name, $referenceType, $hostTokens);
     }
  
     protected function getParametersFromObject($keys, $object)

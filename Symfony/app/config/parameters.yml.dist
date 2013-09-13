@@ -1,0 +1,23 @@
+parameters:
+    database_driver:   pdo_mysql
+    database_host:     localhost
+    database_port:     ~
+    database_name:     icse
+    database_user:     icse
+    database_password: ~
+ 
+    mailer_transport:      null
+    mailer_host:           smtp.cc.ic.ac.uk  
+    mailer_user:           icse
+    mailer_password:       ~
+    mailer_encryption:     tls
+    mailer_sender_address: icse@imperial.ac.uk 
+
+    icmailman_admin_url: https://mailman.ic.ac.uk/mailman/admin
+    icsemembers_mailman_list: icse-talk 
+    icsemembers_mailman_pw: ~
+    icsepublic_mailman_list: icu-stringensemble-public 
+    icsepublic_mailman_pw: ~
+
+    locale:            en
+    secret:            ~
