@@ -20,7 +20,7 @@ var initCreateForm = function() {
     var last_starts_at = moment(rows.first().data('entity')['starts_at']);
     var default_next_date = last_starts_at.add('weeks', 1);
     $("#edit_form input[name='form[starts_at][date]']").val(default_next_date.format('DD/MM/YYYY'));
-    $("#edit_form input[name='form[starts_at][time]']").val(default_next_date.format('HH:mm'));
+    $("#edit_form input[name='form[starts_at][time]']").val(default_next_date.format('h:mm a'));
   })();
 
 };

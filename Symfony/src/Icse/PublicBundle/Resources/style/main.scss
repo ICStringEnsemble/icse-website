@@ -254,11 +254,11 @@ form {
   margin-top: 1em;
   overflow: auto;
 
-  div.field_row {
+  div.form_row {
     overflow: hidden;
     margin-bottom: 0.9em;
 
-    .field_row_main {
+    .form_row_main {
       clear: none;
       margin-left: $form-margin-width_fullpage;
 

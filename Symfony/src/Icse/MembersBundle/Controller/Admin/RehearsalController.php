@@ -51,7 +51,7 @@ class RehearsalController extends EntityAdminController
     {
         $rehearsal->setStartsAt(new \DateTime("this friday 6pm"));
         $form = $this->createFormBuilder($rehearsal)
-        ->add('starts_at', 'datetime', array(
+        ->add('starts_at', new DateTimeType, array(
                 'date_widget' => 'single_text'
             ,   'time_widget' => 'single_text'
             ,   'date_format' => 'dd/MM/yy'

@@ -114,7 +114,7 @@ class SignUpController extends Controller
 
       if ($request->getMethod() == 'POST')
         {
-          $form->bindRequest($request);
+          $form->handleRequest($request);
           /* Do more error checking, and fill in implied data */
           if ($subscriber->getLogin())
             {

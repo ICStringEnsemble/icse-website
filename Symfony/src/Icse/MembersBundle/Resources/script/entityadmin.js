@@ -6,7 +6,7 @@
 
   /* Misc Initialisation */
   $('button').button();
-  $('input.time').timepicker({ 'timeFormat': 'H:i' });
+  $('input.time').timepicker({ 'timeFormat': 'g:i a' });
   $('input.date').datepicker({ dateFormat: "dd/mm/yy" });
   $('#edit_form input:submit, #import_csv_form input:submit').hide();
   // Insert dummy field at beginning of form to prevent jqueryui popups from appearing too early
@@ -215,7 +215,7 @@ function openEditDialog(){
       if (value === false) value = 0;
       else if (value === true) value = 1;
       if (name_array[1] == "date") value = moment(value).format('DD/MM/YYYY');
-      if (name_array[1] == "time") value = moment(value).format('HH:mm'/*hh:mma*/);
+      if (name_array[1] == "time") value = moment(value).format('h:mm a');
       if (typeof value == 'object') {
         if ($(this).prop("tagName") == "SELECT") value = value.id;
         else value = value.name;
