@@ -20,18 +20,15 @@ if ((isset($_SERVER['HTTP_CLIENT_IP'])
         )))
    )
 {
-    if (!isset($_SERVER['PHP_AUTH_USER']))
+    if (  !isset($_SERVER['PHP_AUTH_USER'])
+            || !($_SERVER['PHP_AUTH_USER']=="icse" && $_SERVER['PHP_AUTH_PW']=="somepassword")
+       )
     {
         header('WWW-Authenticate: Basic realm="Icse Dev"');
         header('HTTP/1.0 401 Unauthorized');
+        echo "<p>{$_SERVER['REMOTE_ADDR']} is remote addr.</p>";
         echo 'You must authenticate to access this page.';
         exit;
-    }
-    else if (!($_SERVER['PHP_AUTH_USER'] == "icse" && $_SERVER['PHP_AUTH_PW'] == "somepassword"))
-    {
-        echo "<p>{$_SERVER['REMOTE_ADDR']} is remote addr.</p>";
-        header('HTTP/1.0 403 Forbidden');
-        exit('You are not allowed to access this file.');
     }
 }
 
