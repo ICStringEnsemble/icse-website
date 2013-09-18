@@ -63,7 +63,7 @@ class CalendarController extends Controller
         $vcalendar = new VObject\Component\VCalendar();
 
         $vcalendar->add('X-WR-CALNAME', 'ICSE Members');
-        $vcalendar->add('X-WR-CALDESC', 'Rehearsals and events calendar for Imperial College String Ensemble');
+        $vcalendar->add('X-WR-CALDESC', 'Imperial College String Ensemble\'s rehearsals and events');
         $vcalendar->add('X-PUBLISHED-TTL', 'PT15M');
 
         foreach ($rehearsals as $r)
