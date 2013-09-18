@@ -90,3 +90,11 @@ IcsePublicBundle_resource:
     defaults: { _controller: IcsePublicBundle:Resources:resource }
     requirements: 
         file: "[^\.]*\.?[^\.]*" # Directory traversal protection, but slashes allowed
+
+IcsePublicBundle_test_cal_feed:
+    pattern: /testcal.ics
+    defaults: { _controller: IcsePublicBundle:Calendar:test }
+
+IcsePublicBundle_members_cal_feed:
+    pattern: /memberscalendar.ics
+    defaults: { _controller: IcsePublicBundle:Calendar:members }

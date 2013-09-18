@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "70be434b7e49b1825abaf61f3bb62f26",
+    "hash": "231439a5ebac0adf7fae05e909bc5a69",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -766,13 +766,13 @@
             "target-dir": "Fkr/ImagineBundle",
             "source": {
                 "type": "git",
-                "url": "https://github.com/dphoyes/FkrImagineBundle.git",
-                "reference": "5bacc53c615199525841a025b33af34ade1cb962"
+                "url": "https://github.com/fkrauthan/FkrImagineBundle.git",
+                "reference": "79433765f82179c5486f813732f480d73e66544f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dphoyes/FkrImagineBundle/zipball/5bacc53c615199525841a025b33af34ade1cb962",
-                "reference": "5bacc53c615199525841a025b33af34ade1cb962",
+                "url": "https://api.github.com/repos/fkrauthan/FkrImagineBundle/zipball/79433765f82179c5486f813732f480d73e66544f",
+                "reference": "79433765f82179c5486f813732f480d73e66544f",
                 "shasum": ""
             },
             "require": {
@@ -786,6 +786,7 @@
                     "Fkr\\ImagineBundle": ""
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -798,15 +799,12 @@
             "description": "Integrates Imagine into Symfony2",
             "homepage": "https://github.com/fkrauthan/FkrImagineBundle",
             "keywords": [
-                "Image",
                 "Image transform",
-                "Imagine",
-                "Symfony Bundle"
+                "Symfony Bundle",
+                "image",
+                "imagine"
             ],
-            "support": {
-                "source": "https://github.com/dphoyes/FkrImagineBundle/tree/master"
-            },
-            "time": "2013-08-21 21:19:22"
+            "time": "2013-08-27 14:22:10"
         },
         {
             "name": "friendsofsymfony/jsrouting-bundle",
@@ -1556,6 +1554,59 @@
                 "symfony"
             ],
             "time": "2013-09-13 12:05:28"
+        },
+        {
+            "name": "sabre/vobject",
+            "version": "3.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fruux/sabre-vobject.git",
+                "reference": "0b44e0c3f1d60b8c2aa9f9850b8d6f9cbd7301f7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fruux/sabre-vobject/zipball/0b44e0c3f1d60b8c2aa9f9850b8d6f9cbd7301f7",
+                "reference": "0b44e0c3f1d60b8c2aa9f9850b8d6f9cbd7301f7",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.3.1"
+            },
+            "bin": [
+                "bin/vobject"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Sabre\\VObject": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Evert Pot",
+                    "email": "evert@rooftopsolutions.nl",
+                    "homepage": "http://evertpot.com/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "The VObject library for PHP allows you to easily parse and manipulate iCalendar and vCard objects",
+            "homepage": "https://github.com/fruux/sabre-vobject",
+            "keywords": [
+                "VObject",
+                "iCalendar",
+                "vCard"
+            ],
+            "time": "2013-08-13 12:09:49"
         },
         {
             "name": "sensio/distribution-bundle",

@@ -35,7 +35,8 @@
         "doctrine/doctrine-migrations-bundle": "dev-master",
         "jms/serializer-bundle": "*@dev",
         "tijsverkoyen/css-to-inline-styles": "dev-master",
-        "robertotru/to-inline-style-email-bundle": "dev-master" 
+        "robertotru/to-inline-style-email-bundle": "dev-master",
+        "sabre/vobject" : "~3.1"
     },
     "scripts": {
         "post-install-cmd": [
@@ -69,11 +70,5 @@
         }
     },
     "repositories": [
-/*
-        {
-            "type": "vcs",
-            "url": "https://github.com/dphoyes/FkrImagineBundle"
-        }
-*/
     ]
 }
