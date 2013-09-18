@@ -81,7 +81,7 @@ class CalendarController extends Controller
                 'DTSTAMP' => new \DateTime('now', new \DateTimeZone('utc')),
                 'LAST-MODIFIED' => $r->getUpdatedAt()->setTimezone(new \DateTimeZone('utc')),
                 'UID' =>  'R'.$r->getId().':'.$r->getStartsAt()->format('Ymd\THis').'@union.ic.ac.uk/arts/stringensemble',
-                'LOCATION' => $r->getLocation()->getName(),
+                'LOCATION' => $r->getLocation() ? $r->getLocation()->getName() : "",
                 'DESCRIPTION' => $r->getComments() . "\n" . 'Loaded at '. (new \DateTime())->format('Y-m-d H:i:s'),
             ]);            
         }
