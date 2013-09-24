@@ -96,5 +96,5 @@ IcsePublicBundle_test_cal_feed:
     defaults: { _controller: IcsePublicBundle:Calendar:test }
 
 IcsePublicBundle_members_cal_feed:
-    pattern: /memberscalendar.ics
+    pattern: /members-calendar.ics
     defaults: { _controller: IcsePublicBundle:Calendar:members }

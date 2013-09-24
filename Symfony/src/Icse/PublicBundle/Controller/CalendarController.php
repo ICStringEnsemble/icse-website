@@ -16,7 +16,7 @@ class CalendarController extends Controller
     {
         $vcalendar = new VObject\Component\VCalendar();
 
-        $vcalendar->add('X-WR-CALNAME', 'ICSE');
+        $vcalendar->add('X-WR-CALNAME', 'ICSE Test');
         $vcalendar->add('X-WR-CALDESC', 'ICSE Events Calendar, oh this changes too');
         $vcalendar->add('X-PUBLISHED-TTL', 'PT15M');
 
@@ -26,7 +26,7 @@ class CalendarController extends Controller
             'DTEND' => new \DateTime('2013-09-17 4pm'),
             'DTSTAMP' => new \DateTime('now', new \DateTimeZone('utc')),
             'LAST-MODIFIED' => new \DateTime('now', new \DateTimeZone('utc')),
-            'UID' => '10@union.ic.ac.uk/arts/stringensemble',
+            'UID' => '10@www.union.ic.ac.uk/arts/stringensemble',
             'DESCRIPTION' => 'Created at '. (new \DateTime())->format('Y-m-d H:i:s'),
         ]);
 
@@ -36,7 +36,7 @@ class CalendarController extends Controller
             'DTEND' => new \DateTime('2013-09-18 1pm'),
             'DTSTAMP' => new \DateTime('now', new \DateTimeZone('utc')),
             'LAST-MODIFIED' => new \DateTime('now', new \DateTimeZone('utc')),
-            'UID' => '11@union.ic.ac.uk/arts/stringensemble',
+            'UID' => '11@www.union.ic.ac.uk/arts/stringensemble',
             'DESCRIPTION' => 'Created at '. (new \DateTime())->format('Y-m-d H:i:s'),
         ]);
 
@@ -46,7 +46,7 @@ class CalendarController extends Controller
                             [
                                 'Cache-Control' => 'private',
                                 'Connection' => 'close',
-                                // 'Content-Type' => 'text/calendar; charset=utf-8',
+                                'Content-Type' => 'text/calendar; charset=utf-8',
                             ]);
 
         $response->setExpires(new \DateTime('+15 minutes'));
