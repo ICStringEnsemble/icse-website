@@ -8,6 +8,95 @@
 
 {% set readOnly = true %}
 
-{% block extra_content %}
+{% block extra_table_buttons %}
+  <li><button onClick="window.print()" class="show_if_none_selected" type=button>Print</button></li>
+{% endblock %}
+
+{% block extra_controls %}
+
+<div id="signupsfilter" class="noprint" >
+Show: 
+    <a href="" id="all" >All</a>
+  | <a href="" id="concertgoers" >Concert-goers</a>
+  | <a href="" id="players" >Players</a>
+  | <a href="" id="violinists" >Violinists</a>
+  | <a href="" id="violists" >Violists</a>
+  | <a href="" id="cellists" >Cellists</a>
+  | <a href="" id="doublebassists" >Double Bassists</a>
+  | <a href="" id="otherplayers" >Other Players</a>
+</div>
+
+<div>
+    <span class="onlyprint"><span id="current_showing_label">All</span>: </span><span id="n_people">0</span> people
+</div>
+
+<script>
+
+var postTableReload;
+
+$( document ).ready(function(){
+
+    var all_rows;
+    var current_filter = 'all';
+
+    function updateFilters(){
+        $('#signupsfilter a').removeClass('current');
+        $('#signupsfilter a').filter('#' + current_filter).addClass('current');
+        $('#current_showing_label').html($('#signupsfilter a').filter('#' + current_filter).html());
+
+        $('#admin_table_container tbody tr').remove();
+        filtered = all_rows.filter(function(){
+            var person = $(this).data('entity');
+            var instruments = [];
+            if (person.instrument) {
+                instruments = person.instrument.toLowerCase().split(', ');
+            }
+            switch (current_filter) {
+                case ('all'):
+                    return true;
+                case ('concertgoers'):
+                    return person.player === false;
+                case ('players'):
+                    return person.player === true;
+                case ('violinists'):
+                    return instruments.indexOf('violin') >= 0;
+                case ('violists'):
+                    return instruments.indexOf('viola') >= 0;
+                case ('cellists'):
+                    return instruments.indexOf('cello') >= 0;
+                case ('doublebassists'):
+                    return instruments.indexOf('double bass') >= 0;
+                case ('otherplayers'):
+                    for (var i=0; i < instruments.length; i++) {
+                        var instr = instruments[i];
+                        if (   instr != 'violin'
+                            && instr != 'viola'
+                            && instr != 'cello'
+                            && instr != 'double bass') {
+                            return true;
+                        }
+                    }
+                    return false;
+            }
+        }).clone();
+        filtered.appendTo('#admin_table_container tbody');
+        $('#n_people').html(filtered.length);
+    };
+
+    postTableReload = function(){
+        all_rows = $('#admin_table_container tbody tr').clone();
+        updateFilters();
+    }
+    postTableReload();
+
+    $('#signupsfilter a').click(function(){
+        current_filter = $(this).attr('id');
+        updateFilters();
+        return false;
+    });
+
+});
+
+</script>
 
 {% endblock %}

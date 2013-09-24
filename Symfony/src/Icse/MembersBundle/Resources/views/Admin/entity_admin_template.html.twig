@@ -14,7 +14,7 @@
 {% block stylesheets %}
 {{ parent() }}
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsepublic/lib/timepicker/jquery.timepicker.css') }}" />
-{% endblock %}  
+{% endblock %}
 
 {% block javascripts %}
 {{ parent() }}
@@ -36,6 +36,8 @@
   <li><button class="unselectall show_if_any_selected" type=button>Unselect All</button></li>
   <img hidden class="loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" /> 
 </ul>
+
+{% block extra_controls %}{% endblock extra_controls %}
 
 <div id="admin_table_container">
 {% include 'IcseMembersBundle:Admin:table_fragment.html.twig' %}

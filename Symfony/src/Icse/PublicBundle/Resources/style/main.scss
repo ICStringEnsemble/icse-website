@@ -22,7 +22,11 @@ body {
   font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
   font-size: $default-font-size;
   overflow-y: scroll;
-} 
+}
+
+.onlyprint {
+  display: none;
+}
 
 #above_footer {
   min-height:100%;
