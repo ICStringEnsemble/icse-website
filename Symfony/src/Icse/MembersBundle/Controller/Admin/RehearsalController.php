@@ -40,7 +40,7 @@ class RehearsalController extends EntityAdminController
             array('heading' => 'Date', 'cell' => function($x){return $x->getStartsAt()? $x->getStartsAt()->format('D jS F Y') : "?";}),
             array('heading' => 'Time', 'cell' => function($x){return $x->getStartsAt()? $x->getStartsAt()->format('g:ia') : "?";}),
             array('heading' => 'Where', 'cell' => function($x){return $x->getLocation() ? $x->getLocation()->getName() : "?";}),
-            array('heading' => 'Name', 'cell' => function($x){return $x->getName();}),
+            array('heading' => 'Title', 'cell' => function($x){return $x->getName();}),
             array('heading' => 'Comments', 'cell' => function($x){return $x->getComments();}),
             array('heading' => 'Last updated', 'cell' => function($x){return $this->timeagoDate($x->getUpdatedAt()) . " by " .$x->getUpdatedBy()->getFirstName();}),
             );
@@ -61,7 +61,7 @@ class RehearsalController extends EntityAdminController
                 'property' => 'name',
                 'required' => false,
             ))
-        ->add('name', 'text', array('required' => false))
+        ->add('name', 'text', array('required' => false, 'label' => 'Title'))
         ->add('comments', 'textarea', array('required' => false))
         ->getForm(); 
         return $form;

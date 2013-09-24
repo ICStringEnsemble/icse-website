@@ -1,0 +1,86 @@
+{% extends 'IcseMembersBundle:Default:template.html.twig' %}
+
+{% set pageTitle = 'Calendar' %}  
+{% set currentSubSection = 'calendar' %}  
+
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" type="text/css" media="all" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.css" /> 
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.min.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<h1>Calendar</h1>
+
+<div id="calendar_div"></div>
+
+<form target="_blank" action="webcal://www.union.ic.ac.uk/arts/stringensemble/memberscalendar.ics">
+    <button type="submit">Add to Calendar</button>
+</form>
+
+<a href="http://www.google.com/calendar/render?cid=webcal://www.union.ic.ac.uk/arts/stringensemble/memberscalendar.ics" target="_blank"><img src="//www.google.com/calendar/images/ext/gc_button6.gif" border=0>
+</a>
+
+
+<script>
+$(document).ready(function() {
+
+    var date = new Date();
+    var d = date.getDate();
+    var m = date.getMonth();
+    var y = date.getFullYear();
+
+
+    $('#calendar_div').fullCalendar({
+        defaultView: 'agendaWeek',
+        height: 650,
+        header: {
+            left: 'title',
+            center: 'prev,today,next',
+            right: 'month,agendaWeek',
+        },
+        allDaySlot: false,
+        firstDay: 1,
+        // theme: true,
+        titleFormat: {
+            month: 'MMMM yyyy',
+            week: "dS[ MMMM][ yyyy]{ '&#8211;' dS MMMM yyyy}",
+            day: 'dddd, MMM d, yyyy'
+        },
+        columnFormat: {
+            month: 'ddd',    // Mon
+            week: 'ddd d/M', // Mon 9/7
+            day: 'dddd d/M'  // Monday 9/7
+        },
+        eventSources: [
+
+            // your event source
+            {
+                events: {{ events | json_encode() | raw }},
+
+            //     [
+            //     {
+            //         title: 'Birthday Party',
+            //         start: new Date(2013, 08, 24, 19, 0),
+            //         end: new Date(2013, 08, 24, 22, 30),
+            //         allDay: false
+            //     }
+            // ],
+                color: '#9D6830',     // an option!
+                textColor: 'black' // an option!
+            }
+
+            // any other event sources...
+
+        ]
+    })
+
+});
+</script>
+
+{% endblock %}

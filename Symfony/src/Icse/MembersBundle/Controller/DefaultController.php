@@ -24,6 +24,39 @@ class DefaultController extends Controller
 
     public function indexAction()
     {
-      return $this->render('IcseMembersBundle:Default:index.html.twig', array());
+        return $this->render('IcseMembersBundle:Default:index.html.twig', array());
+    }
+
+    public function calendarAction()
+    {
+        $dm = $this->getDoctrine();
+        $rehearsals = $dm->getRepository('IcseMembersBundle:Rehearsal')
+                         ->findAll();
+
+        $events = [];
+
+        foreach ($rehearsals as $r)
+        {
+            $start_time = $r->getStartsAt();
+
+            $title = 'Rehearsal';
+
+            if ($r->getLocation())
+            {
+                $title .= ' ('.$r->getLocation()->getName().')';
+            }
+
+            $event = [
+                'title' => $title,
+                'start' => $r->getStartsAt() ? $r->getStartsAt()->format('M d Y H:i:s') : '',
+                'end' => $r->getEndsAt() ? $r->getEndsAt()->format('M d Y H:i:s') : '',
+                'allDay' => false,
+            ];
+
+            array_push($events, $event);
+        }
+
+
+        return $this->render('IcseMembersBundle:Default:calendar.html.twig', ['events' => $events]);
     }
 }

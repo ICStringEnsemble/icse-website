@@ -68,7 +68,7 @@ class CalendarController extends Controller
 
         foreach ($rehearsals as $r)
         {
-            $title = "Rehearsal";
+            $title = "ICSE Rehearsal";
             if ($r->getName())
             {
                 $title .= ': '. $r->getName();
@@ -82,7 +82,7 @@ class CalendarController extends Controller
                 'LAST-MODIFIED' => $r->getUpdatedAt()->setTimezone(new \DateTimeZone('utc')),
                 'UID' =>  'R'.$r->getId().':'.$r->getStartsAt()->format('Ymd\THis').'@union.ic.ac.uk/arts/stringensemble',
                 'LOCATION' => $r->getLocation() ? $r->getLocation()->getName() : "",
-                'DESCRIPTION' => $r->getComments() . "\n" . 'Loaded at '. (new \DateTime())->format('Y-m-d H:i:s'),
+                'DESCRIPTION' => $r->getComments() . "\n\n" . 'Last reloaded at '. (new \DateTime())->format('Y-m-d H:i:s'),
             ]);            
         }
 
@@ -91,7 +91,7 @@ class CalendarController extends Controller
                             [
                                 'Cache-Control' => 'private',
                                 'Connection' => 'close',
-                                // 'Content-Type' => 'text/calendar; charset=utf-8',
+                                'Content-Type' => 'text/calendar; charset=utf-8',
                             ]);
         $response->setExpires(new \DateTime('+15 minutes'));
         return $response;
