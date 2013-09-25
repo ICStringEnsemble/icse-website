@@ -148,6 +148,7 @@ $( document ).ready(function(){
     $('#filter_list a').click(function(){
         current_filter = $(this).attr('id');
         updateFilters();
+        updateSorting();
         return false;
     });
 
