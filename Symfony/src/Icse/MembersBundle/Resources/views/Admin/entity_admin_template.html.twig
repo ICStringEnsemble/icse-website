@@ -39,6 +39,11 @@
 
 {% block extra_controls %}{% endblock extra_controls %}
 
+<script>
+  $('button.show_if_any_selected, button.show_if_one_selected').hide();
+  $('button.show_if_none_selected').button();
+</script>
+
 <div id="admin_table_container">
 {% include 'IcseMembersBundle:Admin:table_fragment.html.twig' %}
 </div>

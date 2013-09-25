@@ -9,235 +9,248 @@ $sidebar_button_flip_animation_time: 1s;
 $nav_col_colour: #d4b896;
 
 #above_footer {
-  background: url(@IcseMembersBundle/images/bg.png) #fff repeat-y left;
-  @include transition(background $sidebar_animation_time); 
+    background: url(@IcseMembersBundle/images/bg.png) #fff repeat-y left;
+    @include transition(background $sidebar_animation_time); 
 }
 
 #above_footer.nav_col_hidden {
-  background-position: -206px 0;
-  background-image: url(@IcseMembersBundle/images/bg_hidden_nav.png);
+    background-position: -206px 0;
+    background-image: url(@IcseMembersBundle/images/bg_hidden_nav.png);
 }
 
 #above_footer.full_width {
-  background: #fff;
+    background: #fff;
 } 
 
 #nav_column {
-  float: left;
-  position:relative;
-  width: 0px;
-  left: 0;
-  @include transition(left $sidebar_animation_time);
-  height: auto !important;
+    float: left;
+    position:relative;
+    width: 0px;
+    left: 0;
+    @include transition(left $sidebar_animation_time);
+    height: auto !important;
 }
 
 .nav_col_hidden #nav_column {
-  left: $hidden_nav_col_width - $nav_col_width;
+    left: $hidden_nav_col_width - $nav_col_width;
 }
 
 #nav_column li {
-  display: block;
-  float: left;
-  clear: left;
+    display: block;
+    float: left;
+    clear: left;
 }
 
 #nav_col_head, #nav_column li.category {
-  width: $nav_col_width - 2 * $nav_col_side_padding;
-  padding: 0.5em $nav_col_side_padding;
-  color: #fff;
-  background: #000;
+    width: $nav_col_width - 2 * $nav_col_side_padding;
+    padding: 0.5em $nav_col_side_padding;
+    color: #fff;
+    background: #000;
 }
 
 #nav_column li a {
 
-  &:link, &:visited {
-    display: block;
-    width: $nav_col_width - 2 * $nav_col_side_padding - $nav_col_edge_width;
-    padding: 0.5em $nav_col_side_padding;
-    text-decoration: none;
-    color: #000;
-    background-color: $nav_col_colour; 
+    &:link, &:visited {
+        display: block;
+        width: $nav_col_width - 2 * $nav_col_side_padding - $nav_col_edge_width;
+        padding: 0.5em $nav_col_side_padding;
+        text-decoration: none;
+        color: #000;
+        background-color: $nav_col_colour; 
 
-    &.current {
-      background-color: lighten($nav_col_colour, 10%);
+        &.current {
+            background-color: lighten($nav_col_colour, 10%);
+        }
     }
-  }
 
-  &:hover {
-      background-color: darken($nav_col_colour, 10%); 
-    &.current {
-      background-color: lighten($nav_col_colour, 20%);
+    &:hover {
+            background-color: darken($nav_col_colour, 10%); 
+        &.current {
+            background-color: lighten($nav_col_colour, 20%);
+        }
     }
-  }
 
 }
 
 #section_container {
-  margin-left: $nav_col_width;
-  overflow: hidden; 
-  @include transition(margin-left $sidebar_animation_time);  
+    margin-left: $nav_col_width;
+    overflow: hidden; 
+    @include transition(margin-left $sidebar_animation_time);  
 }
 
 .nav_col_hidden #section_container {
-  margin-left: $hidden_nav_col_width;
+    margin-left: $hidden_nav_col_width;
 }
 
 #hide_nav_col_button {
-  float: right;
-  @include transition(transform $sidebar_button_flip_animation_time); 
+    float: right;
+    @include transition(transform $sidebar_button_flip_animation_time); 
 }
 
 #hide_nav_col_button:hover {
-  cursor: pointer;
+    cursor: pointer;
 } 
 
 section {
-  width: auto;
-  float: none;
+    width: auto;
+    float: none;
 }
 
 form label {
-  width: 300px;
+    width: 300px;
 }
 
 form input[type=submit] {
-  margin-left: 320px;
+    margin-left: 320px;
 }
 
 form p.error_wide {
-  color: #f00;
-  margin-left: 320px;
+    color: #f00;
+    margin-left: 320px;
 }
 
 p.success {
-  color: #090;
+    color: #090;
 }
 
 #hidden_nav_col_cover {
-  visibility: hidden;
-  opacity: 0;
-  width: $nav_col_width;
-  height:100%;
-  position: absolute;
-  left: 0;
-  z-index: 0;
-  background-color: #000;
-  @include transition(visibility 0s linear $sidebar_animation_time, opacity $sidebar_animation_time); 
+    visibility: hidden;
+    opacity: 0;
+    width: $nav_col_width;
+    height:100%;
+    position: absolute;
+    left: 0;
+    z-index: 0;
+    background-color: #000;
+    @include transition(visibility 0s linear $sidebar_animation_time, opacity $sidebar_animation_time); 
 }
 
 .nav_col_hidden #hidden_nav_col_cover {
-  visibility: visible;
-  opacity: 1;
-  @include transition-delay(0s); 
+    visibility: visible;
+    opacity: 1;
+    @include transition-delay(0s); 
 } 
 
 
 #hidden_nav_col_cover div {
-  color: #fff;
-  position:absolute;
-  top: 2em;
-  right: 0.5em;
-  width: 0px;
-  @include rotate(90deg);
-  @include apply-origin(top left, false);
+    color: #fff;
+    position:absolute;
+    top: 2em;
+    right: 0.5em;
+    width: 0px;
+    @include rotate(90deg);
+    @include apply-origin(top left, false);
 } 
 
 .loading_spinner {
-  vertical-align: middle;
+    vertical-align: middle;
 }
 
 ul.table_buttons {
-  height: 2.5em;
-  margin-bottom: 0;
-  li {
-    display: block;
-    float: left;
-  }
-  .loading_spinner {
-    margin: 0.45em 0.45em;
-  } 
+    height: 2.5em;
+    margin-bottom: 0;
+    li {
+        display: block;
+        float: left;
+    }
+    .loading_spinner {
+        margin: 0.45em 0.45em;
+    } 
 }
 
 .ui-dialog #edit_dialog.ui-dialog-content {
-  padding-bottom: 0;
+    padding-bottom: 0;
 }
 
 #import_csv_dialog {
-  ul li {
-    list-style-type: disc;
-    margin-left: 30px;
-  }
-
-  label {
-    width: 100px;
-  }
-  .field_row_main {
-    margin-left: 100px;
-
-    input {
-      width: 300px;
+    ul li {
+        list-style-type: disc;
+        margin-left: 30px;
     }
-  }
+
+    label {
+        width: 100px;
+    }
+    .field_row_main {
+        margin-left: 100px;
+
+        input {
+            width: 300px;
+        }
+    }
 }
 
 #admin_table_container {
-  overflow: auto;
+    overflow: auto;
 }
 
 table.admintable {
-  margin-top: 2em;
+    margin-top: 2em;
 
-  &, td, th {
-    padding: 0 10px;
-    text-align: center;
-    vertical-align: middle;
-  }
-
-  thead tr {
-    background-color: #a6681e; 
-    th {
-      color: #fff;
-      font-weight: bold;
-    }
-  }
-
-  tbody tr {
-    &:nth-child(odd) {
-      background-color: #e3c9ab; 
-      &.ui-selected {
-        background-color: #AFC9D4;
-      }
-      &.ui-selecting {
-        background-color: lighten(#AFC9D4, 5%);
-      }
-    }
-    &:nth-child(even) {
-      background-color: #fff; 
-      &.ui-selected {
-        background-color: lighten(#AFC9D4, 10%);
-      }
-      &.ui-selecting {
-        background-color: lighten(#AFC9D4, 15%);
-      }
+    &, td, th {
+        padding: 0 10px;
+        text-align: center;
+        vertical-align: middle;
     }
 
-    &.past_date {
-      color: #858585;
-
+    thead tr {
+        background-color: #a6681e; 
+        th {
+            color: #fff;
+            font-weight: bold;
+        }
     }
 
-    &.future_date {
-      color: #00a;
-    }
+    tbody tr {
+        &:nth-child(odd) {
+            background-color: #e3c9ab; 
+            &.ui-selected {
+                background-color: #AFC9D4;
+            }
+            &.ui-selecting {
+                background-color: lighten(#AFC9D4, 5%);
+            }
+        }
+        &:nth-child(even) {
+            background-color: #fff; 
+            &.ui-selected {
+                background-color: lighten(#AFC9D4, 10%);
+            }
+            &.ui-selecting {
+                background-color: lighten(#AFC9D4, 15%);
+            }
+        }
 
-    &.just_updated {
-      background-color: #C3FF42;
-    }
+        &.past_date {
+            color: #858585;
 
-    &.ui-selected.just_deleted {
-      background-color: #E95D58;
+        }
+
+        &.future_date {
+            color: #00a;
+        }
+
+        &.just_updated {
+            background-color: #C3FF42;
+        }
+
+        &.ui-selected.just_deleted {
+            background-color: #E95D58;
+        }
     }
-  }
 
 
 }
+
+#calendar_div {
+    margin-bottom: 2em;
+}
+
+#add_to_cal_button, #add_google_cal_button {
+    display: block;
+    float: left;
+    // height: 36px;
+    margin-right: 10px;
+    margin-bottom: 1em;
+}
+

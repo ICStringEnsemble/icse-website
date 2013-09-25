@@ -19,16 +19,20 @@
 
 <div id="calendar_div"></div>
 
-<form target="_blank" action="webcal://www.union.ic.ac.uk/arts/stringensemble/memberscalendar.ics">
-    <button type="submit">Add to Calendar</button>
-</form>
 
-<a href="http://www.google.com/calendar/render?cid=webcal://www.union.ic.ac.uk/arts/stringensemble/memberscalendar.ics" target="_blank"><img src="//www.google.com/calendar/images/ext/gc_button6.gif" border=0>
-</a>
+<h2>Add this to your personal calendar</h2>
+
+{% set cal_url = 'webcal://' ~ app.request.httpHost ~ path('IcsePublicBundle_members_cal_feed') %}
+
+<a id="add_to_cal_button" href="{{ cal_url }}" target="_blank">Add to Calendar</a>
+<a id="add_google_cal_button" href="https://www.google.com/calendar/render?cid={{ cal_url }}" target="_blank"><img src="//www.google.com/calendar/images/ext/gc_button6.gif" border=0></a>
 
 
 <script>
 $(document).ready(function() {
+
+    $('#add_to_cal_button').button();
+
 
     var date = new Date();
     var d = date.getDate();
@@ -38,7 +42,7 @@ $(document).ready(function() {
 
     $('#calendar_div').fullCalendar({
         defaultView: 'agendaWeek',
-        height: 650,
+        height: 600,
         header: {
             left: 'title',
             center: 'prev,today,next',

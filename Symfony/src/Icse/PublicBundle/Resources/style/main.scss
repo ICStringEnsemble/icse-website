@@ -15,238 +15,238 @@ $nav_colour3: #aaa;
 
 
 html, body {
-  height: 100%;
+    height: 100%;
 }
 
 body {
-  font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
-  font-size: $default-font-size;
-  overflow-y: scroll;
+    font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
+    font-size: $default-font-size;
+    overflow-y: scroll;
 }
 
 .onlyprint {
-  display: none;
+    display: none;
 }
 
 #above_footer {
-  min-height:100%;
-  height: auto !important;
-  height: 100%;
-  min-width: $page-width;
-  background: url(@IcsePublicBundle/images/bg.png) #eee repeat-y center;
+    min-height:100%;
+    height: auto !important;
+    height: 100%;
+    min-width: $page-width;
+    background: url(@IcsePublicBundle/images/bg.png) #eee repeat-y center;
 }
 
 header {
-  background-color: #fff;
+    background-color: #fff;
 }
 
 hgroup {
-  width: $page-width - 2 * $page-side-padding;
-  margin: 0 auto;
-  padding: 7px $page-side-padding;
-  background-image: url(@IcsePublicBundle/images/banner_violin.png);
-  background-repeat: no-repeat;
-  background-position: bottom right;
+    width: $page-width - 2 * $page-side-padding;
+    margin: 0 auto;
+    padding: 7px $page-side-padding;
+    background-image: url(@IcsePublicBundle/images/banner_violin.png);
+    background-repeat: no-repeat;
+    background-position: bottom right;
 }
 
 #top_nav {
-  background-color: $nav_colour1;
-  height: 2em;
+    background-color: $nav_colour1;
+    height: 2em;
 }
 
 #sub_nav {
-  width: $page-width;
-  margin: 0 auto;
-  height: 2em;
-  background-color: $nav_colour2;
+    width: $page-width;
+    margin: 0 auto;
+    height: 2em;
+    background-color: $nav_colour2;
 }
 
 nav ul {
-  width: $page-width;
-  margin: 0 auto;
-  list-style: none;
+    width: $page-width;
+    margin: 0 auto;
+    list-style: none;
 }
 
 #sub_nav ul ul {
-  width: auto;
-  background-color: $nav_colour3;
+    width: auto;
+    background-color: $nav_colour3;
 }
 
 nav li {
-  display: block;
-  float: left;
+    display: block;
+    float: left;
 }
 
 nav a {
-  &:link, &:visited {
-    display: block;
-    padding: 0.5em 20px;
-    text-decoration:none;
-    color:#fff;
-    font-family: Verdana;
-  }
-  &:hover {
-    background-color: #444;
-  }
+    &:link, &:visited {
+        display: block;
+        padding: 0.5em 20px;
+        text-decoration:none;
+        color:#fff;
+        font-family: Verdana;
+    }
+    &:hover {
+        background-color: #444;
+    }
 }
 
 #sub_nav ul ul a.crumb {
-  background-image: url(@IcsePublicBundle/images/breadcrumb.png);
-  background-repeat: no-repeat;
-  background-position: right center; 
-  padding-right: 20px + 24px;
-  &:link, &:visited {
-    background-color: $nav_colour3;
-    color: #000;
-  }
-  &:hover {
-    background-color: lighten($nav_colour3, 10%);
-  }
+    background-image: url(@IcsePublicBundle/images/breadcrumb.png);
+    background-repeat: no-repeat;
+    background-position: right center; 
+    padding-right: 20px + 24px;
+    &:link, &:visited {
+        background-color: $nav_colour3;
+        color: #000;
+    }
+    &:hover {
+        background-color: lighten($nav_colour3, 10%);
+    }
 }
 
 #sub_nav ul ul a.midcrumb {
-  padding-left: 10px;
+    padding-left: 10px;
 }
 
 #top_nav a.current  {
-  &:link, &:visited {
-    background-color: $nav_colour2;
-  }
-  &:hover {
-    background-color: lighten($nav_colour2, 10%);
-  }
+    &:link, &:visited {
+        background-color: $nav_colour2;
+    }
+    &:hover {
+        background-color: lighten($nav_colour2, 10%);
+    }
 }
 
 #sub_nav a.current {
-  &:link, &:visited {
-    background-color: #fff;
-    color: #000;
-  }
-  &:hover {
-    background-color: #eee;
-  }
+    &:link, &:visited {
+        background-color: #fff;
+        color: #000;
+    }
+    &:hover {
+        background-color: #eee;
+    }
 }
 
 #top_nav #members_area_button.logged_in a {
-  color: #ff0;
+    color: #ff0;
 }
 
 #top_nav #members_area_button {
-  float: right;
+    float: right;
 }
 
 #header_to_footer {
-  clear: both;
-  width: $page-width;
-  margin: 0 auto;
+    clear: both;
+    width: $page-width;
+    margin: 0 auto;
 }
 
 .ui-widget {
-    font-size: 96% !important;
+        font-size: 96% !important;
 } 
 
 section, .ui-dialog {
-  line-height: 1.5em;
+    line-height: 1.5em;
 }
 
 section {
-  padding: 0 $page-side-padding;
-  padding-top:1em;
-  padding-bottom:0em;
-  float: left;
-  width: $page-width - 2 * $page-side-padding;
-  
-  h1 {
-    font-size: 1.6em;
-    font-weight: bold;
-    padding-bottom: 1em;
-    font-family: Arial;
-  }
+    padding: 0 $page-side-padding;
+    padding-top:1em;
+    padding-bottom:0em;
+    float: left;
+    width: $page-width - 2 * $page-side-padding;
+    
+    h1 {
+        font-size: 1.6em;
+        font-weight: bold;
+        padding-bottom: 1em;
+        font-family: Arial;
+    }
 
-  h2 {
-    font-size: 1.2em;
-    font-weight: bold;
-    padding-bottom: 0.1em;
-    margin-bottom: 0.5em;
-    font-family: Arial;
-    border-bottom: 3px solid $h2_colour;
-    color: $h2_colour;
-
-    a {
-      &:link, &:visited {
+    h2 {
+        font-size: 1.2em;
+        font-weight: bold;
+        padding-bottom: 0.1em;
+        margin-bottom: 0.5em;
+        font-family: Arial;
+        border-bottom: 3px solid $h2_colour;
         color: $h2_colour;
-        text-decoration: none;
-      }
+
+        a {
+            &:link, &:visited {
+                color: $h2_colour;
+                text-decoration: none;
+            }
+        }
     }
-  }
 
-  h3 {
-    font-size: 1.1em;
-    font-weight: bold;
-    padding-bottom: 0.1em;
-    font-family: Arial;
-  }
-
-
-  p, ul {
-    margin-bottom: 1em;
-    max-width: 714px;
-  }
-
-  .main_content ul, ol {
-    list-style: disc;
-
-    li {
-      margin-left: 40px;
-      padding-left: 5px;
-      margin-bottom: 0.5em;
+    h3 {
+        font-size: 1.1em;
+        font-weight: bold;
+        padding-bottom: 0.1em;
+        font-family: Arial;
     }
-  }
+
+
+    p, ul {
+        margin-bottom: 1em;
+        max-width: 714px;
+    }
+
+    .main_content ul, ol {
+        list-style: disc;
+
+        li {
+            margin-left: 40px;
+            padding-left: 5px;
+            margin-bottom: 0.5em;
+        }
+    }
 
 }
 
 footer {
-  font-size: $footer-text-size;
-  padding: $footer-padding 0;
-  min-width: $page-width;
-  height: 1em;
-  color:#fff;
-  background-color: #000;
-  text-align: center;
-  margin-top: - (2 * $footer-padding + 1em);
+    font-size: $footer-text-size;
+    padding: $footer-padding 0;
+    min-width: $page-width;
+    height: 1em;
+    color:#fff;
+    background-color: #000;
+    text-align: center;
+    margin-top: - (2 * $footer-padding + 1em);
 }
 
 .footer_push {
-  height: $footer-overall-height;
-  clear:both;
+    height: $footer-overall-height;
+    clear:both;
 }
 
 a, .ui-widget-content a {
-  &:link, &:visited {
-    text-decoration:none;
-    color: #996633;
-  }
-  &:hover {
-    color: lighten(#996633, 10%);
-    text-decoration:underline;
-  }
+    &:link, &:visited {
+        text-decoration:none;
+        color: #996633;
+    }
+    &:hover {
+        color: lighten(#996633, 10%);
+        text-decoration:underline;
+    }
 }
 
 footer a {
-  &:link, &:visited {
+    &:link, &:visited {
+        color: #fff;
+    }
+    &:hover {
+        color: #996633;
+    }
+}
+
+footer a {
     color: #fff;
-  }
-  &:hover {
-    color: #996633;
-  }
-}
-
-footer a {
-  color: #fff;
 }
 
 ::selection {
-	background: #d8c3a9;
+    background: #d8c3a9;
 } 
 
 $form-margin-width_fullpage: 400px;
@@ -255,316 +255,319 @@ $form-label-separation: 20px;
 
 
 form {
-  margin-top: 1em;
-  overflow: auto;
+    margin-top: 1em;
+    overflow: auto;
 
-  div.form_row {
-    overflow: hidden;
-    margin-bottom: 0.9em;
+    div.form_row {
+        overflow: hidden;
+        margin-bottom: 0.9em;
 
-    .form_row_main {
-      clear: none;
-      margin-left: $form-margin-width_fullpage;
+        .form_row_main {
+            clear: none;
+            margin-left: $form-margin-width_fullpage;
 
-      .ui-dialog & {
-        margin-left: $form-margin-width_narrowpage;
-      }
+            .ui-dialog & {
+                margin-left: $form-margin-width_narrowpage;
+            }
 
-      div {
+            div {
+                clear: none;
+            }
+
+
+        }
+    }
+
+    .error {
         clear: none;
-      }
-
-
-    }
-  }
-
-  .error {
-    clear: none;
-    float: right;
-    color: #f00;
-    clear: right;
-    text-align: right;
-  }
-
-  .global_error {
-    padding-bottom: 0.7em;
-  }
-
-  input {
-    &[type=text], &[type=email], &[type=password] {
-      //display: block;
-      //float:left;
-      width: 200px;
-      vertical-align: middle; 
-      margin-top: 0;
-      margin-right: 10px;
+        float: right;
+        color: #f00;
+        clear: right;
+        text-align: right;
     }
 
-    &[type=date], &[type=time] {
-      height: 1.2em;
+    .global_error {
+        padding-bottom: 0.7em;
     }
 
-    &.date {
-      width: 105px;
+    input {
+        &[type=text], &[type=email], &[type=password] {
+            //display: block;
+            //float:left;
+            width: 200px;
+            vertical-align: middle; 
+            margin-top: 0;
+            margin-right: 10px;
+        }
+
+        &[type=date], &[type=time] {
+            height: 1.2em;
+        }
+
+        &.date {
+            width: 105px;
+        }
+
+        &.time {
+            width: 80px;
+        }
+
+        &[type=radio], &[type=checkbox] {
+            margin-top: 0.4em;
+        }
+
+        &[type=submit] {
+            display: block;
+            float: left;
+            clear: both;
+            margin-left: $form-margin-width_fullpage;
+            margin-bottom: 1.5em;
+
+            .ui-dialog & {
+                margin-left: $form-margin-width_narrowpage;
+            } 
+        }
+
     }
 
-    &.time {
-      width: 80px;
+    label {
+        float: left;
+        clear: left;
+        width: $form-margin-width_fullpage - $form-label-separation;
+        text-align: right;
+        margin-right: $form-label-separation;
+
+        .ui-dialog & {
+            width: $form-margin-width_narrowpage - $form-label-separation;
+        }
     }
 
-    &[type=radio], &[type=checkbox] {
-      margin-top: 0.4em;
+    .choices_list input {
+        display: block;
+        float: left;
+        margin-right: 0px;
+        margin-left: 0px;
+        clear: both;
     }
 
-    &[type=submit] {
-      display: block;
-      float: left;
-      clear: both;
-      margin-left: $form-margin-width_fullpage;
-      margin-bottom: 1.5em;
-
-      .ui-dialog & {
-        margin-left: $form-margin-width_narrowpage;
-      } 
+    /* div containing the radio list */
+    .choices_list {
+        float: left;
+        clear: none;
+        margin-bottom: -0.5em;
     }
 
-  }
-
-  label {
-    float: left;
-    clear: left;
-    width: $form-margin-width_fullpage - $form-label-separation;
-    text-align: right;
-    margin-right: $form-label-separation;
-
-    .ui-dialog & {
-      width: $form-margin-width_narrowpage - $form-label-separation;
-    }
-  }
-
-  .choices_list input {
-    display: block;
-    float: left;
-    margin-right: 0px;
-    margin-left: 0px;
-    clear: both;
-  }
-
-  /* div containing the radio list */
-  .choices_list {
-    float: left;
-    clear: none;
-    margin-bottom: -0.5em;
-  }
-
-  /* Radio labels */
-  .choices_list label {
-    width: auto;
-    float:left;
-    vertical-align: middle; 
-    margin: 0;
-    clear: none;
-    padding-bottom: 0.5em;
-    padding-left: 10px;
-  }
-
-  div {
-    clear: both;
-  }
-
-  div#other_instrument {
-    clear:none;
-    float:left;
-    margin-left: 20px;
-  }
-
-  label[for=form_other_instrument] {
-    display: none;
-  }
-
-  #username_or_email_lookup input[type=button] {
-    //display: block;
-    //float: left;
-    clear: none;
-    margin-left: 10px;
-  }
-
-  #login_button {
-    float: left;
-  }
-
-  input#remember_me {
-    float: left;
-    margin-top: 0.5em;
-    margin-left: 30px;
-  }
-
-  label#remember_me_label {
-    clear: none;
-    width: auto;
-    padding-left: 5px;
-  }
-
-  #username_or_email_error, li {
-    color: #f00;
-    float: right;
-  }
-
-  .global_errors li {
-    float: left;
-    clear: both;
-    min-height: 2em;
-    margin-left: 400px;
-    margin-bottom: 0.5em;
-  }
-
-  .submit_and_loading_container {
-    display: block;
-    float: left;
-    clear: both;
-    margin-left: $form-margin-width_fullpage;
-
-    .ui-dialog & {
-      margin-left: $form-margin-width_narrowpage;
-    } 
-
-    input[type=submit] {
-      display: inline;
-      margin: 0;
+    /* Radio labels */
+    .choices_list label {
+        width: auto;
+        float:left;
+        vertical-align: middle; 
+        margin: 0;
+        clear: none;
+        padding-bottom: 0.5em;
+        padding-left: 10px;
     }
 
-    .loading_spinner {
-      margin: 0.2em 0.5em;
+    div {
+        clear: both;
     }
-  }
+
+    div#other_instrument {
+        clear:none;
+        float:left;
+        margin-left: 20px;
+    }
+
+    label[for=form_other_instrument] {
+        display: none;
+    }
+
+    #username_or_email_lookup input[type=button] {
+        //display: block;
+        //float: left;
+        clear: none;
+        margin-left: 10px;
+    }
+
+    #login_button {
+        float: left;
+    }
+
+    input#remember_me {
+        float: left;
+        margin-top: 0.5em;
+        margin-left: 30px;
+    }
+
+    label#remember_me_label {
+        clear: none;
+        width: auto;
+        padding-left: 5px;
+    }
+
+    #username_or_email_error, li {
+        color: #f00;
+        float: right;
+    }
+
+    .global_errors li {
+        float: left;
+        clear: both;
+        min-height: 2em;
+        margin-left: 400px;
+        margin-bottom: 0.5em;
+    }
+
+    .submit_and_loading_container {
+        display: block;
+        float: left;
+        clear: both;
+        margin-left: $form-margin-width_fullpage;
+
+        .ui-dialog & {
+            margin-left: $form-margin-width_narrowpage;
+        } 
+
+        input[type=submit] {
+            display: inline;
+            margin: 0;
+        }
+
+        .loading_spinner {
+            margin: 0.2em 0.5em;
+        }
+    }
 }
 
 .ui-dialog-buttonset .loading_spinner {
-  margin-right: 10px;
+    margin-right: 10px;
 }
 
 div#end_form {
-  clear: both;
+    clear: both;
 }
 
 textarea#email_textarea {
-  vertical-align: top;
-  height: 2.7em;
+    vertical-align: top;
+    height: 2.7em;
 }
 
-#signupsfilter .current {
-  font-weight: bold;
+#filter_list, #sortorder_list {
+    .current {
+        font-weight: bold;
+    }
 }
+
 
 
 
 
 *[hidden] {
-  display: none;
+    display: none;
 } 
 
 .flip-h {
-  @include scaleX(-1);
+    @include scaleX(-1);
 } 
 
 .rotate-180 {
-  @include rotate(-180deg);
+    @include rotate(-180deg);
 } 
 
 .article_pic {
-  float: right;
-  margin-left: 20px;
-  margin-bottom: 20px;
+    float: right;
+    margin-left: 20px;
+    margin-bottom: 20px;
 }
 
 .event_list, .news_list {
-  margin-bottom: 1em;
+    margin-bottom: 1em;
 }
 
 .event_listing, .news_listing {
-  clear: both;
-  margin-top: 1em;
-  overflow: hidden;
+    clear: both;
+    margin-top: 1em;
+    overflow: hidden;
 
-  a.picture+div.details {
-    padding-left: 201px + 16px;
-  }
-
-  ul {
-    list-style: disc inside;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-    margin-left: 1em;
-  }
-
-  a.picture {
-    background: #fff;
-    float: left;
-    display: block;
-  }
-
-  img {
-    display: block;
-    border: 1px solid #000;
-  }
-
-  a.picture, h3 a {
-    color: #000;
-    text-decoration: none;
-
-    &:hover, .mouseover & {
-      color: #666;
-
-      img {
-        opacity: 0.8;
-      }
+    a.picture+div.details {
+        padding-left: 201px + 16px;
     }
-  }
 
-  .posted_at {
-    color: #888;
-    font-size: 0.8em;
-  }
+    ul {
+        list-style: disc inside;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+        margin-left: 1em;
+    }
+
+    a.picture {
+        background: #fff;
+        float: left;
+        display: block;
+    }
+
+    img {
+        display: block;
+        border: 1px solid #000;
+    }
+
+    a.picture, h3 a {
+        color: #000;
+        text-decoration: none;
+
+        &:hover, .mouseover & {
+            color: #666;
+
+            img {
+                opacity: 0.8;
+            }
+        }
+    }
+
+    .posted_at {
+        color: #888;
+        font-size: 0.8em;
+    }
 
 
 }
 
 section #news_head {
-  margin-bottom: 1em;
-  padding-bottom: 0.4em;
-  border-bottom: 3px solid #000; 
-  h1 {
-    padding-bottom: 0.3em;
-  }
+    margin-bottom: 1em;
+    padding-bottom: 0.4em;
+    border-bottom: 3px solid #000; 
+    h1 {
+        padding-bottom: 0.3em;
+    }
 
-  h2 {
-    margin-top: 0;
-    margin-bottom: 0;
-    border: none;
-    font-weight: normal;
-  }
+    h2 {
+        margin-top: 0;
+        margin-bottom: 0;
+        border: none;
+        font-weight: normal;
+    }
 }
 
 section #news_article {
-  margin-bottom: 1em;
-  .posted_at, .posted_by {
-    color: #888;
-    font-size: 0.8em;
-  } 
+    margin-bottom: 1em;
+    .posted_at, .posted_by {
+        color: #888;
+        font-size: 0.8em;
+    } 
 
-  p.intro {
-    font-weight: bold;
-  }
+    p.intro {
+        font-weight: bold;
+    }
 }
 
 .view_full_image:hover {
-  cursor: -webkit-zoom-in;
-  cursor: -moz-zoom-in; 
-  cursor: zoom-in; 
+    cursor: -webkit-zoom-in;
+    cursor: -moz-zoom-in; 
+    cursor: zoom-in; 
 }
 
 .fancybox-image {
-  cursor: -webkit-zoom-out;
-  cursor: -moz-zoom-out; 
-  cursor: zoom-out; 
+    cursor: -webkit-zoom-out;
+    cursor: -moz-zoom-out; 
+    cursor: zoom-out; 
 }

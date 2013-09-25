@@ -83,9 +83,10 @@
   <footer>
   Copyright &copy; 2005&ndash;{{ "now" | date ("Y") }} Imperial College String Ensemble | <a href="{{ path('IcsePublicBundle_contact') }}">Contact Us</a>
   </footer>
+  {#
   <script type="text/javascript"> 
-    {# Notify old browser #}
-    {#
+    // Notify old browser
+    
     var $buoop = {} 
     $buoop.ol = window.onload; 
     window.onload=function(){ 
@@ -94,9 +95,9 @@
      e.setAttribute("type", "text/javascript"); 
      e.setAttribute("src", "http://browser-update.org/update.js"); 
      document.body.appendChild(e); 
-    }#} 
-	  
-    {# Google Analytics #}
+    } 
+    
+    // Google Analytics
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-37318585-1']);
     _gaq.push(['_setCookiePath', '/arts/stringensemble']); 
@@ -107,7 +108,8 @@
       ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
-
+    
   </script> 
+  #}
 </body>
 </html>

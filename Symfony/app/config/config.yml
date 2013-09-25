@@ -74,3 +74,8 @@ fkr_imagine:
 
 fos_js_routing:
     routes_to_expose: [ IcsePublicBundle_query_username ] 
+
+jms_serializer:
+    handlers:
+        datetime:
+            default_format: "U000" # Unix timestamp

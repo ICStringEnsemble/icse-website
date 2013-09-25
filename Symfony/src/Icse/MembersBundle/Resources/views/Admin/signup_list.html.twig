@@ -14,7 +14,7 @@
 
 {% block extra_controls %}
 
-<div id="signupsfilter" class="noprint" >
+<div id="filter_list" class="noprint" >
 Show: 
     <a href="" id="all" >All</a>
   | <a href="" id="concertgoers" >Concert-goers</a>
@@ -24,6 +24,11 @@ Show:
   | <a href="" id="cellists" >Cellists</a>
   | <a href="" id="doublebassists" >Double Bassists</a>
   | <a href="" id="otherplayers" >Other Players</a>
+</div>
+<div id="sortorder_list" class="noprint">
+Sort by:
+  <a href="" id="submissiontime" >Submission time</a>
+| <a href="" id="name" >Name</a>
 </div>
 
 <div>
@@ -38,60 +43,117 @@ $( document ).ready(function(){
 
     var all_rows;
     var current_filter = 'all';
+    var current_sortorder = 'submissiontime';
 
-    function updateFilters(){
-        $('#signupsfilter a').removeClass('current');
-        $('#signupsfilter a').filter('#' + current_filter).addClass('current');
-        $('#current_showing_label').html($('#signupsfilter a').filter('#' + current_filter).html());
 
-        $('#admin_table_container tbody tr').remove();
-        filtered = all_rows.filter(function(){
-            var person = $(this).data('entity');
+    /* Filtering */
+    var updateFilters;
+    (function(){
+        function getInstruments(row) {
+            var person = $(row).data('entity');
             var instruments = [];
             if (person.instrument) {
                 instruments = person.instrument.toLowerCase().split(', ');
             }
-            switch (current_filter) {
-                case ('all'):
-                    return true;
-                case ('concertgoers'):
-                    return person.player === false;
-                case ('players'):
-                    return person.player === true;
-                case ('violinists'):
-                    return instruments.indexOf('violin') >= 0;
-                case ('violists'):
-                    return instruments.indexOf('viola') >= 0;
-                case ('cellists'):
-                    return instruments.indexOf('cello') >= 0;
-                case ('doublebassists'):
-                    return instruments.indexOf('double bass') >= 0;
-                case ('otherplayers'):
-                    for (var i=0; i < instruments.length; i++) {
-                        var instr = instruments[i];
-                        if (   instr != 'violin'
-                            && instr != 'viola'
-                            && instr != 'cello'
-                            && instr != 'double bass') {
-                            return true;
-                        }
+            return instruments;
+        }
+
+        var filter_functions = {
+            'all': function() {
+                return true;
+            },
+            'concertgoers': function() {
+                return $(this).data('entity').player === false;
+            },
+            'players': function() {
+                return $(this).data('entity').player === true;
+            },
+            'violinists': function() {
+                return getInstruments(this).indexOf('violin') >= 0;
+            },
+            'violists': function() {
+                return getInstruments(this).indexOf('viola') >= 0;
+            },
+            'cellists': function() {
+                return getInstruments(this).indexOf('cello') >= 0;
+            },
+            'doublebassists': function() {
+                return getInstruments(this).indexOf('double bass') >= 0;
+            },
+            'otherplayers': function() {
+                var instruments = getInstruments(this);
+                for (var i=0; i < instruments.length; i++) {
+                    var instr = instruments[i];
+                    if (   instr != 'violin'
+                        && instr != 'viola'
+                        && instr != 'cello'
+                        && instr != 'double bass') {
+                        return true;
                     }
-                    return false;
-            }
-        }).clone();
-        filtered.appendTo('#admin_table_container tbody');
-        $('#n_people').html(filtered.length);
-    };
+                }
+                return false;
+            },
+        };
+
+        updateFilters = function(){
+            $('#filter_list a').removeClass('current');
+            $('#filter_list a').filter('#' + current_filter).addClass('current');
+            $('#current_showing_label').html($('#filter_list a').filter('#' + current_filter).html());
+
+            $('#admin_table_container tbody tr').remove();
+            filtered = all_rows.filter(filter_functions[current_filter]).clone();
+            filtered.appendTo('#admin_table_container tbody');
+            $('#n_people').html(filtered.length);
+        };
+    })();
+
+    /* Sorting */
+    var updateSorting;
+    (function(){
+        var sorting_functions = {
+            'submissiontime': function(a,b) {
+                var date_a = new Date(parseInt($(a).data('entity').subscribed_at));
+                var date_b = new Date(parseInt($(b).data('entity').subscribed_at));
+                return (date_a == date_b)? 0 : (date_a < date_b)? 1 : -1;
+            },
+            'name': function(a,b) {
+                var name_a = $(a).data('entity').last_name.toLowerCase();
+                var name_b = $(b).data('entity').last_name.toLowerCase();
+                if (name_a == name_b) {
+                    name_a = $(a).data('entity').first_name.toLowerCase();
+                    name_b = $(b).data('entity').first_name.toLowerCase();
+                    if (name_a == name_b) {
+                        return 0;
+                    }
+                }
+                return (name_a > name_b)? 1 : -1;
+            },
+        };
+
+        updateSorting = function(){
+            $('#sortorder_list a').removeClass('current');
+            $('#sortorder_list a').filter('#' + current_sortorder).addClass('current');
+
+            $('#admin_table_container tbody tr').sort(sorting_functions[current_sortorder]).appendTo('#admin_table_container tbody');
+        };
+    })();
 
     postTableReload = function(){
         all_rows = $('#admin_table_container tbody tr').clone();
         updateFilters();
+        updateSorting();
     }
     postTableReload();
 
-    $('#signupsfilter a').click(function(){
+    $('#filter_list a').click(function(){
         current_filter = $(this).attr('id');
         updateFilters();
+        return false;
+    });
+
+    $('#sortorder_list a').click(function(){
+        current_sortorder = $(this).attr('id');
+        updateSorting();
         return false;
     });
 
