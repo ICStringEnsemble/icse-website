@@ -71,9 +71,24 @@ class SignUpController extends Controller
 
         if ($is_success_page)
         {
+            if ($request->query->has('already'))
+            {
+                $page_body = "<p>Thanks " .  $request->query->get('sn') . ". You're already on our mailing list, so we should be in touch shortly.</p>
+                <p>If for some reason you are not receiving messages from us, please e-mail us at icse@imperial.ac.uk, and we'll try and put things right.</p>";
+            }
+            else if ($request->query->has('mailmanfail'))
+            {
+                $page_body = "<p>Unfortunately, for some reason we were unable to add you to our mailing list.
+                Please e-mail us at icse@imperial.ac.uk, and we'll try and put things right.</p>";
+            }
+            else
+            {
+                $page_body = "<p>Thanks " .  $request->query->get('sn') . ", we'll be in touch shortly.</p>";
+            }
+
             $parameters = array('pageId' => 'join',
                                 'pageTitle' => 'Join Us',
-                                'pageBody' => "Thanks " .  $request->query->get('sn') . ", we'll be in touch shortly.",
+                                'pageBody' => $page_body,
                                 'no_nav' => $freshers);
             if ($freshers)
             {
@@ -163,6 +178,9 @@ class SignUpController extends Controller
                 $em->persist($subscriber);
                 $em->flush();
 
+                $already_on_mailman = false;
+                $mailman_failure = false;
+
                 /* Add to Mailman */
                 if(!$this->get('kernel')->isDebug())
                 {
@@ -176,12 +194,15 @@ class SignUpController extends Controller
                     } 
                     if (!$mailman->subscribe($subscriber->getEmail()))
                     {
-                        throw new \Exception('Adding to mailman failed.'); 
+                        if ($mailman->error == 'already') $already_on_mailman = true;
+                        else $mailman_failure = true;
                     }
                 }
 
                 $query_array = ['sn' => $subscriber->getFirstName()];
                 if ($freshers) $query_array['freshersfair'] = 1;
+                if ($already_on_mailman) $query_array['already'] = 1;
+                if ($mailman_failure) $query_array['mailmanfail'] = 1;
                 return $this->redirect($this->generateUrl('IcsePublicBundle_join', $query_array));
             }
             else

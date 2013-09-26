@@ -90,6 +90,9 @@ class Mailman {
 		if (preg_match('#<h5>Successfully subscribed:</h5>#i',$html)) {
 			$this->error=false;
 			return true;
+		} else if (preg_match('#-- Already a member#i',$html)) {
+			$this->error='already';
+			return false;
 		} else {
 			preg_match('#<h5>(.+?)</h5>#i',$html,$m);
 			$this->error=trim(strip_tags($m[1]),':');
