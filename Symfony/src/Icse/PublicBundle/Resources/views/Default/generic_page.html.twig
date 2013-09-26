@@ -1,4 +1,4 @@
-{% extends (freshers is defined and freshers) ? 'IcsePublicBundle:SignUp:freshers_template.html.twig' : 'IcsePublicBundle:Default:template.html.twig' %} 
+{% extends 'IcsePublicBundle:Default:template.html.twig' %}
 {% set currentSection = pageId %}
 
 {% block content %}
@@ -8,7 +8,13 @@
 {% if reloadPeriod is defined %}
 <script>
 $(document).ready(function(){ 
-  setTimeout(function(){window.top.location.reload(true);}, {{ reloadPeriod }});
+  setTimeout(function(){
+    {% if reloadPath is defined %}
+        window.location.href = "{{ reloadPath }}";
+    {% else %}
+        window.top.location.reload(true);
+    {% endif %}
+}, {{ reloadPeriod }});
 });
 </script>
 {% endif %}

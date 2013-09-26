@@ -63,8 +63,8 @@ class Tools
 
             $errors[$key] = $template;
         }
-        if ($form->hasChildren()) {
-            foreach ($form->getChildren() as $child) {
+        if (count($form) > 0) {
+            foreach ($form->all() as $child) {
                 if (!$child->isValid()) {
                     $errors[$child->getName()] = Tools::getErrorMessages($child);
                 }

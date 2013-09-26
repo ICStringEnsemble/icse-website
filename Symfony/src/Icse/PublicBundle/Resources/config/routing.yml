@@ -56,19 +56,15 @@ IcsePublicBundle_event_endslash:
 
 IcsePublicBundle_join:
     pattern:  /join
-    defaults: { _controller: IcsePublicBundle:SignUp:join, freshers: false }
-
-IcsePublicBundle_join_freshers:
-    pattern:  /join/freshersfair
-    defaults: { _controller: IcsePublicBundle:SignUp:join, freshers: true }
-
-IcsePublicBundle_signup_results_tmp:
-    pattern:  /view/all/signups/from/freshers/fair
-    defaults: { _controller: IcsePublicBundle:Default:signup_results }
+    defaults: { _controller: IcsePublicBundle:SignUp:join }
 
 IcsePublicBundle_query_username:
     pattern:  /join/query_username
     defaults: { _controller: IcsePublicBundle:SignUp:query_username, _format: json }
+
+IcsePublicBundle_freshersfair:
+    pattern:  /freshersfair
+    defaults: { _controller: IcsePublicBundle:SignUp:freshersfair }
 
 IcsePublicBundle_support:
     pattern:  /support

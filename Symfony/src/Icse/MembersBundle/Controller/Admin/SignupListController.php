@@ -30,7 +30,7 @@ class SignupListController extends EntityAdminController
     protected function getTableContent()
     {
         $dm = $this->getDoctrine(); 
-        $subscribers = $dm->getRepository('IcsePublicBundle:Subscriber')->findBy(array(), array('subscribed_at'=>'desc'));
+        $subscribers = $dm->getRepository('IcsePublicBundle:Subscriber')->findAllThisYear();
 
         $columns = array(
             // array('heading' => 'ID', 'cell' => function($x){return $x->getID();}),

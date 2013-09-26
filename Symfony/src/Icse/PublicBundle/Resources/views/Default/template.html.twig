@@ -7,6 +7,7 @@
               {label: 'Support Us', id:'support', url:path('IcsePublicBundle_support')},
               {label: 'Members', id:'members', url:path('IcseMembersBundle_return')}
 ] %}
+{% set allow_nav = no_nav is defined ? not no_nav : true %}
 <!DOCTYPE HTML>
 <html>
 {% spaceless %}
@@ -50,13 +51,16 @@
     <header>
     <hgroup>
     <h1>
-      <a href="{{ path('IcsePublicBundle_home') }}"><img height=139 src="{{ asset('bundles/icsepublic/images/banner_logo.png') }}" alt="Imperial College String Ensemble"/></a>
+      {% if allow_nav %}<a href="{{ path('IcsePublicBundle_home') }}">{% endif %}
+      <img height=139 src="{{ asset('bundles/icsepublic/images/banner_logo.png') }}" alt="Imperial College String Ensemble"/>
+      {% if allow_nav %}</a>{% endif %}
     </h1>
     </hgroup>
     </header>
     <nav>
     {% block navbars %}
     <div id="top_nav">
+      {% if allow_nav %}
       <ul>
         {% for item in main_nav_items %}
         <li {% if item.id == 'members' %}
@@ -68,6 +72,7 @@
         </li> 
         {% endfor %}
       </ul>
+      {% endif %}
     </div>
     {% endblock navbars %}
     </nav>
@@ -81,7 +86,7 @@
     <div class="footer_push"></div>
   </div>
   <footer>
-  Copyright &copy; 2005&ndash;{{ "now" | date ("Y") }} Imperial College String Ensemble | <a href="{{ path('IcsePublicBundle_contact') }}">Contact Us</a>
+  Copyright &copy; 2005&ndash;{{ "now" | date ("Y") }} Imperial College String Ensemble {% if allow_nav %}| <a href="{{ path('IcsePublicBundle_contact') }}">Contact Us</a>{% endif %}
   </footer>
   {#
   <script type="text/javascript"> 

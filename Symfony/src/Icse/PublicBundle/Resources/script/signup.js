@@ -54,6 +54,7 @@ $(document).ready(function() {
                 } else {
                     username_or_email_looked_up = 'error'
                 }
+                $('.error_list').remove();
                 update_form_layout(slideTime);
                 $('#username_or_email_lookup input').prop('disabled', false);
             });
@@ -132,10 +133,11 @@ $(document).ready(function() {
     /*
      * Get into correct starting state
      */
-    if ($('#username_or_email_field').val() != "") {
-        lookup_username_or_email_action(0);
-    }
+    update_form_layout(0);
     enableDisableOtherInstrument();
     changeIsAPlayerHandler(0);
-    update_form_layout(0);
+    if ($('#username_or_email_field').val() != "") {
+        username_or_email_looked_up = $('#form_login').val() != '' ? 'username' : 'email';
+        update_form_layout(0);
+    }
 });

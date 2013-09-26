@@ -151,7 +151,7 @@ class MembersController extends EntityAdminController
 
             return $this->get('ajax_response_gen')->returnSuccess();
         } else {
-            $em->refresh($member);
+            if ($em->contains($member)) $em->refresh($member);
             return $this->get('ajax_response_gen')->returnFail($form);
         }  
     }

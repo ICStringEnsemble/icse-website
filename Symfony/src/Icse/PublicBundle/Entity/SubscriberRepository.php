@@ -12,6 +12,24 @@ use Doctrine\ORM\EntityRepository;
  */
 class SubscriberRepository extends EntityRepository
 {
+  public function findAllThisYear()
+    {
+      $thresh = new \DateTime('first day of june');
+      $now = new \DateTime();
+      if ($thresh > $now)
+      {
+          $thresh->modify('- 1 year');
+      }
+
+      return $this->getEntityManager()
+                  ->createQuery('SELECT s 
+                                 FROM IcsePublicBundle:Subscriber s
+                                 WHERE s.subscribed_at >= :thresh
+                                 ORDER BY s.subscribed_at DESC')
+                  ->setParameters(array('thresh' => $thresh))
+                  ->getResult();
+    }
+
   public function findAllMostRecentFirst()
     {
       return $this->getEntityManager()
