@@ -9,6 +9,7 @@
 {% set readOnly = true %}
 
 {% block extra_table_buttons %}
+  <li><button class="listemails" type=button>Email addresses</button></li>
   <li><button onClick="window.print()" class="show_if_none_selected" type=button>Print</button></li>
 {% endblock %}
 
@@ -36,7 +37,6 @@ Sort by:
 </div>
 
 <script>
-
 var postTableReload;
 
 $( document ).ready(function(){
@@ -44,7 +44,6 @@ $( document ).ready(function(){
     var all_rows;
     var current_filter = 'all';
     var current_sortorder = 'submissiontime';
-
 
     /* Filtering */
     var updateFilters;
@@ -96,6 +95,8 @@ $( document ).ready(function(){
         };
 
         updateFilters = function(){
+            $('button.unselectall').click();
+
             $('#filter_list a').removeClass('current');
             $('#filter_list a').filter('#' + current_filter).addClass('current');
             $('#current_showing_label').html($('#filter_list a').filter('#' + current_filter).html());
@@ -161,5 +162,42 @@ $( document ).ready(function(){
 });
 
 </script>
+{% endblock extra_controls %}
 
-{% endblock %}
+
+
+{% block extra_content %}
+
+<div id="email_list_dialog" title="Email addresses" hidden>
+<textarea readonly="readonly" cols=50 rows=20></textarea>
+</div>
+
+<script>
+    $('#email_list_dialog').dialog({
+        autoOpen: false,
+        modal: true,
+        width: 500,
+        minWidth: 500,
+        height: 500,
+    });
+
+    $('button.listemails').click(function(){
+        $('#email_list_dialog').dialog('open');
+
+        var rows = $('tbody tr.ui-selected');
+        if (rows.length == 0) rows = $('tbody tr');
+
+        var emails = "";
+        rows.each(function(){
+            emails += $(this).data('entity').email + '\n';
+        });
+
+        $('#email_list_dialog textarea').val(emails).select();
+    });
+
+    $('#email_list_dialog textarea').focus(function() { $(this).select(); } );
+    $('#email_list_dialog textarea').mouseup(function() { return false; } );
+</script>
+
+
+{% endblock extra_content %}

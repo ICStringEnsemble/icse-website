@@ -237,7 +237,7 @@
     $('button.refresh').click(reloadTable); // Refresh button
 
     $('button.unselectall, #above_footer, #signupsfilter a').click(function(){ // Unselect all button/area
-      $('tbody tr').removeClass('ui-selected')
+      $('tbody tr').removeClass('ui-selected');
       hideShowControlButtons();
     });
     $('.table_buttons button').click(function(e){
