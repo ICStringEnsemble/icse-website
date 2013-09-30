@@ -576,3 +576,38 @@ section #news_article {
     cursor: -moz-zoom-out; 
     cursor: zoom-out; 
 }
+
+#committee_profiles {
+
+    div.profile {
+        margin-bottom: 2em;
+        overflow: auto;
+    }
+
+    h3 {
+        padding-bottom: 0.5em;
+        font-size: 1.2em;
+    }
+
+    dl {
+
+        padding-left: 165px;
+
+        dt {
+            float: left;
+            font-weight: bold;
+            margin-right: 10px;
+
+            &:after {
+                content: ':'
+            }
+        }
+    }
+
+    img {
+        display: block;
+        float: left;
+        margin-right: 10px;
+    }
+}
+

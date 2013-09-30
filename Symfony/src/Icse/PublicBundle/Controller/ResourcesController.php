@@ -69,6 +69,10 @@ class ResourcesController extends Controller
                 {
                   $path = $this->resizeImage($path, '_'.$size_id, 334, 254, true);
                 }
+              else if ($size_id == 'committeeprofile')
+                {
+                  $path = $this->resizeImage($path, '_'.$size_id, 155, 200, true);
+                }
               else if ($size_id == 'hpmainthumb')
                 {
                   $path = $this->resizeImage($path, '_'.$size_id, 200, null);

@@ -1,23 +1,12 @@
 {% extends 'IcsePublicBundle:Default:template.html.twig' %}
 {% set currentSection = 'home' %}
 
-{% block stylesheets %}
-{{ parent() }}
-{% stylesheets 
-  '@IcsePublicBundle/Resources/style/home.scss' 
-  filter='compass,css_url_rewrite,?yui_css'
-  output='bundles/icsepublic/css/home.css'
-%}
-<link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
-{% endstylesheets %}
-{% endblock %} 
-
 {% block javascripts %}
 {{ parent() }}
-<script src="{{ asset('bundles/icsepublic/js/lib/jquery.cycle.min.js') }}"></script> 
-<script src="{{ asset('bundles/icsepublic/js/lib/jquery.waitforimages.min.js') }}"></script> 
-<script src="{{ asset('bundles/icsepublic/js/lib/jquery.timeago.min.js') }}"></script> 
+<script src="{{ asset('bundles/icsepublic/lib/js/jquery.cycle2.min.js') }}"></script>
 {% endblock %} 
+
+{% block aboveFooterAttrs %}class="homepage"{% endblock %}
 
 {% block content %}
 
@@ -69,46 +58,44 @@
     $('#past_event_title').html('');
   });
 
-  $('#past_events_strip').waitForImages(function() {
+  (function() {
     var images = $('#past_events_strip img');
-    var originalWidth = 0;
-    var originalWidthIE = 0;
-    var onloadsCompleted = 0;
-    var requiredWidth = 580;
+    var original_total_width = 0;
+    var required_total_width = 580;
+    var onloads_completed = 0;
     images.each(function() {
       var origImg = new Image(); 
       origImg.onload = (function(visibleImg) {
         return function(){
-          originalWidthIE += this.width;
+          original_total_width += this.width;
           $(visibleImg).data('origWidth', this.width);
-          onloadsCompleted += 1;
-          if (onloadsCompleted === images.size()) {
-            scaleFactor = requiredWidth / originalWidthIE;
-            if (scaleFactor > 1) scaleFactor = 1;
+          onloads_completed += 1;
+          if (onloads_completed === images.size()) {
+            var scale_factor = required_total_width / original_total_width;
+            if (scale_factor > 1) scale_factor = 1;
             images.each(function(){
-              $(this).width($(this).data('origWidth')*scaleFactor);
+              $(this).width($(this).data('origWidth')*scale_factor);
             });
           }
         }
       })(this);
       origImg.src = $(this).attr('src'); 
     });
-  }); 
+  })(); 
 </script>
 
-<div id=col_right>
-  <div id=slideshow >
+<div id="col_right">
+  <div class="cycle-slideshow"
+       data-cycle-fx="fadeout"
+       data-cycle-random="true"
+       data-cycle-speed="1000"
+       data-cycle-timeout="3000"
+       data-cycle-log="false"
+    >
     {% for image in slideshow_images %}
     <img alt="" width=334 height=254 src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':image.getFile(), 'size':'hpslideshow'}) }}"/>
     {% endfor %}
   </div>
-  <script>
-    $('#slideshow').cycle({ 
-        fx:     'fadeout', 
-        random:  1 
-    }); 
-  </script>
-
 
   {% if next_rehearsal %}
   <h2>Next Rehearsal</h2>
