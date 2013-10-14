@@ -1,0 +1,64 @@
+{% extends 'IcseMembersBundle:Default:template.html.twig' %}
+
+{% set pageTitle = 'Send Email' %}  
+{% set currentSubSection = 'sendemail' %}
+
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('bundles/icsemembers/lib/aloha/lib/require.js') }}"></script>
+<script src="{{ asset('bundles/icsemembers/lib/aloha/lib/aloha.js') }}" data-aloha-plugins="common/ui,common/format,common/highlighteditables,common/link"></script>
+<script src="{{ asset('bundles/icsemembers/lib/ckeditor/ckeditor.js') }}"></script>
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('bundles/icsemembers/lib/aloha/css/aloha.css') }}" type="text/css">
+{% endblock %}
+
+
+
+
+{% block content %}
+
+<h1>Send Email</h1>
+
+
+<textarea class="ckeditor" name="editor1"><p>Getting started with Aloha Editor!</p></textarea>
+<div id="content"><p>Getting started with Aloha Editor!</p></div>
+
+<script>
+
+Aloha.settings.toolbar = {
+    tabs: [
+        {
+            label: 'Format',
+            components: [
+                [ 'bold', 'italic', 'underline', '\n',
+                  'subscript', 'superscript', 'strikethrough' ],
+                [ 'formatBlock' ]
+            ]
+        },
+        {
+            label: 'Insert',
+            exclusive: true,
+            components: [
+                "createTable", "characterPicker", "insertLink",
+            ]
+        },
+        {
+            label: 'Link',
+            components: [ 'editlink' ]
+        }
+    ],
+    exclude: [ 'Format', 'emphasis', 'strikethrough' ]
+};
+
+Aloha.ready( function() {
+    Aloha.jQuery('#content').aloha();
+});
+
+</script>
+
+
+{% endblock %}

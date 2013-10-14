@@ -21,7 +21,7 @@ IcseMembersBundle_account_settings:
     pattern:  /members/account
     defaults: { _controller: IcseMembersBundle:AccountSettings:index }
 
-# Images
+# Admin
 IcseMembersBundle_image_uploads:
     pattern:  /members/admin/images
     defaults: { _controller: IcseMembersBundle:Admin/Image:imageUploads }
@@ -34,20 +34,21 @@ IcseMembersBundle_confirm_upload:
     pattern:  /members/admin/uploadconfirm
     defaults: { _controller: IcseMembersBundle:Admin/Image:confirmUpload }
 
-# Rehearsal Admin #
 IcseMembersBundle_rehearsaladmin:
     pattern:  /members/admin/rehearsals/{arg}
     defaults: { _controller: IcseMembersBundle:Admin/Rehearsal:router, arg: ~ }
 
-# Members List #
 IcseMembersBundle_members:
     pattern:  /members/superadmin/members/{arg}
     defaults: { _controller: IcseMembersBundle:SuperAdmin/Members:router, arg: ~ }
 
-# Signup List #
 IcseMembersBundle_signuplist:
     pattern:  /members/admin/signups/{arg}
     defaults: { _controller: IcseMembersBundle:Admin/SignupList:router, arg: ~ }
+
+IcseMembersBundle_sendemail:
+    pattern:  /members/admin/email/{arg}
+    defaults: { _controller: IcseMembersBundle:Admin/Email:main, arg: ~ }
 
 # Misc SuperAdmin #
 IcseMembersBundle_site_dev:
