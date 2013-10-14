@@ -108,4 +108,60 @@ class Venue
     {
         return $this->address;
     }
+    /**
+     * @var \DateTime
+     */
+    private $updated_at;
+
+    /**
+     * @var string
+     */
+    private $manyToOne;
+
+
+    /**
+     * Set updated_at
+     *
+     * @param \DateTime $updatedAt
+     * @return Venue
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updated_at = $updatedAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get updated_at
+     *
+     * @return \DateTime 
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
+    }
+
+    /**
+     * Set manyToOne
+     *
+     * @param string $manyToOne
+     * @return Venue
+     */
+    public function setManyToOne($manyToOne)
+    {
+        $this->manyToOne = $manyToOne;
+    
+        return $this;
+    }
+
+    /**
+     * Get manyToOne
+     *
+     * @return string 
+     */
+    public function getManyToOne()
+    {
+        return $this->manyToOne;
+    }
 }

@@ -17,4 +17,9 @@ Icse\PublicBundle\Entity\Venue:
         embedMap:
             type: text
             nullable: true
+        updated_at:
+            type: datetime
+        manyToOne:
+            updated_by: 
+                targetEntity: Member
     lifecycleCallbacks: {  }
