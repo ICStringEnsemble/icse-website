@@ -113,11 +113,6 @@ class Venue
      */
     private $updated_at;
 
-    /**
-     * @var string
-     */
-    private $manyToOne;
-
 
     /**
      * Set updated_at
@@ -142,26 +137,33 @@ class Venue
         return $this->updated_at;
     }
 
+
     /**
-     * Set manyToOne
+     * @var \Icse\MembersBundle\Entity\Member
+     */
+    private $updated_by;
+
+
+    /**
+     * Set updated_by
      *
-     * @param string $manyToOne
+     * @param \Icse\MembersBundle\Entity\Member $updatedBy
      * @return Venue
      */
-    public function setManyToOne($manyToOne)
+    public function setUpdatedBy(\Icse\MembersBundle\Entity\Member $updatedBy = null)
     {
-        $this->manyToOne = $manyToOne;
+        $this->updated_by = $updatedBy;
     
         return $this;
     }
 
     /**
-     * Get manyToOne
+     * Get updated_by
      *
-     * @return string 
+     * @return \Icse\MembersBundle\Entity\Member 
      */
-    public function getManyToOne()
+    public function getUpdatedBy()
     {
-        return $this->manyToOne;
+        return $this->updated_by;
     }
 }

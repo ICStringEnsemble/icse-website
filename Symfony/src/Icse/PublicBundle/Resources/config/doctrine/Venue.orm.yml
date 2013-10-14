@@ -19,7 +19,7 @@ Icse\PublicBundle\Entity\Venue:
             nullable: true
         updated_at:
             type: datetime
-        manyToOne:
-            updated_by: 
-                targetEntity: Member
+    manyToOne:
+        updated_by: 
+            targetEntity: Icse\MembersBundle\Entity\Member
     lifecycleCallbacks: {  }

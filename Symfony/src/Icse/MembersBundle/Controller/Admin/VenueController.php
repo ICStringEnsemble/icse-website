@@ -36,7 +36,7 @@ class VenueController extends EntityAdminController
         $columns = array(
             array('heading' => 'Name', 'cell' => function($x){return $x->getName();}),
             array('heading' => 'Address', 'cell' => function($x){return $x->getAddress();}),
-            // array('heading' => 'Last updated', 'cell' => function($x){return $this->timeagoDate($x->getUpdatedAt()) . " by " .$x->getUpdatedBy()->getFirstName();}),
+            array('heading' => 'Last updated', 'cell' => function($x){return $this->timeagoDate($x->getUpdatedAt()) . " by " .$x->getUpdatedBy()->getFirstName();}),
             );
         return array("columns" => $columns, "entities" => $entities);
     }
@@ -56,8 +56,8 @@ class VenueController extends EntityAdminController
         $form = $this->getForm($entity);
         $form->bind($request);
 
-        // $entity->setUpdatedAt(new \DateTime());
-        // $entity->setUpdatedBy($this->get('security.context')->getToken()->getUser());
+        $entity->setUpdatedAt(new \DateTime());
+        $entity->setUpdatedBy($this->get('security.context')->getToken()->getUser());
 
         $em = $this->getDoctrine()->getManager();
         if ($form->isValid())
