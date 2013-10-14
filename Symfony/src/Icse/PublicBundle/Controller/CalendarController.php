@@ -12,6 +12,43 @@ use Icse\PublicBundle\Entity\Event;
 
 class CalendarController extends Controller
 {
+    private function fetch ($Url) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $Url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $output = curl_exec($ch);
+        curl_close($ch);
+        return $output;
+    }
+
+    public function icsPreprocessAction(Request $request)
+    {
+        $url = $request->query->get('url');
+        $remove_regex = $request->query->get('remove');
+        $ics_in = $this->fetch($url);
+
+        $vcal = VObject\Reader::read($ics_in);
+
+        foreach($vcal->VEVENT as $ev) {
+            if (preg_match($remove_regex, $ev->SUMMARY))
+            {
+                $vcal->remove($ev);
+            }
+        }
+
+        $response = new Response($vcal->serialize(),
+                            200,
+                            [
+                                'Cache-Control' => 'private',
+                                'Connection' => 'close',
+                                'Content-Type' => 'text/calendar; charset=utf-8',
+                            ]);
+        $response->setExpires(new \DateTime('+15 minutes'));
+
+        return $response;
+    }
+
+
     public function testAction()
     {
         $vcalendar = new VObject\Component\VCalendar();

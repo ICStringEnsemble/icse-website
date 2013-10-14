@@ -94,3 +94,7 @@ IcsePublicBundle_test_cal_feed:
 IcsePublicBundle_members_cal_feed:
     pattern: /members-calendar.ics
     defaults: { _controller: IcsePublicBundle:Calendar:members }
+
+IcsePublicBundle_icspreprocess:
+    pattern: /preprocess.ics
+    defaults: { _controller: IcsePublicBundle:Calendar:icsPreprocess }
