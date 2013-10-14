@@ -39,6 +39,11 @@ IcseMembersBundle_rehearsaladmin:
     pattern:  /members/admin/rehearsals/{arg}
     defaults: { _controller: IcseMembersBundle:Admin/Rehearsal:router, arg: ~ }
 
+# Venue Admin #
+IcseMembersBundle_venueadmin:
+    pattern:  /members/admin/venues/{arg}
+    defaults: { _controller: IcseMembersBundle:Admin/Venue:router, arg: ~ }
+
 # Members List #
 IcseMembersBundle_members:
     pattern:  /members/superadmin/members/{arg}

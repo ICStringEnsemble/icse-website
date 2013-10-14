@@ -194,7 +194,7 @@ table.admintable {
     }
 
     thead tr {
-        background-color: #a6681e; 
+        background-color: #B18138; 
         th {
             color: #fff;
             font-weight: bold;
@@ -203,7 +203,7 @@ table.admintable {
 
     tbody tr {
         &:nth-child(odd) {
-            background-color: #e3c9ab; 
+            background-color: #F0E0CE; 
             &.ui-selected {
                 background-color: #AFC9D4;
             }
