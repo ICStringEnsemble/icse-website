@@ -27,8 +27,13 @@
 <a id="add_to_cal_button" href="{{ cal_url }}" target="_blank">Add to Calendar</a>
 <a id="add_google_cal_button" href="https://www.google.com/calendar/render?cid={{ cal_url }}" target="_blank"><img src="//www.google.com/calendar/images/ext/gc_button6.gif" border=0></a>
 
-
 <script>
+var onNavColumnToggle = function() {
+    window.setTimeout(function(){
+        $('#calendar_div').fullCalendar('render');
+    }, 200);
+}
+
 $(document).ready(function() {
 
     $('#add_to_cal_button').button();

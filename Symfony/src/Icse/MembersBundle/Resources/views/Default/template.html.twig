@@ -77,16 +77,23 @@
 </div>
 <script>
   $(document).ready(function(){
+
+    if(typeof onNavColumnToggle != 'function'){
+        window.onNavColumnToggle = function(){};
+    }
+
     var nav_col_enabled = true;
     function hideNavColumn(){
         $('#above_footer').addClass("nav_col_hidden"); 
         $('#hide_nav_col_button').addClass("rotate-180");
         nav_col_enabled = false;
+        onNavColumnToggle();
     }
     function showNavColumn(){
         $('#above_footer').removeClass("nav_col_hidden"); 
         $('#hide_nav_col_button').removeClass("rotate-180");
         nav_col_enabled = true;
+        onNavColumnToggle();
     }
     $('#hide_nav_col_button, #hidden_nav_col_cover').click(function(){
       if (nav_col_enabled) {
