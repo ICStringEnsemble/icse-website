@@ -3,18 +3,22 @@
 {% set pageTitle = 'Send Email' %}  
 {% set currentSubSection = 'sendemail' %}
 
+{% block stylesheets %}
+{{ parent() }}
+{% stylesheets 
+  '@IcseMembersBundle/Resources/style/email.scss' 
+  filter='compass,css_url_rewrite,?yui_css'
+  output='bundles/icsemembers/css/email.css'
+%}
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+{% endstylesheets %}
+{% endblock stylesheets %}
+
 
 {% block javascripts %}
 {{ parent() }}
-<script src="{{ asset('bundles/icsemembers/lib/aloha/lib/require.js') }}"></script>
-<script src="{{ asset('bundles/icsemembers/lib/aloha/lib/aloha.js') }}" data-aloha-plugins="common/ui,common/format,common/highlighteditables,common/link"></script>
 <script src="{{ asset('bundles/icsemembers/lib/ckeditor/ckeditor.js') }}"></script>
-{% endblock %}
-
-{% block stylesheets %}
-{{ parent() }}
-<link rel="stylesheet" href="{{ asset('bundles/icsemembers/lib/aloha/css/aloha.css') }}" type="text/css">
-{% endblock %}
+{% endblock javascripts %}
 
 
 
@@ -23,42 +27,20 @@
 
 <h1>Send Email</h1>
 
-
-<textarea class="ckeditor" name="editor1"><p>Getting started with Aloha Editor!</p></textarea>
-<div id="content"><p>Getting started with Aloha Editor!</p></div>
+{% include 'IcseMembersBundle:Email:new_email.html.twig' with {'to_embed': true} %}  
 
 <script>
-
-Aloha.settings.toolbar = {
-    tabs: [
-        {
-            label: 'Format',
-            components: [
-                [ 'bold', 'italic', 'underline', '\n',
-                  'subscript', 'superscript', 'strikethrough' ],
-                [ 'formatBlock' ]
-            ]
-        },
-        {
-            label: 'Insert',
-            exclusive: true,
-            components: [
-                "createTable", "characterPicker", "insertLink",
-            ]
-        },
-        {
-            label: 'Link',
-            components: [ 'editlink' ]
-        }
-    ],
-    exclude: [ 'Format', 'emphasis', 'strikethrough' ]
-};
-
-Aloha.ready( function() {
-    Aloha.jQuery('#content').aloha();
+CKEDITOR.disableAutoInline = true;
+CKEDITOR.inline( 'editable', {
+    extraPlugins : 'webkit-span-fix,sourcedialog',
+    customConfig : '',
+    /*toolbar :
+            [
+                ['Source'],
+                ['Bold','Italic','Underline','Strike'],
+            ],*/
+    width: 490
 });
-
 </script>
-
 
 {% endblock %}

@@ -254,3 +254,11 @@ table.admintable {
     margin-bottom: 1em;
 }
 
+.cke_editable.cke_editable_inline {
+    &.cke_focus {
+        box-shadow: inset 0px 0px 20px 3px #ddd, inset 0 0 1px #000;
+        outline: none;
+        background: #fff;
+        cursor: text;
+    }
+}
