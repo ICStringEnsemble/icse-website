@@ -12,15 +12,27 @@ use Doctrine\ORM\EntityRepository;
  */
 class RehearsalRepository extends EntityRepository
 {
-  public function findNext()
+    public function findNext()
     {
-      return $this->getEntityManager()
-                  ->createQuery('SELECT r
-                                 FROM IcseMembersBundle:Rehearsal r
-                                 WHERE r.starts_at >= :starttime
-                                 ORDER BY r.starts_at ASC')
-                  ->setParameters(array('starttime' => new \DateTime("today")))
-                  ->setMaxResults(1)
-                  ->getOneOrNullResult();
+        return $this->getEntityManager()
+                    ->createQuery('SELECT r
+                                   FROM IcseMembersBundle:Rehearsal r
+                                   WHERE r.starts_at >= :starttime
+                                   ORDER BY r.starts_at ASC')
+                    ->setParameters(array('starttime' => new \DateTime("today")))
+                    ->setMaxResults(1)
+                    ->getOneOrNullResult();
+    }
+
+    public function findNextN($n=1)
+    {
+        return $this->getEntityManager()
+                    ->createQuery('SELECT r
+                                   FROM IcseMembersBundle:Rehearsal r
+                                   WHERE r.starts_at >= :starttime
+                                   ORDER BY r.starts_at ASC')
+                    ->setParameters(array('starttime' => new \DateTime("today")))
+                    ->setMaxResults($n)
+                    ->getResult();
     }
 }

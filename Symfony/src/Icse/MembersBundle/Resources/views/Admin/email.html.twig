@@ -6,9 +6,9 @@
 {% block stylesheets %}
 {{ parent() }}
 {% stylesheets 
-  '@IcseMembersBundle/Resources/style/email.scss' 
-  filter='compass,css_url_rewrite,?yui_css'
-  output='bundles/icsemembers/css/email.css'
+    '@IcseMembersBundle/Resources/style/email.scss' 
+    filter='compass,css_url_rewrite,?yui_css'
+    output='bundles/icsemembers/css/email.css'
 %}
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
 {% endstylesheets %}
@@ -18,29 +18,60 @@
 {% block javascripts %}
 {{ parent() }}
 <script src="{{ asset('bundles/icsemembers/lib/ckeditor/ckeditor.js') }}"></script>
+<script src="{{ asset('bundles/icsemembers/lib/ckeditor/adapters/jquery.js') }}"></script>
 {% endblock javascripts %}
-
-
-
 
 {% block content %}
 
 <h1>Send Email</h1>
 
+<ul class="email_buttons">
+    <li><button class="preview" type=button>Preview</button></li>
+    <img hidden class="loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" /> 
+</ul>
+
 {% include 'IcseMembersBundle:Email:new_email.html.twig' with {'to_embed': true} %}  
 
+<iframe id="preview_frame" style="min-width: 95%;height:100%;"></iframe>
+
+
 <script>
-CKEDITOR.disableAutoInline = true;
-CKEDITOR.inline( 'editable', {
-    extraPlugins : 'webkit-span-fix,sourcedialog',
-    customConfig : '',
-    /*toolbar :
-            [
-                ['Source'],
-                ['Bold','Italic','Underline','Strike'],
-            ],*/
-    width: 490
-});
+    (function(){
+        $('.email_buttons button').button();
+
+        var preview_frame = $('#preview_frame');
+        var editor = $('#editable');
+        preview_frame.dialog({
+            autoOpen: false,
+            modal: true,
+            resizable: true,
+            width: 800,
+            height: 500,
+        });
+        $('button.preview').click(function(){
+            preview_frame.dialog('open');
+            preview_frame.attr('src', "{{ path('IcseMembersBundle_sendemail', {'arg': 'preview'}) }}"+'?'+$.param({'body': editor.ckeditorGet().getData()}));
+        });
+
+        editor.ckeditor(function(){}, {
+            extraPlugins : 'webkit-span-fix,sourcedialog',
+            customConfig : '',
+            toolbar :
+              [
+                { name: 'basicstyles', items : [ 'Bold','Italic','Underline','-','RemoveFormat' ] },
+                { name: 'paragraph', items : [  ] },
+                { name: 'insert', items : [ 'NumberedList','BulletedList', '-', 'Link', 'Image','HorizontalRule' ] },
+                '/',
+                { name: 'styles', items : [ 'Format' ] },
+                /*{ name: 'document', items : [ 'Save','NewPage','DocProps','Preview','Print','-','Templates' ] },*/
+                /*{ name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },*/
+                { name: 'editing', items : [ 'Sourcedialog', '-', 'Scayt' ] },
+                { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] }
+              ],
+            width: 490
+        });
+        
+    })();
 </script>
 
 {% endblock %}

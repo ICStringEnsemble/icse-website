@@ -1,4 +1,5 @@
 @import 'compass/reset/utilities';
+$section_bottom_margin: 1.8em;
 
 table#icse_email {
     @include nested-reset;
@@ -29,7 +30,8 @@ table#icse_email {
     }
 
     #border_table {
-        margin: 0 auto;
+        margin-left: auto;
+        margin-right: auto;
         border-width:1px;
         border-style: dashed;
         border-color: #000;
@@ -41,6 +43,15 @@ table#icse_email {
         font-family:verdana;
         font-size:12px;
         color: #010101;
+
+        table {
+            margin-bottom: 1.7em;
+        }
+
+
+        td {
+            border: solid;
+        }
     }
 
     #footer_cell {
@@ -64,7 +75,7 @@ table#icse_email {
     h2 {
         font-size: 1.5em;
         font-weight: bold;
-        margin-top: 0.4em;
+        padding-top: 0.2em;
         padding-bottom: 0.1em;
         margin-bottom: 0.5em;
         font-family: Arial;
@@ -72,9 +83,22 @@ table#icse_email {
         color: #643906; 
     }
 
-    p {
-        margin: 0;
-        margin-bottom: 2em;
+    h3 {
+        font-size: 1.3em;
+        font-weight: bold;
+        padding-top: 0.2em;
+        padding-bottom: 0.1em;
+        margin-bottom: 0.5em;
+        font-family: Arial;
+        border-bottom: 1px solid #643906;
+        color: #643906; 
+    }
+
+    p, pre {
+        margin-left: 0;
+        margin-right: 0;
+        margin-top: 0;
+        margin-bottom: $section_bottom_margin;
     }
 
     ul {
@@ -87,16 +111,21 @@ table#icse_email {
 
     ul, ol {
         margin-top: 0.5em;
-        margin-bottom: 2em;
+        margin-bottom: $section_bottom_margin - 0.1em;
         padding-left: 30px;
 
         li {
             margin-left: 15px;
+            margin-bottom: 0.5em;
         }
     }
 
-    li {
-        margin-bottom: 0.5em;
+    hr {
+        color: #643906;
+        background-color: #643906;
+        border: none;
+        height: 3px;
+        margin-bottom: $section_bottom_margin;
     }
 
     a {
@@ -122,4 +151,6 @@ table#icse_email {
         vertical-align: sub;
         font-size: smaller;
     }
+
+
 }

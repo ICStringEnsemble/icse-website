@@ -24,6 +24,7 @@
               <tr>
                 <td id="content_cell">
                   {% block content %}
+                  {{ content | raw }}
                   {% endblock %}
                 </td>
               </tr>
