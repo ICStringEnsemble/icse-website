@@ -1,0 +1,56 @@
+{% extends 'IcseMembersBundle:Email:template.html.twig' %} 
+
+{% block content %}
+<div id="editable" contenteditable="true">
+{% if email_body is defined %}
+{{ email_body }}
+{% else %}
+<p>Dear ICSE,</p>
+
+<p>Now that we are several weeks into the Autumn term, our rehearsals continue as usual in preparation for our Christmas Concert which will take place on <strong>Tuesday 10th December 2013</strong>.</p>
+
+<h3>Next Rehearsal</h3>
+
+<p>Our rehearsal this Friday will be in the <strong>Senior Common Room (SCR)</strong>, which can be accessed from either the Sherfield Walkway or the landing outside the Great Hall.</p>
+
+<p><strong>Friday 18th October<br />
+6pm - 8:30pm<br />
+Senior Common Room (SCR), Level 2, Sherfield Building</strong></p>
+
+<h3>Next Social</h3>
+
+<p>After tomorrow&#39;s rehearsal, you are all welcome to come over to my house for <strong>pizza</strong> and <strong>drinks</strong> etc. My address is <strong>39 Ongar Road, London, SW6 1SJ</strong>. Once we have packed away we will leave en masse by public transport, but if you somehow manage to get lost, my phone number is <strong>07957911758</strong>.</p>
+
+<p>Please bring your <strong>Oyster Cards</strong> with you unless you are cycling (you know who you are). First Years need not fear - I live only around 15-20 minutes away from South Kensington by direct tube train or bus.</p>
+
+<h3>Membership</h3>
+
+<p>If you haven&#39;t done so already, please could I urge to you to purchase your annual <strong>membership</strong> as soon as possible. It&#39;s really quick and easy to do on the <a href="https://www.imperialcollegeunion.org/shop/club-society-project-products/string-ensemble-products/2975/string-ensemble-membership-13-14">Union website</a>.</p>
+
+<p>Membership costs <strong>&pound;15</strong>&nbsp;for the whole year, with the fee put towards things such as&nbsp;<strong>music rental</strong>, subsidising&nbsp;<strong>weekends away</strong>&nbsp;and&nbsp;<strong>tours</strong>, as well as most importantly, for stocking up on&nbsp;<strong>tea and biscuits</strong>.</p>
+
+<p>Becoming a member also allows you access <strong>practice parts</strong> and the online <strong>rehearsal and concert calendar</strong> on the <a href="https://www.union.ic.ac.uk/arts/stringensemble">ICSE website</a>.</p>
+
+<p>As always, please <a href="mailto:icse@imperial.ac.uk" style="font-size: 12px;" target="_blank">get in touch</a> if you have any questions.</p>
+
+<p>See you all on Friday!</p>
+
+<p>ICSE love,</p>
+
+<p><strong>{{ app.user.getFirstName() }}</strong><br />
+<em>ICSE Secretary, 2013-14</em></p>
+
+
+{% if upcoming_rehearsals is not empty %}
+<hr>
+<h4>Upcoming Rehearsals</h4>
+<ul>
+    {% for r in upcoming_rehearsals %}
+    {% set loc = r.getLocation() %}
+    <li>{{ r.getStartsAt() | date('l d/m/Y, g:ia') }} &mdash; {{ loc ? loc.getName() : "Location TBC"}}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endif %}
+</div>
+{% endblock %}
