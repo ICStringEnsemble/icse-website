@@ -29,7 +29,7 @@ class IcseMailer
         );
         $params = array_merge($default_parameters, $params);
 
-        $this->style_converter->setCSS(file_get_contents($this->root_dir . '/../src/Icse/MembersBundle/Resources/style/email.css')); 
+        $this->style_converter->setCSS(file_get_contents($this->root_dir . '/../web/bundles/icsemembers/css/email.css')); 
         $this->style_converter->setHTMLByView($params['template'], $params['template_params']); 
         $html_body = $this->style_converter->generateStyledHTML();
         $email = \Swift_Message::newInstance()
