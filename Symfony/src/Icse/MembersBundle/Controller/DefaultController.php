@@ -29,34 +29,40 @@ class DefaultController extends Controller
 
     public function calendarAction()
     {
-        $dm = $this->getDoctrine();
-        $rehearsals = $dm->getRepository('IcseMembersBundle:Rehearsal')
-                         ->findAll();
+        $events = ['rehearsal' => [], 'event' => []];
+        
+        $event_lib = $this->get('icse.calendar_events');
 
-        $events = [];
-
-        foreach ($rehearsals as $r)
+        foreach ($event_lib->iter() as $e)
         {
-            $start_time = $r->getStartsAt();
-
-            $title = 'Rehearsal';
-
-            if ($r->getLocation())
+            $type = $event_lib->type($e);
+            
+            $title = '';
+            if ($type == 'rehearsal')
             {
-                $title .= ' ('.$r->getLocation()->getName().')';
+                $title = 'Rehearsal';
+            }
+            elseif ($type == 'event')
+            {
+                $title = $e->getName();
             }
 
-            $event = [
-                'title' => $title,
-                'start' => $r->getStartsAt() ? $r->getStartsAt()->format('M d Y H:i:s') : '',
-                'end' => $r->getEndsAt() ? $r->getEndsAt()->format('M d Y H:i:s') : '',
-                'allDay' => false,
-            ];
+            if ($e->getLocation())
+            {
+                $title .= ' ('.$e->getLocation()->getName().')';
+            }
 
-            array_push($events, $event);
+            array_push($events[$type], [
+                'title' => $title,
+                'start' => $e->getStartsAt() ? $e->getStartsAt()->format('M d Y H:i:s') : '',
+                'end' => $e->getEndsAt() ? $e->getEndsAt()->format('M d Y H:i:s') : '',
+                'allDay' => false,
+            ]);
         }
 
-
-        return $this->render('IcseMembersBundle:Default:calendar.html.twig', ['events' => $events]);
+        return $this->render('IcseMembersBundle:Default:calendar.html.twig', [
+            'rehearsals' => $events['rehearsal'],
+            'events' => $events['event'],
+        ]);
     }
 }

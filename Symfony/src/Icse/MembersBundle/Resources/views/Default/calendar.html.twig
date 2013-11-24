@@ -69,25 +69,16 @@ $(document).ready(function() {
         },
         timeFormat: 'h(:mm)tt',
         eventSources: [
-
-            // your event source
+            {
+                events: {{ rehearsals | json_encode() | raw }},
+                color: '#9D6830',
+                textColor: 'black'
+            },
             {
                 events: {{ events | json_encode() | raw }},
-
-            //     [
-            //     {
-            //         title: 'Birthday Party',
-            //         start: new Date(2013, 08, 24, 19, 0),
-            //         end: new Date(2013, 08, 24, 22, 30),
-            //         allDay: false
-            //     }
-            // ],
-                color: '#9D6830',     // an option!
-                textColor: 'black' // an option!
+                color: '#AB79FE',
+                textColor: 'black'
             }
-
-            // any other event sources...
-
         ]
     })
 

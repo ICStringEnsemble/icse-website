@@ -93,9 +93,7 @@ class CalendarController extends Controller
 
     public function membersAction()
     {
-        $dm = $this->getDoctrine();
-        $rehearsals = $dm->getRepository('IcseMembersBundle:Rehearsal')
-                         ->findAll();
+        $event_lib = $this->get('icse.calendar_events');
 
         $vcalendar = new VObject\Component\VCalendar();
 
@@ -103,23 +101,37 @@ class CalendarController extends Controller
         $vcalendar->add('X-WR-CALDESC', 'Imperial College String Ensemble\'s rehearsals and events');
         $vcalendar->add('X-PUBLISHED-TTL', 'PT15M');
 
-        foreach ($rehearsals as $r)
+        foreach ($event_lib->iter() as $e)
         {
-            $title = "ICSE Rehearsal";
-            if ($r->getName())
+            $type = $event_lib->type($e);
+            
+            $title = '';
+            $UID_prefix = '';
+            $description = '';
+            if ($type == 'rehearsal')
             {
-                $title .= ': '. $r->getName();
+                $UID_prefix = 'R';
+                $title = 'ICSE Rehearsal';
+                if ($e->getName())
+                {
+                    $title .= ': '. $e->getName();
+                }
+            }
+            elseif ($type == 'event')
+            {
+                $UID_prefix = 'E';
+                $title = $e->getName();
             }
 
             $vcalendar->add('VEVENT', [
                 'SUMMARY' => $title,
-                'DTSTART' => $r->getStartsAt(),
-                'DTEND' =>  $r->getEndsAt(),
+                'DTSTART' => $e->getStartsAt(),
+                'DTEND' =>  $e->getEndsAt(),
                 'DTSTAMP' => new \DateTime('now', new \DateTimeZone('utc')),
-                'LAST-MODIFIED' => $r->getUpdatedAt()->setTimezone(new \DateTimeZone('utc')),
-                'UID' =>  'R'.$r->getId().':'.$r->getStartsAt()->format('Ymd\THis').'@www.union.ic.ac.uk/arts/stringensemble',
-                'LOCATION' => $r->getLocation() ? $r->getLocation()->getName() : "",
-                'DESCRIPTION' => $r->getComments() . "\n\n" . 'Last reloaded at '. (new \DateTime())->format('Y-m-d H:i:s'),
+                'LAST-MODIFIED' => $e->getUpdatedAt()->setTimezone(new \DateTimeZone('utc')),
+                'UID' =>  $UID_prefix.$e->getId().':'.$e->getStartsAt()->format('Ymd\THis').'@www.union.ic.ac.uk/arts/stringensemble',
+                'LOCATION' => $e->getLocation() ? $e->getLocation()->getName() : "",
+                'DESCRIPTION' => $description . "\n\n" . 'Last reloaded at '. (new \DateTime())->format('Y-m-d H:i:s'),
             ]);            
         }
 

@@ -29,6 +29,10 @@ services:
     ajax_response_gen:
         class: Icse\MembersBundle\Service\AjaxResponseGenerator
 
+    icse.calendar_events:
+        class: Icse\MembersBundle\Service\CalendarEvents
+        arguments: [@doctrine.orm.entity_manager] 
+
 #    icse_members.example:
 #        class: %icse_members.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
