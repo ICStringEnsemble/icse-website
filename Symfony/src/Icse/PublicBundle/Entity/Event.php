@@ -121,9 +121,16 @@ class Event
      */
     public function getEndsAt()
     {
-        $ends_at = clone $this->starts_at;
-        $ends_at->modify('+3 hours');
-        return $ends_at;
+        if ($this->starts_at == null)
+        {
+            return null;
+        }
+        else
+        {
+            $ends_at = clone $this->starts_at;
+            $ends_at->modify('+3 hours');
+            return $ends_at;
+        }
     }
 
     /**

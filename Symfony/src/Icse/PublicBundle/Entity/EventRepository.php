@@ -12,6 +12,16 @@ use Doctrine\ORM\EntityRepository;
  */
 class EventRepository extends EntityRepository
 {
+    public function findEventsWithKnownTime()
+    {
+      return $this->getEntityManager()
+                  ->createQuery ('SELECT e 
+                                  FROM IcsePublicBundle:Event e
+                                  WHERE e.starts_at IS NOT NULL
+                                  ORDER BY e.starts_at DESC')
+                  ->getResult();
+    }
+
     public function findPastEvents()
     {
       return $this->getEntityManager()
