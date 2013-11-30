@@ -16,6 +16,7 @@ Icse\PublicBundle\Entity\Event:
             nullable: true
         starts_at:
             type: datetime
+            nullable: true 
         updated_at:
             type: datetime
         updated_by:

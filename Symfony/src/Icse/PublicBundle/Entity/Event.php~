@@ -117,6 +117,16 @@ class Event
     }
 
     /**
+     * @return \DateTime 
+     */
+    public function getEndsAt()
+    {
+        $ends_at = clone $this->starts_at;
+        $ends_at->modify('+3 hours');
+        return $ends_at;
+    }
+
+    /**
      * Set location
      *
      * @param string $location
