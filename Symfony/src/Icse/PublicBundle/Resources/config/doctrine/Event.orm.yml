@@ -19,15 +19,15 @@ Icse\PublicBundle\Entity\Event:
             nullable: true 
         updated_at:
             type: datetime
-        updated_by:
-            type: integer
     manyToOne:
         location:
             targetEntity: Venue
             nullable: true 
         poster:
             targetEntity: Image
-            nullable: true 
+            nullable: true
+        updated_by:
+            targetEntity: Icse\MembersBundle\Entity\Member
     oneToMany:
         performances:
             targetEntity: PerformanceOfAPiece

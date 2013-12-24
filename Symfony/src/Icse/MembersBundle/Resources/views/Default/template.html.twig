@@ -3,28 +3,31 @@
 
 {% set members_nav_items = [
             {id: 'main', items: [
-                            {label: 'Home', id: 'home', url: path('IcseMembersBundle_home')},                           
-                            {label: 'Calendar', id: 'calendar', url: path('IcseMembersBundle_calendar')},                           
-                            {label: 'Practice Parts', id: 'practice_parts', url: path('IcseMembersBundle_practice_parts')},                           
+                {label: 'Home', id: 'home', url: path('IcseMembersBundle_home')},
+                {label: 'Calendar', id: 'calendar', url: path('IcseMembersBundle_calendar')},
+                {label: 'Practice Parts', id: 'practice_parts', url: path('IcseMembersBundle_practice_parts')},
             ]},
             {label: 'Admin', id: 'admin', items: [
-                            {label: 'Rehearsals', id: 'rehearsaladmin', url: path('IcseMembersBundle_rehearsaladmin')},
-                            {label: 'Venues', id: 'venueadmin', url: path('IcseMembersBundle_venueadmin')},
-                            {label: 'Signups', id: 'signuplist', url: path('IcseMembersBundle_signuplist')},
+                {label: 'Rehearsals', id: 'rehearsaladmin', url: path('IcseMembersBundle_rehearsaladmin')},
+                {label: 'Venues', id: 'venueadmin', url: path('IcseMembersBundle_venueadmin')},
+                {label: 'Signups', id: 'signuplist', url: path('IcseMembersBundle_signuplist')},
+            ]},
+            {label: 'In Development', id: 'devel', items: [
+                {label: 'Events', id: 'eventadmin', url: path('IcseMembersBundle_eventadmin')},
+                {label: 'Email', id: 'sendemail', url: path('IcseMembersBundle_sendemail')},
+                {label: 'Images', id: 'images', url: path('IcseMembersBundle_image_uploads')},
+                {label: 'Music Library', id: '', url: '#'},
             ]},
             {label: 'Super Admin', id: 'superadmin', items: [
-                            {label: 'Members List', id: 'memberslist', url: path('IcseMembersBundle_members')},
-                            {label: 'Site Dev', id: 'sitedev', url: path('IcseMembersBundle_site_dev')},                           
-                            {label: 'Music Library', id: '', url: '#'},
-                            {label: 'Images', id: 'images', url: path('IcseMembersBundle_image_uploads')},
-                            {label: 'Email', id: 'sendemail', url: path('IcseMembersBundle_sendemail')},
+                {label: 'Members List', id: 'memberslist', url: path('IcseMembersBundle_members')},
+                {label: 'Site Dev', id: 'sitedev', url: path('IcseMembersBundle_site_dev')},
             ]},
             {label: 'Account: '~app.user.getFullName(), id: 'account', items: [
-                            {label: 'Settings', id: 'accountsettings', url: path('IcseMembersBundle_account_settings')},                           
-                            {label: 'Logout', id: '', url: path('IcseMembersBundle_logout')},                           
+                {label: 'Settings', id: 'accountsettings', url: path('IcseMembersBundle_account_settings')},
+                {label: 'Logout', id: '', url: path('IcseMembersBundle_logout')},
             ]},
             {id: 'impersonation', items: [
-                            {label: 'Exit Impersonation', id: '', url: path('IcseMembersBundle_home', {_switch_user: '_exit'})},                           
+                {label: 'Exit Impersonation', id: '', url: path('IcseMembersBundle_home', {_switch_user: '_exit'})},
             ]},
 ] %} 
 
@@ -57,6 +60,7 @@
     <li id="nav_col_head">Members Area<img title="Hide/Show" id="hide_nav_col_button" src="{{ asset('bundles/icsemembers/images/leftarrow.png') }}" /></li>
     {% for category in members_nav_items %}
       {% if not (    (category.id == 'admin' and not is_granted('ROLE_ADMIN'))
+                  or (category.id == 'devel' and not is_granted('ROLE_SUPER_ADMIN'))
                   or (category.id == 'superadmin' and not is_granted('ROLE_SUPER_ADMIN'))
                   or (category.id == 'impersonation' and not is_granted('ROLE_PREVIOUS_ADMIN'))
                 ) %}
@@ -104,7 +108,7 @@
         showNavColumn();
       }
     });
-    $('#nav_column li').bind('swipeleft', hideNavColumn);
+    $('#nav_column').find('li').bind('swipeleft', hideNavColumn);
     $('#hidden_nav_col_cover').bind('swiperight', showNavColumn);
   })
 </script>

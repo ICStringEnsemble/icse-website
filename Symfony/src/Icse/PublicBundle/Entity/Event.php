@@ -2,8 +2,10 @@
 
 namespace Icse\PublicBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Common\Tools; 
+use Common\Tools;
+use Icse\MembersBundle\Entity\Member;
 
 /**
  * Icse\PublicBundle\Entity\Event
@@ -14,42 +16,51 @@ class Event
      * @var integer $id
      */
     private $id;
-
     /**
      * @var string $name
      */
     private $name;
-
     /**
-     * @var text $description
+     * @var string $description
      */
     private $description;
-
     /**
-     * @var datetime $starts_at
-     */
-    private $starts_at;
-
-    /**
-     * @var string $location
+     * @var Venue
      */
     private $location;
-
     /**
-     * @var datetime $updated_at
+     * @var \DateTime $starts_at
+     */
+    private $starts_at;
+    /**
+     * @var \DateTime
      */
     private $updated_at;
-
     /**
-     * @var integer $updated_by
+     * @var Member
      */
     private $updated_by;
+    /**
+     * @var Image
+     */
+    private $poster;
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $performances;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->performances = new ArrayCollection();
+    }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -57,39 +68,9 @@ class Event
     }
 
     /**
-     * Set name
-     *
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string 
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set description
-     *
-     * @param text $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
      * Get description
      *
-     * @return text 
+     * @return string
      */
     public function getDescription()
     {
@@ -97,23 +78,33 @@ class Event
     }
 
     /**
-     * Set starts_at
+     * Set description
      *
-     * @param datetime $startsAt
+     * @param string $description
      */
-    public function setStartsAt($startsAt)
+    public function setDescription($description)
     {
-        $this->starts_at = $startsAt;
+        $this->description = $description;
     }
 
     /**
      * Get starts_at
      *
-     * @return datetime 
+     * @return \DateTime
      */
     public function getStartsAt()
     {
         return $this->starts_at;
+    }
+
+    /**
+     * Set starts_at
+     *
+     * @param \DateTime $startsAt
+     */
+    public function setStartsAt($startsAt)
+    {
+        $this->starts_at = $startsAt;
     }
 
     /**
@@ -134,39 +125,9 @@ class Event
     }
 
     /**
-     * Set location
-     *
-     * @param string $location
-     */
-    public function setLocation($location)
-    {
-        $this->location = $location;
-    }
-
-    /**
-     * Get location
-     *
-     * @return string 
-     */
-    public function getLocation()
-    {
-        return $this->location;
-    }
-
-    /**
-     * Set updated_at
-     *
-     * @param datetime $updatedAt
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updated_at = $updatedAt;
-    }
-
-    /**
      * Get updated_at
      *
-     * @return datetime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -174,110 +135,70 @@ class Event
     }
 
     /**
-     * Set updated_by
+     * Set updated_at
      *
-     * @param integer $updatedBy
+     * @param \DateTime $updatedAt
      */
-    public function setUpdatedBy($updatedBy)
+    public function setUpdatedAt($updatedAt)
     {
-        $this->updated_by = $updatedBy;
+        $this->updated_at = $updatedAt;
+    }
+
+    public function getSlug()
+    {
+        return Tools::slugify($this->getName());
     }
 
     /**
-     * Get updated_by
+     * Get name
      *
-     * @return integer 
+     * @return string
      */
-    public function getUpdatedBy()
+    public function getName()
     {
-        return $this->updated_by;
-    }
-    /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     */
-    private $images;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->images = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
-     * Add images
-     *
-     * @param Icse\PublicBundle\Entity\Image $images
-     * @return Event
-     */
-    public function addImage(\Icse\PublicBundle\Entity\Image $images)
-    {
-        $this->images[] = $images;
-    
-        return $this;
+        return $this->name;
     }
 
     /**
-     * Remove images
+     * Set name
      *
-     * @param Icse\PublicBundle\Entity\Image $images
+     * @param string $name
      */
-    public function removeImage(\Icse\PublicBundle\Entity\Image $images)
+    public function setName($name)
     {
-        $this->images->removeElement($images);
-    }
-
-    /**
-     * Get images
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getImages()
-    {
-        return $this->images;
-    }
-    /**
-     * @var Icse\PublicBundle\Entity\Image
-     */
-    private $poster;
-
-
-    /**
-     * Set poster
-     *
-     * @param Icse\PublicBundle\Entity\Image $poster
-     * @return Event
-     */
-    public function setPoster(\Icse\PublicBundle\Entity\Image $poster = null)
-    {
-        $this->poster = $poster;
-    
-        return $this;
+        $this->name = $name;
     }
 
     /**
      * Get poster
      *
-     * @return Icse\PublicBundle\Entity\Image 
+     * @return Image
      */
     public function getPoster()
     {
         return $this->poster;
     }
-    /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     */
-    private $performances;
 
+    /**
+     * Set poster
+     *
+     * @param Image $poster
+     * @return Event
+     */
+    public function setPoster(Image $poster = null)
+    {
+        $this->poster = $poster;
+
+        return $this;
+    }
 
     /**
      * Add performances
      *
-     * @param Icse\PublicBundle\Entity\PerformanceOfAPiece $performances
+     * @param PerformanceOfAPiece $performances
      * @return Event
      */
-    public function addPerformance(\Icse\PublicBundle\Entity\PerformanceOfAPiece $performances)
+    public function addPerformance(PerformanceOfAPiece $performances)
     {
         $this->performances[] = $performances;
     
@@ -287,9 +208,9 @@ class Event
     /**
      * Remove performances
      *
-     * @param Icse\PublicBundle\Entity\PerformanceOfAPiece $performances
+     * @param PerformanceOfAPiece $performances
      */
-    public function removePerformance(\Icse\PublicBundle\Entity\PerformanceOfAPiece $performances)
+    public function removePerformance(PerformanceOfAPiece $performances)
     {
         $this->performances->removeElement($performances);
     }
@@ -297,15 +218,56 @@ class Event
     /**
      * Get performances
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection 
      */
     public function getPerformances()
     {
         return $this->performances;
     }
 
-    public function getSlug()
+    /**
+     * Get updated_by
+     *
+     * @return Member
+     */
+    public function getUpdatedBy()
     {
-        return Tools::slugify($this->getName());
+        return $this->updated_by;
+    }
+
+    /**
+     * Set updated_by
+     *
+     * @param Member $updatedBy
+     * @return Event
+     */
+    public function setUpdatedBy(Member $updatedBy = null)
+    {
+        $this->updated_by = $updatedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get location
+     *
+     * @return Venue
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
+     * Set location
+     *
+     * @param Venue $location
+     * @return Event
+     */
+    public function setLocation(Venue $location = null)
+    {
+        $this->location = $location;
+
+        return $this;
     }
 }
