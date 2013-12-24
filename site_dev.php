@@ -2,26 +2,21 @@
 
 use Symfony\Component\HttpFoundation\Request;
 
-// If you don't want to setup permissions the proper way, just uncomment the following PHP line
-// read http://symfony.com/doc/current/book/installation.html#configuration-and-setup for more information
-//umask(0000);
+$loader = require_once __DIR__.'/Symfony/app/bootstrap.php.cache';
+require_once __DIR__.'/Symfony/app/AppKernel.php';
 
-// This check prevents access to debug front controllers that are deployed by accident to production servers.
-// Feel free to remove this, extend it, or make something more sophisticated.
-
-
+$symfony_params = \Symfony\Component\Yaml\Yaml::parse(file_get_contents(__DIR__.'/Symfony/app/config/parameters.yml'))['parameters'];
 
 if ((isset($_SERVER['HTTP_CLIENT_IP'])
     || isset($_SERVER['HTTP_X_FORWARDED_FOR'])
     || !in_array(@$_SERVER['REMOTE_ADDR'], array(
         '127.0.0.1',
-        '192.168.0.42',
         '::1',
         )))
    )
 {
     if (  !isset($_SERVER['PHP_AUTH_USER'])
-            || !($_SERVER['PHP_AUTH_USER']=="icse" && $_SERVER['PHP_AUTH_PW']=="somepassword")
+            || !($_SERVER['PHP_AUTH_USER']==$symfony_params['dev_user'] && $_SERVER['PHP_AUTH_PW']==$symfony_params['dev_password'])
        )
     {
         header('WWW-Authenticate: Basic realm="Icse Dev"');
@@ -31,10 +26,6 @@ if ((isset($_SERVER['HTTP_CLIENT_IP'])
         exit;
     }
 }
-
-
-$loader = require_once __DIR__.'/Symfony/app/bootstrap.php.cache';
-require_once __DIR__.'/Symfony/app/AppKernel.php';
 
 $kernel = new AppKernel('dev', true);
 $kernel->loadClassCache();

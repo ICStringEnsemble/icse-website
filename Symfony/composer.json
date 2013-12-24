@@ -31,12 +31,13 @@
         "friendsofsymfony/jsrouting-bundle": "1.1.*@dev",
         "fkr/imagine-bundle": "dev-master",
 
-        "doctrine/migrations": "dev-master",
-        "doctrine/doctrine-migrations-bundle": "dev-master",
+        "doctrine/migrations": "dev-master@dev",
+        "doctrine/doctrine-migrations-bundle": "dev-master@dev",
         "jms/serializer-bundle": "*@dev",
         "tijsverkoyen/css-to-inline-styles": "dev-master",
         "robertotru/to-inline-style-email-bundle": "dev-master",
-        "sabre/vobject" : "~3.1"
+        "sabre/vobject" : "~3.1",
+        "acts/social-api-bundle": "v0.1"
     },
     "scripts": {
         "post-install-cmd": [

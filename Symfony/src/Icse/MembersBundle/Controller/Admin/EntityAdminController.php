@@ -8,12 +8,19 @@ use Symfony\Component\HttpFoundation\Request;
 
 abstract class EntityAdminController extends Controller
 {
+    /**
+     * @return \Doctrine\Common\Persistence\ObjectRepository
+     */
     abstract protected function repository();
 
     abstract protected function newInstance();
 
     abstract protected function getTableContent();
 
+    /**
+     * @param $entity
+     * @return \Symfony\Component\Form\Form
+     */
     abstract protected function getForm($entity);
 
     abstract protected function putData($request, $entity);
@@ -35,6 +42,12 @@ abstract class EntityAdminController extends Controller
         ));
     }
 
+    /**
+     * @param Request $request
+     * @param $arg
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
     public function routerAction(Request $request, $arg)
     {
         if ($request->getMethod() == "GET")
@@ -77,16 +90,17 @@ abstract class EntityAdminController extends Controller
 
     public function updateAction(Request $request, $id)
     {
-        $entity = $this->repository()->findOneById($id);
+        $entity = $this->repository()->findOneBy(['id' => $id]);
         if (!$entity) {
             throw $this->createNotFoundException('Entity does not exist'); 
         }
         return $this->putData($request, $entity);
     }
 
-    public function deleteAction($id) {
-        $dm = $this->getDoctrine(); 
-        $entity = $this->repository()->findOneById($id);
+    public function deleteAction($id)
+    {
+        $dm = $this->getDoctrine();
+        $entity = $this->repository()->findOneBy(['id' => $id]);
         if ($entity) {
             $em = $dm->getManager();
             $em->remove($entity);
@@ -95,7 +109,7 @@ abstract class EntityAdminController extends Controller
         return $this->get('ajax_response_gen')->returnSuccess();
     }
 
-    protected function timeagoDate($datetime)
+    protected function timeagoDate(\DateTime $datetime)
     {
         return '<abbr class="timeago" title="' . $datetime->format('c') . '">' . $datetime->format('Y-m-d H:i:s'). '</abbr>';
     }

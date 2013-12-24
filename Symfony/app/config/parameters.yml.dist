@@ -19,5 +19,8 @@ parameters:
     icsepublic_mailman_list: icu-stringensemble-public 
     icsepublic_mailman_pw: ~
 
+    dev_user: icse
+    dev_password: ~
+
     locale:            en
     secret:            ~

@@ -3,6 +3,7 @@
 namespace Icse\MembersBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Icse\PublicBundle\Entity\Venue;
 
 /**
  * Icse\MembersBundle\Entity\Rehearsal
@@ -10,40 +11,43 @@ use Doctrine\ORM\Mapping as ORM;
 class Rehearsal
 {
     /**
-     * @var integer $id
+     * @var integer
      */
     private $id;
-
     /**
-     * @var string $name
+     * @var string
      */
     private $name;
-
     /**
-     * @var string $comments
+     * @var string
      */
     private $comments;
-
     /**
-     * @var \DateTime $starts_at
+     * @var \DateTime
      */
     private $starts_at;
-
     /**
-     * @var string $location
-     */
-    private $location;
-
-    /**
-     * @var \DateTime $updated_at
+     * @var \DateTime
      */
     private $updated_at;
-
     /**
-     * @var integer $updated_by
+     * @var Venue
+     */
+    private $location;
+    /**
+     * @var Member
      */
     private $updated_by;
 
+    /**
+     * @return \DateTime
+     */
+    public function getEndsAt()
+    {
+        $ends_at = clone $this->starts_at;
+        $ends_at->modify('+3 hours');
+        return $ends_at;
+    }
 
     /**
      * Get id
@@ -56,6 +60,16 @@ class Rehearsal
     }
 
     /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
      * Set name
      *
      * @param string $name
@@ -64,18 +78,18 @@ class Rehearsal
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
-     * Get name
+     * Get comments
      *
-     * @return string 
+     * @return string
      */
-    public function getName()
+    public function getComments()
     {
-        return $this->name;
+        return $this->comments;
     }
 
     /**
@@ -87,18 +101,18 @@ class Rehearsal
     public function setComments($comments)
     {
         $this->comments = $comments;
-    
+
         return $this;
     }
 
     /**
-     * Get comments
+     * Get starts_at
      *
-     * @return string 
+     * @return \DateTime
      */
-    public function getComments()
+    public function getStartsAt()
     {
-        return $this->comments;
+        return $this->starts_at;
     }
 
     /**
@@ -110,51 +124,18 @@ class Rehearsal
     public function setStartsAt($startsAt)
     {
         $this->starts_at = $startsAt;
-    
+
         return $this;
     }
 
     /**
-     * Get starts_at
+     * Get updated_at
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
-    public function getStartsAt()
+    public function getUpdatedAt()
     {
-        return $this->starts_at;
-    }
-
-    /**
-     * @return \DateTime 
-     */
-    public function getEndsAt()
-    {
-        $ends_at = clone $this->starts_at;
-        $ends_at->modify('+3 hours');
-        return $ends_at;
-    }
-
-    /**
-     * Set location
-     *
-     * @param string $location
-     * @return Rehearsal
-     */
-    public function setLocation($location)
-    {
-        $this->location = $location;
-    
-        return $this;
-    }
-
-    /**
-     * Get location
-     *
-     * @return string 
-     */
-    public function getLocation()
-    {
-        return $this->location;
+        return $this->updated_at;
     }
 
     /**
@@ -166,40 +147,53 @@ class Rehearsal
     public function setUpdatedAt($updatedAt)
     {
         $this->updated_at = $updatedAt;
-    
+
         return $this;
     }
 
     /**
-     * Get updated_at
+     * Get location
      *
-     * @return \DateTime 
+     * @return Venue
      */
-    public function getUpdatedAt()
+    public function getLocation()
     {
-        return $this->updated_at;
+        return $this->location;
     }
 
     /**
-     * Set updated_by
+     * Set location
      *
-     * @param integer $updatedBy
+     * @param Venue $location
      * @return Rehearsal
      */
-    public function setUpdatedBy($updatedBy)
+    public function setLocation(Venue $location = null)
     {
-        $this->updated_by = $updatedBy;
-    
+        $this->location = $location;
+
         return $this;
     }
 
     /**
      * Get updated_by
      *
-     * @return integer 
+     * @return Member
      */
     public function getUpdatedBy()
     {
         return $this->updated_by;
+    }
+
+    /**
+     * Set updated_by
+     *
+     * @param Member $updatedBy
+     * @return Rehearsal
+     */
+    public function setUpdatedBy(Member $updatedBy = null)
+    {
+        $this->updated_by = $updatedBy;
+
+        return $this;
     }
 }

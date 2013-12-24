@@ -6,6 +6,9 @@ use Icse\PublicBundle\Entity\Event;
 
 class EventController extends EntityAdminController
 {
+    /**
+     * @return \Doctrine\Common\Persistence\ObjectRepository
+     */
     protected function repository()
     {
         return $this->getDoctrine()->getRepository('IcsePublicBundle:Event');
@@ -26,11 +29,11 @@ class EventController extends EntityAdminController
         $entities = $this->repository()->findBy(array(), array('starts_at'=>'desc'));
 
         $columns = array(
-            array('heading' => 'Name', 'cell' => function($x){/* @var $x Event */ return $x->getName();}),
-            array('heading' => 'Date', 'cell' => function($x){/* @var $x Event */ return $x->getStartsAt()? $x->getStartsAt()->format('D jS F Y') : "?";}),
-            array('heading' => 'Time', 'cell' => function($x){/* @var $x Event */ return $x->getStartsAt()? $x->getStartsAt()->format('g:ia') : "?";}),
-            array('heading' => 'Where', 'cell' => function($x){/* @var $x Event */ return $x->getLocation() ? $x->getLocation()->getName() : "?";}),
-            array('heading' => 'Last updated', 'cell' => function($x){/* @var $x Event */ return $this->timeagoDate($x->getUpdatedAt()) . " by " .$x->getUpdatedBy()->getFirstName();}),
+            array('heading' => 'Name', 'cell' => function(Event $x){return $x->getName();}),
+            array('heading' => 'Date', 'cell' => function(Event $x){return $x->getStartsAt()? $x->getStartsAt()->format('D jS F Y') : "?";}),
+            array('heading' => 'Time', 'cell' => function(Event $x){return $x->getStartsAt()? $x->getStartsAt()->format('g:ia') : "?";}),
+            array('heading' => 'Where', 'cell' => function(Event $x){return $x->getLocation() ? $x->getLocation()->getName() : "?";}),
+            array('heading' => 'Last updated', 'cell' => function(Event $x){return $this->timeagoDate($x->getUpdatedAt()) . " by " .$x->getUpdatedBy()->getFirstName();}),
             );
         return array("columns" => $columns, "entities" => $entities);
     }
@@ -39,6 +42,16 @@ class EventController extends EntityAdminController
     {
         $form = $this->createFormBuilder($entity)
         ->add('name', 'text')
+        ->add('starts_at', 'datetime12', array(
+            'date_widget' => 'single_text',
+            'time_widget' => 'single_text',
+            'date_format' => 'dd/MM/yy',
+        ))
+        ->add('location', 'entity', array(
+            'class' => 'IcsePublicBundle:Venue',
+            'property' => 'name',
+            'required' => false,
+        ))
         ->getForm(); 
         return $form;
     }

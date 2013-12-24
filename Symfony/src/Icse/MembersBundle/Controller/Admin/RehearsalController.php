@@ -28,16 +28,20 @@ class RehearsalController extends EntityAdminController
 
         $columns = array(
             // array('heading' => 'ID', 'cell' => function($x){return $x->getID();}),
-            array('heading' => 'Date', 'cell' => function($x){return $x->getStartsAt()? $x->getStartsAt()->format('D jS F Y') : "?";}),
-            array('heading' => 'Time', 'cell' => function($x){return $x->getStartsAt()? $x->getStartsAt()->format('g:ia') : "?";}),
-            array('heading' => 'Where', 'cell' => function($x){return $x->getLocation() ? $x->getLocation()->getName() : "?";}),
-            array('heading' => 'Title', 'cell' => function($x){return $x->getName();}),
-            array('heading' => 'Comments', 'cell' => function($x){return $x->getComments();}),
-            array('heading' => 'Last updated', 'cell' => function($x){return $this->timeagoDate($x->getUpdatedAt()) . " by " .$x->getUpdatedBy()->getFirstName();}),
+            array('heading' => 'Date', 'cell' => function(Rehearsal $x){return $x->getStartsAt()? $x->getStartsAt()->format('D jS F Y') : "?";}),
+            array('heading' => 'Time', 'cell' => function(Rehearsal $x){return $x->getStartsAt()? $x->getStartsAt()->format('g:ia') : "?";}),
+            array('heading' => 'Where', 'cell' => function(Rehearsal $x){return $x->getLocation() ? $x->getLocation()->getName() : "?";}),
+            array('heading' => 'Title', 'cell' => function(Rehearsal $x){return $x->getName();}),
+            array('heading' => 'Comments', 'cell' => function(Rehearsal $x){return $x->getComments();}),
+            array('heading' => 'Last updated', 'cell' => function(Rehearsal $x){return $this->timeagoDate($x->getUpdatedAt()) . " by " .$x->getUpdatedBy()->getFirstName();}),
             );
         return array("columns" => $columns, "entities" => $rehearsals);
     }
 
+    /**
+     * @param Rehearsal $rehearsal
+     * @return \Symfony\Component\Form\Form
+     */
     protected function getForm($rehearsal)
     {
         $rehearsal->setStartsAt(new \DateTime("this friday 6pm"));
@@ -58,9 +62,13 @@ class RehearsalController extends EntityAdminController
         return $form;
     }
 
+    /**
+     * @param $request
+     * @param Rehearsal $rehearsal
+     * @return mixed
+     */
     protected function putData($request, $rehearsal)
     {
-        // $is_new = ($rehearsal->getID() === null);
         $form = $this->getForm($rehearsal);
         $form->bind($request);
 
