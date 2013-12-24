@@ -31,8 +31,15 @@ services:
 
     icse.calendar_events:
         class: Icse\MembersBundle\Service\CalendarEvents
-        arguments: [@doctrine.orm.entity_manager] 
+        arguments: [@doctrine.orm.entity_manager]
 
-#    icse_members.example:
-#        class: %icse_members.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    icse.form.type.time12:
+        class: Icse\MembersBundle\Form\Type\TimeType
+        tags:
+            - { name: form.type, alias: time12 }
+
+    icse.form.type.datetime12:
+        class: Icse\MembersBundle\Form\Type\DateTimeType
+        tags:
+            - { name: form.type, alias: datetime12 }
+

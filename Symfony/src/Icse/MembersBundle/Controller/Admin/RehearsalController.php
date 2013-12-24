@@ -2,16 +2,7 @@
 
 namespace Icse\MembersBundle\Controller\Admin;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\FormError;
-
-use Icse\MembersBundle\Form\Type\DateTimeType;
-
 use Icse\MembersBundle\Entity\Rehearsal;
-// use Icse\PublicBundle\Entity\Venue;
-use Common\Tools; 
 
 class RehearsalController extends EntityAdminController
 {
@@ -51,7 +42,7 @@ class RehearsalController extends EntityAdminController
     {
         $rehearsal->setStartsAt(new \DateTime("this friday 6pm"));
         $form = $this->createFormBuilder($rehearsal)
-        ->add('starts_at', new DateTimeType, array(
+        ->add('starts_at', 'datetime12', array(
                 'date_widget' => 'single_text'
             ,   'time_widget' => 'single_text'
             ,   'date_format' => 'dd/MM/yy'

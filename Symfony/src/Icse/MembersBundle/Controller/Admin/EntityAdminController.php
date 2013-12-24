@@ -3,11 +3,8 @@
 namespace Icse\MembersBundle\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\FormError;
 
-use Common\Tools; 
 
 abstract class EntityAdminController extends Controller
 {
@@ -32,9 +29,10 @@ abstract class EntityAdminController extends Controller
         $form = $this->getForm($entity);
         $table_content = $this->getTableContent();
 
-        return $this->render($this->viewName(), array('table_content' => $table_content,
+        return $this->render($this->viewName(), array(
+            'table_content' => $table_content,
             'form' => $form->createView()
-            ));
+        ));
     }
 
     public function routerAction(Request $request, $arg)
@@ -79,7 +77,6 @@ abstract class EntityAdminController extends Controller
 
     public function updateAction(Request $request, $id)
     {
-        $dm = $this->getDoctrine(); 
         $entity = $this->repository()->findOneById($id);
         if (!$entity) {
             throw $this->createNotFoundException('Entity does not exist'); 
