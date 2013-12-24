@@ -3,9 +3,8 @@
 namespace Icse\MembersBundle\Controller\SuperAdmin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response; 
-
-use Icse\PublicBundle\Entity\Subscriber; 
+use Symfony\Component\HttpFoundation\Response;
+use Icse\PublicBundle\Entity\Subscriber;
 
 class MiscController extends Controller
 {
@@ -16,17 +15,21 @@ class MiscController extends Controller
 
     public function migrateDBAction()
     {
-        exec('/usr/bin/php ./Symfony/app/console -n doctrine:migrations:migrate', $output, $error);
-        if ($error == 0)
-        {
-          array_push($output, "Success");
+        if ($this->get('kernel')->getEnvironment() == 'dev') {
+            exec('/usr/bin/php ./Symfony/app/console -n doctrine:migrations:migrate', $output, $error);
+            if ($error == 0)
+            {
+              array_push($output, "Success");
+            }
+            else
+            {
+              array_push($output, "Fail");
+            }
+            $pageBody = implode('<br />', $output);
+            return new Response($pageBody);
+        } else {
+            return new Response("Dev environment required; no changes made.");
         }
-        else
-        {
-          array_push($output, "Fail");
-        }
-        $pageBody = implode('<br />', $output);
-        return new Response($pageBody);
     }
 
     public function testEmailAction()
@@ -70,6 +73,7 @@ class MiscController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         $subscribers = $repository->findAll(); 
         foreach ($subscribers as $s) {
+            /* @var $s Subscriber */
             $login = $s->getLogin();
             if ($login && strpos($s->getEmail(),'@imperial.ac.uk') !== false) {
                 $ldap = ldap_connect('addressbook.imperial.ac.uk');
