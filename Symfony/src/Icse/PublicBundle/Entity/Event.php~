@@ -2,8 +2,10 @@
 
 namespace Icse\PublicBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Common\Tools; 
+use Common\Tools;
+use Icse\MembersBundle\Entity\Member;
 
 /**
  * Icse\PublicBundle\Entity\Event
@@ -14,46 +16,147 @@ class Event
      * @var integer $id
      */
     private $id;
-
     /**
      * @var string $name
      */
     private $name;
-
     /**
-     * @var text $description
+     * @var string $description
      */
     private $description;
-
     /**
-     * @var datetime $starts_at
-     */
-    private $starts_at;
-
-    /**
-     * @var string $location
+     * @var \Icse\PublicBundle\Entity\Venue
      */
     private $location;
-
     /**
-     * @var datetime $updated_at
+     * @var \DateTime $starts_at
+     */
+    private $starts_at;
+    /**
+     * @var \DateTime
      */
     private $updated_at;
-
     /**
-     * @var integer $updated_by
+     * @var Member
      */
     private $updated_by;
+    /**
+     * @var Image
+     */
+    private $poster;
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $performances;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->performances = new ArrayCollection();
+    }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * Get starts_at
+     *
+     * @return \DateTime
+     */
+    public function getStartsAt()
+    {
+        return $this->starts_at;
+    }
+
+    /**
+     * Set starts_at
+     *
+     * @param \DateTime $startsAt
+     */
+    public function setStartsAt($startsAt)
+    {
+        $this->starts_at = $startsAt;
+    }
+
+    /**
+     * @return \DateTime 
+     */
+    public function getEndsAt()
+    {
+        if ($this->starts_at == null)
+        {
+            return null;
+        }
+        else
+        {
+            $ends_at = clone $this->starts_at;
+            $ends_at->modify('+3 hours');
+            return $ends_at;
+        }
+    }
+
+    /**
+     * Get updated_at
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
+    }
+
+    /**
+     * Set updated_at
+     *
+     * @param \DateTime $updatedAt
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updated_at = $updatedAt;
+    }
+
+    public function getSlug()
+    {
+        return Tools::slugify($this->getName());
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**
@@ -67,210 +170,35 @@ class Event
     }
 
     /**
-     * Get name
-     *
-     * @return string 
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set description
-     *
-     * @param text $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * Get description
-     *
-     * @return text 
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set starts_at
-     *
-     * @param datetime $startsAt
-     */
-    public function setStartsAt($startsAt)
-    {
-        $this->starts_at = $startsAt;
-    }
-
-    /**
-     * Get starts_at
-     *
-     * @return datetime 
-     */
-    public function getStartsAt()
-    {
-        return $this->starts_at;
-    }
-
-    /**
-     * @return \DateTime 
-     */
-    public function getEndsAt()
-    {
-        $ends_at = clone $this->starts_at;
-        $ends_at->modify('+3 hours');
-        return $ends_at;
-    }
-
-    /**
-     * Set location
-     *
-     * @param string $location
-     */
-    public function setLocation($location)
-    {
-        $this->location = $location;
-    }
-
-    /**
-     * Get location
-     *
-     * @return string 
-     */
-    public function getLocation()
-    {
-        return $this->location;
-    }
-
-    /**
-     * Set updated_at
-     *
-     * @param datetime $updatedAt
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updated_at = $updatedAt;
-    }
-
-    /**
-     * Get updated_at
-     *
-     * @return datetime 
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updated_at;
-    }
-
-    /**
-     * Set updated_by
-     *
-     * @param integer $updatedBy
-     */
-    public function setUpdatedBy($updatedBy)
-    {
-        $this->updated_by = $updatedBy;
-    }
-
-    /**
-     * Get updated_by
-     *
-     * @return integer 
-     */
-    public function getUpdatedBy()
-    {
-        return $this->updated_by;
-    }
-    /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     */
-    private $images;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->images = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
-     * Add images
-     *
-     * @param Icse\PublicBundle\Entity\Image $images
-     * @return Event
-     */
-    public function addImage(\Icse\PublicBundle\Entity\Image $images)
-    {
-        $this->images[] = $images;
-    
-        return $this;
-    }
-
-    /**
-     * Remove images
-     *
-     * @param Icse\PublicBundle\Entity\Image $images
-     */
-    public function removeImage(\Icse\PublicBundle\Entity\Image $images)
-    {
-        $this->images->removeElement($images);
-    }
-
-    /**
-     * Get images
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getImages()
-    {
-        return $this->images;
-    }
-    /**
-     * @var Icse\PublicBundle\Entity\Image
-     */
-    private $poster;
-
-
-    /**
-     * Set poster
-     *
-     * @param Icse\PublicBundle\Entity\Image $poster
-     * @return Event
-     */
-    public function setPoster(\Icse\PublicBundle\Entity\Image $poster = null)
-    {
-        $this->poster = $poster;
-    
-        return $this;
-    }
-
-    /**
      * Get poster
      *
-     * @return Icse\PublicBundle\Entity\Image 
+     * @return Image
      */
     public function getPoster()
     {
         return $this->poster;
     }
-    /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     */
-    private $performances;
 
+    /**
+     * Set poster
+     *
+     * @param Image $poster
+     * @return Event
+     */
+    public function setPoster(Image $poster = null)
+    {
+        $this->poster = $poster;
+
+        return $this;
+    }
 
     /**
      * Add performances
      *
-     * @param Icse\PublicBundle\Entity\PerformanceOfAPiece $performances
+     * @param PerformanceOfAPiece $performances
      * @return Event
      */
-    public function addPerformance(\Icse\PublicBundle\Entity\PerformanceOfAPiece $performances)
+    public function addPerformance(PerformanceOfAPiece $performances)
     {
         $this->performances[] = $performances;
     
@@ -280,9 +208,9 @@ class Event
     /**
      * Remove performances
      *
-     * @param Icse\PublicBundle\Entity\PerformanceOfAPiece $performances
+     * @param PerformanceOfAPiece $performances
      */
-    public function removePerformance(\Icse\PublicBundle\Entity\PerformanceOfAPiece $performances)
+    public function removePerformance(PerformanceOfAPiece $performances)
     {
         $this->performances->removeElement($performances);
     }
@@ -290,15 +218,33 @@ class Event
     /**
      * Get performances
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection 
      */
     public function getPerformances()
     {
         return $this->performances;
     }
 
-    public function getSlug()
+    /**
+     * Get updated_by
+     *
+     * @return Member
+     */
+    public function getUpdatedBy()
     {
-        return Tools::slugify($this->getName());
+        return $this->updated_by;
+    }
+
+    /**
+     * Set updated_by
+     *
+     * @param Member $updatedBy
+     * @return Event
+     */
+    public function setUpdatedBy(Member $updatedBy = null)
+    {
+        $this->updated_by = $updatedBy;
+
+        return $this;
     }
 }
