@@ -12,6 +12,30 @@ use Doctrine\ORM\EntityRepository;
  */
 class EventRepository extends EntityRepository
 {
+    /**
+     * @return \AppendIterator
+     */
+    public function findAllEventsDescUnknownFirst()
+    {
+        $known_events = $this->getEntityManager()
+                             ->createQuery ('SELECT e
+                                             FROM IcsePublicBundle:Event e
+                                             WHERE e.starts_at IS NOT NULL
+                                             ORDER BY e.starts_at DESC')
+                             ->getResult();
+        $unknown_events = $this->getEntityManager()
+                               ->createQuery ('SELECT e
+                                               FROM IcsePublicBundle:Event e
+                                               WHERE e.starts_at IS NULL')
+                               ->getResult();
+
+        $result = new \AppendIterator();
+        $result->append(new \ArrayIterator($unknown_events));
+        $result->append(new \ArrayIterator($known_events));
+
+        return $result;
+    }
+
     public function findEventsWithKnownTime()
     {
       return $this->getEntityManager()
@@ -25,9 +49,10 @@ class EventRepository extends EntityRepository
     public function findPastEvents()
     {
       return $this->getEntityManager()
-                  ->createQuery ('SELECT e 
+                  ->createQuery ('SELECT e
                                   FROM IcsePublicBundle:Event e
-                                  WHERE e.starts_at < :time
+                                  WHERE e.starts_at IS NOT NULL
+                                  AND e.starts_at < :time
                                   ORDER BY e.starts_at DESC')
                   ->setParameters(array('time' => new \DateTime("today")))
                   ->getResult();
@@ -150,8 +175,8 @@ class EventRepository extends EntityRepository
                                   WHERE e.starts_at < :time
                                   AND e.poster IS NOT NULL
                                   ORDER BY e.starts_at DESC')
-                  ->setParameters(array('time' => new \DateTime("today")))
                   ->setMaxResults($n)
+                  ->setParameters(array('time' => new \DateTime("today")))
                   ->getResult();
     }
 }

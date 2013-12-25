@@ -7,7 +7,7 @@ use Icse\PublicBundle\Entity\Event;
 class EventController extends EntityAdminController
 {
     /**
-     * @return \Doctrine\Common\Persistence\ObjectRepository
+     * @return \Icse\PublicBundle\Entity\EventRepository
      */
     protected function repository()
     {
@@ -26,7 +26,7 @@ class EventController extends EntityAdminController
 
     protected function getTableContent()
     {
-        $entities = $this->repository()->findBy(array(), array('starts_at'=>'desc'));
+        $entities = $this->repository()->findAllEventsDescUnknownFirst();
 
         $columns = array(
             array('heading' => 'Name', 'cell' => function(Event $x){return $x->getName();}),

@@ -17,8 +17,10 @@
     {% for entity in table_content.entities %}
 
       {% set row_classes = [] %}
-      {% if entity.getStartsAt() is defined and date(entity.getStartsAt()) > date("today") %}
-          {% set row_classes = row_classes | merge(['future_date']) %}
+      {% if entity.getStartsAt() is defined %}
+          {% if entity.getStartsAt() is null or date(entity.getStartsAt()) > date("today") %}
+            {% set row_classes = row_classes | merge(['future_date']) %}
+          {% endif %}
       {% endif %}
       {% if entity.getUpdatedAt() is defined and date(entity.getUpdatedAt()) > date("3 seconds ago") %}
           {% set row_classes = row_classes | merge(['just_updated']) %}
