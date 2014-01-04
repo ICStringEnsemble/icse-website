@@ -25,7 +25,7 @@ class Event
      */
     private $description;
     /**
-     * @var \Icse\PublicBundle\Entity\Venue
+     * @var Venue
      */
     private $location;
     /**
@@ -247,4 +247,59 @@ class Event
 
         return $this;
     }
+
+    /**
+     * Get location
+     *
+     * @return Venue
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    public function getLocationName()
+    {
+        return $this->getLocation() ? $this->getLocation()->getName() : '?';
+    }
+
+    /**
+     * Set location
+     *
+     * @param Venue $location
+     * @return Event
+     */
+    public function setLocation(Venue $location = null)
+    {
+        $this->location = $location;
+
+        return $this;
+    }
+
+    /**
+     * @var integer
+     */
+    private $facebook_status;
+
+    public static $SOCIAL_EVENT_NOT_CREATED = 0;
+    public static $SOCIAL_EVENT_SYNCED = 1;
+    public static $SOCIAL_EVENT_UNSYNCED = 2;
+
+    private static function socialStatusToIcon($stat)
+    {
+        switch($stat) {
+            case self::$SOCIAL_EVENT_NOT_CREATED:
+                return '-';
+                break;
+            case self::$SOCIAL_EVENT_SYNCED:
+                return '<i class="fa fa-check"></i>';
+                break;
+            case self::$SOCIAL_EVENT_UNSYNCED:
+                return '<i class="fa fa-unlink"></i>';
+                break;
+        }
+        return '';
+    }
+
+
 }
