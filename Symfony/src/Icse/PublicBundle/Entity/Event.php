@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Common\Tools;
 use Icse\MembersBundle\Entity\Member;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * Icse\PublicBundle\Entity\Event
@@ -258,6 +259,11 @@ class Event
         return $this->location;
     }
 
+    public function getLocationName()
+    {
+        return $this->getLocation() ? $this->getLocation()->getName() : '?';
+    }
+
     /**
      * Set location
      *
@@ -269,5 +275,95 @@ class Event
         $this->location = $location;
 
         return $this;
+    }
+
+    /**
+     * @var integer
+     */
+    private $facebook_status;
+
+    /** @Exclude */
+    public static $SOCIAL_EVENT_NOT_CREATED = 0;
+    /** @Exclude */
+    public static $SOCIAL_EVENT_SYNCED = 1;
+    /** @Exclude */
+    public static $SOCIAL_EVENT_UNSYNCED = 2;
+
+    private static function socialStatusToIcon($stat)
+    {
+        switch($stat) {
+            case self::$SOCIAL_EVENT_NOT_CREATED:
+                return '-';
+                break;
+            case self::$SOCIAL_EVENT_SYNCED:
+                return '<i class="fa fa-check"></i>';
+                break;
+            case self::$SOCIAL_EVENT_UNSYNCED:
+                return '<i class="fa fa-unlink"></i>';
+                break;
+        }
+        return '';
+    }
+
+    /**
+     * @var string
+     */
+    private $facebook_id;
+
+
+    /**
+     * Set facebook_status
+     *
+     * @param integer $facebookStatus
+     * @return Event
+     */
+    public function setFacebookStatus($facebookStatus)
+    {
+        $this->facebook_status = $facebookStatus;
+    
+        return $this;
+    }
+
+    /**
+     * Get facebook_status
+     *
+     * @return integer
+     */
+    public function getFacebookStatus()
+    {
+        return $this->facebook_status;
+    }
+
+    public function isSocialNetworkEnabled()
+    {
+        return $this->getFacebookStatus() != self::$SOCIAL_EVENT_NOT_CREATED;
+    }
+
+    public function getFacebookStatusIcon()
+    {
+        return $this->socialStatusToIcon($this->getFacebookStatus());
+    }
+
+    /**
+     * Set facebook_id
+     *
+     * @param string $facebookId
+     * @return Event
+     */
+    public function setFacebookId($facebookId)
+    {
+        $this->facebook_id = $facebookId;
+    
+        return $this;
+    }
+
+    /**
+     * Get facebook_id
+     *
+     * @return string 
+     */
+    public function getFacebookId()
+    {
+        return $this->facebook_id;
     }
 }

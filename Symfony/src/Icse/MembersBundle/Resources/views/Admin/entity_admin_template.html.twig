@@ -2,6 +2,7 @@
 
 {% set entityPlural = entityPlural | default(entitySingular ~ 's') %}
 {% set readOnly = readOnly | default(false) %}
+{% set enable_social_net = enable_social_net | default(false) %}
 
 {% form_theme form _self %}
 
@@ -42,6 +43,12 @@
 <script>
   $('button.show_if_any_selected, button.show_if_one_selected').hide();
   $('.table_buttons button').button();
+  var currentPath = "{{ path(app.request.get('_route')) }}";
+  var entitySingular = "{{ entitySingular }}";
+  var entityPlural = "{{ entityPlural }}";
+  var facebookAppId = '{{ facebook_app_id }}';
+  var facebookPageId = '{{ facebook_page_id }}';
+  var enable_social_net = {{ enable_social_net ? 'true' : 'false' }};
 </script>
 
 <div id="admin_table_container">
@@ -56,6 +63,7 @@
     <input hidden type="submit" />
   </form>
 </div>
+
 <div hidden id=delete_dialog title="Delete {{ entitySingular | capitalize }}" > 
 <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span>
 Are you sure you want to permanently delete all of the selected {{ entityPlural }}?</p>
@@ -63,15 +71,13 @@ Are you sure you want to permanently delete all of the selected {{ entityPlural 
 
 {% endif %}
 
+{% if enable_social_net %}
+    <div id="fb-root"></div>
+{% endif %}
+
 {% block extra_content %}{% endblock %}
 
-<script>
-  var currentPath = "{{ path(app.request.get('_route')) }}";
-  var entitySingular = "{{ entitySingular }}";
-  var entityPlural = "{{ entityPlural }}";
-</script>
-
-{% javascripts 
+{% javascripts
   '@IcseMembersBundle/Resources/script/entityadmin.js'
   filter='?yui_js'
   output='bundles/icsemembers/js/entityadmin.js'

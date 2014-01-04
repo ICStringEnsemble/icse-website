@@ -24,6 +24,9 @@ twig:
     form:
         resources:
             - 'IcsePublicBundle:Form:custom_fields.html.twig'
+    globals:
+        facebook_page_id: %facebook_page_id%
+        facebook_app_id: %facebook_app_id%
 
 # Assetic Configuration
 assetic:
@@ -79,3 +82,33 @@ jms_serializer:
     handlers:
         datetime:
             default_format: "U000" # Unix timestamp
+
+acts_social_api:
+    apis:
+        facebook:
+            client_id: %facebook_app_id%
+            client_secret: %facebook_app_secret%
+            paths:
+                create_page_event:
+                   path: /{page_id}/events
+                   method: POST
+                   arguments: [page_id, name, description, start_time, end_time, location, ticket_uri]
+                   url_has_params: true
+                update_event:
+                   path: /{event_id}
+                   method: PUT
+                   arguments: [event_id, name, description, start_time, end_time, location, ticket_uri]
+                   url_has_params: true
+                delete_event:
+                   path: /{event_id}
+                   method: DELETE
+                   arguments: [event_id]
+                   url_has_params: true
+        google:
+            client_id: %google_id%
+            client_secret: %google_secret%
+#        twitter:
+#            client_id: %twitter_key%
+#            client_secret: %twitter_secret%
+#            access_token: %twitter_token%
+#            access_token_secret: %twitter_token_secret%

@@ -23,9 +23,10 @@ class AppKernel extends Kernel
             new Fkr\CssURLRewriteBundle\FkrCssURLRewriteBundle(), 
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle($this), 
-            new RobertoTru\ToInlineStyleEmailBundle\RobertoTruToInlineStyleEmailBundle(), 
+            new RobertoTru\ToInlineStyleEmailBundle\RobertoTruToInlineStyleEmailBundle(),
+            new Acts\SocialApiBundle\ActsSocialApiBundle(),
             new Icse\PublicBundle\IcsePublicBundle(),
-            new Icse\MembersBundle\IcseMembersBundle() 
+            new Icse\MembersBundle\IcseMembersBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

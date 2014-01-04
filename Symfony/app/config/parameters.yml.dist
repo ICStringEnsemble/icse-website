@@ -22,5 +22,12 @@ parameters:
     dev_user: icse
     dev_password: ~
 
+    facebook_page_id: ~
+    facebook_app_id: ~
+    facebook_app_secret: ~
+
+    google_id: ~
+    google_secret: ~
+
     locale:            en
     secret:            ~

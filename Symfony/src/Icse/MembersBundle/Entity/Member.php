@@ -6,14 +6,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
 
-use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
-use JMS\Serializer\Annotation\Exclude;
 use JMS\Serializer\Annotation\Groups;
-
-// use JMS\Serializer\Annotation\ExclusionPolicy;
-// use JMS\Serializer\Annotation\Expose;
-// use JMS\Serializer\Annotation\Exclude;
 
 /**
  * Icse\MembersBundle\Entity\Member
@@ -72,6 +66,8 @@ class Member implements AdvancedUserInterface
           return array('ROLE_ADMIN');
         case 100:
           return array('ROLE_SUPER_ADMIN');
+        default:
+          return array('ROLE_USER');
       }
     }
 

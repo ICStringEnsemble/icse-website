@@ -3,21 +3,21 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "3bd77a657eb19c8bd1bf6e21cf36f8b6",
+    "hash": "d705eca62e2f137aeaac31784e366253",
     "packages": [
         {
             "name": "acts/social-api-bundle",
-            "version": "v0.1",
+            "version": "dev-master",
             "target-dir": "Acts/SocialApiBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/camdram/social-api-bundle.git",
-                "reference": "fe2f1f6f3493d8d06fbf6b9dfc7ce29cac5d0ae0"
+                "reference": "d15baa7c8d12f1e7451bc05f251c6b8fecdce229"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/camdram/social-api-bundle/zipball/fe2f1f6f3493d8d06fbf6b9dfc7ce29cac5d0ae0",
-                "reference": "fe2f1f6f3493d8d06fbf6b9dfc7ce29cac5d0ae0",
+                "url": "https://api.github.com/repos/camdram/social-api-bundle/zipball/d15baa7c8d12f1e7451bc05f251c6b8fecdce229",
+                "reference": "d15baa7c8d12f1e7451bc05f251c6b8fecdce229",
                 "shasum": ""
             },
             "require": {
@@ -49,7 +49,7 @@
                 "social",
                 "twitter"
             ],
-            "time": "2013-12-23 20:52:58"
+            "time": "2014-01-03 00:27:39"
         },
         {
             "name": "doctrine/annotations",
@@ -477,12 +477,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineMigrationsBundle.git",
-                "reference": "62e20bb35da280baed221cc0a8076d46bd70db38"
+                "reference": "667f20875f0dd3f3fce3e5a7d97cceac92a8e9d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/62e20bb35da280baed221cc0a8076d46bd70db38",
-                "reference": "62e20bb35da280baed221cc0a8076d46bd70db38",
+                "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/667f20875f0dd3f3fce3e5a7d97cceac92a8e9d1",
+                "reference": "667f20875f0dd3f3fce3e5a7d97cceac92a8e9d1",
                 "shasum": ""
             },
             "require": {
@@ -527,7 +527,7 @@
                 "migrations",
                 "schema"
             ],
-            "time": "2013-12-18 08:25:03"
+            "time": "2014-01-02 21:27:15"
         },
         {
             "name": "doctrine/inflector",
@@ -650,12 +650,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "ce2ffa17a642267d48b9df6c5eba94e9d773e22f"
+                "reference": "5d83a66d8da927cb71d1550bb51466a6501f13f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/ce2ffa17a642267d48b9df6c5eba94e9d773e22f",
-                "reference": "ce2ffa17a642267d48b9df6c5eba94e9d773e22f",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/5d83a66d8da927cb71d1550bb51466a6501f13f8",
+                "reference": "5d83a66d8da927cb71d1550bb51466a6501f13f8",
                 "shasum": ""
             },
             "require": {
@@ -702,7 +702,7 @@
                 "database",
                 "migrations"
             ],
-            "time": "2013-12-03 00:28:34"
+            "time": "2014-01-01 13:52:46"
         },
         {
             "name": "doctrine/orm",
@@ -2454,7 +2454,8 @@
         "doctrine/doctrine-migrations-bundle": 20,
         "jms/serializer-bundle": 20,
         "tijsverkoyen/css-to-inline-styles": 20,
-        "robertotru/to-inline-style-email-bundle": 20
+        "robertotru/to-inline-style-email-bundle": 20,
+        "acts/social-api-bundle": 20
     },
     "platform": {
         "php": ">=5.3.3"

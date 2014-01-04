@@ -4,6 +4,7 @@ namespace Icse\MembersBundle\Controller\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 
 abstract class EntityAdminController extends Controller
@@ -61,9 +62,16 @@ abstract class EntityAdminController extends Controller
                 return $this->tableAction($request);
             }
         }
-        else if ($request->getMethod() == "POST" && $arg == null)
+        else if ($request->getMethod() == "POST")
         {
-            return $this->createAction($request);
+            if ($arg == null)
+            {
+                return $this->createAction($request);
+            }
+            else
+            {
+                return $this->instanceOperationAction($request, $arg);
+            }
         }
         else if ($request->getMethod() == "PUT" && $arg != null)
         {
@@ -73,13 +81,13 @@ abstract class EntityAdminController extends Controller
         {
             return $this->deleteAction($arg);
         }
-        throw $this->createNotFoundException('Page does not exist');
+        throw $this->createNotFoundException();
     }
 
     public function tableAction()
     {
         $table_content = $this->getTableContent();
-        return $this->render('IcseMembersBundle:Admin:table_fragment.html.twig', array('table_content' => $table_content)); 
+        return $this->render('IcseMembersBundle:Admin:table_fragment.html.twig', array('table_content' => $table_content));
     }
 
     public function createAction(Request $request)
@@ -88,25 +96,38 @@ abstract class EntityAdminController extends Controller
         return $this->putData($request, $entity);
     }
 
-    public function updateAction(Request $request, $id)
-    {
+    protected function getEntityById($id) {
         $entity = $this->repository()->findOneBy(['id' => $id]);
         if (!$entity) {
-            throw $this->createNotFoundException('Entity does not exist'); 
+            throw $this->createNotFoundException('Entity does not exist');
         }
+        return $entity;
+    }
+
+    public function updateAction(Request $request, $id)
+    {
+        $entity = $this->getEntityById($id);
         return $this->putData($request, $entity);
     }
 
     public function deleteAction($id)
     {
-        $dm = $this->getDoctrine();
-        $entity = $this->repository()->findOneBy(['id' => $id]);
-        if ($entity) {
-            $em = $dm->getManager();
-            $em->remove($entity);
-            $em->flush();
-        }
+        $entity = $this->getEntityById($id);
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($entity);
+        $em->flush();
         return $this->get('ajax_response_gen')->returnSuccess();
+    }
+
+    /**
+     * @param $request
+     * @param $id
+     * @return Response
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    protected function instanceOperationAction(/** @noinspection PhpUnusedParameterInspection */ $request, $id)
+    {
+        throw $this->createNotFoundException();
     }
 
     protected function timeagoDate(\DateTime $datetime)

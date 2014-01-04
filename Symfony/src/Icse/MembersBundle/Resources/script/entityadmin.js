@@ -15,7 +15,7 @@
 
     String.prototype.capitalize = function() {
         return this.charAt(0).toUpperCase() + this.slice(1);
-    }
+    };
 
     /* Misc Initialisation */
     $('button').button();
@@ -28,7 +28,7 @@
             $(this).before('<input type="text" style="width: 0; height: 0; top: -100px; position: absolute;">');
         }
     });
-    $('#edit_form input:submit').before('<input type=hidden name="_method" value="POST" >');
+    $('#edit_form').find('input:submit').before('<input type=hidden name="_method" value="POST" >');
 
     /* Loading Indicator Handling */
     var loadingIndicatorJobs = 0; 
@@ -59,11 +59,13 @@
     function hideShowControlButtons(time) {
         if(typeof time === "undefined") {
             time = 200;
-        } 
-        if (!$('tbody tr').isAnyTableRowSelected()) {
+        }
+
+        var rows = $('tbody tr');
+        if (!rows.isAnyTableRowSelected()) {
             $('.show_if_none_selected').show(time);
             $('.show_if_one_selected, .show_if_any_selected').hide(time);
-        } else if ($('tbody tr').isExactlyOneTableRowSelected()) {
+        } else if (rows.isExactlyOneTableRowSelected()) {
             $('.show_if_one_selected, .show_if_any_selected').show(time);
             $('.show_if_none_selected').hide(time);
         } else {
@@ -119,7 +121,7 @@
       {
           text: "", // eg. "Create", "Save Changes"
           click: function(){
-            $('#edit_form input:submit').click();
+            $('#edit_form').find('input:submit').click();
           },
           'class': 'submit_button'
         },
@@ -133,6 +135,39 @@
         ]
       });
 
+    function deleteSelectedEntities(){
+        getSocialTokens().done(function(){
+            $('.delete_dialog .ui-dialog-buttonset .loading_spinner').show();
+            $('.delete_dialog .ui-dialog-buttonset button').button('disable');
+            var failure = false;
+            var ajaxes = $('tbody tr.ui-selected').map(function(){
+                var id = $(this).data('entity').id;
+                var dfd = $.Deferred();
+                $.ajax({
+                    type: 'POST',
+                    data: {_method: 'DELETE', fb: fb_page_token},
+                    url: currentPath + '/' + id,
+                    dataType: 'json'
+                }).always(function(r){
+                    if (r.status != "success") {
+                        failure = true;
+                    }
+                    dfd.resolve();
+                });
+                return dfd.promise();
+            });
+
+            $.when.apply(null, ajaxes).done(function(){
+                $('.delete_dialog .ui-dialog-buttonset .loading_spinner').hide();
+                $('.delete_dialog .ui-dialog-buttonset button').button('enable');
+                if (!failure) {
+                    $('#delete_dialog').dialog('close');
+                    $('table tr.ui-selected').addClass('just_deleted');
+                    reloadTable();
+                }
+            });
+        });
+    }
 
     $('#delete_dialog').dialog({
       autoOpen: false,
@@ -141,41 +176,7 @@
       width: 400,
       dialogClass: 'delete_dialog',
       buttons : {
-        "Delete" : function(){
-          var requests_remaining = $('tbody tr.ui-selected').length;
-          var failures = 0;
-          if (requests_remaining > 0) {
-            $('.delete_dialog .ui-dialog-buttonset .loading_spinner').show();
-            $('.delete_dialog .ui-dialog-buttonset button').button('disable');
-            $('tbody tr.ui-selected').each(function(){
-              var id = $(this).data('entity').id;
-
-              $.ajax({
-                // type: 'DELETE',
-                type: 'POST',
-                data: {_method: 'DELETE'},
-                url: currentPath + '/' + id,
-                dataType: 'json'
-              }).fail(function(){
-                failures += 1;
-              }).always(function(result){
-                requests_remaining -= 1;
-                if (requests_remaining === 0) {
-                  $('.delete_dialog .ui-dialog-buttonset .loading_spinner').hide();
-                  $('.delete_dialog .ui-dialog-buttonset button').button('enable');
-                  if (failures === 0) {
-                    $('#delete_dialog').dialog('close');
-                    $('table tr.ui-selected').addClass('just_deleted');
-                    reloadTable();
-                  }
-                }
-              });
-
-            });
-          } else {
-            $(this).dialog("close");
-          }
-        },
+        "Delete" : deleteSelectedEntities,
         "Cancel" : function(){
           $(this).dialog("close");
         }
@@ -188,11 +189,12 @@
     function openCreateDialog(){
         $('.edit_dialog .ui-dialog-buttonset .submit_button .ui-button-text').html('Create');
         $('#edit_dialog').dialog('open').dialog({ title: "Add " + entitySingular.capitalize() });
-        $('#edit_form').attr('method', 'POST');
-        $('#edit_form input[name="_method"]').val('POST');
-        $('#edit_form').attr('action', currentPath);
-        $('#edit_form').find('input, textarea').not(':button, :submit, :reset, :hidden, :radio, :checkbox').val(''); 
-        $('#edit_form').find('.error').remove();
+        var edit_form = $('#edit_form');
+        edit_form.attr('method', 'POST');
+        edit_form.find('input[name="_method"]').val('POST');
+        edit_form.attr('action', currentPath);
+        edit_form.find('input, textarea').not(':button, :submit, :reset, :hidden, :radio, :checkbox').val('');
+        edit_form.find('.error').remove();
         initCreateForm();
     }
     $('button.create').click(openCreateDialog);
@@ -204,14 +206,15 @@
         $('.edit_dialog .ui-dialog-buttonset .submit_button .ui-button-text').html('Save Changes');
         $('#edit_dialog').dialog('open').dialog({ title: "Edit " + entitySingular.capitalize() });
         // $('#edit_form').attr('method', 'PUT');
-        $('#edit_form input[name="_method"]').val('PUT');
-        $('#edit_form').attr('method', 'POST');
-        $('#edit_form').find('.error').remove();
-        $('#edit_form').attr('action', currentPath + '/' + entity.id);
-        $('#edit_form').find('input, select, textarea').not(':button, :submit, :reset, :hidden, :radio, :checkbox').each(function(){
+        var edit_form = $('#edit_form');
+        edit_form.find('input[name="_method"]').val('PUT');
+        edit_form.attr('method', 'POST');
+        edit_form.find('.error').remove();
+        edit_form.attr('action', currentPath + '/' + entity.id);
+        edit_form.find('input, select, textarea').not(':button, :submit, :reset, :hidden, :radio, :checkbox').each(function(){
             var name_array = $(this).attr('name').split('[');
             name_array.splice(0,1);
-            name_array = $.map(name_array, function(value, i) {
+            name_array = $.map(name_array, function(value) {
                 return value.split(']')[0];
             });
             var main_name = name_array[0];
@@ -231,7 +234,7 @@
             }
         });
         initEditForm();
-    };
+    }
     $('button.edit').click(openEditDialog);
 
     $('button.refresh').click(reloadTable); // Refresh button
@@ -246,21 +249,22 @@
 
     $('button.delete').click(function(){ // Delete button
       $('#delete_dialog').dialog('open');
-    })
+    });
 
     /* Form submit */
     $('.ui-dialog form').submit(function () {
         var form_element = $(this);
         var containing_dialog = form_element.closest('.ui-dialog-content');
         var dialog_buttonpane = containing_dialog.nextAll('.ui-dialog-buttonpane');
+        var formData, contentType, processData;
         if (form_element.find('input:file').length !== 0) {      // if files, we have to use multipart/form-data; doesn't play nicely with PUT
-            var formData = new FormData(form_element[0]);
-            var contentType = false;
-            var processData = false;
+            formData = new FormData(form_element[0]);
+            contentType = false;
+            processData = false;
         } else {                                            // if no files, use urlencoded data; can use either POST or PUT
-            var formData = form_element.serialize();
-            var contentType = 'application/x-www-form-urlencoded; charset=UTF-8';
-            var processData = true;
+            formData = form_element.serialize();
+            contentType = 'application/x-www-form-urlencoded; charset=UTF-8';
+            processData = true;
         }
         $.ajax({
             type: form_element.attr('method'),
@@ -283,29 +287,31 @@
                     reloadTable();
                 }
                 for (var key in result.errors) {
-                    var error_element = $('<div/>',{
-                      'class' : 'error',
-                      'text' :  (function(){
-                        var val = result.errors[key];
-                        // console.log(typeof val.first);
-                        if (typeof val === 'string') {
-                          return val;
-                        } else if (typeof val === 'object' && typeof val.first === 'object') {
-                          return val.first[0];
+                    if (result.errors.hasOwnProperty(key)) {
+                        var error_element = $('<div>',{
+                            'class' : 'error',
+                            'text' :  (function(){
+                                var val = result.errors[key];
+                                // console.log(typeof val.first);
+                                if (typeof val === 'string') {
+                                  return val;
+                                } else if (typeof val === 'object' && typeof val.first === 'object') {
+                                  return val.first[0];
+                                } else {
+                                  return val[0];
+                                }
+                            })()
+                        });
+
+                        var bad_input_element = form_element.find('*[name*="[' + key + ']"]');
+                        if (isNaN(key) && bad_input_element.length !== 0) {
+                            bad_input_element.before(error_element);
                         } else {
-                          return val[0];
+                            if (isNaN(key)) { // if key is named but matching input can't be found
+                                error_element.html(key + ': ' + error_element.html());
+                            }
+                            error_element.addClass('global_error').appendTo(form_element);
                         }
-                      })()
-                    });
-      
-                    var bad_input_element = form_element.find('*[name*="[' + key + ']"]');
-                    if (isNaN(key) && bad_input_element.length !== 0) {
-                        bad_input_element.before(error_element);
-                    } else {
-                        if (isNaN(key)) { // if key is named but matching input can't be found
-                            error_element.html(key + ': ' + error_element.html());
-                        }
-                        error_element.addClass('global_error').appendTo(form_element);
                     }
                 }
             }
@@ -315,6 +321,150 @@
         form_element.find('.error').remove();
 
         return false; 
+    });
+
+    /* Reusable UI Dialogs */
+
+    function ui_warn(msg) {
+        var dfd = $.Deferred();
+        $("<div>").html(msg).dialog({
+            close: function(){dfd.resolve();},
+            resizable:false,
+            closeOnEscape: false,
+            buttons: {'Okay':function(){$(this).dialog('close');}}
+        });
+        return dfd.promise();
+    }
+    function ui_progress(msg) {
+        var dfd = $.Deferred();
+        var dialog = $("<div>").html(msg).dialog({
+            resizable:false,
+            closeOnEscape: false,
+            open: function() { $(this).parent().find(".ui-dialog-titlebar-close").hide(); },
+            modal: true
+        });
+        dfd.always(function(){
+            dialog.dialog('close');
+        });
+        return dfd;
+    }
+
+    /* Facebook */
+
+    var fb_connected = false;
+    var fb_page_token = null;
+    var fb_perms = ['create_event', 'manage_pages'];
+
+    function processFBLoginResponse(r) {
+        fb_connected = (r.status === 'connected');
+    }
+
+    if (enable_social_net) {
+        $.ajaxSetup({ cache: true });
+        $.getScript('//connect.facebook.net/en_UK/all.js', function(){
+            FB.init({
+                appId: facebookAppId,
+                status: true
+            });
+            FB.Event.subscribe('auth.authResponseChange', processFBLoginResponse);
+            $('button.social_sync').button("option", "disabled", false);
+        });
+    }
+
+    function facebookLogin() {
+        var dfd = $.Deferred();
+        FB.login(function(r){
+            processFBLoginResponse(r);
+            if (fb_connected) {
+                dfd.resolve();
+            } else {
+                dfd.reject();
+            }
+        }, {scope: fb_perms.join(',')});
+        return dfd.promise();
+    }
+
+    function doWithFacebookLogin(op, dfd) {
+        facebookLogin().done(function(){
+            op(dfd);
+        }).fail(function(){
+            dfd.reject();
+        });
+    }
+
+    function doWithFacebook(op) {
+        var dfd = $.Deferred();
+        console.log('Already connected:', fb_connected);
+        if (fb_connected) {
+            op($.Deferred()).done(function(){
+                console.log("Success first time");
+                dfd.resolve();
+            }).fail(function(){
+                    ui_warn("Click to reconnect to Facebook.").always(function(){
+                        doWithFacebookLogin(op, dfd);
+                    });
+                });
+        } else {
+            doWithFacebookLogin(op, dfd);
+        }
+        return dfd.promise();
+    }
+
+    function getFacebookPageToken() {
+        if (fb_page_token !== null) {
+            return $.when();
+        } else {
+            return doWithFacebook(function(dfd){
+                FB.api('/me/accounts/',  function(response) {
+                    var success = false;
+                    if ($.isArray(response.data)) for (var i=0; i<response.data.length; i++) {
+                        var page = response.data[i];
+                        if (page.id === facebookPageId) {
+                            console.log(page.name, page.access_token);
+                            fb_page_token = page.access_token;
+                            success = true;
+                            break;
+                        }
+                    }
+                    success ? dfd.resolve() : dfd.reject();
+                });
+                return dfd.promise();
+            });
+        }
+    }
+
+    function getSocialTokens() {
+        if (enable_social_net) {
+            return $.when(getFacebookPageToken());
+        } else {
+            return $.when();
+        }
+    }
+
+    $('button.social_sync').button().click(function(){
+        getSocialTokens().done(function(){
+            var progress = ui_progress("Synchronising changes to social networks...");
+            var dfds = $('tbody tr.ui-selected').map(function(){
+                var id = $(this).data('entity').id;
+                var dfd = $.Deferred();
+                $.ajax({
+                    type: "POST",
+                    url: currentPath + '/' + id +'?'+ $.param({op: 'socialnetsync'}),
+                    data: {fb: fb_page_token},
+                    dataType: 'json'
+                }).always(function(r){
+                    if (r.status == "fail") {
+                        fb_page_token = null;
+                    }
+                    dfd.resolve();
+                });
+                return dfd.promise();
+            });
+            $.when.apply(null, dfds).done(function(){
+                progress.resolve();
+                reloadTable();
+            })
+        });
     });
 
 })();

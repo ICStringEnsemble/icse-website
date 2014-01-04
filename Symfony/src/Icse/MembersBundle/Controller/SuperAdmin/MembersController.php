@@ -2,8 +2,7 @@
 
 namespace Icse\MembersBundle\Controller\SuperAdmin;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormError;
 
@@ -34,14 +33,14 @@ class MembersController extends EntityAdminController
         $members = $dm->getRepository('IcseMembersBundle:Member')->findBy(array(), array('last_name'=>'asc'));
 
         $columns = array(
-            array('heading' => 'ID', 'cell' => function($member){return $member->getID();}),
-            array('heading' => 'Name', 'cell' => function($member){return $member->getFullName();}),
-            array('heading' => 'Username', 'cell' => function($member){return $member->getUsername();}),
-            array('heading' => 'Email', 'cell' => function($member){return $member->getEmail();}),
-            array('heading' => 'Password', 'cell' => function($member){return $member->getPassword()?"Stored":"Imperial";}),
-            array('heading' => 'Active', 'cell' => function($member){return $member->getActive()? "Yes":"No";}),
-            array('heading' => 'Role', 'cell' => function($member){return $member->getRole() == 100? "Super Admin":($member->getRole() == 10?"Admin":"User");}),
-            array('heading' => 'Last Online', 'cell' => function($member){return $member->getLastOnlineAt()? $this->timeagoDate($member->getLastOnlineAt()) : "Never";}),
+            array('heading' => 'ID', 'cell' => function(Member $member){return $member->getID();}),
+            array('heading' => 'Name', 'cell' => function(Member $member){return $member->getFullName();}),
+            array('heading' => 'Username', 'cell' => function(Member $member){return $member->getUsername();}),
+            array('heading' => 'Email', 'cell' => function(Member $member){return $member->getEmail();}),
+            array('heading' => 'Password', 'cell' => function(Member $member){return $member->getPassword()?"Stored":"Imperial";}),
+            array('heading' => 'Active', 'cell' => function(Member $member){return $member->getActive()? "Yes":"No";}),
+            array('heading' => 'Role', 'cell' => function(Member $member){return $member->getRole() == 100? "Super Admin":($member->getRole() == 10?"Admin":"User");}),
+            array('heading' => 'Last Online', 'cell' => function(Member $member){return $member->getLastOnlineAt()? $this->timeagoDate($member->getLastOnlineAt()) : "Never";}),
         );
         return array("columns" => $columns, "entities" => $members, "serial_groups" => ['superadmin']);
     }
@@ -79,10 +78,11 @@ class MembersController extends EntityAdminController
 
     protected function putData($request, $member)
     {
+        /* @var $member Member */
         $is_new_account = ($member->getID() === null);
-        $mailer = $this->get('icse_mailer'); 
+        $mailer = $this->get('icse_mailer');
         $form = $this->getForm($member);
-        $form->bind($request);
+        $form->submit($request);
 
         $password_type = $form->get('password_choice')->getData();
         $plain_password = '';
@@ -177,6 +177,7 @@ class MembersController extends EntityAdminController
     {
         $uploadedFiles = $request->files->get('form');
         if (isset($uploadedFiles['csv_file'])) {
+            /* @var $csv_file File */
             $csv_file = $uploadedFiles['csv_file'];
             $file_handle = fopen($csv_file->getPathname(), 'r');
             $csv_row = fgetcsv($file_handle);

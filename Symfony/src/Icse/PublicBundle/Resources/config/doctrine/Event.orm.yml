@@ -19,10 +19,15 @@ Icse\PublicBundle\Entity\Event:
             nullable: true 
         updated_at:
             type: datetime
+        facebook_status:
+            type: integer
+        facebook_id:
+            type: string
+            nullable: true
     manyToOne:
         location:
             targetEntity: Venue
-            nullable: true 
+            nullable: true
         poster:
             targetEntity: Image
             nullable: true

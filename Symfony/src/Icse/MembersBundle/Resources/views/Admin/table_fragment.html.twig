@@ -8,7 +8,7 @@
       <th></th>
       {% endif %}
       {% for column in table_content.columns %}
-      <th>{{ column.heading }}</th>
+      <th>{{ column.heading | raw }}</th>
       {% endfor %}
     </tr>
   </thead>
