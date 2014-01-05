@@ -1,7 +1,6 @@
 <?php
 namespace Icse\MembersBundle\Service;
 
-use Symfony\Component\HttpFoundation\Response; 
 use Doctrine\ORM\EntityManager;
 
 class CalendarEvents
@@ -34,7 +33,8 @@ class CalendarEvents
 
     public function type($e)
     {
-        return strtolower(end(explode('\\', get_class($e))));
+        $class_path = explode('\\', get_class($e));
+        return strtolower(end($class_path));
     }
 
 }

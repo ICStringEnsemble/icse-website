@@ -54,7 +54,6 @@ class Member implements AdvancedUserInterface
     {
       $this->active = true;
       $this->role = 1;
-      //$this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
     }
 
     public function getRoles()
