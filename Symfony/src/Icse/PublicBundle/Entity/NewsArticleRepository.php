@@ -30,4 +30,16 @@ class NewsArticleRepository extends EntityRepository
                   ->setMaxResults($n) 
                   ->getResult();
     }
+
+    public function homePageMostRecent()
+    {
+      return $this->getEntityManager()
+                  ->createQuery ('SELECT a
+                                  FROM IcsePublicBundle:NewsArticle a
+                                  WHERE a.updated_at > :time
+                                  ORDER BY a.posted_at DESC')
+                  ->setMaxResults(1)
+                  ->setParameters(array('time' => new \DateTime("4 months ago")))
+                  ->getResult();
+    }
 }

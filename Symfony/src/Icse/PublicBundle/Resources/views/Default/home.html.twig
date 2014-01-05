@@ -48,18 +48,19 @@
 </div>
 
 <script>
-  $('#past_events_strip a').each(function(){
+  var past_events_strip = $('#past_events_strip');
+  past_events_strip.find('a').each(function(){
     $(this).data('title', $(this).attr('title')).removeAttr('title'); 
   });
 
-  $('#past_events_strip a').hover(function(){
+  past_events_strip.find('a').hover(function(){
     $('#past_event_title').html($(this).data('title'));
   }, function(){
     $('#past_event_title').html('');
   });
 
   (function() {
-    var images = $('#past_events_strip img');
+    var images = past_events_strip.find('img');
     var original_total_width = 0;
     var required_total_width = 580;
     var onloads_completed = 0;

@@ -50,7 +50,7 @@ class DefaultController extends Controller
                            ->findNext();
 
       $news_articles = $dm->getRepository('IcsePublicBundle:NewsArticle')
-                           ->listN(1);
+                           ->homePageMostRecent();
 
       return $this->render('IcsePublicBundle:Default:home.html.twig', array('home_intro' => $this->getSiteText('home_intro'),
                                                                             'today_events' => $today_events,
