@@ -19,6 +19,7 @@
 {{ parent() }}
 <script src="{{ asset('bundles/icsemembers/lib/ckeditor/ckeditor.js') }}"></script>
 <script src="{{ asset('bundles/icsemembers/lib/ckeditor/adapters/jquery.js') }}"></script>
+<script src="{{ asset('bundles/icsepublic/lib/js/jquery.storageapi.min.js') }}"></script>
 {% endblock javascripts %}
 
 {% block content %}
@@ -26,52 +27,23 @@
 <h1>Send Email</h1>
 
 <ul class="email_buttons">
+    {% spaceless %}
     <li><button class="preview" type=button>Preview</button></li>
-    <img hidden class="loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" /> 
+    <li><span class="not_button saved_indicator">Saved</span></li>
+    <li><img hidden class="not_button loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" /></li>
+    {% endspaceless %}
 </ul>
 
-{% include 'IcseMembersBundle:Email:email_editable.html.twig' with {'to_embed': true} %}  
+{% include 'IcseMembersBundle:Email:email_editable.html.twig' %}
 
-<iframe id="preview_frame" style="min-width: 95%;height:100%;"></iframe>
+<iframe id="preview_frame" style="min-width: 95%;height:100%;" data-base-url="{{ path('IcseMembersBundle_sendemail', {'arg': 'preview'}) }}"></iframe>
 
-
-<script>
-    (function(){
-        $('.email_buttons button').button();
-
-        var preview_frame = $('#preview_frame');
-        var editor = $('#editable');
-        preview_frame.dialog({
-            autoOpen: false,
-            modal: true,
-            resizable: true,
-            width: 800,
-            height: 500,
-        });
-        $('button.preview').click(function(){
-            preview_frame.dialog('open');
-            preview_frame.attr('src', "{{ path('IcseMembersBundle_sendemail', {'arg': 'preview'}) }}"+'?'+$.param({'body': editor.ckeditorGet().getData()}));
-        });
-
-        editor.ckeditor(function(){}, {
-            extraPlugins : 'webkit-span-fix,sourcedialog',
-            customConfig : '',
-            toolbar :
-              [
-                { name: 'basicstyles', items : [ 'Bold','Italic','Underline','-','RemoveFormat' ] },
-                { name: 'paragraph', items : [  ] },
-                { name: 'insert', items : [ 'NumberedList','BulletedList', '-', 'Link', 'Image','HorizontalRule' ] },
-                '/',
-                { name: 'styles', items : [ 'Format' ] },
-                /*{ name: 'document', items : [ 'Save','NewPage','DocProps','Preview','Print','-','Templates' ] },*/
-                /*{ name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },*/
-                { name: 'editing', items : [ 'Sourcedialog', '-', 'Scayt' ] },
-                { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] }
-              ],
-            width: 490
-        });
-        
-    })();
-</script>
+{% javascripts
+'@IcseMembersBundle/Resources/script/emailcomposer.js'
+filter='?yui_js'
+output='bundles/icsemembers/js/emailcomposer.js'
+%}
+<script src="{{ asset_url }}"></script>
+{% endjavascripts %}
 
 {% endblock %}

@@ -1,4 +1,6 @@
-{% extends 'IcseMembersBundle:Email:template.html.twig' %} 
+{% extends 'IcseMembersBundle:Email:template.html.twig' %}
+
+{% set to_embed = true %}
 
 {% block content %}
 <div id="editable" contenteditable="true">
@@ -40,7 +42,7 @@ Senior Common Room (SCR), Level 2, Sherfield Building</strong></p>
 <p><strong>{{ app.user.getFirstName() }}</strong><br />
 <em>ICSE Secretary, 2013-14</em></p>
 
-
+<div id="email_upcoming_rehearsals">
 {% if upcoming_rehearsals is not empty %}
 <hr>
 <h4>Upcoming Rehearsals</h4>
@@ -51,6 +53,9 @@ Senior Common Room (SCR), Level 2, Sherfield Building</strong></p>
     {% endfor %}
 </ul>
 {% endif %}
+</div>
+
+
 {% endif %}
 </div>
 {% endblock %}

@@ -140,22 +140,36 @@ p.success {
     width: 0px;
     @include rotate(90deg);
     @include apply-origin(top left, false);
-} 
-
-.loading_spinner {
-    vertical-align: middle;
 }
 
-ul.table_buttons {
-    height: 2.5em;
+.ui-dialog-buttonset .loading_spinner {
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+ul.table_buttons, ul.email_buttons {
+    height: 2.3em;
     margin-bottom: 0;
+    max-width: none;
+
     li {
-        display: block;
-        float: left;
+        display: inline-block;
+        vertical-align: middle;
+
+        & > * {
+            vertical-align: middle;
+        }
+        .not_button {
+            margin-left: 0.8em;
+        }
+        .loading_spinner {
+            margin-left: 0.5em;
+        }
     }
-    .loading_spinner {
-        margin: 0.45em 0.45em;
-    } 
+}
+
+.saved_indicator {
+    color: #999;
 }
 
 .ui-dialog #edit_dialog.ui-dialog-content {

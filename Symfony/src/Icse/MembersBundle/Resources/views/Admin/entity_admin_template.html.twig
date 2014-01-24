@@ -27,15 +27,17 @@
 <h1>{{ pageTitle }}</h1>
 
 <ul class="table_buttons">
+  {% spaceless %}
   <li><button class="refresh show_if_none_selected" type=button>Refresh</button></li>
   {% if not readOnly %}
-  <li><button class="create show_if_none_selected" type=button>Add {{ entitySingular | capitalize }}</button></li>
+  <li><button class="create show_if_none_selected" type=button>Add&nbsp;{{ entitySingular | capitalize }}</button></li>
   <li><button class="edit show_if_one_selected" type=button>Edit</button></li>
   <li><button class="delete show_if_any_selected" type=button>Delete</button></li>
   {% endif %}
   {% block extra_table_buttons %}{% endblock %}
-  <li><button class="unselectall show_if_any_selected" type=button>Unselect All</button></li>
-  <img hidden class="loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" /> 
+  <li><button class="unselectall show_if_any_selected" type=button>Unselect&nbsp;All</button></li>
+  <li><img hidden class="not_button loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" /></li>
+  {% endspaceless %}
 </ul>
 
 {% block extra_controls %}{% endblock extra_controls %}
