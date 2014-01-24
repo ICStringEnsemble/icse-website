@@ -50,18 +50,20 @@
         var draft_storage = $.initNamespaceStorage('icse_email_draft').localStorage;
 
         function load_draft() {
-            var draft_body = $('<div>').append(draft_storage.get('body'));
-            var template_body = $('<div>').append(editor.ckeditorGet().getData());
-
-            var new_rehearsals_section = template_body.find('#email_upcoming_rehearsals');
-            var draft_rehearsals_section = draft_body.find('#email_upcoming_rehearsals');
-            if (draft_rehearsals_section.length) {
-                draft_rehearsals_section.replaceWith(new_rehearsals_section);
-            } else {
-                draft_body.append(new_rehearsals_section)
-            }
+            var draft_body = draft_storage.get('body');
 
             if (draft_body) {
+                draft_body = $('<div>').append(draft_body);
+                var template_body = $('<div>').append(editor.ckeditorGet().getData());
+
+                var new_rehearsals_section = template_body.find('#email_upcoming_rehearsals');
+                var draft_rehearsals_section = draft_body.find('#email_upcoming_rehearsals');
+                if (draft_rehearsals_section.length) {
+                    draft_rehearsals_section.replaceWith(new_rehearsals_section);
+                } else {
+                    draft_body.append(new_rehearsals_section)
+                }
+
                 editor.ckeditorGet().setData(draft_body.html());
             }
         }
