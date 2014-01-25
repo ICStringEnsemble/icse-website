@@ -25,8 +25,11 @@
 </a> 
 {% endif %}
 
+<div class="main_content">
 {{ article.getBody() | raw }}
-<div class="posted_by">{{ article.getUpdatedBy().getFullName() }}</div> 
+</div>
+
+<div class="posted_by">{{ article.getUpdatedBy().getFullName() }}</div>
 </div>
 
 <script>
