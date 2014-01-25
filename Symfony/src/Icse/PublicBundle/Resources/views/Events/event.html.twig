@@ -50,10 +50,12 @@
 
 {# Event Description #}
 {% if event.getDescription() %}
-<h2>Information</h2>
-<div class="main_content">
-{{ event.getDescription() | raw }}
-</div>
+    <h2>Information</h2>
+    <div class="main_content">
+    {{ event.getDescription() | raw }}
+    </div>
+{% else %}
+    <p>Sorry, we don't have any more information just yet.</p>
 {% endif %}
 
 
