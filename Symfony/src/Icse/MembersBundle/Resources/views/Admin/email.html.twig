@@ -4,9 +4,10 @@
 {% set currentSubSection = 'sendemail' %}
 
 {% block stylesheets %}
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsemembers/lib/tagit/css/jquery.tagit.css') }}" />
 {{ parent() }}
-{% stylesheets 
-    '@IcseMembersBundle/Resources/style/email.scss' 
+{% stylesheets
+    '@IcseMembersBundle/Resources/style/email.scss'
     filter='compass,css_url_rewrite,?yui_css'
     output='bundles/icsemembers/css/email.css'
 %}
@@ -14,12 +15,12 @@
 {% endstylesheets %}
 {% endblock stylesheets %}
 
-
 {% block javascripts %}
 {{ parent() }}
 <script src="{{ asset('bundles/icsemembers/lib/ckeditor/ckeditor.js') }}"></script>
 <script src="{{ asset('bundles/icsemembers/lib/ckeditor/adapters/jquery.js') }}"></script>
 <script src="{{ asset('bundles/icsepublic/lib/js/jquery.storageapi.min.js') }}"></script>
+<script src="{{ asset('bundles/icsemembers/lib/tagit/js/tag-it.min.js') }}"></script>
 {% endblock javascripts %}
 
 {% block content %}
@@ -29,10 +30,46 @@
 <ul class="email_buttons">
     {% spaceless %}
     <li><button class="preview" type=button>Preview</button></li>
+    <li><button disabled class="send" type=button>Send</button></li>
     <li><span class="not_button saved_indicator">Saved</span></li>
     <li><img hidden class="not_button loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" /></li>
     {% endspaceless %}
 </ul>
+
+<div id="email_options_pane">
+    <div id="subject_row">
+        <label class="row_label">Subject</label>
+        <div class="row_body">
+            <input type="text" id="email_subject" name="email_subject" value="ICSE Weekly Update">
+        </div>
+    </div>
+
+    <div id="mailing_list_row">
+        <label class="row_label">Mailing List</label>
+        <div class="row_body">
+            {% spaceless %}
+            <input type="radio" id="mailing_list_members" name="mailing_list" value="members" checked>
+            <label for="mailing_list_members">Members</label>
+            <input type="radio" id="mailing_list_public" name="mailing_list" value="public">
+            <label for="mailing_list_public">Public</label>
+            <input type="radio" id="mailing_list_none" name="mailing_list" value="none">
+            <label for="mailing_list_none">Neither</label>
+            {% endspaceless %}
+        </div>
+    </div>
+
+    <div id="send_to_row">
+        <label class="row_label">Send</label>
+        <div class="row_body">
+            {% spaceless %}
+            <input type="radio" id="send_to_mailinglist" name="send_to_option" value="mailing_list" checked>
+            <label for="send_to_mailinglist">Straight to the mailing list</label>
+            <input type="radio" id="send_to_other" name="send_to_option" value="other">
+            <label for="send_to_other">Just to: </label><input hidden type="text" id="send_to_address" name="send_to_address" value="icse@imperial.ac.uk">
+            {% endspaceless %}
+        </div>
+    </div>
+</div>
 
 {% include 'IcseMembersBundle:Email:email_editable.html.twig' %}
 

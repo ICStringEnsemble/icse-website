@@ -276,3 +276,82 @@ table.admintable {
         cursor: text;
     }
 }
+
+#email_options_pane {
+    background-color: #F6F1E6;
+    padding: 0.8em 1em;
+    margin-top: 1em;
+    border: 1px solid #000;
+    border-radius: 5px;
+    .row_label {
+        font-weight: bold;
+        width: 110px;
+        display: inline-block;
+        float: left;
+        &:after {
+            content: ':'
+        }
+    }
+
+    input[type="radio"] {
+        margin: 0.5em 0 0 0.4em;
+
+        &:disabled + label {
+            color: #aaa;
+        }
+    }
+
+    .row_body {
+        display: block;
+        margin-left: 110px;
+
+        label {
+            padding-left: 5px;
+
+            & + input[type="radio"] {
+                margin-left: 15px;
+            }
+        }
+    }
+
+    ul.tagit {
+        padding: 0px 1px;
+        margin: 0;
+        margin-top: -0.1em;
+        display: inline-block;
+        vertical-align: top;
+
+        li.tagit-choice-editable, {
+            padding: 0 18px 0 .5em;
+            margin: 1px 1px 1px 0;
+        }
+        li.tagit-new {
+            padding: 0 .5px 0 .5em;
+            margin: 2px 1px 1px 0;
+
+            input {
+                width: 100px;
+            }
+        }
+
+        &.disabled, &.disabled input {
+            background-color: #eee;
+            color: #666;
+            background-image: none;
+
+            .tagit-close {
+                display: none;
+            }
+
+            li.tagit-choice-editable {
+                background-color: #ddd;
+                color: #666;
+                background-image: none;
+            }
+        }
+    }
+}
+
+#icse_email.embedded {
+    margin-top: 1em;
+}
