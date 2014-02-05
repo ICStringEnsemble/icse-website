@@ -5,10 +5,7 @@ namespace Icse\MembersBundle\Controller\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request; 
 use Symfony\Component\HttpFoundation\Response; 
-use Symfony\Component\HttpKernel\Exception\HttpException; 
-use Icse\MembersBundle\Form\Type\FileInfoType;
 
-use RobertoTru\ToInlineStyleEmailBundle\Converter\ToInlineStyleEmailConverter; 
 
 class EmailController extends Controller
 {
@@ -20,9 +17,9 @@ class EmailController extends Controller
             $style_converter->setCSS(file_get_contents($this->container->getParameter('kernel.root_dir') . '/../web/bundles/icsemembers/css/email.css')); 
 
 
-            if ($request->query->has('body'))
+            if ($request->request->has('body'))
             {
-                $style_converter->setHTMLByView('IcseMembersBundle:Email:template.html.twig', ['content' => $request->query->get('body')]); 
+                $style_converter->setHTMLByView('IcseMembersBundle:Email:template.html.twig', ['content' => $request->request->get('body')]);
             }
             else
             {
@@ -30,7 +27,8 @@ class EmailController extends Controller
             }
 
             $html_body = $style_converter->generateStyledHTML();
-            
+            $html_body = preg_replace('/ id\s*=\s*["\']?icse_email["\']?[^a-zA-Z\d]/', ' ', $html_body, 1);
+
             return new Response($html_body);
         }
 

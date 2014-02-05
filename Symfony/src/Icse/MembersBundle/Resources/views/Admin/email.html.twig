@@ -73,7 +73,7 @@
 
 {% include 'IcseMembersBundle:Email:email_editable.html.twig' %}
 
-<iframe id="preview_frame" style="min-width: 95%;height:100%;" data-base-url="{{ path('IcseMembersBundle_sendemail', {'arg': 'preview'}) }}"></iframe>
+<div id="preview_dialog" data-base-url="{{ path('IcseMembersBundle_sendemail', {'arg': 'preview'}) }}"></div>
 
 {% javascripts
 '@IcseMembersBundle/Resources/script/emailcomposer.js'

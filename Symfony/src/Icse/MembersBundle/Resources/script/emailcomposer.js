@@ -1,7 +1,7 @@
 (function(){
     $('.email_buttons button').button();
 
-    var preview_frame = $('#preview_frame');
+    var preview_frame = $('#preview_dialog');
     var editor = $('#editable');
     preview_frame.dialog({
         autoOpen: false,
@@ -12,7 +12,8 @@
     });
     $('button.preview').click(function(){
         preview_frame.dialog('open');
-        preview_frame.attr('src', preview_frame.data('base-url')+'?'+$.param({'body': editor.ckeditorGet().getData()}));
+        preview_frame.html('');
+        preview_frame.load(preview_frame.data('base-url'), {'body': editor.ckeditorGet().getData()});
     });
 
     editor.ckeditor(function(){}, {
