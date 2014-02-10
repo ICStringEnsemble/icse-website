@@ -20,7 +20,7 @@ class EmailController extends Controller
     {
         if ($arg == null)
         {
-            return $this->indexAction($request);
+            return $this->indexAction();
         }
         elseif ($arg == 'preview')
         {
@@ -33,7 +33,7 @@ class EmailController extends Controller
         throw $this->createNotFoundException();
     }
 
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         $upcoming_rehearsals = $this->getDoctrine()->getRepository('IcseMembersBundle:Rehearsal')->findNextN(2);
         $email_params = [
@@ -111,12 +111,15 @@ class EmailController extends Controller
         if ($form->isValid()) {
             $recipients = [];
             $mailer = $this->formToMailer($form, $recipients);
-            $failures = null;
-            $ret = $mailer->send($recipients, $failures);
-            var_dump($ret);
-            var_dump($failures);
-            die();
-            return new Response($ret);
+            $fails = $mailer->send($recipients);
+            if ($fails == 0)
+            {
+                return $this->get('ajax_response_gen')->returnSuccess();
+            }
+            else
+            {
+                return $this->get('ajax_response_gen')->returnFail($fails." failed");
+            }
         }
         else
         {

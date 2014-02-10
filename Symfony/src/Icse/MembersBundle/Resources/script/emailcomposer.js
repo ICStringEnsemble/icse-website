@@ -189,7 +189,7 @@
     function getEmailDataForPOST(){
         var data = {
             body: editor.ckeditorGet().getData()
-        }
+        };
         $.extend(data, email_options);
         return data;
     }

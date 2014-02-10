@@ -2,7 +2,6 @@
 namespace Icse\MembersBundle\Service;
 
 use RobertoTru\ToInlineStyleEmailBundle\Converter\ToInlineStyleEmailConverter; 
-use Symfony\Component\HttpFoundation\Response; 
 
 class IcseMailer
 {
@@ -73,6 +72,9 @@ class IcseMailer
                             ->setTo($to_addresses, $to_name);
         $email->setBody($html_body);
         $email->setContentType("text/html");
-        return $this->mailer->send($email, $failures);
+        $n_successful = $this->mailer->send($email, $failures);
+        $n_attempted = is_array($to_addresses) ? count($to_addresses) : 1;
+        $n_fails = $n_attempted - $n_successful;
+        return $n_fails;
     }
 } 

@@ -32,27 +32,6 @@ class MiscController extends Controller
         }
     }
 
-    public function testEmailAction()
-    {
-        $mailer = $this->get('icse_mailer');
-
-        $mailer->send(array(
-            'template' => 'IcseMembersBundle:Email:temporary_password.html.twig',
-            'template_params' => array(
-                    'first_name' => 'Joe',
-                    'username' => 'joe10',
-                    'email' => 'joe.smith@imperial.ac.uk',
-                    'password_type' => 'set',
-                    'plain_password' => '1234567890',
-            ),
-            'subject' => 'ICSE Online Account Created', 
-            'to' => 'joe.smith@imperial.ac.uk',
-            'return_body' => true,
-        ));
-
-        return new Response("done");
-    } 
-
     public function testldapAction()
     {
         $username = 'jbh1111';

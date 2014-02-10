@@ -80,7 +80,7 @@ class MembersController extends EntityAdminController
     {
         /* @var $member Member */
         $is_new_account = ($member->getID() === null);
-        $mailer = $this->get('icse_mailer');
+        $mailer = $this->get('icse.mailer');
         $form = $this->getForm($member);
         $form->submit($request);
 
@@ -123,30 +123,26 @@ class MembersController extends EntityAdminController
             $em->flush();
 
             if ($is_new_account) {
-                $mailer->send(array(
-                    'template' => 'IcseMembersBundle:Email:account_created.html.twig',
-                    'template_params' => array(
-                            'first_name' => $member->getFirstName(),
-                            'username' => $member->getUsername(),
-                            'email' => $member->getEmail(),
-                            'password_type' => $password_type,
-                            'plain_password' => $plain_password,
-                    ),
-                    'subject' => 'ICSE Online Account Created', 
-                    'to' => $member->getEmail()
-                )); 
+                $mailer->setTemplate('IcseMembersBundle:Email:account_created.html.twig')
+                    ->setBodyFields([
+                        'first_name' => $member->getFirstName(),
+                        'username' => $member->getUsername(),
+                        'email' => $member->getEmail(),
+                        'password_type' => $password_type,
+                        'plain_password' => $plain_password,
+                    ])
+                    ->setSubject('ICSE Online Account Created')
+                    ->send($member->getEmail(), $member->getFirstName());
             } else if ($password_type == 'random') {
-                $mailer->send(array(
-                    'template' => 'IcseMembersBundle:Email:temporary_password.html.twig',
-                    'template_params' => array(
-                            'first_name' => $member->getFirstName(),
-                            'username' => $member->getUsername(),
-                            'email' => $member->getEmail(),
-                            'plain_password' => $plain_password,
-                    ),
-                    'subject' => 'ICSE Account Password Reset', 
-                    'to' => $member->getEmail()
-                ));            
+                $mailer->setTemplate('IcseMembersBundle:Email:temporary_password.html.twig')
+                    ->setBodyFields([
+                        'first_name' => $member->getFirstName(),
+                        'username' => $member->getUsername(),
+                        'email' => $member->getEmail(),
+                        'plain_password' => $plain_password,
+                    ])
+                    ->setSubject('ICSE Account Password Reset')
+                    ->send($member->getEmail(), $member->getFirstName());
             }
 
             return $this->get('ajax_response_gen')->returnSuccess();
