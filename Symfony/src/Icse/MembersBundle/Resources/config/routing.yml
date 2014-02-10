@@ -56,7 +56,7 @@ IcseMembersBundle_signuplist:
 
 IcseMembersBundle_sendemail:
     pattern:  /members/admin/email/{arg}
-    defaults: { _controller: IcseMembersBundle:Admin/Email:main, arg: ~ }
+    defaults: { _controller: IcseMembersBundle:Admin/Email:router, arg: ~ }
 
 # Misc SuperAdmin #
 IcseMembersBundle_site_dev:

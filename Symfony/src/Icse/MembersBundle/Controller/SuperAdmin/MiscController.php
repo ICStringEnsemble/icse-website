@@ -36,7 +36,7 @@ class MiscController extends Controller
     {
         $mailer = $this->get('icse_mailer');
 
-        return $mailer->send(array(
+        $mailer->send(array(
             'template' => 'IcseMembersBundle:Email:temporary_password.html.twig',
             'template_params' => array(
                     'first_name' => 'Joe',
@@ -49,6 +49,8 @@ class MiscController extends Controller
             'to' => 'joe.smith@imperial.ac.uk',
             'return_body' => true,
         ));
+
+        return new Response("done");
     } 
 
     public function testldapAction()

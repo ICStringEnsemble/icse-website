@@ -3,17 +3,13 @@
 
     var preview_frame = $('#preview_dialog');
     var editor = $('#editable');
+    var icse_email = $('#icse_email');
     preview_frame.dialog({
         autoOpen: false,
         modal: true,
         resizable: true,
         width: 800,
         height: 500
-    });
-    $('button.preview').click(function(){
-        preview_frame.dialog('open');
-        preview_frame.html('');
-        preview_frame.load(preview_frame.data('base-url'), {'body': editor.ckeditorGet().getData()});
     });
 
     editor.ckeditor(function(){}, {
@@ -35,6 +31,40 @@
         width: 490
     });
 
+    function ui_confirm_and_do(msg, ok_txt, do_it) {
+        var outer_dfd = $.Deferred();
+
+        var dialog = $("<div>").html(msg).dialog({
+            close: function(){},
+            resizable:false,
+            modal: true,
+            width: 400,
+            buttons: {s:function(){}}
+        });
+        var button_set = dialog.parent().find('.ui-dialog-buttonset');
+        dialog.dialog("option", "buttons", [
+            {
+                text: ok_txt, click: function() {
+                    $('.email_buttons .loading_spinner').clone().prependTo(button_set).show();
+                    button_set.find('button').button('disable');
+                    var inner_dfd = do_it();
+                    inner_dfd.done(function(){
+                        dialog.dialog("close");
+                        outer_dfd.resolve();
+                    }).fail(function(){
+                        button_set.find('.loading_spinner').remove();
+                        button_set.find('button').button('enable');
+                    });
+                }
+            },{
+                text: "Cancel", click: function() {
+                    dialog.dialog("close");
+                }
+            }
+        ]);
+        return outer_dfd.promise();
+    }
+
     function localStorageAvailable(){
         var test = 'test';
         try {
@@ -52,7 +82,7 @@
     var send_to_radios = email_options_pane.find('input[name=send_to_option]');
 
     var save_draft = function(){};
-    var save_options = function(opts){};
+    var save_options = function(){};
     if (localStorageAvailable()) {
         var draft_storage = $.initNamespaceStorage('icse_email_draft').localStorage;
 
@@ -75,23 +105,30 @@
             }
 
             email_options = draft_storage.get(['subject','mailing_list','send_to_option','send_to_address']);
-            email_options_pane.find('#email_subject').val(email_options['subject']);
-            email_options_pane.find('#send_to_address').val(email_options['send_to_address']);
-            mailing_list_radios.filter('[value='+email_options['mailing_list']+']').prop('checked', true);
-            send_to_radios.filter('[value='+email_options['send_to_option']+']').prop('checked', true);
+            if (email_options['email_subject']) {
+                email_options_pane.find('#email_subject').val(email_options['subject']);
+            }
+            if (email_options['send_to_address']) {
+                email_options_pane.find('#send_to_address').val(email_options['send_to_address']);
+            }
+            if (email_options['mailing_list']) {
+                mailing_list_radios.filter('[value='+email_options['mailing_list']+']').prop('checked', true);
+            }
+            if (email_options['send_to_option']) {
+                send_to_radios.filter('[value='+email_options['send_to_option']+']').prop('checked', true);
+            }
         }
         load_draft();
 
         save_draft = function() {
             var body = editor.ckeditorGet().getData();
-
             draft_storage.set('body', body);
-
             $('.saved_indicator').show();
         };
 
-        save_options = function(opts) {
-            draft_storage.set(opts);
+        save_options = function() {
+            draft_storage.set(email_options);
+            draft_storage.remove('subject');
         }
     }
 
@@ -109,9 +146,11 @@
     var send_to_tag_box = email_options_pane.find('#send_to_row').find('ul.tagit');
 
     function handle_email_option_change(){
+        // extract text fields
         var email_subject = email_options_pane.find('#email_subject').val();
         var send_to_address = email_options_pane.find('#send_to_address').val();
 
+        // auto-enable/disable fields/radios
         var mailing_list = mailing_list_radios.filter(':checked').val();
         if (mailing_list == 'none') {
             send_to_radios.filter('[value=mailing_list]').prop('disabled', true);
@@ -119,7 +158,6 @@
         } else {
             send_to_radios.filter('[value=mailing_list]').prop('disabled', false);
         }
-
         var send_to_option = send_to_radios.filter(':checked').val();
         if (send_to_option == 'other') {
             send_to_tag_box.removeClass('disabled');
@@ -127,19 +165,59 @@
             send_to_tag_box.addClass('disabled');
         }
 
+        // group and save all options
         email_options = {
-            subject: email_subject,
+            email_subject: email_subject,
             mailing_list: mailing_list,
             send_to_option: send_to_option,
             send_to_address: send_to_address
         };
-        save_options(email_options);
+        save_options();
+
+        // edit footer according to options
+        icse_email.find('[class^=ml_]').hide();
+        icse_email.find('[class^=ml_'+email_options['mailing_list']+']').show();
     }
     handle_email_option_change();
     email_options_pane.find('input').change(handle_email_option_change);
+
     send_to_tag_box.click(function(){
         send_to_radios.filter('[value=other]').prop('checked', true);
         handle_email_option_change();
+    });
+
+    function getEmailDataForPOST(){
+        var data = {
+            body: editor.ckeditorGet().getData()
+        }
+        $.extend(data, email_options);
+        return data;
+    }
+
+    $('button.preview').click(function(){
+        preview_frame.dialog('open');
+        preview_frame.html($('.email_buttons .loading_spinner').clone().removeAttr('hidden'));
+        preview_frame.load(preview_frame.data('base-url'), getEmailDataForPOST());
+    });
+
+    $('button.send').click(function(){
+        ui_confirm_and_do("Send email?", "Send", function(){
+            var dfd = $.Deferred();
+            var send_url = $('button.send').data('base-url');
+            $.ajax({
+                type: 'POST',
+                data: getEmailDataForPOST(),
+                url: send_url,
+                dataType: 'json'
+            }).always(function(r){
+                if (r.status == "success") {
+                    dfd.resolve();
+                } else {
+                    dfd.reject();
+                }
+            });
+            return dfd;
+        });
     });
 
 })();

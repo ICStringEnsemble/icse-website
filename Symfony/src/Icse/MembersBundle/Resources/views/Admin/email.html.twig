@@ -30,7 +30,7 @@
 <ul class="email_buttons">
     {% spaceless %}
     <li><button class="preview" type=button>Preview</button></li>
-    <li><button disabled class="send" type=button>Send</button></li>
+    <li><button class="send" type=button data-base-url="{{ path('IcseMembersBundle_sendemail', {'arg': 'send'}) }}">Send</button></li>
     <li><span class="not_button saved_indicator">Saved</span></li>
     <li><img hidden class="not_button loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" /></li>
     {% endspaceless %}

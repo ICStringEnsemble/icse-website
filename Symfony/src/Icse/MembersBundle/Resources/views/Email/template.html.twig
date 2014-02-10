@@ -1,4 +1,10 @@
 {% if to_embed is not defined %}{% set to_embed = false %}{% endif %}
+{% if mailinglist is not defined %}{% set mailinglist = 'none' %}{% endif %}
+
+{% macro unsubscribe_line(url) %} Want to <a href="{{ url }}">unsubscribe</a>? {% endmacro %}
+{% macro contactus_line(inner) %} <a href="mailto:icse@imperial.ac.uk">{{ inner | default('Contact us') }}</a>? {% endmacro %}
+{% import _self as email_lines %}
+
 {% if not to_embed %}
 <!DOCTYPE HTML>
 <html>
@@ -30,7 +36,24 @@
                                         </tr>
                                         <tr>
                                             <td id="footer_cell">
-                                                Want to <a href="https://mailman.ic.ac.uk/mailman/listinfo/icse-talk">unsubscribe</a>? <a href="mailto:icse@imperial.ac.uk">Contact us</a>? Visit our <a href="http://www.union.ic.ac.uk/arts/stringensemble/" >website</a>?
+                                                {% if mailinglist in ['members', 'all'] %}
+                                                    <span class="ml_members">
+                                                        {{ email_lines.unsubscribe_line('https://mailman.ic.ac.uk/mailman/listinfo/icse-talk') }}
+                                                        {{ email_lines.contactus_line() }}
+                                                    </span>
+                                                {% endif %}
+                                                {% if mailinglist in ['public', 'all'] %}
+                                                    <span class="ml_public">
+                                                        {{ email_lines.unsubscribe_line('https://mailman.ic.ac.uk/mailman/listinfo/icu-stringensemble-public') }}
+                                                        {{ email_lines.contactus_line() }}
+                                                    </span>
+                                                {% endif %}
+                                                {% if mailinglist in ['none', 'all'] %}
+                                                    <span class="ml_none">
+                                                        Want to {{ email_lines.contactus_line('contact us') }}
+                                                    </span>
+                                                {% endif %}
+                                                Visit our <a href="http://www.union.ic.ac.uk/arts/stringensemble/">website</a>?
                                             </td>
                                         </tr>
                                     </table>

@@ -9,42 +9,70 @@ class IcseMailer
     private $mailer;
     private $style_converter;
     private $root_dir;
+    private $template;
+    private $email_subject;
+    private $from_name;
+    private $template_fields;
 
     public function __construct(\Swift_Mailer $mailer, ToInlineStyleEmailConverter $css_to_inline_email_converter, $root_dir)
     {
         $this->mailer = $mailer;
         $this->style_converter = $css_to_inline_email_converter;
         $this->root_dir = $root_dir;
+        $this->template = 'IcseMembersBundle:Email:template.html.twig';
+        $this->email_subject = 'An Email from ICSE';
+        $this->from_name = 'ICSE Website';
+        $this->template_fields = [];
+    }
+
+    public function setTemplate($t)
+    {
+        $this->template = $t;
+        return $this;
+    }
+
+    public function setBodyFields($f)
+    {
+        $this->template_fields = $f;
+        return $this;
+    }
+
+    public function setSubject($s)
+    {
+        $this->email_subject = $s;
+        return $this;
+    }
+
+    public function setFromName($n)
+    {
+        $this->from_name = $n;
+        return $this;
+    }
+
+    private function generateStyledEmailHtml()
+    {
+        $this->style_converter->setCSS(file_get_contents($this->root_dir . '/../web/bundles/icsemembers/css/email.css'));
+        $this->style_converter->setHTMLByView($this->template, $this->template_fields);
+        $html_body = $this->style_converter->generateStyledHTML();
+        return $html_body;
+    }
+
+    public function preview()
+    {
+        $html_body = $this->generateStyledEmailHtml();
+        $html_body = preg_replace('/ id\s*=\s*["\']?icse_email["\']?[^a-zA-Z\d]/', ' ', $html_body, 1);
+        return $html_body;
     }
  
-    public function send($params = array())
+    public function send($to_addresses, $to_name=null, &$failures=null)
     {
-        $default_parameters = array(
-            'template' => 'IcseMembersBundle:Email:account_created.html.twig',
-            'template_params' => array(),
-            'subject' => 'An Email from ICSE',
-            'from_name' => 'ICSE Website',
-            'to' => 'dphoyes@gmail.com',
-            'return_body' => 'false',
-        );
-        $params = array_merge($default_parameters, $params);
-
-        $this->style_converter->setCSS(file_get_contents($this->root_dir . '/../web/bundles/icsemembers/css/email.css')); 
-        $this->style_converter->setHTMLByView($params['template'], $params['template_params']); 
-        $html_body = $this->style_converter->generateStyledHTML();
+        $html_body = $this->generateStyledEmailHtml();
         $email = \Swift_Message::newInstance()
-                            ->setSubject($params['subject'])
-                            ->setFrom(array('icse@imperial.ac.uk' => $params['from_name']))
-                            ->setTo($params['to'])
-                            ->setBody($html_body) 
-                            ->setContentType("text/html") 
-                            ;
-        $this->mailer->send($email);
-     
-        if ($params['return_body'] === true) {
-            return new Response($html_body); 
-        } else {
-            return true;
-        }
+                            ->setSubject($this->email_subject)
+                            ->setFrom(['icse@imperial.ac.uk' => $this->from_name])
+                            ->setTo($to_addresses, $to_name);
+        $email->setBody($html_body);
+        $email->setContentType("text/html");
+        return $this->mailer->send($email, $failures);
     }
 } 
