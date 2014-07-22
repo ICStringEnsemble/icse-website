@@ -11,7 +11,7 @@ security:
                 path: /logout
                 target: /
             remember_me:
-                key:      3Q18L=WtlR/=9$B 
+                key:      %remember_me_key%
                 lifetime: 1209600 
                 path:     /
             switch_user: true

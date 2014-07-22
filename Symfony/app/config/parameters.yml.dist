@@ -31,3 +31,4 @@ parameters:
 
     locale:            en
     secret:            ~
+    remember_me_key:   ~
