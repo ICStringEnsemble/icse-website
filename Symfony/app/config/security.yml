@@ -13,7 +13,7 @@ security:
             remember_me:
                 key:      3Q18L=WtlR/=9$B 
                 lifetime: 1209600 
-                path:     /arts/stringensemble
+                path:     /
             switch_user: true
 
     access_control:
