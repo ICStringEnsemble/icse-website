@@ -30,7 +30,7 @@
   {% spaceless %}
   <li><button class="refresh show_if_none_selected" type=button>Refresh</button></li>
   {% if not readOnly %}
-  <li><button class="create show_if_none_selected" type=button>Add&nbsp;{{ entitySingular | capitalize }}</button></li>
+  <li><button class="create show_if_none_selected" type=button>Add&nbsp;{{ entitySingular | title }}</button></li>
   <li><button class="edit show_if_one_selected" type=button>Edit</button></li>
   <li><button class="delete show_if_any_selected" type=button>Delete</button></li>
   {% endif %}

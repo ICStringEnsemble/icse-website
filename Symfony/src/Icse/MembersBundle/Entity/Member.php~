@@ -2,18 +2,13 @@
 
 namespace Icse\MembersBundle\Entity;
 
+use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
 
-use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
-use JMS\Serializer\Annotation\Exclude;
 use JMS\Serializer\Annotation\Groups;
-
-// use JMS\Serializer\Annotation\ExclusionPolicy;
-// use JMS\Serializer\Annotation\Expose;
-// use JMS\Serializer\Annotation\Exclude;
 
 /**
  * Icse\MembersBundle\Entity\Member
@@ -60,18 +55,35 @@ class Member implements AdvancedUserInterface
     {
       $this->active = true;
       $this->role = 1;
-      //$this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+    }
+
+    private function getAutoRole($dt = null)
+    {
+        if (is_null($dt)) $dt = new \DateTime();
+        $current_month = intval($dt->format("m"));
+        $current_year = intval($dt->format("Y"));
+
+        if ($current_month < 6)  $required_start_year = [$current_year - 1];
+        elseif ($current_month < 10) $required_start_year = [$current_year - 1, $current_year];
+        else $required_start_year = [$current_year];
+
+        $current_roles = $this->getCommitteeRolesMatchingYears($required_start_year);
+
+        if (count($current_roles) > 0) return array('ROLE_ADMIN');
+        else return array('ROLE_USER');
     }
 
     public function getRoles()
     {
       switch($this->getRole()) {
         case 1:
-          return array('ROLE_USER');
+          return $this->getAutoRole();
         case 10:
           return array('ROLE_ADMIN');
         case 100:
           return array('ROLE_SUPER_ADMIN');
+        default:
+          return array('ROLE_USER');
       }
     }
 
@@ -371,4 +383,50 @@ class Member implements AdvancedUserInterface
         return $this->last_online_at;
     }
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $committee_roles;
+
+
+    /**
+     * Add committee_roles
+     *
+     * @param \Icse\MembersBundle\Entity\CommitteeRole $committeeRoles
+     * @return Member
+     */
+    public function addCommitteeRole(\Icse\MembersBundle\Entity\CommitteeRole $committeeRoles)
+    {
+        $this->committee_roles[] = $committeeRoles;
+
+        return $this;
+    }
+
+    /**
+     * Remove committee_roles
+     *
+     * @param \Icse\MembersBundle\Entity\CommitteeRole $committeeRoles
+     */
+    public function removeCommitteeRole(\Icse\MembersBundle\Entity\CommitteeRole $committeeRoles)
+    {
+        $this->committee_roles->removeElement($committeeRoles);
+    }
+
+    /**
+     * Get committee_roles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCommitteeRoles()
+    {
+        return $this->committee_roles;
+    }
+
+    public function getCommitteeRolesMatchingYears($years)
+    {
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->in('start_year', $years));
+
+        return $this->committee_roles->matching($criteria);
+    }
 }

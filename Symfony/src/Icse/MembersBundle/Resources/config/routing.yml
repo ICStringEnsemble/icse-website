@@ -50,6 +50,10 @@ IcseMembersBundle_members:
     pattern:  /members/superadmin/members/{arg}
     defaults: { _controller: IcseMembersBundle:SuperAdmin/Members:router, arg: ~ }
 
+IcseMembersBundle_committee_edit:
+    pattern:  /members/superadmin/committee/{arg}
+    defaults: { _controller: IcseMembersBundle:SuperAdmin/Committee:router, arg: ~ }
+
 IcseMembersBundle_signuplist:
     pattern:  /members/admin/signups/{arg}
     defaults: { _controller: IcseMembersBundle:Admin/SignupList:router, arg: ~ }

@@ -1,0 +1,42 @@
+{% extends 'IcseMembersBundle:Admin:entity_admin_template.html.twig' %}
+
+{% set pageTitle = 'Committee' %}
+{% set currentSubSection = 'committeelist' %}
+
+{% set entitySingular = 'committee member' %}
+
+{% block extra_content %}
+<script>
+
+    var initCreateForm;
+
+    (function(){
+
+        var edit_form = $("#edit_form");
+        var year_input = edit_form.find("input[name='form[start_year]']");
+        var sort_input = edit_form.find("input[name='form[sort_position]']");
+
+        initCreateForm = function() {
+            year_input.val(moment().year());
+            year_input.change();
+        };
+
+        year_input.change(function(){
+            var year = $(this).val();
+
+            var positions = $('.admintable').find('tr.ui-selectee').map(function(){
+                return $(this).data('entity');
+            }).filter(function(){
+                return $(this)[0].start_year == year;
+            }).map(function(){
+                return $(this)[0].sort_position;
+            });
+
+            var new_position = positions.length == 0 ? 0 : Math.max.apply(null, positions) + 1;
+            sort_input.val(new_position);
+        });
+
+    })()
+
+</script>
+{% endblock %}

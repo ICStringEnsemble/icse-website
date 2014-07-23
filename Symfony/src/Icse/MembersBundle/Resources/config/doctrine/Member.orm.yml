@@ -41,5 +41,9 @@ Icse\MembersBundle\Entity\Member:
         type: datetime 
         nullable: true
     created_at:
-        type: datetime 
+        type: datetime
+  oneToMany:
+      committee_roles:
+          targetEntity: CommitteeRole
+          mappedBy: member
   lifecycleCallbacks: {  }

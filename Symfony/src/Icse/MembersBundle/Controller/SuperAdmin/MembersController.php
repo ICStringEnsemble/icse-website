@@ -39,7 +39,7 @@ class MembersController extends EntityAdminController
             array('heading' => 'Email', 'cell' => function(Member $member){return $member->getEmail();}),
             array('heading' => 'Password', 'cell' => function(Member $member){return $member->getPassword()?"Stored":"Imperial";}),
             array('heading' => 'Active', 'cell' => function(Member $member){return $member->getActive()? "Yes":"No";}),
-            array('heading' => 'Role', 'cell' => function(Member $member){return $member->getRole() == 100? "Super Admin":($member->getRole() == 10?"Admin":"User");}),
+            array('heading' => 'Role', 'cell' => function(Member $member){return $member->getRole() == 100? "Super Admin":($member->getRole() == 10?"Admin":"-");}),
             array('heading' => 'Last Online', 'cell' => function(Member $member){return $member->getLastOnlineAt()? $this->timeagoDate($member->getLastOnlineAt()) : "Never";}),
         );
         return array("columns" => $columns, "entities" => $members, "serial_groups" => ['superadmin']);
@@ -56,7 +56,7 @@ class MembersController extends EntityAdminController
                 'choices' => array(true => 'Yes', false => 'No')
             ))
             ->add('role', 'choice', array(
-                'choices' => array(1 => 'User', 10 => 'Admin', 100 => 'Super Admin')
+                'choices' => array(1 => 'Auto', 10 => 'Admin', 100 => 'Super Admin')
             ))
             ->add('password_choice', 'choice', array(
                 'choices' => array('no_change' => 'Don\'t Change', 'imperial' => 'Imperial Password', 'random' => 'Random Password', 'set' => 'Choose a Password'),

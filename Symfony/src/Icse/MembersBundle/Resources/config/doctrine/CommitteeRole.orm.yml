@@ -1,0 +1,23 @@
+Icse\MembersBundle\Entity\CommitteeRole:
+    type: entity
+    table: null
+    repositoryClass: Icse\MembersBundle\Entity\CommitteeRoleRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        position_name:
+            type: string
+            length: 255
+        start_year:
+            type: integer
+        sort_position:
+            type: integer
+    manyToOne:
+        member:
+            targetEntity: Member
+            inversedBy: committee_roles
+    lifecycleCallbacks: {  }

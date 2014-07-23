@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "918dde8d5e14d849cea2a4aca343ea22",
+    "hash": "a651260280aedc9474c18fe0b9234590",
     "packages": [
         {
             "name": "acts/social-api-bundle",
