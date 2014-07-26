@@ -2,6 +2,7 @@
 
 namespace Icse\MembersBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
@@ -59,11 +60,12 @@ class Member implements AdvancedUserInterface
 
     public function __construct()
     {
-      $this->active = true;
-      $this->role = 1;
+        $this->committee_roles = new Arraycollection;
+        $this->active = true;
+        $this->role = 1;
     }
 
-    private function getAutoRole($dt = null)
+    private function getAutoRole(\DateTime $dt = null)
     {
         if (is_null($dt)) $dt = new \DateTime();
         $current_month = intval($dt->format("m"));
@@ -79,23 +81,24 @@ class Member implements AdvancedUserInterface
         else return array('ROLE_USER');
     }
 
-    public function getRoles($dt = null)
+    public function getRoles(\DateTime $dt = null)
     {
-      switch($this->getRole()) {
-        case 1:
-          return $this->getAutoRole($dt);
-        case 10:
-          return array('ROLE_ADMIN');
-        case 100:
-          return array('ROLE_SUPER_ADMIN');
-        default:
-          return array('ROLE_USER');
-      }
+        switch($this->getRole())
+        {
+            case 1:
+                return $this->getAutoRole($dt);
+            case 10:
+                return array('ROLE_ADMIN');
+            case 100:
+                return array('ROLE_SUPER_ADMIN');
+            default:
+                return array('ROLE_USER');
+        }
     }
 
     public function equals(UserInterface $member)
     {
-      return $member->getUsername() === $this->username;
+        return $member->getUsername() === $this->username;
     }
 
     public function eraseCredentials()
@@ -104,22 +107,22 @@ class Member implements AdvancedUserInterface
 
     public function isAccountNonExpired()
     {
-      return true;
+        return true;
     }
 
     public function isAccountNonLocked()
     {
-      return true;
+        return true;
     }
 
     public function isCredentialsNonExpired()
     {
-      return true;
+        return true;
     }
 
     public function isEnabled()
     {
-      return $this->isActive();
+        return $this->isActive();
     }
 
 
