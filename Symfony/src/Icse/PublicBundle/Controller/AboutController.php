@@ -25,30 +25,30 @@ class AboutController extends Controller
     public function ensembleAction()
     {
         $section = $this->getSiteSection('about_ensemble');
-        return $this->render('IcsePublicBundle:About:generic_page.html.twig', array('pageBody' => $section['text'],
-                                                                                'imageFile' => $section['image'],
-                                                                                'pageTitle' => 'About the Ensemble',
-                                                                                'currentSubSection' => 'ensemble'
-                                                                             ));
+        return $this->render('IcsePublicBundle:About:generic_page.html.twig', [
+            'pageBody' => $section['text'],
+            'imageFile' => $section['image'],
+            'pageTitle' => 'About the Ensemble',
+            'currentSubSection' => 'ensemble'
+        ]);
     }
 
     public function conductorAction()
     {
         $section = $this->getSiteSection('about_conductor');
-        return $this->render('IcsePublicBundle:About:generic_page.html.twig', array('pageBody' => $section['text'],
-                                                                                'imageFile' => $section['image'],
-                                                                                'pageTitle' => 'The Conductor',
-                                                                                'currentSubSection' => 'conductor'
-                                                                             ));
+        return $this->render('IcsePublicBundle:About:generic_page.html.twig', [
+            'pageBody' => $section['text'],
+            'imageFile' => $section['image'],
+            'pageTitle' => 'The Conductor',
+            'currentSubSection' => 'conductor'
+        ]);
     }
 
     public function committeeAction()
     {
-        $section = $this->getSiteSection('about_committee');
-        return $this->render('IcsePublicBundle:About:generic_page.html.twig', array('pageBody' => $section['text'],
-                                                                                'imageFile' => $section['image'],
-                                                                                'pageTitle' => 'The Committee',
-                                                                                'currentSubSection' => 'committee'
-                                                                             ));
+        $committee_members = $this->getDoctrine()->getRepository('IcseMembersBundle:CommitteeRole')->findCurrent();
+        return $this->render('IcsePublicBundle:About:committee.html.twig', [
+            'committee_members' => $committee_members
+        ]);
     }
 }

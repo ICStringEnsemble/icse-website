@@ -1,0 +1,31 @@
+Icse\MembersBundle\Entity\MemberProfile:
+    type: entity
+    table: null
+    id:
+        member:
+            associationKey: true
+    fields:
+        instrument:
+            type: string
+            length: 100
+        join_year:
+            type: integer
+        study_subject:
+            type: string
+            length: 100
+        favourite_snack:
+            type: string
+            length: 100
+        memorable_moment:
+            type: text
+    manyToOne:
+        picture:
+            targetEntity: Icse\PublicBundle\Entity\Image
+            nullable: true
+    oneToOne:
+        member:
+            targetEntity: Member
+            inversedBy: profile
+            joinColumn:
+                onDelete: CASCADE
+    lifecycleCallbacks: {  }

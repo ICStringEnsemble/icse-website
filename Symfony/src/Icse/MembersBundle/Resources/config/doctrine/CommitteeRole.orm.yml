@@ -14,7 +14,7 @@ Icse\MembersBundle\Entity\CommitteeRole:
             length: 255
         start_year:
             type: integer
-        sort_position:
+        sort_index:
             type: integer
     manyToOne:
         member:

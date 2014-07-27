@@ -130,7 +130,7 @@ class Member implements AdvancedUserInterface
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -150,7 +150,7 @@ class Member implements AdvancedUserInterface
     /**
      * Get username
      *
-     * @return string 
+     * @return string
      */
     public function getUsername()
     {
@@ -170,7 +170,7 @@ class Member implements AdvancedUserInterface
     /**
      * Get salt
      *
-     * @return string 
+     * @return string
      */
     public function getSalt()
     {
@@ -190,7 +190,7 @@ class Member implements AdvancedUserInterface
     /**
      * Get password
      *
-     * @return string 
+     * @return string
      */
     public function getPassword()
     {
@@ -210,7 +210,7 @@ class Member implements AdvancedUserInterface
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -230,7 +230,7 @@ class Member implements AdvancedUserInterface
     /**
      * Get active
      *
-     * @return boolean 
+     * @return boolean
      */
     public function isActive()
     {
@@ -250,7 +250,7 @@ class Member implements AdvancedUserInterface
     /**
      * Get active
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getActive()
     {
@@ -270,7 +270,7 @@ class Member implements AdvancedUserInterface
     /**
      * Get first_name
      *
-     * @return string 
+     * @return string
      */
     public function getFirstName()
     {
@@ -290,7 +290,7 @@ class Member implements AdvancedUserInterface
     /**
      * Get last_name
      *
-     * @return string 
+     * @return string
      */
     public function getLastName()
     {
@@ -300,13 +300,13 @@ class Member implements AdvancedUserInterface
     /**
      * Get Full name; first and last names concatenated together
      *
-     * @return string 
+     * @return string
      */
     public function getFullName()
     {
         return $this->getFirstName() .' '. $this->getLastName();
     }
-    
+
     /**
      * @var integer $role
      * @Groups({"superadmin"})
@@ -327,7 +327,7 @@ class Member implements AdvancedUserInterface
     /**
      * Get role
      *
-     * @return integer 
+     * @return integer
      */
     public function getRole()
     {
@@ -349,14 +349,14 @@ class Member implements AdvancedUserInterface
     public function setCreatedAt($createdAt)
     {
         $this->created_at = $createdAt;
-    
+
         return $this;
     }
 
     /**
      * Get created_at
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -378,14 +378,14 @@ class Member implements AdvancedUserInterface
     public function setLastOnlineAt($lastOnlineAt)
     {
         $this->last_online_at = $lastOnlineAt;
-    
+
         return $this;
     }
 
     /**
      * Get last_online_at
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLastOnlineAt()
     {
@@ -418,7 +418,7 @@ class Member implements AdvancedUserInterface
     /**
      * Get committee_roles
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCommitteeRoles()
     {
@@ -431,5 +431,33 @@ class Member implements AdvancedUserInterface
         $criteria->where(Criteria::expr()->in('start_year', $years));
 
         return $this->committee_roles->matching($criteria);
+    }
+    /**
+     * @var \Icse\MembersBundle\Entity\MemberProfile
+     */
+    private $profile;
+
+
+    /**
+     * Set profile
+     *
+     * @param \Icse\MembersBundle\Entity\MemberProfile $profile
+     * @return Member
+     */
+    public function setProfile(\Icse\MembersBundle\Entity\MemberProfile $profile = null)
+    {
+        $this->profile = $profile;
+
+        return $this;
+    }
+
+    /**
+     * Get profile
+     *
+     * @return \Icse\MembersBundle\Entity\MemberProfile
+     */
+    public function getProfile()
+    {
+        return $this->profile;
     }
 }

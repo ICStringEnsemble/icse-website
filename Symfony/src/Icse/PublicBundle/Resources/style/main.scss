@@ -580,15 +580,16 @@ section #news_article {
         overflow: auto;
     }
 
+    img+div.profiletext {
+        padding-left: 165px;
+    }
+
     h3 {
         padding-bottom: 0.5em;
         font-size: 1.2em;
     }
 
     dl {
-
-        padding-left: 165px;
-
         dt {
             float: left;
             font-weight: bold;

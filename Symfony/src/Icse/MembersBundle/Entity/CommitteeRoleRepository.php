@@ -12,13 +12,21 @@ use Doctrine\ORM\EntityRepository;
  */
 class CommitteeRoleRepository extends EntityRepository
 {
-    public function maxSortPositionOfYear($year)
+    public function findCurrent(\DateTime $dt = null)
     {
+        if ($dt === null) $dt = new \DateTime;
+        $current_month = intval($dt->format("m"));
+        $current_year = intval($dt->format("Y"));
+
+        if ($current_month < 8) $start_year = $current_year - 1;
+        else $start_year = $current_year;
+
         return $this->getEntityManager()
-                    ->createQuery ('SELECT MAX(r.sort_position)
+                    ->createQuery ('SELECT r
                                     FROM IcseMembersBundle:CommitteeRole r
-                                    WHERE r.start_year = :year')
-                    ->setParameters(['year' => $year])
-                    ->getSingleScalarResult();
+                                    WHERE r.start_year = :year
+                                    ORDER BY r.sort_index ASC')
+                    ->setParameters(['year' => $start_year])
+                    ->getResult();
     }
 }

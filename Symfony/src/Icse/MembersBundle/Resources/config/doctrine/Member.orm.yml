@@ -1,49 +1,54 @@
 Icse\MembersBundle\Entity\Member:
-  type: entity
-  repositoryClass: Icse\MembersBundle\Entity\MemberRepository 
-  table: null
-  fields:
+    type: entity
+    repositoryClass: Icse\MembersBundle\Entity\MemberRepository 
+    table: null
     id:
-      type: integer
-      id: true
-      generator:
-        strategy: AUTO
-    first_name:
-      type: string
-      length: 50
-      nullable: false
-    last_name:
-      type: string
-      length: 50 
-      nullable: false
-    username:
-      type: string
-      length: '50'
-      unique: true
-      nullable: true
-    salt:
-      type: string
-      length: '40'
-      nullable: true
-    password:
-      type: string
-      length: '89'
-      nullable: true
-    email:
-      type: string
-      length: '60'
-      unique: true
-    active:
-      type: boolean
-    role:
-      type: integer
-    last_online_at:
-        type: datetime 
-        nullable: true
-    created_at:
-        type: datetime
-  oneToMany:
-      committee_roles:
-          targetEntity: CommitteeRole
-          mappedBy: member
-  lifecycleCallbacks: {  }
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        first_name:
+            type: string
+            length: 50
+            nullable: false
+        last_name:
+            type: string
+            length: 50 
+            nullable: false
+        username:
+            type: string
+            length: '50'
+            unique: true
+            nullable: true
+        salt:
+            type: string
+            length: '40'
+            nullable: true
+        password:
+            type: string
+            length: '89'
+            nullable: true
+        email:
+            type: string
+            length: '60'
+            unique: true
+        active:
+            type: boolean
+        role:
+            type: integer
+        last_online_at:
+            type: datetime 
+            nullable: true
+        created_at:
+            type: datetime
+    oneToMany:
+        committee_roles:
+            targetEntity: CommitteeRole
+            mappedBy: member
+    oneToOne:
+        profile:
+            targetEntity: MemberProfile
+            mappedBy: member
+    lifecycleCallbacks: {  }

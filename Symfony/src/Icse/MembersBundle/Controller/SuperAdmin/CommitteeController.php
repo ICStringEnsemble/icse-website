@@ -24,10 +24,10 @@ class CommitteeController extends EntityAdminController
 
     protected function getTableContent()
     {
-        $entities = $this->repository()->findBy(array(), array('start_year'=>'desc', 'sort_position'=>'asc'));
+        $entities = $this->repository()->findBy(array(), array('start_year'=>'desc', 'sort_index'=>'asc'));
 
         $columns = array(
-            array('heading' => 'Index', 'cell' => function(CommitteeRole $x){return $x->getSortPosition();}),
+            array('heading' => 'Index', 'cell' => function(CommitteeRole $x){return $x->getSortIndex();}),
             array('heading' => 'Year', 'cell' => function(CommitteeRole $x){$y0=$x->getStartYear(); $y1=$y0+1; return "$y0&ndash;$y1";}),
             array('heading' => 'Role', 'cell' => function(CommitteeRole $x){return $x->getPositionName();}),
             array('heading' => 'Name', 'cell' => function(CommitteeRole $x){return $x->getMember()->getFullName();}),
@@ -44,7 +44,7 @@ class CommitteeController extends EntityAdminController
             ])
             ->add('position_name', 'text')
             ->add('start_year', 'integer')
-            ->add('sort_position', 'integer', ['label' => 'Sort index'])
+            ->add('sort_index', 'integer', ['label' => 'Sort index'])
             ->getForm();
         return $form;
     }
@@ -52,16 +52,16 @@ class CommitteeController extends EntityAdminController
     private function makeSortIndexAvailable(CommitteeRole $fixed_entity)
     {
         $entities_of_year = $this->getDoctrine()->getRepository('IcseMembersBundle:CommitteeRole')
-                                                ->findBy(['start_year' => $fixed_entity->getStartYear()], ['sort_position' => 'ASC']);
+                                                ->findBy(['start_year' => $fixed_entity->getStartYear()], ['sort_index' => 'ASC']);
 
-        $reserved_i = $fixed_entity->getSortPosition();
+        $reserved_i = $fixed_entity->getSortIndex();
         $next_assignment = $reserved_i + 1;
 
         foreach($entities_of_year as $e)
         {
-            if ($e !== $fixed_entity and $e->getSortPosition() >= $reserved_i)
+            if ($e !== $fixed_entity and $e->getSortIndex() >= $reserved_i)
             {
-                $e->setSortPosition($next_assignment);
+                $e->setSortIndex($next_assignment);
                 $next_assignment++;
             }
         }

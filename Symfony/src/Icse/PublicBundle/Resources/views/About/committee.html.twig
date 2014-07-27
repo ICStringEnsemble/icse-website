@@ -1,0 +1,47 @@
+{% extends 'IcsePublicBundle:About:template.html.twig' %} 
+
+{% set pageTitle = 'The Committee' %}
+{% set currentSubSection = 'committee' %}
+
+{% block content %}
+
+<h1>The Committee</h1>
+<div id="committee_profiles">
+
+{% set previous_position_name = null %}
+
+{% for m in committee_members %}
+    {% if m.positionName != previous_position_name %}
+        <h2>{{ m.positionName }}</h2>
+    {% endif %}
+    <div class="profile">
+        {% if m.member.profile is not null and m.member.profile.picture is not null %}
+            <img width=155 height=200 src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file': m.member.profile.picture.file, 'size':'committeeprofile'}) }}" >
+        {% endif %}
+        <div class="profiletext">
+            <h3>{{ m.member.fullName }}</h3>
+            {% if m.member.profile is not null %}
+                {% set p = m.member.profile %}
+                <dl>
+                    {% for line in [
+                        {label: 'Instrument', value: p.instrument},
+                        {label: 'Joined ICSE', value: p.joinYear},
+                        {label: 'Subject studied', value: p.studySubject},
+                        {label: 'Favourite ICSE break snack', value: p.favouriteSnack},
+                        {label: 'Most memorable ICSE moment', value: p.memorableMoment},
+                    ] %}
+                        {% if line.value %}
+                            <dt>{{ line.label }}</dt><dd>{{ line.value }}</dd>
+                        {% endif %}
+                    {% endfor %}
+                </dl>
+            {% endif %}
+        </div>
+    </div>
+
+    {% set previous_position_name = m.positionName %}
+{% endfor %}
+
+</div>
+
+{% endblock %}

@@ -1,7 +1,7 @@
 Header set X-UA-Compatible "IE=edge"
 RewriteEngine On
 
-RewriteCond %{HTTP_HOST} !^www\.icstringensemble\.(org\.uk|localhost)$
+RewriteCond %{HTTP_HOST} !^(www\.icstringensemble\.(org\.uk|localhost)|icse\..*\.xip\.io)$
 RewriteRule ^(.*)$ http://www.icstringensemble.org.uk/$1 [R=301,L]
 
 RewriteCond %{REQUEST_FILENAME} !-d

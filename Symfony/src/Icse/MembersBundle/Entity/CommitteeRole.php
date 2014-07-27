@@ -86,7 +86,7 @@ class CommitteeRole
     }
 
     /**
-     * @var \Icse\MembersBundle\Entity\Member
+     * @var Member
      */
     private $member;
 
@@ -94,10 +94,10 @@ class CommitteeRole
     /**
      * Set member
      *
-     * @param \Icse\MembersBundle\Entity\Member $member
+     * @param Member $member
      * @return CommitteeRole
      */
-    public function setMember(\Icse\MembersBundle\Entity\Member $member = null)
+    public function setMember(Member $member = null)
     {
         $this->member = $member;
 
@@ -107,7 +107,7 @@ class CommitteeRole
     /**
      * Get member
      *
-     * @return \Icse\MembersBundle\Entity\Member 
+     * @return Member
      */
     public function getMember()
     {
@@ -116,29 +116,29 @@ class CommitteeRole
     /**
      * @var integer
      */
-    private $sort_position;
+    private $sort_index;
 
 
     /**
-     * Set sort_position
+     * Set sort_index
      *
-     * @param integer $sortPosition
+     * @param integer $sort_index
      * @return CommitteeRole
      */
-    public function setSortPosition($sortPosition)
+    public function setSortIndex($sort_index)
     {
-        $this->sort_position = $sortPosition;
+        $this->sort_index = $sort_index;
 
         return $this;
     }
 
     /**
-     * Get sort_position
+     * Get sort_index
      *
      * @return integer 
      */
-    public function getSortPosition()
+    public function getSortIndex()
     {
-        return $this->sort_position;
+        return $this->sort_index;
     }
 }
