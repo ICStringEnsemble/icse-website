@@ -46,6 +46,7 @@
 {{ parent() }}
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 <script src="{{ asset('bundles/icsepublic/lib/js/jquery.mobile.custom.min.js') }}"></script> 
+<script src="{{ asset('bundles/icsepublic/lib/js/jquery.cookie.min.js') }}"></script>
 {#<script src="{{ asset('bundles/icsepublic/lib/js/jquery.ui.touch-punch.min.js') }}"></script> #}
 {#<script src="{{ asset('bundles/icsepublic/lib/js/jquery.touchToClick.min.js') }}"></script>#}
 {% endblock %}
@@ -117,6 +118,8 @@
     });
     $('#nav_column').find('li').bind('swipeleft', hideNavColumn);
     $('#hidden_nav_col_cover').bind('swiperight', showNavColumn);
+
+    $.cookie('last_members_page', '{{ app.request.attributes.get('_route') }}', { expires: 14, path: '/' });
   })
 </script>
 {% endblock %}

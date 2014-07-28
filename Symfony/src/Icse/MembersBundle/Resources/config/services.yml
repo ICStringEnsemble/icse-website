@@ -17,11 +17,6 @@ services:
             - { name: kernel.event_listener, event: kernel.terminate, method: onTerminate }
         arguments: [@security.context, @doctrine.orm.entity_manager] 
 
-    kernel.listener.last_members_page_listener:
-        class: Icse\MembersBundle\EventListener\LastMembersPageListener
-        tags:
-            - { name: kernel.event_listener, event: kernel.response, method: onResponse }
-
     icse.mailer:
         class: Icse\MembersBundle\Service\IcseMailer
         arguments: [@mailer, @css_to_inline_email_converter, %kernel.root_dir%] 
