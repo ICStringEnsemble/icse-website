@@ -9,4 +9,4 @@ RewriteRule ^(.+)/$ /$1 [R=301,L]
 
 RewriteCond %{REQUEST_FILENAME} !-f [OR]
 RewriteCond $0 ^\..*$
-RewriteRule ^(.*)$ site.php [QSA,L] 
+RewriteRule ^(.*)$ main.php [QSA,L] 
