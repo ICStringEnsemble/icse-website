@@ -15,7 +15,7 @@ class MiscController extends Controller
 
     public function migrateDBAction()
     {
-        if ($this->get('kernel')->getEnvironment() == 'dev') {
+        if ($this->get('kernel')->getEnvironment() == 'dev' or $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
             exec('/usr/bin/php ./Symfony/app/console -n doctrine:migrations:migrate', $output, $error);
             if ($error == 0)
             {
@@ -28,7 +28,7 @@ class MiscController extends Controller
             $pageBody = implode('<br />', $output);
             return new Response($pageBody);
         } else {
-            return new Response("Dev environment required; no changes made.");
+            return new Response("Developer mode required; no changes made.");
         }
     }
 
