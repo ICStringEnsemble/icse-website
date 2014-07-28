@@ -21,6 +21,10 @@ IcseMembersBundle_account_settings:
     pattern:  /members/account
     defaults: { _controller: IcseMembersBundle:AccountSettings:index }
 
+IcseMembersBundle_my_profile:
+    pattern:  /members/myprofile
+    defaults: { _controller: IcseMembersBundle:AccountSettings:profile }
+
 # Admin
 IcseMembersBundle_image_uploads:
     pattern:  /members/admin/images

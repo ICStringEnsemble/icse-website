@@ -30,5 +30,6 @@ security:
         Icse\MembersBundle\Entity\Member: sha512
 
     role_hierarchy:
-        ROLE_ADMIN: ROLE_USER
+        ROLE_HAVE_PROFILE: [ROLE_USER]
+        ROLE_ADMIN: [ROLE_HAVE_PROFILE, ROLE_USER]
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]

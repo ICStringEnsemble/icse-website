@@ -4,6 +4,7 @@ namespace Icse\MembersBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
+use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,7 +15,7 @@ use JMS\Serializer\Annotation\Groups;
 /**
  * Icse\MembersBundle\Entity\Member
  */
-class Member implements AdvancedUserInterface
+class Member implements AdvancedUserInterface, \Serializable
 {
     /**
      * @var integer $id
@@ -77,8 +78,8 @@ class Member implements AdvancedUserInterface
 
         $current_roles = $this->getCommitteeRolesMatchingYears($required_start_year);
 
-        if ($current_roles->count()) return array('ROLE_ADMIN');
-        else return array('ROLE_USER');
+        if ($current_roles->count()) return ['ROLE_ADMIN'];
+        else return ['ROLE_USER'];
     }
 
     public function getRoles(\DateTime $dt = null)
@@ -88,11 +89,11 @@ class Member implements AdvancedUserInterface
             case 1:
                 return $this->getAutoRole($dt);
             case 10:
-                return array('ROLE_ADMIN');
+                return ['ROLE_ADMIN'];
             case 100:
-                return array('ROLE_SUPER_ADMIN');
+                return ['ROLE_SUPER_ADMIN'];
             default:
-                return array('ROLE_USER');
+                return ['ROLE_USER'];
         }
     }
 
@@ -459,5 +460,43 @@ class Member implements AdvancedUserInterface
     public function getProfile()
     {
         return $this->profile;
+    }
+
+
+    /**
+     * (PHP 5 &gt;= 5.1.0)<br/>
+     * String representation of object
+     * @link http://php.net/manual/en/serializable.serialize.php
+     * @return string the string representation of the object or null
+     */
+    public function serialize()
+    {
+        return serialize(
+            array(
+                $this->username,
+                $this->password,
+                $this->salt,
+                $this->active
+            )
+        );
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.1.0)<br/>
+     * Constructs the object
+     * @link http://php.net/manual/en/serializable.unserialize.php
+     * @param string $serialized <p>
+     * The string representation of the object.
+     * </p>
+     * @return void
+     */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->username,
+            $this->password,
+            $this->salt,
+            $this->active,
+        ) = unserialize($serialized);
     }
 }

@@ -96,18 +96,28 @@ section {
     float: none;
 }
 
-form label {
-    width: 300px;
+form {
+
+    div.form_row {
+        .form_row_main {
+            margin-left: 320px;
+        }
+    }
+
+    label {
+        width: 300px;
+    }
+
+    input[type=submit], button[type=submit] {
+        margin-left: 320px;
+    }
+
+    p.error_wide {
+        color: #f00;
+        margin-left: 320px;
+    }
 }
 
-form input[type=submit] {
-    margin-left: 320px;
-}
-
-form p.error_wide {
-    color: #f00;
-    margin-left: 320px;
-}
 
 p.success {
     color: #090;

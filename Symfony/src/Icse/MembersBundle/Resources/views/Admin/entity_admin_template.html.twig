@@ -24,7 +24,13 @@
 {% endblock %}
 
 {% block content %}
-<h1>{{ pageTitle }}</h1>
+<h1>
+    {% set page_nav_item = members_nav_items[currentSubSection] %}
+    {% if page_nav_item.fa_icon is defined %}
+        <i class="fa fa-fw {{ page_nav_item.fa_icon }}"></i>
+    {% endif %}
+    {{ pageTitle }}
+</h1>
 
 <ul class="table_buttons">
   {% spaceless %}

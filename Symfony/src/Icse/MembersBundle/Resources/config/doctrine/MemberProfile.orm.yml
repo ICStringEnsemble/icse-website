@@ -8,16 +8,21 @@ Icse\MembersBundle\Entity\MemberProfile:
         instrument:
             type: string
             length: 100
+            nullable: true
         join_year:
             type: integer
+            nullable: true
         study_subject:
             type: string
             length: 100
+            nullable: true
         favourite_snack:
             type: string
             length: 100
+            nullable: true
         memorable_moment:
             type: text
+            nullable: true
     manyToOne:
         picture:
             targetEntity: Icse\PublicBundle\Entity\Image

@@ -8,8 +8,8 @@ use Symfony\Component\Security\Core\SecurityContext;
 class SecurityController extends Controller
 {
     public function loginAction()
-    { 
-        if ($this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+    {
+        if ($this->get('security.context')->isGranted('ROLE_USER')) {
             return $this->redirect($this->generateUrl('IcseMembersBundle_home'));
         } 
 

@@ -21,7 +21,7 @@ class LastMembersPageListener
             $route = $request->get('_route');
             if (    strpos($route, 'IcseMembersBundle') !== false
                  && strpos($route, 'logout') == false ) {
-                $response->headers->setCookie(new Cookie('last_members_page', $route, "2 weeks", "/arts/stringensemble")); 
+                $response->headers->setCookie(new Cookie('last_members_page', $route, "2 weeks"));
             }
             if ($route == "IcsePublicBundle_login" || $response->isForbidden()) {
                 $response->headers->clearCookie('last_members_page'); 

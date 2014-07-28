@@ -1,36 +1,32 @@
 {% extends 'IcsePublicBundle:Default:template.html.twig' %}
 {% set currentSection = 'members' %}
 
-{% set members_nav_items = [
-            {id: 'main', items: [
-                {label: 'Home', fa_icon:'fa-home', id: 'home', url: path('IcseMembersBundle_home')},
-                {label: 'Calendar', fa_icon:'fa-calendar',  id: 'calendar', url: path('IcseMembersBundle_calendar')},
-                {label: 'Practice Parts', fa_icon:'fa-file-text-o', id: 'practice_parts', url: path('IcseMembersBundle_practice_parts')},
-            ]},
-            {label: 'Admin', id: 'admin', items: [
-                {label: 'Rehearsals', fa_icon:'fa-calendar-o', id: 'rehearsaladmin', url: path('IcseMembersBundle_rehearsaladmin')},
-                {label: 'Venues', fa_icon:'fa-building-o', id: 'venueadmin', url: path('IcseMembersBundle_venueadmin')},
-                {label: 'Signups', fa_icon:'fa-bullhorn', id: 'signuplist', url: path('IcseMembersBundle_signuplist')},
-            ]},
-            {label: 'In Development', id: 'devel', items: [
-                {label: 'Events', fa_icon:'fa-ticket', id: 'eventadmin', url: path('IcseMembersBundle_eventadmin')},
-                {label: 'Email', fa_icon:'fa-envelope-o', id: 'sendemail', url: path('IcseMembersBundle_sendemail')},
-                {label: 'Images', fa_icon:'fa-picture-o', id: 'images', url: path('IcseMembersBundle_image_uploads')},
-                {label: 'Music Library', fa_icon:'fa-music', id: '', url: '#'},
-            ]},
-            {label: 'Super Admin', id: 'superadmin', items: [
-                {label: 'Members List', fa_icon:'fa-users', id: 'memberslist', url: path('IcseMembersBundle_members')},
-                {label: 'Committee', fa_icon:'fa-university', id: 'committeelist', url: path('IcseMembersBundle_committee_edit')},
-                {label: 'Site Dev', fa_icon:'fa-wrench', id: 'sitedev', url: path('IcseMembersBundle_site_dev')},
-            ]},
-            {label: 'Account: '~app.user.getFullName(), id: 'account', items: [
-                {label: 'Settings', fa_icon:'fa-cogs', id: 'accountsettings', url: path('IcseMembersBundle_account_settings')},
-                {label: 'Logout', fa_icon:'fa-sign-out', id: '', url: path('IcseMembersBundle_logout')},
-            ]},
-            {id: 'impersonation', items: [
-                {label: 'Exit Impersonation', id: '', url: path('IcseMembersBundle_home', {_switch_user: '_exit'})},
-            ]},
-] %} 
+{% set default_group = {role: 'ROLE_USER'} %}
+
+{% set members_nav_items = {
+        __main__:            {},
+        home:                {label: 'Home',               fa_icon:'fa-home',           url: path('IcseMembersBundle_home')},
+        calendar:            {label: 'Calendar',           fa_icon:'fa-calendar',       url: path('IcseMembersBundle_calendar')},
+        practice_parts:      {label: 'Practice Parts',     fa_icon:'fa-file-text-o',    url: path('IcseMembersBundle_practice_parts')},
+        __admin__:           {label: 'Admin', role: 'ROLE_ADMIN'},
+        rehearsaladmin:      {label: 'Rehearsals',         fa_icon:'fa-calendar-o',     url: path('IcseMembersBundle_rehearsaladmin')},
+        venueadmin:          {label: 'Venues',             fa_icon:'fa-building-o',     url: path('IcseMembersBundle_venueadmin')},
+        signuplist:          {label: 'Signups',            fa_icon:'fa-bullhorn',       url: path('IcseMembersBundle_signuplist')},
+        __devel__:           {label: 'In Development', role: 'ROLE_SUPER_ADMIN'},
+        eventadmin:          {label: 'Events',             fa_icon:'fa-ticket',         url: path('IcseMembersBundle_eventadmin')},
+        sendemail:           {label: 'Email',              fa_icon:'fa-envelope-o',     url: path('IcseMembersBundle_sendemail')},
+        images:              {label: 'Images',             fa_icon:'fa-picture-o',      url: path('IcseMembersBundle_image_uploads')},
+        musiclibrary:        {label: 'Music Library',      fa_icon:'fa-music',          url: '#'},
+        __superadmin__:      {label: 'Super Admin', role: 'ROLE_SUPER_ADMIN'},
+        memberslist:         {label: 'Members List',       fa_icon:'fa-users',          url: path('IcseMembersBundle_members')},
+        committeelist:       {label: 'Committee',          fa_icon:'fa-university',     url: path('IcseMembersBundle_committee_edit')},
+        sitedev:             {label: 'Site Dev',           fa_icon:'fa-wrench',         url: path('IcseMembersBundle_site_dev')},
+        __account__:         {label: 'User: ' ~ app.user.fullName},
+        myprofile:           {label: 'My Profile',         fa_icon:'fa-user',           url: path('IcseMembersBundle_my_profile'), role: 'ROLE_HAVE_PROFILE'},
+        accountsettings:     {label: 'Settings',           fa_icon:'fa-cogs',           url: path('IcseMembersBundle_account_settings')},
+        logout:              {label: 'Logout',             fa_icon:'fa-sign-out',       url: path('IcseMembersBundle_logout')},
+        exitimpersonation:   {label: 'Exit Impersonation',                              url: path('IcseMembersBundle_home', {_switch_user: '_exit'}), role: 'ROLE_PREVIOUS_ADMIN'},
+} %}
 
 {% block stylesheets %}
 {{ parent() }}
@@ -60,24 +56,28 @@
   <ul>
     {# ICSE Resources #}
     <li id="nav_col_head">Members Area<img title="Hide/Show" id="hide_nav_col_button" src="{{ asset('bundles/icsemembers/images/leftarrow.png') }}" /></li>
-    {% for category in members_nav_items %}
-      {% if not (    (category.id == 'admin' and not is_granted('ROLE_ADMIN'))
-                  or (category.id == 'devel' and not is_granted('ROLE_SUPER_ADMIN'))
-                  or (category.id == 'superadmin' and not is_granted('ROLE_SUPER_ADMIN'))
-                  or (category.id == 'impersonation' and not is_granted('ROLE_PREVIOUS_ADMIN'))
-                ) %}
-        {% if category.label is defined %}
-          <li class="category">{{ category.label }}</li>
+    {% set this_group = default_group %}
+    {% for item_id, item in members_nav_items %}
+        {% set is_header = item_id starts with '__' %}
+        {% if is_header %}
+            {% set this_group = default_group | merge(item) %}
         {% endif %}
-        {% for item in category.items %}
-          <li><a {% if item.id == currentSubSection %}class=current{% endif %} href="{{ item.url }}">
-              {% if 'fa_icon' in item|keys %}
-                <i class="fa fa-fw {{ item.fa_icon }}"></i>
-              {% endif %}
-              {{ item.label }}
-          </a></li>
-        {% endfor %}
-      {% endif %}
+        {% if is_granted(this_group.role) and (item.role is not defined or is_granted(item.role)) %}
+            {% if is_header %}
+                {% if this_group.label is defined %}
+                    <li class="category">{{ this_group.label }}</li>
+                {% endif %}
+            {% else %}
+                <li>
+                    <a {{ item_id == currentSubSection ? 'class=current' }} href="{{ item.url }}">
+                        {% if item.fa_icon is defined %}
+                            <i class="fa fa-fw {{ item.fa_icon }}"></i>
+                        {% endif %}
+                        {{ item.label }}
+                    </a>
+                </li>
+            {% endif %}
+        {% endif %}
     {% endfor %}
   </ul>
 </div>
