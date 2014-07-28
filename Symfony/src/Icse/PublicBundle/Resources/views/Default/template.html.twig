@@ -29,14 +29,14 @@
 {% stylesheets 
   '@IcsePublicBundle/Resources/style/main.scss'
   '@IcsePublicBundle/Resources/style/home.scss'
-  filter='compass,css_url_rewrite,?yui_css'
+  filter='compass,css_url_rewrite,?uglifycss'
   output='bundles/icsepublic/css/main.css'
 %}
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
 {% endstylesheets %}
 {% stylesheets 
   '@IcsePublicBundle/Resources/style/print.scss'
-  filter='compass,css_url_rewrite,?yui_css'
+  filter='compass,css_url_rewrite,?uglifycss'
   output='bundles/icsepublic/css/print.css'
 %}
 <link rel="stylesheet" type="text/css" media="print" href="{{ asset_url }}" />

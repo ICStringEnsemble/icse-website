@@ -8,7 +8,7 @@
 {{ parent() }}
 {% stylesheets
     '@IcseMembersBundle/Resources/style/email.scss'
-    filter='compass,css_url_rewrite,?yui_css'
+    filter='compass,css_url_rewrite,?uglifycss'
     output='bundles/icsemembers/css/email.css'
 %}
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
@@ -77,7 +77,7 @@
 
 {% javascripts
 '@IcseMembersBundle/Resources/script/emailcomposer.js'
-filter='?yui_js'
+filter='?uglifyjs2'
 output='bundles/icsemembers/js/emailcomposer.js'
 %}
 <script src="{{ asset_url }}"></script>
