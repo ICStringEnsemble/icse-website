@@ -168,34 +168,45 @@ class MembersController extends EntityAdminController
                                                                                     ));
     }
 
-
-    public function createAction(Request $request)
+    private function generateMembersFromCSV(Request $request, File $csv_file)
     {
-        $uploadedFiles = $request->files->get('form');
-        if (isset($uploadedFiles['csv_file'])) {
-            /* @var $csv_file File */
-            $csv_file = $uploadedFiles['csv_file'];
-            $file_handle = fopen($csv_file->getPathname(), 'r');
-            $csv_row = fgetcsv($file_handle);
-            if ($csv_row) {
-                $headings = array_flip($csv_row);
-                try {
-                    $login_index = Tools::arrayGet($headings, 'Login');
-                    $first_name_index = Tools::arrayGet($headings, 'First Name');
-                    $last_name_index = Tools::arrayGet($headings, 'Last Name');
-                    $email_index = Tools::arrayGet($headings, 'Email');
-                } catch (\UnexpectedValueException $e) {
-                    return $this->get('ajax_response_gen')->returnFail("CSV headings not as expected.");
+        $file_handle = fopen($csv_file->getPathname(), 'r');
+        $csv_row = fgetcsv($file_handle);
+        $line_number = 1;
+        $next_csv_line_is_heading = true;
+        if (!$csv_row)
+        {
+            return $this->get('ajax_response_gen')->returnFail("Nothing in file");
+        }
+
+        $dm = $this->getDoctrine();
+        $member_repo = $dm->getRepository('IcseMembersBundle:Member');
+
+        while ($csv_row)
+        {
+            if (count($csv_row) > 1) // is csv line
+            {
+                if ($next_csv_line_is_heading)
+                {
+                    $headings = array_flip($csv_row);
+                    try {
+                        $login_index = Tools::arrayGet($headings, 'Login');
+                        $first_name_index = Tools::arrayGet($headings, 'First Name');
+                        $last_name_index = Tools::arrayGet($headings, 'Last Name');
+                        $email_index = Tools::arrayGet($headings, 'Email');
+                    } catch (\UnexpectedValueException $e) {
+                        return $this->get('ajax_response_gen')->returnFail("Line ".$line_number.": CSV headings not as expected.");
+                    }
+                    $next_csv_line_is_heading = false;
                 }
-                $csv_row = fgetcsv($file_handle);
-                $line_number = 2;
-                $dm = $this->getDoctrine();
-                while ($csv_row) {
-                    if ($dm->getRepository('IcseMembersBundle:Member')
-                           ->isUnusedUsernameAndEmail($csv_row[$login_index], $csv_row[$email_index])) {
-                        try {
-                            $fakeRequestData = array(
-                                'form' => array(
+                else // is data line
+                {
+                    if ($member_repo->isUnusedUsernameAndEmail($csv_row[$login_index], $csv_row[$email_index]))
+                    {
+                        try
+                        {
+                            $fakeRequestData = [
+                                'form' => [
                                     'first_name' => $csv_row[$first_name_index],
                                     'last_name' => $csv_row[$last_name_index],
                                     'username' => $csv_row[$login_index],
@@ -203,32 +214,49 @@ class MembersController extends EntityAdminController
                                     'active' => '1',
                                     'role' => '1',
                                     'password_choice' => 'imperial',
-                                    'plain_password' => array(
+                                    'plain_password' => [
                                         'first' => '',
                                         'second' => ''
-                                    ),
+                                    ],
                                     '_token' => Tools::arrayGet($request->request->get('form'), '_token')
-                                )
-                            ); 
-                        } catch (\UnexpectedValueException $e) {
-                            return $this->get('ajax_response_gen')->returnFail("No CSRF token.");
+                                ]
+                            ];
                         }
-                        $fakeRequest = $request->duplicate(null, $fakeRequestData, null, null, array());
+                        catch (\UnexpectedValueException $e)
+                        {
+                            return $this->get('ajax_response_gen')->returnFail("CSV line parsing failed / No CSRF token.");
+                        }
+                        $fake_request = $request->duplicate(null, $fakeRequestData, null, null, array());
                         $member = new Member();
-                        $return_response = $this->putData($fakeRequest, $member);
-                        if (!$this->get('ajax_response_gen')->isSuccessResponse($return_response)) {
+                        $return_response = $this->putData($fake_request, $member);
+                        if (!$this->get('ajax_response_gen')->isSuccessResponse($return_response))
+                        {
                             return $this->get('ajax_response_gen')->addErrorToResponse($return_response, "Error at line " . $line_number, true);
                         }
                     }
-                    $csv_row = fgetcsv($file_handle);
-                    $line_number += 1;
                 }
-                return $this->get('ajax_response_gen')->returnSuccess();
-            } else {
-                return $this->get('ajax_response_gen')->returnFail("Nothing in file");
+            }
+            else // not csv line
+            {
+                $next_csv_line_is_heading = true;
             }
 
-        } else {
+            $csv_row = fgetcsv($file_handle);
+            $line_number += 1;
+        }
+
+        return $this->get('ajax_response_gen')->returnSuccess();
+    }
+
+    public function createAction(Request $request)
+    {
+        $uploadedFiles = $request->files->get('form');
+        if (isset($uploadedFiles['csv_file']))
+        {
+            return $this->generateMembersFromCSV($request, $uploadedFiles['csv_file']);
+        }
+        else
+        {
             $member = new Member();
             return $this->putData($request, $member);
         }
