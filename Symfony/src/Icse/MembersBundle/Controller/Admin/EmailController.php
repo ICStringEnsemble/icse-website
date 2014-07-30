@@ -2,6 +2,7 @@
 
 namespace Icse\MembersBundle\Controller\Admin;
 
+use Icse\MembersBundle\Entity\SentNewsletter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,10 +11,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 class EmailController extends Controller
 {
-    private $send_to_map = [
+    private static $SEND_TO_MAP = [
         'members' => 'icse-talk@imperial.ac.uk',
         'public' => 'icu-stringensemble-public@imperial.ac.uk',
         'none' => null
+    ];
+
+    private static $NEWSLETTER_TYPE_MAP = [
+        'members' => SentNewsletter::MEMBERS_NEWSLETTER,
+        'public' => SentNewsletter::PUBLIC_NEWSLETTER,
+        'none' => SentNewsletter::UNDEFINED_NEWSLETTER,
     ];
 
     public function routerAction(Request $request, $arg)
@@ -67,10 +74,8 @@ class EmailController extends Controller
         return $form;
     }
 
-    private function formToMailer(Form $form, &$to_addresses=null)
+    private function mailerFromData($data, &$to_addresses=null)
     {
-        $data = $form->getData();
-
         $mailer = $this->get('icse.mailer');
         $mailer->setBodyFields(['content' => $data['body'], 'mailinglist' => $data['mailing_list']]);
         $mailer->setSubject($data['email_subject']);
@@ -78,7 +83,7 @@ class EmailController extends Controller
 
         if ($data['send_to_option'] == 'mailing_list')
         {
-            $to_addresses = $this->send_to_map[$data['mailing_list']];
+            $to_addresses = self::$SEND_TO_MAP[$data['mailing_list']];
         }
         else
         {
@@ -94,7 +99,7 @@ class EmailController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $mailer = $this->formToMailer($form);
+            $mailer = $this->mailerFromData($form->getData());
             return new Response($mailer->preview());
         }
         else
@@ -103,14 +108,30 @@ class EmailController extends Controller
         }
     }
 
+    public function archiveNewletter($data)
+    {
+        $newsletter = new SentNewsletter();
+        $newsletter->setSubject($data['email_subject']);
+        $newsletter->setBody($data['body']);
+        $newsletter->setSentAt(new \DateTime);
+        $newsletter->setSentBy($this->get('security.context')->getToken()->getUser());
+        $newsletter->setType(self::$NEWSLETTER_TYPE_MAP[$data['mailing_list']]);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($newsletter);
+        $em->flush();
+    }
+
     public function sendAction(Request $request)
     {
         $form = $this->getEmailForm();
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+            $form_data = $form->getData();
+            $this->archiveNewletter($form_data);
             $recipients = [];
-            $mailer = $this->formToMailer($form, $recipients);
+            $mailer = $this->mailerFromData($form_data, $recipients);
             $fails = $mailer->send($recipients);
             if ($fails == 0)
             {

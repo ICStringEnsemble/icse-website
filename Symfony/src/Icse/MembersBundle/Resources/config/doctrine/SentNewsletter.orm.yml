@@ -1,0 +1,24 @@
+Icse\MembersBundle\Entity\SentNewsletter:
+    type: entity
+    table: null
+    repositoryClass: Icse\MembersBundle\Entity\SentNewsletterRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        type:
+            type: integer
+        subject:
+            type: string
+            length: 255
+        body:
+            type: text
+        sent_at:
+            type: datetime
+    manyToOne:
+        sent_by:
+            targetEntity: Icse\MembersBundle\Entity\Member
+    lifecycleCallbacks: {  }

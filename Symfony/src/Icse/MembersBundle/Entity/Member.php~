@@ -499,4 +499,33 @@ class Member implements AdvancedUserInterface, \Serializable
             $this->active,
         ) = unserialize($serialized);
     }
+
+    public function getMostCurrentCommitteeRole(\DateTime $dt = null)
+    {
+        if (is_null($dt)) $dt = new \DateTime();
+        $current_month = intval($dt->format("m"));
+        $current_year = intval($dt->format("Y"));
+
+        if ($current_month < 8)
+        {
+            $start_year1 = $current_year - 1;
+            $start_year2 = $current_year;
+        }
+        else
+        {
+            $start_year1 = $current_year;
+            $start_year2 = $current_year - 1;
+        }
+
+        foreach ([$start_year1, $start_year2] as $y)
+        {
+            $roles = $this->getCommitteeRolesMatchingYears([$y]);
+            if (count($roles) > 0)
+            {
+                return $roles[0];
+            }
+        }
+
+        return null;
+    }
 }
