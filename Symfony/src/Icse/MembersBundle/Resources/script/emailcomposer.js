@@ -4,6 +4,7 @@
     var preview_frame = $('#preview_dialog');
     var editor = $('#editable');
     var icse_email = $('#icse_email');
+    var ckeditor_localdir = $('#ckeditor_localdir').attr('href');
     preview_frame.dialog({
         autoOpen: false,
         modal: true,
@@ -12,8 +13,10 @@
         height: 500
     });
 
+    CKEDITOR.plugins.addExternal('webkit-span-fix', ckeditor_localdir + '/plugins/webkit-span-fix/', 'plugin.js');
+
     editor.ckeditor(function(){}, {
-        extraPlugins : 'webkit-span-fix,sourcedialog',
+        extraPlugins : 'webkit-span-fix,sourcedialog,image2,entities',
         customConfig : '',
         extraAllowedContent: '*[id](*)',
         toolbar :
@@ -28,7 +31,10 @@
                 { name: 'editing', items : [ 'Sourcedialog', '-', 'Scayt' ] },
                 { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] }
             ],
-        width: 490
+        width: 490,
+        image2_alignClasses: [ 'image-left', 'image-center', 'image-right' ],
+        image2_captionedClass: 'image-captioned',
+        entities_processNumerical: true
     });
 
     function ui_confirm_and_do(msg, ok_txt, do_it) {

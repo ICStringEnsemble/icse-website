@@ -17,13 +17,14 @@
 
 {% block javascripts %}
 {{ parent() }}
-<script src="{{ asset('bundles/icsemembers/lib/ckeditor/ckeditor.js') }}"></script>
+<script src="//cdn.ckeditor.com/4.4.3/standard-all/ckeditor.js"></script>
 <script src="{{ asset('bundles/icsemembers/lib/ckeditor/adapters/jquery.js') }}"></script>
 <script src="{{ asset('bundles/icsepublic/lib/js/jquery.storageapi.min.js') }}"></script>
 <script src="{{ asset('bundles/icsemembers/lib/tagit/js/tag-it.min.js') }}"></script>
 {% endblock javascripts %}
 
 {% block content %}
+<a hidden id="ckeditor_localdir" href="{{ asset('bundles/icsemembers/lib/ckeditor/') }}"></a>
 
 <h1>Send Email</h1>
 
