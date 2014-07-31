@@ -26,7 +26,13 @@
 {% block content %}
 <a hidden id="ckeditor_localdir" href="{{ asset('bundles/icsemembers/lib/ckeditor/') }}"></a>
 
-<h1>Send Email</h1>
+<h1>
+    {% set page_nav_item = members_nav_items[currentSubSection] %}
+    {% if page_nav_item.fa_icon is defined %}
+        <i class="fa fa-fw {{ page_nav_item.fa_icon }}"></i>
+    {% endif %}
+    Send Email
+</h1>
 
 <ul class="email_buttons">
     {% spaceless %}
