@@ -15,8 +15,6 @@ Icse\PublicBundle\Entity\PieceOfMusic:
             length: 255
         updated_at:
             type: datetime
-        updated_by:
-            type: integer 
     oneToMany:
         performances:
             targetEntity: PerformanceOfAPiece
@@ -24,4 +22,7 @@ Icse\PublicBundle\Entity\PieceOfMusic:
         practice_parts:
             targetEntity: Icse\MembersBundle\Entity\PracticePart 
             mappedBy: piece
+    manyToOne:
+        updated_by:
+            targetEntity: Icse\MembersBundle\Entity\Member
     lifecycleCallbacks: {  }

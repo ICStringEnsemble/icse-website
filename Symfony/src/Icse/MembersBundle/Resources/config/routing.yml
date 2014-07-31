@@ -50,6 +50,10 @@ IcseMembersBundle_venueadmin:
     pattern:  /members/admin/venues/{arg}
     defaults: { _controller: IcseMembersBundle:Admin/Venue:router, arg: ~ }
 
+IcseMembersBundle_musicadmin:
+    pattern:  /members/admin/music/{arg}
+    defaults: { _controller: IcseMembersBundle:Admin/Music:router, arg: ~ }
+
 IcseMembersBundle_members:
     pattern:  /members/superadmin/members/{arg}
     defaults: { _controller: IcseMembersBundle:SuperAdmin/Members:router, arg: ~ }
