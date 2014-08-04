@@ -22,7 +22,10 @@ Icse\MembersBundle\Entity\Rehearsal:
     manyToOne:
         location:
             targetEntity: Icse\PublicBundle\Entity\Venue
-            nullable: true
+            joinColumn:
+                nullable: true
         updated_by: 
             targetEntity: Member
+            joinColumn:
+                nullable: false
     lifecycleCallbacks: {  }

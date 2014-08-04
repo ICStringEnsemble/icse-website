@@ -27,12 +27,16 @@ Icse\PublicBundle\Entity\Event:
     manyToOne:
         location:
             targetEntity: Venue
-            nullable: true
+            joinColumn:
+                nullable: true
         poster:
             targetEntity: Image
-            nullable: true
+            joinColumn:
+                nullable: true
         updated_by:
             targetEntity: Icse\MembersBundle\Entity\Member
+            joinColumn:
+                nullable: false
     oneToMany:
         performances:
             targetEntity: PerformanceOfAPiece

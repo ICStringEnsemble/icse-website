@@ -19,5 +19,6 @@ Icse\PublicBundle\Entity\SiteSection:
     manyToOne:
         picture:
             targetEntity: Image
-            nullable: true
+            joinColumn:
+                nullable: true
     lifecycleCallbacks: {  }

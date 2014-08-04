@@ -20,4 +20,6 @@ Icse\MembersBundle\Entity\CommitteeRole:
         member:
             targetEntity: Member
             inversedBy: committee_roles
+            joinColumn:
+                nullable: false
     lifecycleCallbacks: {  }

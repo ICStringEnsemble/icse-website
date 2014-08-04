@@ -25,4 +25,6 @@ Icse\PublicBundle\Entity\PieceOfMusic:
     manyToOne:
         updated_by:
             targetEntity: Icse\MembersBundle\Entity\Member
+            joinColumn:
+                nullable: false
     lifecycleCallbacks: {  }

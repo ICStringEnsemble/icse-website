@@ -21,4 +21,6 @@ Icse\MembersBundle\Entity\SentNewsletter:
     manyToOne:
         sent_by:
             targetEntity: Icse\MembersBundle\Entity\Member
+            joinColumn:
+                nullable: false
     lifecycleCallbacks: {  }

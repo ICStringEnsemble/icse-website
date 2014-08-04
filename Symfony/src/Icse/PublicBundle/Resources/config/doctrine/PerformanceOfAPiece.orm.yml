@@ -11,7 +11,11 @@ Icse\PublicBundle\Entity\PerformanceOfAPiece:
         piece:
             targetEntity: PieceOfMusic
             inversedBy: performances
+            joinColumn:
+                nullable: false
         event:
             targetEntity: Event
             inversedBy: performances
+            joinColumn:
+                nullable: false
     lifecycleCallbacks: {  }

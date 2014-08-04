@@ -26,7 +26,8 @@ Icse\MembersBundle\Entity\MemberProfile:
     manyToOne:
         picture:
             targetEntity: Icse\PublicBundle\Entity\Image
-            nullable: true
+            joinColumn:
+                nullable: true
     oneToOne:
         member:
             targetEntity: Member
