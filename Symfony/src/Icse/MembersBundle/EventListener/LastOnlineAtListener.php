@@ -21,11 +21,16 @@ class LastOnlineAtListener
     {
         $token = $this->securityContext->getToken();
         if ($token &&  $this->securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')
-                   && !$this->securityContext->isGranted('ROLE_PREVIOUS_ADMIN')) { // if logged in and not being impersonated
+                   && !$this->securityContext->isGranted('ROLE_PREVIOUS_ADMIN'))  // if logged in and not being impersonated
+        {
             $user = $this->securityContext->getToken()->getUser();
-            $user->setLastOnlineAt(new \DateTime()); 
-            $this->entityManager->persist($user);
-            $this->entityManager->flush(); 
+            $user->setLastOnlineAt(new \DateTime());
+            try
+            {
+                $this->entityManager->flush();
+            }
+            catch (\Doctrine\ORM\ORMException $e)
+            {}
         }
     }
 

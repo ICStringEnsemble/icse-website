@@ -83,11 +83,47 @@ class MembersController extends EntityAdminController
         return $form;
     }
 
+    private function sendNewAccountEmail($member, $password_type='imperial', $plain_password='')
+    {
+        $mailer = $this->get('icse.mailer');
+        $mailer->setTemplate('IcseMembersBundle:Email:account_created.html.twig')
+            ->setBodyFields([
+                'first_name' => $member->getFirstName(),
+                'username' => $member->getUsername(),
+                'email' => $member->getEmail(),
+                'password_type' => $password_type,
+                'plain_password' => $plain_password,
+            ])
+            ->setSubject('ICSE Online Account Created')
+            ->send($member->getEmail(), $member->getFirstName());
+    }
+
+    private function sendTempPasswordEmail($member, $plain_password='')
+    {
+        $mailer = $this->get('icse.mailer');
+        $mailer->setTemplate('IcseMembersBundle:Email:temporary_password.html.twig')
+            ->setBodyFields([
+                'first_name' => $member->getFirstName(),
+                'username' => $member->getUsername(),
+                'email' => $member->getEmail(),
+                'plain_password' => $plain_password,
+            ])
+            ->setSubject('ICSE Account Password Reset')
+            ->send($member->getEmail(), $member->getFirstName());
+    }
+
+    private function isValidEmail($input)
+    {
+        $emailConstraint = new \Symfony\Component\Validator\Constraints\Email;
+        $emailConstraint->checkMX = true;
+        $errorList = $this->get('validator')->validateValue($input, $emailConstraint);
+        return count($errorList) == 0;
+    }
+
     protected function putData($request, $member)
     {
         /* @var $member Member */
         $is_new_account = ($member->getID() === null);
-        $mailer = $this->get('icse.mailer');
         $form = $this->getForm($member);
         $form->submit($request);
 
@@ -120,36 +156,19 @@ class MembersController extends EntityAdminController
  
         }
 
-        if ($is_new_account) {
-            $member->setCreatedAt(new \DateTime()); 
-        }
-
         $em = $this->getDoctrine()->getManager();
-        if ($form->isValid()) {
+        if ($form->isValid())
+        {
             $em->persist($member);
             $em->flush();
 
-            if ($is_new_account) {
-                $mailer->setTemplate('IcseMembersBundle:Email:account_created.html.twig')
-                    ->setBodyFields([
-                        'first_name' => $member->getFirstName(),
-                        'username' => $member->getUsername(),
-                        'email' => $member->getEmail(),
-                        'password_type' => $password_type,
-                        'plain_password' => $plain_password,
-                    ])
-                    ->setSubject('ICSE Online Account Created')
-                    ->send($member->getEmail(), $member->getFirstName());
-            } else if ($password_type == 'random') {
-                $mailer->setTemplate('IcseMembersBundle:Email:temporary_password.html.twig')
-                    ->setBodyFields([
-                        'first_name' => $member->getFirstName(),
-                        'username' => $member->getUsername(),
-                        'email' => $member->getEmail(),
-                        'plain_password' => $plain_password,
-                    ])
-                    ->setSubject('ICSE Account Password Reset')
-                    ->send($member->getEmail(), $member->getFirstName());
+            if ($is_new_account)
+            {
+                $this->sendNewAccountEmail($member, $password_type, $plain_password);
+            }
+            else if ($password_type == 'random')
+            {
+                $this->sendTempPasswordEmail($member, $plain_password);
             }
 
             return $this->get('ajax_response_gen')->returnSuccess();
@@ -187,6 +206,7 @@ class MembersController extends EntityAdminController
         }
 
         $dm = $this->getDoctrine();
+        $em = $dm->getManager();
         $member_repo = $dm->getRepository('IcseMembersBundle:Member');
 
         while ($csv_row)
@@ -214,41 +234,48 @@ class MembersController extends EntityAdminController
                     if ($member === null)
                     {
                         $member = new Member();
-                        $is_existing = false;
+                        $is_new = true;
                     }
-                    else $is_existing = true;
+                    else
+                    {
+                        $is_new = false;
+                    }
 
                     try
                     {
-                        $fake_request_data = [
-                            'form' => [
-                                'first_name' => $is_existing ? $member->getFirstName() : $csv_row[$first_name_index],
-                                'last_name' => $is_existing ? $member->getLastName() : $csv_row[$last_name_index],
-                                'username' => $is_existing ? $member->getUsername() : $csv_row[$login_index],
-                                'email' => $is_existing ? $member->getEmail() : $csv_row[$email_index],
-                                'active' => '1',
-                                'last_paid_membership_on' => max($member->getLastPaidMembershipOn(), \DateTime::createFromFormat('d/m/Y', $csv_row[$date_index]))->format('d/m/Y'),
-                                'role' => $is_existing ? $member->getRole() : '1',
-                                'password_choice' => $is_existing ? 'no_change' : 'imperial',
-                                'plain_password' => [
-                                    'first' => '',
-                                    'second' => ''
-                                ],
-                                '_token' => Tools::arrayGet($request->request->get('form'), '_token')
-                            ]
-                        ];
+                        if ($is_new)
+                        {
+                            $member->setFirstName($csv_row[$first_name_index]);
+                            $member->setLastName($csv_row[$last_name_index]);
+                            $member->setUsername($csv_row[$login_index]);
+                            $member->setEmail($csv_row[$email_index]);
+                            $member->setRole(1);
+                            $member->setSalt(null);
+                            $member->setPassword(null);
+
+                            if (!$member->getFirstName() or !$member->getLastName() or !$member->getUsername() or !$this->isValidEmail($member->getEmail()))
+                            {
+                                throw new \UnexpectedValueException("Field empty or invalid");
+                            }
+                        }
+
+                        if (strlen($csv_row[$date_index]) != 10) throw new \UnexpectedValueException("Unexpected date format " . strlen($csv_row[$date_index]));
+
+                        $new_payment_date = \DateTime::createFromFormat('d/m/Y', $csv_row[$date_index]);
+                        $member->setLastPaidMembershipOn(max($member->getLastPaidMembershipOn(), $new_payment_date));
+                        $member->setActive(true);
                     }
                     catch (\UnexpectedValueException $e)
                     {
-                        return $this->get('ajax_response_gen')->returnFail("CSV line parsing failed / No CSRF token.");
-                    }
-                    $fake_request = $request->duplicate(null, $fake_request_data, null, null, array());
-                    $return_response = $this->putData($fake_request, $member);
-                    if (!$this->get('ajax_response_gen')->isSuccessResponse($return_response))
-                    {
-                        return $this->get('ajax_response_gen')->addErrorToResponse($return_response, "Error at line " . $line_number, true);
+                        return $this->get('ajax_response_gen')->returnFail("Error at line " . $line_number . " " . $e->getMessage());
                     }
 
+                    if ($is_new)
+                    {
+                        $em->persist($member);
+                        $em->flush();
+                        $this->sendNewAccountEmail($member, 'imperial');
+                    }
                 }
             }
             else // not csv line
@@ -260,6 +287,7 @@ class MembersController extends EntityAdminController
             $line_number += 1;
         }
 
+        $em->flush();
         return $this->get('ajax_response_gen')->returnSuccess();
     }
 

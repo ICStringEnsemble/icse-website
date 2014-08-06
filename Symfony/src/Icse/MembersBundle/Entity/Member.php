@@ -76,6 +76,7 @@ class Member implements AdvancedUserInterface, \Serializable
         $this->committee_roles = new Arraycollection;
         $this->active = true;
         $this->role = 1;
+        $this->created_at = new \DateTime();
     }
 
     /**
