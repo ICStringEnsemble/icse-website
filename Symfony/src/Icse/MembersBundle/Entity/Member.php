@@ -55,15 +55,64 @@ class Member implements AdvancedUserInterface, \Serializable
 
     /**
      * @var \Doctrine\Common\Collections\Collection
-     * @Groups({"collection"})
+     * @Groups({"noserialise"})
      */
     private $committee_roles;
+
+    /**
+     * @var \Icse\MembersBundle\Entity\MemberProfile
+     * @Groups({"noserialise"})
+     */
+    private $profile;
+
+    /**
+     * @var \DateTime
+     * @Groups({"superadmin"})
+     */
+    private $last_paid_membership_on;
 
     public function __construct()
     {
         $this->committee_roles = new Arraycollection;
         $this->active = true;
         $this->role = 1;
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.1.0)<br/>
+     * String representation of object
+     * @link http://php.net/manual/en/serializable.serialize.php
+     * @return string the string representation of the object or null
+     */
+    public function serialize()
+    {
+        return serialize(
+            array(
+                $this->username,
+                $this->password,
+                $this->salt,
+                $this->active
+            )
+        );
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.1.0)<br/>
+     * Constructs the object
+     * @link http://php.net/manual/en/serializable.unserialize.php
+     * @param string $serialized <p>
+     * The string representation of the object.
+     * </p>
+     * @return void
+     */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->username,
+            $this->password,
+            $this->salt,
+            $this->active,
+            ) = unserialize($serialized);
     }
 
     private function getAutoRole(\DateTime $dt = null)
@@ -433,11 +482,6 @@ class Member implements AdvancedUserInterface, \Serializable
 
         return $this->committee_roles->matching($criteria);
     }
-    /**
-     * @var \Icse\MembersBundle\Entity\MemberProfile
-     */
-    private $profile;
-
 
     /**
      * Set profile
@@ -460,44 +504,6 @@ class Member implements AdvancedUserInterface, \Serializable
     public function getProfile()
     {
         return $this->profile;
-    }
-
-
-    /**
-     * (PHP 5 &gt;= 5.1.0)<br/>
-     * String representation of object
-     * @link http://php.net/manual/en/serializable.serialize.php
-     * @return string the string representation of the object or null
-     */
-    public function serialize()
-    {
-        return serialize(
-            array(
-                $this->username,
-                $this->password,
-                $this->salt,
-                $this->active
-            )
-        );
-    }
-
-    /**
-     * (PHP 5 &gt;= 5.1.0)<br/>
-     * Constructs the object
-     * @link http://php.net/manual/en/serializable.unserialize.php
-     * @param string $serialized <p>
-     * The string representation of the object.
-     * </p>
-     * @return void
-     */
-    public function unserialize($serialized)
-    {
-        list (
-            $this->username,
-            $this->password,
-            $this->salt,
-            $this->active,
-        ) = unserialize($serialized);
     }
 
     public function getMostCurrentCommitteeRole(\DateTime $dt = null)
@@ -527,5 +533,28 @@ class Member implements AdvancedUserInterface, \Serializable
         }
 
         return null;
+    }
+
+    /**
+     * Set last_paid_membership_on
+     *
+     * @param \DateTime $lastPaidMembershipOn
+     * @return Member
+     */
+    public function setLastPaidMembershipOn($lastPaidMembershipOn)
+    {
+        $this->last_paid_membership_on = $lastPaidMembershipOn;
+
+        return $this;
+    }
+
+    /**
+     * Get last_paid_membership_on
+     *
+     * @return \DateTime 
+     */
+    public function getLastPaidMembershipOn()
+    {
+        return $this->last_paid_membership_on;
     }
 }

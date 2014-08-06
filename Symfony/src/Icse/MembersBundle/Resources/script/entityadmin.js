@@ -222,8 +222,8 @@
               var value = entity[main_name];
               if (value === false) value = 0;
               else if (value === true) value = 1;
-              if (name_array[1] == "date") value = moment(parseInt(value)).format('DD/MM/YYYY');
-              if (name_array[1] == "time") value = moment(parseInt(value)).format('h:mm a');
+              if ($(this).hasClass("date")) value = moment(parseInt(value)).format('DD/MM/YYYY');
+              if ($(this).hasClass("time")) value = moment(parseInt(value)).format('h:mm a');
               if (typeof value == 'object') {
                 if ($(this).prop("tagName") == "SELECT") value = value.id;
                 else value = value.name;

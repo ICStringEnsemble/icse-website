@@ -40,6 +40,7 @@ class MembersController extends EntityAdminController
             array('heading' => 'Password', 'cell' => function(Member $member){return $member->getPassword()?"Stored":"Imperial";}),
             array('heading' => 'Active', 'cell' => function(Member $member){return $member->getActive()? "Yes":"No";}),
             array('heading' => 'Role', 'cell' => function(Member $member){return $member->getRole() == 100? "Super Admin":($member->getRole() == 10?"Admin":'('.strtolower($member->getRoles()[0]).')');}),
+            array('heading' => 'Paid', 'cell' => function(Member $member){return $member->getLastPaidMembershipOn()? $member->getLastPaidMembershipOn()->format('d/M/Y') : "Exempt";}),
             array('heading' => 'Last Online', 'cell' => function(Member $member){return $member->getLastOnlineAt()? $this->timeagoDate($member->getLastOnlineAt()) : "Never";}),
         );
         return array("columns" => $columns, "entities" => $members, "serial_groups" => ['superadmin']);
@@ -54,6 +55,12 @@ class MembersController extends EntityAdminController
             ->add('email', 'email')
             ->add('active', 'choice', array(
                 'choices' => array(true => 'Yes', false => 'No')
+            ))
+            ->add('last_paid_membership_on', 'date', array(
+                'label' => 'Paid membership',
+                'widget' => 'single_text',
+                'required' => false,
+                'format' => 'dd/MM/yy'
             ))
             ->add('role', 'choice', array(
                 'choices' => array(1 => 'Auto', 10 => 'Admin', 100 => 'Super Admin')
@@ -190,6 +197,7 @@ class MembersController extends EntityAdminController
                 {
                     $headings = array_flip($csv_row);
                     try {
+                        $date_index = Tools::arrayGet($headings, 'Date');
                         $login_index = Tools::arrayGet($headings, 'Login');
                         $first_name_index = Tools::arrayGet($headings, 'First Name');
                         $last_name_index = Tools::arrayGet($headings, 'Last Name');
@@ -201,39 +209,46 @@ class MembersController extends EntityAdminController
                 }
                 else // is data line
                 {
-                    if ($member_repo->isUnusedUsernameAndEmail($csv_row[$login_index], $csv_row[$email_index]))
+                    $member = $member_repo->findOneBy(['username' => $csv_row[$login_index]]);
+                    if ($member === null) $member = $member_repo->findOneBy(['email' => $csv_row[$email_index]]);
+                    if ($member === null)
                     {
-                        try
-                        {
-                            $fakeRequestData = [
-                                'form' => [
-                                    'first_name' => $csv_row[$first_name_index],
-                                    'last_name' => $csv_row[$last_name_index],
-                                    'username' => $csv_row[$login_index],
-                                    'email' => $csv_row[$email_index],
-                                    'active' => '1',
-                                    'role' => '1',
-                                    'password_choice' => 'imperial',
-                                    'plain_password' => [
-                                        'first' => '',
-                                        'second' => ''
-                                    ],
-                                    '_token' => Tools::arrayGet($request->request->get('form'), '_token')
-                                ]
-                            ];
-                        }
-                        catch (\UnexpectedValueException $e)
-                        {
-                            return $this->get('ajax_response_gen')->returnFail("CSV line parsing failed / No CSRF token.");
-                        }
-                        $fake_request = $request->duplicate(null, $fakeRequestData, null, null, array());
                         $member = new Member();
-                        $return_response = $this->putData($fake_request, $member);
-                        if (!$this->get('ajax_response_gen')->isSuccessResponse($return_response))
-                        {
-                            return $this->get('ajax_response_gen')->addErrorToResponse($return_response, "Error at line " . $line_number, true);
-                        }
+                        $is_existing = false;
                     }
+                    else $is_existing = true;
+
+                    try
+                    {
+                        $fake_request_data = [
+                            'form' => [
+                                'first_name' => $is_existing ? $member->getFirstName() : $csv_row[$first_name_index],
+                                'last_name' => $is_existing ? $member->getLastName() : $csv_row[$last_name_index],
+                                'username' => $is_existing ? $member->getUsername() : $csv_row[$login_index],
+                                'email' => $is_existing ? $member->getEmail() : $csv_row[$email_index],
+                                'active' => '1',
+                                'last_paid_membership_on' => max($member->getLastPaidMembershipOn(), \DateTime::createFromFormat('d/m/Y', $csv_row[$date_index]))->format('d/m/Y'),
+                                'role' => $is_existing ? $member->getRole() : '1',
+                                'password_choice' => $is_existing ? 'no_change' : 'imperial',
+                                'plain_password' => [
+                                    'first' => '',
+                                    'second' => ''
+                                ],
+                                '_token' => Tools::arrayGet($request->request->get('form'), '_token')
+                            ]
+                        ];
+                    }
+                    catch (\UnexpectedValueException $e)
+                    {
+                        return $this->get('ajax_response_gen')->returnFail("CSV line parsing failed / No CSRF token.");
+                    }
+                    $fake_request = $request->duplicate(null, $fake_request_data, null, null, array());
+                    $return_response = $this->putData($fake_request, $member);
+                    if (!$this->get('ajax_response_gen')->isSuccessResponse($return_response))
+                    {
+                        return $this->get('ajax_response_gen')->addErrorToResponse($return_response, "Error at line " . $line_number, true);
+                    }
+
                 }
             }
             else // not csv line
