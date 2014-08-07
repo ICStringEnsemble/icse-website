@@ -558,4 +558,17 @@ class Member implements AdvancedUserInterface, \Serializable
     {
         return $this->last_paid_membership_on;
     }
+
+    public function hasCurrentMembership($dt = null)
+    {
+        $last_paid = $this->getLastPaidMembershipOn();
+        if ($last_paid === null) return false;
+
+        if (is_null($dt)) $dt = new \DateTime;
+
+        $last_august = new \DateTime("1st August");
+        while ($last_august > $dt) $last_august->sub(new \DateInterval("P1Y"));
+
+        return $last_paid >= $last_august;
+    }
 }

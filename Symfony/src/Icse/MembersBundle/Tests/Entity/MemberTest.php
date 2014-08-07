@@ -26,5 +26,26 @@ class MemberTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(array('ROLE_USER'), $member2->getRoles(new \DateTime('2011-09-01')), "Never an admin");
     }
 
+    public function testHasCurrentMembership()
+    {
+        $member = new Member;
+        $member->setLastPaidMembershipOn(new \DateTime("31st July 2010"));
+
+        $this->assertEquals(true, $member->hasCurrentMembership(new \DateTime("15th January 2010")));
+        $this->assertEquals(true, $member->hasCurrentMembership(new \DateTime("31st July 2010")));
+        $this->assertEquals(false, $member->hasCurrentMembership(new \DateTime("1st August 2010")));
+        $this->assertEquals(false, $member->hasCurrentMembership(new \DateTime("1st January 2011")));
+
+        $member->setLastPaidMembershipOn(new \DateTime("1st August 2010"));
+        $this->assertEquals(true, $member->hasCurrentMembership(new \DateTime("31st July 2010")));
+        $this->assertEquals(true, $member->hasCurrentMembership(new \DateTime("1st August 2010")));
+        $this->assertEquals(true, $member->hasCurrentMembership(new \DateTime("31st December 2010")));
+        $this->assertEquals(true, $member->hasCurrentMembership(new \DateTime("1st January 2011")));
+        $this->assertEquals(true, $member->hasCurrentMembership(new \DateTime("31st July 2011")));
+        $this->assertEquals(false, $member->hasCurrentMembership(new \DateTime("1st August 2011")));
+        $this->assertEquals(false, $member->hasCurrentMembership(new \DateTime("31st December 2011")));
+        $this->assertEquals(false, $member->hasCurrentMembership(new \DateTime("1st January 2012")));
+    }
+
 }
  

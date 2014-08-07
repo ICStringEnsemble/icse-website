@@ -370,3 +370,13 @@ table.admintable {
     display: block;
     margin: 3em auto;
 }
+
+span.membership_date {
+    &.good {
+        color: #1caa00;
+    }
+
+    &.bad {
+        color: #f40200;
+    }
+}
