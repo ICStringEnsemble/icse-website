@@ -1,5 +1,6 @@
 Icse\PublicBundle\Entity\PieceOfMusic:
     type: entity
+    repositoryClass: Icse\PublicBundle\Entity\PieceOfMusicRepository
     table: null
     fields:
         id:
@@ -22,6 +23,8 @@ Icse\PublicBundle\Entity\PieceOfMusic:
         practice_parts:
             targetEntity: Icse\MembersBundle\Entity\PracticePart 
             mappedBy: piece
+            orderBy:
+                sort_index: ASC
     manyToOne:
         updated_by:
             targetEntity: Icse\MembersBundle\Entity\Member

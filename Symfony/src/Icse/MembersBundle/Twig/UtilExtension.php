@@ -18,7 +18,7 @@ class UtilExtension extends \Twig_Extension
 
     public function yesOrNo($value)
     {
-        return $value ? "Yes" : No;
+        return $value ? "Yes" : "No";
     }
 
     public function getName()

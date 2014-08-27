@@ -164,4 +164,60 @@ class PracticePart
     {
         return $this->piece;
     }
+    /**
+     * @var string
+     */
+    private $instrument;
+
+    /**
+     * @var integer
+     */
+    private $sort_index;
+
+
+    /**
+     * Set instrument
+     *
+     * @param string $instrument
+     * @return PracticePart
+     */
+    public function setInstrument($instrument)
+    {
+        $this->instrument = $instrument;
+
+        return $this;
+    }
+
+    /**
+     * Get instrument
+     *
+     * @return string 
+     */
+    public function getInstrument()
+    {
+        return $this->instrument;
+    }
+
+    /**
+     * Set sort_index
+     *
+     * @param integer $sortIndex
+     * @return PracticePart
+     */
+    public function setSortIndex($sortIndex)
+    {
+        $this->sort_index = $sortIndex;
+
+        return $this;
+    }
+
+    /**
+     * Get sort_index
+     *
+     * @return integer 
+     */
+    public function getSortIndex()
+    {
+        return $this->sort_index;
+    }
 }

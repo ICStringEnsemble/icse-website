@@ -23,6 +23,7 @@ services:
 
     ajax_response_gen:
         class: Icse\MembersBundle\Service\AjaxResponseGenerator
+        arguments: [@jms_serializer]
 
     icse.calendar_events:
         class: Icse\MembersBundle\Service\CalendarEvents

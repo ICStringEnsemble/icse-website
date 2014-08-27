@@ -41,6 +41,7 @@ class EventsController extends Controller
 
     public function eventAction($id, $slug)
     {
+        /** @var $event Event */
         $event = $this->getDoctrine()
                 ->getRepository('IcsePublicBundle:Event')
                 ->findOneById($id);

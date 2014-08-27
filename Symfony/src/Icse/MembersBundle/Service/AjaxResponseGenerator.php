@@ -3,21 +3,28 @@ namespace Icse\MembersBundle\Service;
 
 use Symfony\Component\HttpFoundation\Response;
 use Common\Tools;
+use JMS\Serializer\Serializer;
+use JMS\Serializer\SerializationContext;
 
 class AjaxResponseGenerator
 {
-    public function __construct()
+    private $serializer;
+
+    public function __construct(Serializer $serializer)
     {
+        $this->serializer = $serializer;
     }
  
-    public function returnSuccess()
+    public function returnSuccess($extra_data = null)
     {
-        return new Response(json_encode(array('status' => "success")));
+        $return_content = ['status' => 'success'];
+        if (!is_null($extra_data)) $return_content = array_merge($return_content, $extra_data);
+        return new Response($this->serializer->serialize($return_content, 'json', SerializationContext::create()->setGroups(['Default'])));
     }
 
     public function returnFail($errors, $partial_success = false)
     {
-        if (is_object($errors) && is_a($errors, "Symfony\Component\Form\Form")) {
+        if (is_object($errors) && is_a($errors, "Symfony\\Component\\Form\\Form")) {
             $error_array = Tools::getErrorMessages($errors);
         } else if (is_array($errors)){
             $error_array = $errors;

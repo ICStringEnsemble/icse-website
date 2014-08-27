@@ -8,6 +8,13 @@ Icse\PublicBundle\Entity\Subscriber:
             - NotBlank: ~
             - Email:
                 message: Not a valid email address
-                checkMX: true 
+                checkMX: true
         player:
             - NotBlank: ~
+Icse\PublicBundle\Entity\PieceOfMusic:
+    properties:
+        name:
+            - NotBlank: ~
+        composer:
+            - NotBlank: ~
+

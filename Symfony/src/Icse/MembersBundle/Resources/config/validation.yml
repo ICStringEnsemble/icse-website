@@ -12,3 +12,11 @@ Icse\MembersBundle\Entity\Member:
             - Email:
                 message: Not a valid email address
                 checkMX: true
+
+Icse\MembersBundle\Entity\PracticePart:
+    properties:
+        file:
+            - File:
+                mimeTypes: [application/pdf]
+        instrument:
+            - NotBlank: ~

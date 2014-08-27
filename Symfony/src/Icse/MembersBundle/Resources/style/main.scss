@@ -1,5 +1,6 @@
 @import "compass/css3/transform"; 
-@import "compass/css3/transition"; 
+@import "compass/css3/transition";
+@import "compass/css3/box-sizing";
 $nav_col_width: 240px;
 $hidden_nav_col_width: 34px;
 $nav_col_edge_width: 2px;
@@ -227,38 +228,41 @@ table.admintable {
 
     tbody tr {
         &:nth-child(odd) {
-            background-color: #F0E0CE; 
-            &.ui-selected {
+            td {
+                background-color: #F0E0CE;
+            }
+            &.ui-selected td {
                 background-color: #AFC9D4;
             }
-            &.ui-selecting {
+            &.ui-selecting td {
                 background-color: lighten(#AFC9D4, 5%);
             }
         }
         &:nth-child(even) {
-            background-color: #fff; 
-            &.ui-selected {
+            td {
+                background-color: #fff;
+            }
+            &.ui-selected td {
                 background-color: lighten(#AFC9D4, 10%);
             }
-            &.ui-selecting {
+            &.ui-selecting td {
                 background-color: lighten(#AFC9D4, 15%);
             }
         }
 
         &.past_date {
             color: #858585;
-
         }
 
         &.future_date {
             color: #00a;
         }
 
-        &.just_updated {
+        &.just_updated td {
             background-color: #C3FF42;
         }
 
-        &.ui-selected.just_deleted {
+        &.ui-selected.just_deleted td {
             background-color: #E95D58;
         }
     }
@@ -378,5 +382,179 @@ span.membership_date {
 
     &.bad {
         color: #f40200;
+    }
+}
+
+.fileinput-button-wrapper {
+    position: relative;
+    overflow: hidden;
+
+    input {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 0;
+        opacity: 0;
+        -ms-filter: 'alpha(opacity=0)';
+        font-size: 200px;
+        direction: ltr;
+        cursor: pointer;
+    }
+}
+
+#edit_dialog {
+    overflow-x: hidden;
+
+    .ui-button {
+        margin: 0;
+        float: left;
+    }
+
+    #practice_parts_section {
+        margin-bottom: 0.7em;
+        overflow: hidden;
+
+        #drop_mask {
+            position: absolute;
+            left: 0; right: 0;
+            z-index: 99;
+            border: dashed #0088CC 5px;
+            display: none;
+        }
+
+        #drag_instruction {
+            color: #777777;
+            margin-left: 0.5em;
+            margin-top: 0.2em;
+            float: left;
+        }
+
+        &.draginside {
+            #drop_mask {
+                display: block;
+            }
+            #drag_instruction {
+                color: #0088CC;
+            }
+        }
+    }
+
+    h2 {
+        $h2_colour: #643906;
+
+        font-size: 1.2em;
+        font-weight: bold;
+        padding-top: 0.2em;
+        padding-bottom: 0.1em;
+        margin-bottom: 0.5em;
+        font-family: Arial;
+        border-bottom: 2px solid $h2_colour;
+        color: $h2_colour;
+    }
+
+    ul#practice_parts {
+        margin-bottom: 0.3em;
+
+        li {
+            $input_text_height: 1.2em;
+            $input_vert_padding: 0.1em;
+            $input_vert_border: 0.1em;
+            $li_height: $input_text_height + 2*($input_vert_padding + $input_vert_border);
+
+            background-color: #f0e48a;
+            border: solid #bda953 1px;
+            height: $li_height;
+            padding: 0.5em;
+            margin-bottom: 0.2em;
+            overflow: hidden;
+
+            &.hidden {
+                height: 0;
+                padding: 0;
+                margin: 0;
+                border-width: 0;
+                opacity: 0;
+
+                @include transition(all 0.2s ease-in);
+            }
+
+
+            input {
+                height: $input_text_height;
+                margin: 0 0.3em;
+                padding: $input_vert_padding 0.3em;
+                border-width: $input_vert_border;
+                float: left;
+            }
+
+            .ui-progressbar {
+                height: $li_height;
+                position: relative;
+                clear: none;
+                margin-left: 1.8em;
+
+                .name {
+                    position: absolute;
+                    left: 0.7em;
+                }
+            }
+
+            .error {
+                clear: none;
+            }
+
+            .a-button, a {
+                &:link, &:visited {
+                    color: #000;
+                }
+
+                &:hover {
+                    color: #996633;
+                    cursor: pointer;
+                }
+
+                &.delete {
+                    float: right;
+
+                    &:hover {
+                        color: #f00;
+                    }
+                }
+            }
+
+
+            &.drag-placeholder {
+                background-color: transparent;
+                border-style: dashed;
+            }
+
+            i {
+                $margin: 0.2em;
+
+                display: inline-block;
+                float: left;
+                font-size: $li_height - 2*$margin;
+                margin: $margin;
+
+                &.handle {
+                    cursor: grab;
+                    cursor: -moz-grab;
+                    cursor: -webkit-grab;
+                }
+            }
+
+        }
+    }
+}
+
+#delete_dialog {
+    .ui-icon-alert {
+        margin-top: 0.3em;
+        margin-right: 7px;
+        float: left;
+    }
+
+    p {
+        margin-bottom: 0.6em;
     }
 }

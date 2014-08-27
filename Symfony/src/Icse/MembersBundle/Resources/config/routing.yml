@@ -79,6 +79,14 @@ IcseMembersBundle_migrateDB:
     pattern:  /migratedb
     defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:migrateDB }
 
+IcseMembersBundle_phpinfo:
+    pattern:  /phpinfo
+    defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:phpinfo }
+
+IcseMembersBundle_linkappcache:
+    pattern:  /members/superadmin/linkappcache
+    defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:appcache }
+
 IcseMembersBundle_test:
     pattern:  /members/superadmin/test
     defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:test }

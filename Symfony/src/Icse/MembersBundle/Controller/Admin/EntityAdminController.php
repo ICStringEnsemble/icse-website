@@ -31,16 +31,21 @@ abstract class EntityAdminController extends Controller
         return 'IcseMembersBundle:Admin:entity_admin_template.html.twig';
     }
 
+    protected function indexData()
+    {
+        return [];
+    }
+
     public function indexAction()
     {
-        $entity = $this->newInstance();
+        $entity = $this->newInstancePrototype();
         $form = $this->getForm($entity);
         $table_content = $this->getTableContent();
 
-        return $this->render($this->viewName(), array(
+        return $this->render($this->viewName(), array_merge([
             'table_content' => $table_content,
             'form' => $form->createView()
-        ));
+        ], $this->indexData()));
     }
 
     /**
@@ -70,7 +75,8 @@ abstract class EntityAdminController extends Controller
             }
             else
             {
-                return $this->instanceOperationAction($request, $arg);
+                $op = $request->query->get('op');
+                return $this->instanceOperationAction($request, $arg, $op);
             }
         }
         else if ($request->getMethod() == "PUT" && $arg != null)
@@ -96,8 +102,8 @@ abstract class EntityAdminController extends Controller
         return $this->putData($request, $entity);
     }
 
-    protected function getEntityById($id) {
-        $entity = $this->repository()->findOneBy(['id' => $id]);
+    protected function getEntityById($id, $finder = 'findOneById') {
+        $entity = $this->repository()->$finder($id);
         if (!$entity) {
             throw $this->createNotFoundException('Entity does not exist');
         }
@@ -106,8 +112,13 @@ abstract class EntityAdminController extends Controller
 
     public function updateAction(Request $request, $id)
     {
-        $entity = $this->getEntityById($id);
+        $entity = $this->getEntityById($id, $this->updateEntityFinder());
         return $this->putData($request, $entity);
+    }
+
+    protected function updateEntityFinder()
+    {
+        return 'findOneById';
     }
 
     public function deleteAction($id)
@@ -122,12 +133,19 @@ abstract class EntityAdminController extends Controller
     /**
      * @param $request
      * @param $id
-     * @return Response
+     * @param $op
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @return Response
      */
-    protected function instanceOperationAction(/** @noinspection PhpUnusedParameterInspection */ $request, $id)
+    protected function instanceOperationAction(/** @noinspection PhpUnusedParameterInspection */
+        $request, $id, $op)
     {
         throw $this->createNotFoundException();
+    }
+
+    protected function newInstancePrototype()
+    {
+        return $this->newInstance();
     }
 
     protected function timeagoDate(\DateTime $datetime)

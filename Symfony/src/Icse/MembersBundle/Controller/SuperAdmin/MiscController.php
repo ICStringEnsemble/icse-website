@@ -10,12 +10,36 @@ class MiscController extends Controller
 {
     public function siteDevAction()
     {
-        return $this->render('IcseMembersBundle:SuperAdmin:sitedev.html.twig');
+        $form = $this->createFormBuilder()->getForm();
+        return $this->render('IcseMembersBundle:SuperAdmin:sitedev.html.twig', ['dummy_form' => $form->createView()]);
+    }
+
+    private function userIsDeveloper()
+    {
+        return $this->get('kernel')->getEnvironment() == 'dev' or $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN');
+    }
+
+    public function phpinfoAction()
+    {
+        if ($this->userIsDeveloper())
+        {
+            phpinfo();
+            return new Response;
+        }
+        else
+        {
+            return new Response("You are not a developer.");
+        }
+    }
+
+    public function appcacheAction()
+    {
+        return new Response('<html manifest="/appcache"><body>Link .appcache</body></html>');
     }
 
     public function migrateDBAction()
     {
-        if ($this->get('kernel')->getEnvironment() == 'dev' or $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+        if ($this->userIsDeveloper()) {
             exec('/usr/bin/php ./Symfony/app/console -n doctrine:migrations:migrate', $output, $error);
             if ($error == 0)
             {

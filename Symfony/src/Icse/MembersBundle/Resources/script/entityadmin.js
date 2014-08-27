@@ -12,13 +12,24 @@
         window.postTableReload = function(){};
     }
 
-
-    String.prototype.capitalize = function() {
-        return this.charAt(0).toUpperCase() + this.slice(1);
-    };
+    function resetFormInput(el){
+        el.wrap('<form>').closest('form')[0].reset();
+        el.unwrap();
+    }
 
     /* Misc Initialisation */
     $('button').button();
+    $('input[type="file"]').each(function(){
+        var wrapper = $('<span>', {
+            class: 'fileinput-button-wrapper'
+        });
+        wrapper.append($('<span>', {
+            text: $(this).data('label')
+        }));
+        wrapper.insertAfter($(this));
+        wrapper.button();
+        $(this).detach().appendTo(wrapper);
+    });
     $('input.time').timepicker({ 'timeFormat': 'g:i a' });
     $('input.date').datepicker({ dateFormat: "dd/mm/yy" });
     $('#edit_form input:submit, #import_csv_form input:submit').hide();
@@ -29,6 +40,35 @@
         }
     });
     $('#edit_form').find('input:submit').before('<input type=hidden name="_method" value="POST" >');
+
+    $("html").on("dragover", function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        $(this).addClass('draginside');
+    });
+    $("html").on("dragleave", function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        $(this).removeClass('draginside');
+    });
+    $("html").on("drop", function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+    });
+
+    fos.Router.prototype.generateIgnoringExtras = function(name, opt_params, absolute) {
+        var path = this.generate(name, opt_params, absolute);
+        return path.replace(/\?.*$/, '');
+    }
+
+    $.fn.addTransitionClass = function(class_name){
+        var dfd = $.Deferred();
+        $(this).addClass(class_name);
+        $(this).on('transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd', function(){
+            dfd.resolveWith(this);
+        });
+        return dfd.promise();
+    };
 
     /* Loading Indicator Handling */
     var loadingIndicatorJobs = 0; 
@@ -98,14 +138,23 @@
 
     /* Reload Table */
     function reloadTable(){
+        var dfd = $.Deferred();
         $('#admin_table_container').load(currentPath + '/table', function(){
             attachTableHandlers();
             postTableReload();
             stopLoading();
             hideShowControlButtons();
             $('.ui-widget-overlay').height($(document).height());
+            dfd.resolve();
         });
         startLoading();
+        return dfd.promise();
+    }
+
+    function getTableRowById(id){
+        return $('tbody tr').filter(function(){
+            return $(this).data('entity').id === id;
+        });
     }
 
     /* Dialogs */
@@ -121,16 +170,18 @@
       {
           text: "", // eg. "Create", "Save Changes"
           click: function(){
-            $('#edit_form').find('input:submit').click();
+              var form = $('#edit_form');
+              form.data('reopen', false);
+              form.find('input:submit').click();
           },
           'class': 'submit_button'
         },
         {
-          text: "Cancel",
-          click: function(){
-            $(this).dialog("close");
-          },
-          'class': 'cancel_button'
+            text: "Cancel",
+            click: function(){
+                $(this).dialog("close");
+            },
+            'class': 'cancel_button'
         }
         ]
       });
@@ -188,14 +239,17 @@
     /* Button Handlers */
     function openCreateDialog(){
         $('.edit_dialog .ui-dialog-buttonset .submit_button .ui-button-text').html('Create');
-        $('#edit_dialog').dialog('open').dialog({ title: "Add " + entitySingular.capitalize() });
+        $('#edit_dialog').dialog('open').dialog({ title: "Add " + entitySingularTitle });
         var edit_form = $('#edit_form');
         edit_form.attr('method', 'POST');
         edit_form.find('input[name="_method"]').val('POST');
         edit_form.attr('action', currentPath);
         edit_form.find('input, textarea').not(':button, :submit, :reset, :hidden, :radio, :checkbox').val('');
         edit_form.find('.error').remove();
-        initCreateForm();
+        edit_form.find('.show_if_create').show();
+        edit_form.find('.show_if_edit').hide();
+        edit_form.data('form_mode', 'create');
+        initCreateForm(edit_form);
     }
     $('button.create').click(openCreateDialog);
 
@@ -204,36 +258,42 @@
         if (selection.length != 1) return;
         var entity = selection.first().data('entity');
         $('.edit_dialog .ui-dialog-buttonset .submit_button .ui-button-text').html('Save Changes');
-        $('#edit_dialog').dialog('open').dialog({ title: "Edit " + entitySingular.capitalize() });
+        $('#edit_dialog').dialog('open').dialog({ title: "Edit " + entitySingularTitle });
         // $('#edit_form').attr('method', 'PUT');
         var edit_form = $('#edit_form');
         edit_form.find('input[name="_method"]').val('PUT');
         edit_form.attr('method', 'POST');
         edit_form.find('.error').remove();
+        edit_form.find('.show_if_edit').show();
+        edit_form.find('.show_if_create').hide();
+        edit_form.data('form_mode', 'edit');
         edit_form.attr('action', currentPath + '/' + entity.id);
         edit_form.find('input, select, textarea').not(':button, :submit, :reset, :hidden, :radio, :checkbox').each(function(){
-            var name_array = $(this).attr('name').split('[');
+            var name_attr = $(this).attr('name');
+            if (typeof name_attr === "undefined") return;
+            var name_array = name_attr.split('[');
             name_array.splice(0,1);
             name_array = $.map(name_array, function(value) {
                 return value.split(']')[0];
             });
             var main_name = name_array[0];
             if (entity.hasOwnProperty(main_name)) {
-              var value = entity[main_name];
-              if (value === false) value = 0;
-              else if (value === true) value = 1;
-              if ($(this).hasClass("date")) value = moment(parseInt(value)).format('DD/MM/YYYY');
-              if ($(this).hasClass("time")) value = moment(parseInt(value)).format('h:mm a');
-              if (typeof value == 'object') {
-                if ($(this).prop("tagName") == "SELECT") value = value.id;
-                else value = value.name;
-              }
-              $(this).val(value);
+                var value = entity[main_name];
+                if (value === false) value = 0;
+                else if (value === true) value = 1;
+                else if ($(this).hasClass("date")) value = moment(parseInt(value)).format('DD/MM/YYYY');
+                else if ($(this).hasClass("time")) value = moment(parseInt(value)).format('h:mm a');
+                else if (typeof value == 'object') {
+                    if (value instanceof Array) value = null;
+                    else if ($(this).prop("tagName") == "SELECT") value = value.id;
+                    else value = value.name;
+                }
+                $(this).val(value);
             } else {
-              $(this).val('');
+                $(this).val('');
             }
         });
-        initEditForm();
+        initEditForm(edit_form, entity);
     }
     $('button.edit').click(openEditDialog);
 
@@ -247,15 +307,58 @@
       e.stopPropagation();
     });
 
+    $('button.submit_and_reopen').click(function(){
+        var form = $(this).closest('form');
+        form.data('reopen', true);
+        form.find('input:submit').click();
+        return false;
+    });
+
     $('button.delete').click(function(){ // Delete button
       $('#delete_dialog').dialog('open');
     });
+
+    var attachErrorsToForm = function this_function (form_element, name_stem, errors) {
+        for (var key in errors) if (errors.hasOwnProperty(key)) {
+            var child = errors[key];
+            var field_name = name_stem + '[' + key + ']';
+
+            if (typeof  child == 'string') {
+                var error_element = $('<div>',{
+                    'class' : 'error',
+                    'text' :  child
+                });
+
+                var bad_field_element = form_element.find('*[name="'+field_name+'"]');
+                if (bad_field_element.length == 0) {
+                    bad_field_element = form_element.find('*[name="'+name_stem+'"]');
+                }
+
+                if (bad_field_element.length == 0) { // insert as global error
+                    if (isNaN(key)) error_element.text(key + ': ' + error_element.text());  // add key to message
+                    error_element.addClass('global_error').appendTo(form_element);
+                } else { // attach error to bad field
+                    bad_field_element.before(error_element);
+                }
+            }
+            else if (typeof child == 'object') {
+                this_function(form_element, field_name, child);
+            }
+        }
+    };
 
     /* Form submit */
     $('.ui-dialog form').submit(function () {
         var form_element = $(this);
         var containing_dialog = form_element.closest('.ui-dialog-content');
         var dialog_buttonpane = containing_dialog.nextAll('.ui-dialog-buttonpane');
+        var all_buttons = dialog_buttonpane.add(form_element).find('button');
+        dialog_buttonpane.find('.loading_spinner').show();
+        all_buttons.each(function(){
+            $(this).data('was_disabled', $(this).prop('disabled'));
+        });
+        all_buttons.button('disable');
+        form_element.find('.error').remove();
         var formData, contentType, processData;
         if (form_element.find('input:file').length !== 0) {      // if files, we have to use multipart/form-data; doesn't play nicely with PUT
             formData = new FormData(form_element[0]);
@@ -277,54 +380,207 @@
             complete: function (result) {}
         }).always(function(){
             dialog_buttonpane.find('.loading_spinner').hide();
-            dialog_buttonpane.find('button').button('enable');
+            all_buttons.each(function(){
+                if (!$(this).data('was_disabled')) {
+                    $(this).button('enable');
+                }
+            });
         }).done(function(result){
             if (result.status == "success"){
                 containing_dialog.dialog('close');
-                reloadTable();
+                var on_reload_table = reloadTable();
+                if (form_element.data('reopen') === true) {
+                    on_reload_table.done(function(){
+                        var new_row = getTableRowById(result.entity.id);
+                        new_row.addClass('ui-selected');
+                        hideShowControlButtons();
+                        $('button.edit').click();
+                    });
+                }
             } else {
                 if (result.status == "partial") {
                     reloadTable();
                 }
-                for (var key in result.errors) {
-                    if (result.errors.hasOwnProperty(key)) {
-                        var error_element = $('<div>',{
-                            'class' : 'error',
-                            'text' :  (function(){
-                                var val = result.errors[key];
-                                // console.log(typeof val.first);
-                                if (typeof val === 'string') {
-                                  return val;
-                                } else if (typeof val === 'object' && typeof val.first === 'object') {
-                                  return val.first[0];
-                                } else {
-                                  return val[0];
-                                }
-                            })()
-                        });
-
-                        var bad_input_element = form_element.find('*[name*="[' + key + ']"]');
-                        if (isNaN(key) && bad_input_element.length !== 0) {
-                            bad_input_element.before(error_element);
-                        } else {
-                            if (isNaN(key)) { // if key is named but matching input can't be found
-                                error_element.html(key + ': ' + error_element.html());
-                            }
-                            error_element.addClass('global_error').appendTo(form_element);
-                        }
-                    }
-                }
+                attachErrorsToForm(form_element, 'form', result.errors);
             }
+        }).always(function(){
+            form_element.data('reopen', null);
         });
-        dialog_buttonpane.find('.loading_spinner').show();
-        dialog_buttonpane.find('button').button('disable');
-        form_element.find('.error').remove();
-
-        return false; 
+        return false;
     });
 
-    /* Reusable UI Dialogs */
+    /* Music Library */
+    (function(){
+        var edit_form = $('#edit_form.piece_of_music');
+        if (edit_form.length > 0) {
 
+            var add_files_button = edit_form.find('#add_files_button');
+            var add_new_part_form = $('#piece_of_music_add_new_part_form');
+            var practice_parts_list = edit_form.find('ul#practice_parts');
+
+            add_new_part_form.find('input[name="form[file]"]').remove();
+
+            var newUploadingPart;
+            (function(){
+                var uploading_part_prototype = practice_parts_list.find('li.uploading-part').detach();
+
+                newUploadingPart = function(){
+                    var item = uploading_part_prototype.clone();
+                    item.find('.progress-bar').progressbar({value: false});
+                    return item;
+                };
+            })();
+
+            var newListedPart;
+            (function(){
+                var practice_part_prototype = practice_parts_list.find('li.part').detach();
+                practice_part_prototype.find('input').removeAttr('id');
+
+                practice_part_prototype.find('.a-button.delete').click(function(){
+                    $(this).closest('li.part').addTransitionClass('hidden').done(function(){
+                        $(this).remove();
+                    });
+                    return false;
+                });
+
+                newListedPart = function(entity){
+                    var item = practice_part_prototype.clone(true);
+                    item.find('a.open').attr('href', Routing.generateIgnoringExtras('IcsePublicBundle_autoresource', entity));
+                    ['instrument', 'sort_index'].forEach(function(input_name){
+                        var input = item.find('input.' + input_name);
+                        input.val(entity[input_name]);
+                        input.attr('name', input.attr('name').replace('__ID__', entity.id));
+                    });
+                    return item;
+                };
+            })();
+
+            var assignSortIndices = function(){
+                practice_parts_list.find('li').each(function(){
+                    $(this).find('input.sort_index').val($(this).index());
+                });
+            };
+
+            practice_parts_list.sortable({
+                placeholder: "drag-placeholder",
+                cancel: '.a-button,input',
+                update: assignSortIndices
+            });
+
+            var currentMaxSortIndex = function(){
+                var indices = practice_parts_list.find('li').map(function(){
+                    return $(this).find('input.sort_index').val();
+                });
+                return indices.length == 0 ? -1 : Math.max.apply(null, indices);
+            };
+
+            var handleFile = function(file, button_pane){
+                var pane_buttons = button_pane.find('button');
+                var loading_spinner = button_pane.find('.loading_spinner');
+                var new_sort_index = currentMaxSortIndex()+1;
+                add_new_part_form.find('input[name="form[sort_index]"]').val(new_sort_index);
+                var uploading_item = newUploadingPart();
+                uploading_item.find('.name').text(file.name);
+                var progress_bar = uploading_item.find('.progress-bar');
+                uploading_item.find('input.sort_index').val(new_sort_index);
+                uploading_item.hide();
+                practice_parts_list.append(uploading_item);
+                uploading_item.show(500);
+
+                var form_data = new FormData(add_new_part_form[0]);
+                form_data.append("form[file]", file);
+
+                pane_buttons.button('disable');
+                loading_spinner.show();
+                var complete = false;
+
+                $.ajax({
+                    url: add_new_part_form.attr('action').replace('__ID__', practice_parts_list.data('piece_id')),
+                    type: "POST",
+                    data: form_data,
+                    dataType: 'json',
+                    processData: false,
+                    contentType: false,
+                    xhr: function() {
+                        xhr = $.ajaxSettings.xhr();
+                        if(xhr.upload){
+                            xhr.upload.addEventListener('progress', function(e) {
+                                if(e.lengthComputable){
+                                    progress_bar.progressbar({value: e.loaded, max: e.total})
+                                }
+                            } , false);
+                        }
+                        return xhr;
+                    }
+                }).done(function(result){
+                    if (result.status == "success"){
+                        var new_form_item = newListedPart(result.entity);
+                        uploading_item.replaceWith(new_form_item);
+                        complete = true;
+                    }
+                }).always(function(){
+                    if (!complete) uploading_item.remove();
+                    if (practice_parts_list.find('.uploading-part').length === 0){
+                        pane_buttons.button('enable');
+                        loading_spinner.hide();
+                        assignSortIndices();
+                        reloadTable();
+                    }
+                });
+            }
+
+            add_files_button.change(function(){
+                var button_pane = $(this).closest('.ui-dialog-content').nextAll('.ui-dialog-buttonpane');
+                for (var i=0; i<this.files.length; i++){
+                    handleFile(this.files[i], button_pane);
+                }
+                resetFormInput($(this));
+            });
+
+            var practice_parts_section = edit_form.find('#practice_parts_section');
+            var drag_mask = practice_parts_section.find('#drop_mask');
+
+            practice_parts_section.on('dragenter', function(e){
+                if (edit_form.data('form_mode') == 'edit'){
+                    e.stopPropagation();
+                    e.preventDefault();
+                    practice_parts_section.addClass('draginside');
+                    drag_mask.height(practice_parts_section.outerHeight());
+                }
+            });
+            drag_mask.on('dragleave', function(e){
+                e.stopPropagation();
+                e.preventDefault();
+                practice_parts_section.removeClass('draginside');
+            });
+            drag_mask.on('drop', function(e){
+                e.stopPropagation();
+                e.preventDefault();
+                practice_parts_section.removeClass('draginside');
+                var button_pane = practice_parts_section.closest('.ui-dialog-content').nextAll('.ui-dialog-buttonpane');
+                var files = e.originalEvent.dataTransfer.files;
+                for (var i=0; i<files.length; i++){
+                    handleFile(files[i], button_pane);
+                }
+            });
+
+            window.initCreateForm = function() {
+                practice_parts_list.empty();
+            };
+
+            window.initEditForm = function(edit_form, piece) {
+                practice_parts_list.data('piece_id', piece.id);
+                var practice_parts = piece.practice_parts;
+                practice_parts_list.empty();
+                practice_parts.forEach(function(this_part){
+                    var new_form_item = newListedPart(this_part);
+                    practice_parts_list.append(new_form_item);
+                });
+            };
+        }
+    })();
+
+    /* Reusable UI Dialogs */
     function ui_warn(msg) {
         var dfd = $.Deferred();
         $("<div>").html(msg).dialog({

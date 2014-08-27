@@ -4,8 +4,47 @@
 {% set currentSubSection = 'musicadmin' %}
 
 {% set entitySingular = 'piece of music' %}
+{% set entityPlural = 'pieces of music' %}
+
+{% block edit_form_fields %}
+    {{ form_row(form.name) }}
+    {{ form_row(form.composer) }}
+
+    <div id="practice_parts_section">
+        <div id="drop_mask"></div>
+        <h2>Practice Parts</h2>
+
+        <div class="show_if_edit">
+            <ul id="practice_parts" class="collection">
+                <li class="part">
+                    <i class="handle fa fa-bars"></i>
+                    <a target="_blank" class="open"><i class="fa fa-file-pdf-o"></i></a>
+                    <i class="a-button delete fa fa-trash-o"></i>
+                    {{ form_widget(form.practice_parts['__ID__'].instrument, {attr: {class: 'instrument'} }) }}
+                    {{ form_widget(form.practice_parts['__ID__'].sort_index, {attr: {class: 'sort_index'} }) }}
+                </li>
+
+                <li class="uploading-part">
+                    <i class="handle fa fa-bars"></i>
+                    <div class="progress-bar"><span class="name"></span></div>
+                    <input class="sort_index" hidden>
+                </li>
+            </ul>
+
+            <input id="add_files_button" type="file" multiple="multiple" data-label="Add files...">
+            <span id="drag_instruction">or drag and drop</span>
+        </div>
+
+        <div class="show_if_create">
+            <button class="submit_and_reopen" type=button>Start adding parts</button>
+        </div>
+    </div>
+
+{% endblock %}
 
 {% block extra_content %}
+    {{ form(new_part_form, {attr: {hidden: true, id: "piece_of_music_add_new_part_form"} }) }}
 
-
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
 {% endblock %}

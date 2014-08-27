@@ -1,6 +1,9 @@
 {% extends 'IcseMembersBundle:Default:template.html.twig' %}
 
 {% set entityPlural = entityPlural | default(entitySingular ~ 's') %}
+{% set entitySingularTitle = entitySingular | title %}
+{% set entityPluralTitle = entityPlural | title %}
+{% set entityIdentifier = entitySingular | replace(' ', '_') %}
 {% set readOnly = readOnly | default(false) %}
 {% set enable_social_net = enable_social_net | default(false) %}
 
@@ -36,7 +39,7 @@
   {% spaceless %}
   <li><button class="refresh show_if_none_selected" type=button>Refresh</button></li>
   {% if not readOnly %}
-  <li><button class="create show_if_none_selected" type=button>Add&nbsp;{{ entitySingular | title }}</button></li>
+  <li><button class="create show_if_none_selected" type=button>Add&nbsp;{{ entitySingularTitle }}</button></li>
   <li><button class="edit show_if_one_selected" type=button>Edit</button></li>
   <li><button class="delete show_if_any_selected" type=button>Delete</button></li>
   {% endif %}
@@ -54,6 +57,8 @@
   var currentPath = "{{ path(app.request.get('_route')) }}";
   var entitySingular = "{{ entitySingular }}";
   var entityPlural = "{{ entityPlural }}";
+  var entitySingularTitle = "{{ entitySingularTitle }}";
+  var entityPluralTitle = "{{ entityPluralTitle }}";
   var facebookAppId = '{{ facebook_app_id }}';
   var facebookPageId = '{{ facebook_page_id }}';
   var enable_social_net = {{ enable_social_net ? 'true' : 'false' }};
@@ -65,16 +70,18 @@
 
 {% if not readOnly %}
 
-<div hidden id=edit_dialog > 
-  <form id="edit_form" action="" method="post" {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
-    <input hidden type="submit" />
-  </form>
+<div hidden id=edit_dialog >
+    {{ form_start(form, {attr: {id: 'edit_form', class: entityIdentifier},}) }}
+    {% block edit_form_fields %}{% endblock %}
+    {{ form_rest(form) }}
+    <input hidden type="submit">
+    {{ form_end(form) }}
 </div>
 
-<div hidden id=delete_dialog title="Delete {{ entitySingular | capitalize }}" > 
-<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span>
+<div hidden id=delete_dialog title="Delete {{ entitySingularTitle }}" >
+<p><span class="ui-icon ui-icon-alert"></span>
 Are you sure you want to permanently delete all of the selected {{ entityPlural }}?</p>
+<p>Note: if deletion is not successful, it may be necessary to first delete/modify any associated entities.</p>
 </div>
 
 {% endif %}

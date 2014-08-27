@@ -87,6 +87,12 @@ IcsePublicBundle_resource:
     requirements: 
         file: "[^\.]*\.?[^\.]*" # Directory traversal protection, but slashes allowed
 
+IcsePublicBundle_autoresource:
+    pattern:   /resources/{resource_type}/{url_resource_path}
+    defaults: { _controller: IcsePublicBundle:Resources:auto }
+    requirements:
+        url_resource_path: "[^\.]*\.?[^\.]*"
+
 IcsePublicBundle_test_cal_feed:
     pattern: /testcal.ics
     defaults: { _controller: IcsePublicBundle:Calendar:test }

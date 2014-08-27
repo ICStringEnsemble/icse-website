@@ -4,6 +4,7 @@
 
 {% block content %}
 <h1>Site Dev</h1>
+<p>
 <div id="db_migration">
   <h2>Database Migration</h2>
   <button type=button>Migrate</button> 
@@ -44,4 +45,20 @@
     </script> 
 
 </div>
+</p>
+
+<h2>CSRF Token</h2>
+<p>
+{{ form(dummy_form) }}
+<script>$('#form__token').attr('type', 'text').attr('readonly', true).width(500);</script>
+</p>
+
+<h2>Misc</h2>
+<a class="button-link" href="{{ path('IcseMembersBundle_phpinfo') }}">PHPInfo</a>
+<a class="button-link" href="{{ path('IcseMembersBundle_linkappcache') }}">Link Appcache</a>
+
+<script>
+    $('.button-link').button();
+</script>
+
 {% endblock %}

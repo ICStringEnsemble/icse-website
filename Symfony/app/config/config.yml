@@ -16,6 +16,7 @@ framework:
     http_method_override: true
     session:
         cookie_path: /
+        cookie_lifetime: 0
 
 # Twig Configuration
 twig:
@@ -74,7 +75,7 @@ fkr_imagine:
     driver: imagick
 
 fos_js_routing:
-    routes_to_expose: [ IcsePublicBundle_query_username ] 
+    routes_to_expose: [ IcsePublicBundle_query_username, IcsePublicBundle_autoresource ]
 
 jms_serializer:
     handlers:

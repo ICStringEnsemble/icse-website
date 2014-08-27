@@ -60,15 +60,15 @@ class EventController extends EntityAdminController
         return $form;
     }
 
-    protected function instanceOperationAction($request, $id)
+    protected function instanceOperationAction($request, $id, $op)
     {
-        if ($request->query->get('op') === "socialnetsync")
+        if ($op === "socialnetsync")
         {
             /* @var $event Event */
             $event = $this->getEntityById($id);
             return $this->socialNetSync($request, $event);
         }
-        throw $this->createNotFoundException();
+        return parent::instanceOperationAction($request, $id, $op);
     }
 
     private function socialNetSync(Request $request, Event $event)
