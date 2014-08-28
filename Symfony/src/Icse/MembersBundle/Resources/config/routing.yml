@@ -87,6 +87,12 @@ IcseMembersBundle_linkappcache:
     pattern:  /members/superadmin/linkappcache
     defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:appcache }
 
+IcseMembersBundle_zipdir:
+    pattern:  /members/superadmin/zipdir/{source_path}
+    defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:zipDir }
+    requirements:
+        source_path: "[^\.]*\.?[^\.]*"
+
 IcseMembersBundle_test:
     pattern:  /members/superadmin/test
     defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:test }

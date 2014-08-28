@@ -5,6 +5,7 @@ namespace Icse\MembersBundle\Controller\SuperAdmin;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Icse\PublicBundle\Entity\Subscriber;
+use Common\Tools;
 
 class MiscController extends Controller
 {
@@ -94,6 +95,21 @@ class MiscController extends Controller
             }
         }
         return new Response('done');
+    }
+
+    public function zipDirAction($source_path)
+    {
+        if ($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN'))
+        {
+            $zip_name = Tools::slugify($source_path) . '.zip';
+            $zip_path = 'Symfony/uploads/' . $zip_name;
+            $success = Tools::Zip($source_path, $zip_path);
+            return new Response($success === false ? 'Fail' : 'Success');
+        }
+        else
+        {
+            return $this->createAccessDeniedException();
+        }
     }
 
     public function testAction()
