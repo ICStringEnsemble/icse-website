@@ -300,7 +300,7 @@ form {
             //display: block;
             //float:left;
             width: 200px;
-            vertical-align: middle; 
+            vertical-align: middle;
             margin-top: 0;
             margin-right: 10px;
         }
@@ -330,7 +330,7 @@ form {
 
             .ui-dialog & {
                 margin-left: $form-margin-width_narrowpage;
-            } 
+            }
         }
 
     }
@@ -359,39 +359,54 @@ form {
     .choices_list {
         float: left;
         clear: none;
-        margin-bottom: -0.5em;
     }
 
     /* Radio labels */
     .choices_list label {
         width: auto;
         float:left;
-        vertical-align: middle; 
+        vertical-align: middle;
         margin: 0;
         clear: none;
         padding-bottom: 0.5em;
         padding-left: 10px;
+
+        &:last-of-type {
+            padding-bottom: 0;
+        }
     }
 
     div {
         clear: both;
     }
 
-    div#other_instrument {
-        clear:none;
-        float:left;
-        margin-left: 20px;
-    }
+    &#join_us {
 
-    label[for=form_other_instrument] {
-        display: none;
-    }
+        div#other_instrument {
+            clear:none;
+            float:left;
+            margin-left: 20px;
+        }
 
-    #username_or_email_lookup input[type=button] {
-        //display: block;
-        //float: left;
-        clear: none;
-        margin-left: 10px;
+        label[for=form_other_instrument] {
+            display: none;
+        }
+
+        #username_or_email_lookup {
+            input {
+                display: block;
+                float: left;
+                margin-top: 0.15em;
+
+                &[type=button] {
+                    margin-left: 8px;
+                }
+            }
+        }
+
+        .loading_spinner {
+            margin-left: 8px;
+        }
     }
 
     #login_button {

@@ -1,72 +1,73 @@
-{% extends 'IcsePublicBundle:Default:template.html.twig' %}
-{% set currentSection = 'join' %}
-
-{% set pageTitle = 'Join Us' %}  
+{% extends 'IcsePublicBundle:SignUp:template.html.twig' %}
 
 {% block javascripts %}
-{{ parent() }}
-<script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
-<script type="text/javascript" src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script> 
-{% javascripts 
-  '@IcsePublicBundle/Resources/script/signup.js'
-  filter='?uglifyjs2'
-  output='bundles/icsepublic/js/signup.js'
-%}
-<script src="{{ asset_url }}"></script> 
-{% endjavascripts %}
-{% endblock %} 
+    {{ parent() }}
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+    {% javascripts
+        '@IcsePublicBundle/Resources/script/signup.js'
+        filter='?uglifyjs2'
+        output='bundles/icsepublic/js/signup.js'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
 
 {% block content %}
 
-{% autoescape false %} 
-{{ join_intro }}
-{% endautoescape %} 
+    {% autoescape false %}
+    {{ join_intro }}
+    {% endautoescape %}
 
-<form action="" method="post" {{ form_enctype(form) }} >
-  <div class="global_errors">
-    {{ form_errors(form) }} 
-  </div>
-
-  {{ form_row(form.player) }} 
-
-  <div id="username_or_email_lookup" class="form_row" hidden >
-    <label for="username_or_email_field">Enter your Imperial username <br>(or e-mail address if you don't have one)</label>
-    <input id="username_or_email_field" type="text" placeholder="Eg. jfs10" value="{{ username_or_email }}" />
-    <input type="button" id="lookup_button" value="Continue..."/>
-    <div id="username_or_email_error" hidden>
-      Not a valid Imperial Username or e-mail address.
-    </div>
-  </div>
-
-  <div class="show_if_email show_if_username">
-    {{ form_row(form.first_name) }} 
-    {{ form_row(form.last_name) }} 
-  </div>
-  <div class="never_show">
-    {{ form_row(form.login) }}
-  </div> 
-  <div class="show_if_username">
-    {{ form_row(form.email) }} 
-    {{ form_row(form.department) }} 
-  </div>
-  {% set other_instrument_input %}
-        <div id="other_instrument">
-          {{ form_errors(form.other_instrument) }} 
-          {{ form_widget(form.other_instrument) }} 
+    <form {% if freshersfair %}class="freshersfair"{% endif %} id="join_us" action="" method="post" {{ form_enctype(form) }} >
+        <div class="global_errors">
+            {{ form_errors(form) }}
         </div>
-  {% endset %}
-  <div class="show_if_player">
-    <div class="form_row">
-      {{ form_label(form.instrument) }}
-      <div class="form_row_main">
-        {{ form_errors(form.instrument) }}
-        {{ form_widget(form.instrument, {'extra_list_item': other_instrument_input}) }} 
-      </div>
-    </div>
 
-    {{ form_row(form.standard) }} 
-  </div>
-  {{ form_rest(form) }} 
-  <input class="show_if_email show_if_username" type="submit" value="Submit" />
-</form>
+        {{ form_row(form.player) }}
+
+        <div id="username_or_email_lookup" class="form_row" hidden >
+            <label for="username_or_email_field">Enter your Imperial username <br>(or e-mail address if you don't have one)</label>
+            <input id="username_or_email_field" type="text" placeholder="Eg. jfs10" value="{{ username_or_email }}" />
+            <input type="button" id="lookup_button" value="Continue..."/>
+            <img hidden class="loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" />
+            <div id="username_or_email_error" hidden>
+                Not a valid Imperial Username or e-mail address.
+            </div>
+        </div>
+
+        <div class="show_if_email show_if_username">
+            {{ form_row(form.first_name) }}
+            {{ form_row(form.last_name) }}
+        </div>
+        <div class="never_show">
+            {{ form_row(form.login) }}
+        </div>
+        <div class="show_if_username">
+            {{ form_row(form.email) }}
+            {{ form_row(form.department) }}
+        </div>
+        {% set other_instrument_input %}
+        <div id="other_instrument">
+            {{ form_errors(form.other_instrument) }}
+            {{ form_widget(form.other_instrument) }}
+        </div>
+        {% endset %}
+        <div class="show_if_player">
+            <div class="form_row">
+                {{ form_label(form.instrument) }}
+                <div class="form_row_main">
+                    {{ form_errors(form.instrument) }}
+                    {{ form_widget(form.instrument, {'extra_list_item': other_instrument_input}) }}
+                </div>
+            </div>
+
+            {{ form_row(form.standard) }}
+        </div>
+        {{ form_rest(form) }}
+        <div class="show_if_email show_if_username" >
+            <input id="submit" type="submit" value="Submit" />
+            <img hidden class="loading_spinner final_submit" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" />
+        </div>
+    </form>
 {% endblock %}

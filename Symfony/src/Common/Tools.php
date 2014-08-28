@@ -51,7 +51,7 @@ class Tools
         return $text; 
     }
 
-    
+
     public static function getErrorMessages(\Symfony\Component\Form\Form $form) {
         $errors = array();
         foreach ($form->getErrors() as $key => $error) {

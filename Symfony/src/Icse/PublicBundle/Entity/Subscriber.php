@@ -3,6 +3,7 @@
 namespace Icse\PublicBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Icse\PublicBundle\Entity\Subscriber
@@ -280,5 +281,35 @@ class Subscriber
     public function getPlayer()
     {
         return $this->player;
+    }
+
+    public function validatePlayerInfo(ExecutionContextInterface $context)
+    {
+        if ($this->isPlayer())
+        {
+            $other_index = array_search('other', $this->getInstrument());
+            $plays_other_instrument = ($other_index !== false);
+            if (!$this->getInstrument() || ($plays_other_instrument && !$this->getOtherInstrument()))
+            {
+                $context->addViolationAt('instrument', 'Please specify your instrument.', array(), null);
+            }
+            if ($plays_other_instrument)
+            {
+                $instruments = $this->getInstrument();
+                $instruments[$other_index] = $this->getOtherInstrument();
+                $this->setInstrument($instruments);
+            }
+            $instrument_string = implode (', ', $this->getInstrument());
+            $this->setInstrument($instrument_string);
+            if (!$this->getStandard())
+            {
+                $context->addViolationAt('standard', 'Please indicate your playing standard.', array(), null);
+            }
+        }
+        else
+        {
+            $this->setInstrument(null);
+            $this->setStandard(null);
+        }
     }
 }

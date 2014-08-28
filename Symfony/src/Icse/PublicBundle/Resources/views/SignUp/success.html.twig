@@ -1,0 +1,14 @@
+{% extends 'IcsePublicBundle:SignUp:template.html.twig' %}
+
+{% block content %}
+
+    {% if success_status == 'already' %}
+        <p>Thanks {{ person_name }}. You're already on our mailing list, so you should hear from us shortly.</p>
+        <p>If for some reason you are not receiving messages from us, please e-mail us at icse@imperial.ac.uk, and we'll try and put things right.</p>
+    {% elseif success_status == 'mailmanfail' %}
+        <p>Unfortunately, for some reason we were unable to add you to our mailing list. Please e-mail us at icse@imperial.ac.uk, and we'll try and put things right.</p>
+    {% else %}
+        <p>Thanks {{ person_name }}, we'll be in touch shortly.</p>
+    {% endif %}
+
+{% endblock content %}

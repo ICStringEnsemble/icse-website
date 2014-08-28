@@ -1,4 +1,6 @@
 Icse\PublicBundle\Entity\Subscriber:
+    constraints:
+        - Callback: [validatePlayerInfo]
     properties:
         first_name:
             - NotBlank: ~

@@ -1,0 +1,8 @@
+{% extends 'IcsePublicBundle:Default:template.html.twig' %}
+{% set currentSection = 'join' %}
+
+{% if freshersfair %}
+    {% set no_nav = true %}
+{% endif %}
+
+{% set pageTitle = freshersfair ? 'Freshers Fair' : 'Join Us' %}

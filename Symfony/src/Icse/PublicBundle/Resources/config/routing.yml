@@ -58,13 +58,13 @@ IcsePublicBundle_join:
     pattern:  /join
     defaults: { _controller: IcsePublicBundle:SignUp:join }
 
+IcsePublicBundle_freshersfair:
+    pattern:  /freshersfair
+    defaults: { _controller: IcsePublicBundle:SignUp:join, freshers: 1 }
+
 IcsePublicBundle_query_username:
     pattern:  /join/query_username
     defaults: { _controller: IcsePublicBundle:SignUp:query_username, _format: json }
-
-IcsePublicBundle_freshersfair:
-    pattern:  /freshersfair
-    defaults: { _controller: IcsePublicBundle:SignUp:freshersfair }
 
 IcsePublicBundle_support:
     pattern:  /support
