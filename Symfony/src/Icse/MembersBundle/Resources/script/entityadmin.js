@@ -56,9 +56,11 @@
         event.stopPropagation();
     });
 
-    fos.Router.prototype.generateIgnoringExtras = function(name, opt_params, absolute) {
-        var path = this.generate(name, opt_params, absolute);
-        return path.replace(/\?.*$/, '');
+    if (typeof fos != 'undefined' && typeof fos.Router != 'undefined'){
+        fos.Router.prototype.generateIgnoringExtras = function(name, opt_params, absolute) {
+            var path = this.generate(name, opt_params, absolute);
+            return path.replace(/\?.*$/, '');
+        }
     }
 
     $.fn.addTransitionClass = function(class_name){
@@ -376,8 +378,7 @@
             dataType: 'json', 
             cache: false,
             contentType: contentType,
-            processData: processData, 
-            complete: function (result) {}
+            processData: processData
         }).always(function(){
             dialog_buttonpane.find('.loading_spinner').hide();
             all_buttons.each(function(){
@@ -463,7 +464,7 @@
 
             practice_parts_list.sortable({
                 placeholder: "drag-placeholder",
-                cancel: '.a-button,input',
+                cancel: 'a,.a-button,input',
                 update: assignSortIndices
             });
 
