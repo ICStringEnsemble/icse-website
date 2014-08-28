@@ -101,10 +101,14 @@ class MiscController extends Controller
     {
         if ($this->get('security.context')->isGranted('ROLE_SUPER_ADMIN'))
         {
+            set_time_limit(0);
             $zip_name = Tools::slugify($source_path) . '.zip';
             $zip_path = 'Symfony/uploads/' . $zip_name;
-            $success = Tools::Zip($source_path, $zip_path);
-            return new Response($success === false ? 'Fail' : 'Success');
+            $root = $_SERVER['DOCUMENT_ROOT'];
+            exec("/usr/bin/zip -r $root/$zip_path $root/$source_path", $output, $error);
+            array_push($output, $error == 0 ? "Success" : "Fail");
+            $page_body = implode('<br />', $output);
+            return new Response($page_body);
         }
         else
         {
