@@ -42,7 +42,7 @@ class MusicController extends EntityAdminController
 
     protected function getTableContent()
     {
-        $entities = $this->repository()->findBy(array(), array('name'=>'asc'));
+        $entities = $this->repository()->findBy(array(), array('composer'=>'asc'));
 
         $columns = array(
             array('heading' => 'Composer', 'cell' => function(PieceOfMusic $x){return $x->getComposer();}),
