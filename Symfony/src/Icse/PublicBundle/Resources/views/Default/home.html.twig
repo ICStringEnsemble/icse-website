@@ -94,7 +94,7 @@
        data-cycle-log="false"
     >
     {% for image in slideshow_images %}
-    <img alt="" width=334 height=254 src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':image.getFile(), 'size':'hpslideshow'}) }}"/>
+    <img alt="" width=334 height=254 src="{{ path('IcsePublicBundle_autoresource', {'object': image, 'size':'hpslideshow'}) }}"/>
     {% endfor %}
   </div>
 

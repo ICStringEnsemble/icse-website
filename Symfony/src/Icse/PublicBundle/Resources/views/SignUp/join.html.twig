@@ -11,6 +11,19 @@
     %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
+
+    {% if freshersfair %}
+        <script src="{{ asset('bundles/icsepublic/lib/js/jquery.animate-enhanced.min.js') }}"></script>
+        <script src="{{ asset('bundles/icsepublic/lib/superslides/jquery.superslides.min.js') }}"></script>
+    {% endif %}
+
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% if freshersfair %}
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsepublic/lib/superslides/superslides.min.css') }}" />
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -71,3 +84,20 @@
         </div>
     </form>
 {% endblock %}
+
+{% block after_footer %}
+{% if freshersfair %}
+    <div hidden class="freshersfair" id="slideshow">
+        <div id="plugin_container">
+            <div id="slides">
+                <div class="slides-container">
+                    {% for image in slideshow_images %}
+                        <img alt="" width=334 height=254 src="{{ path('IcsePublicBundle_autoresource', image) }}"/>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <img id="logo" src="{{ asset('bundles/icsepublic/images/overlay_logo.png') }}" >
+    </div>
+{% endif %}
+{% endblock after_footer %}

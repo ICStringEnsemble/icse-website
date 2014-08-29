@@ -12,4 +12,8 @@ use Doctrine\ORM\EntityRepository;
  */
 class ImageRepository extends EntityRepository
 {
+    public function findSlideshowImages()
+    {
+        return $this->findByCategory('Homepage Slideshow');
+    }
 }

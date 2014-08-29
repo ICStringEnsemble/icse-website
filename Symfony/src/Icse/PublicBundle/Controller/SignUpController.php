@@ -153,11 +153,18 @@ class SignUpController extends Controller
 
         $username_or_email = $subscriber->getLogin() ? $subscriber->getLogin() : $subscriber->getEmail();
 
+        $slideshow_images = [];
+        if ($freshers && $request->isMethod('GET'))
+        {
+            $slideshow_images = $this->getDoctrine()->getRepository('IcsePublicBundle:Image')->findSlideshowImages();
+        }
+
         return $this->render('IcsePublicBundle:SignUp:join.html.twig', [
             'join_intro' => $this->getSiteText('join_intro'),
             'form' => $form->createView(),
             'username_or_email' => $username_or_email,
-            'freshersfair' => $freshers
+            'freshersfair' => $freshers,
+            'slideshow_images' => $slideshow_images
         ]);
     }
 

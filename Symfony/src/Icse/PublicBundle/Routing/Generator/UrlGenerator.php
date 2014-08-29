@@ -18,15 +18,17 @@ class UrlGenerator extends BaseUrlGenerator
     {
         if (is_object($parameters)) {
             $object = $parameters;
-            $parameters = array();
+            $parameters = [];
         }
  
         if (isset($parameters['object']) && is_object($parameters['object'])) {
             $object = $parameters['object'];
+            unset($parameters['object']);
         }
  
         if (isset($object)) {
-            $parameters = $this->getParametersFromObject($variables, $object);
+            $inferred_parameters = $this->getParametersFromObject($variables, $object);
+            $parameters = array_merge($inferred_parameters, $parameters);
         }
  
         return parent::doGenerate($variables, $defaults, $requirements, $tokens, $parameters, $name, $referenceType, $hostTokens);

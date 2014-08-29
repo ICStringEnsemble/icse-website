@@ -204,4 +204,18 @@ class Image
         list($width, $height) = getimagesize($this->image_dir.$this->getFile());
         return $width;
     }
+
+    /** @Serializer\Accessor(getter="getResourceType") */
+    private static $resource_type;
+    public function getResourceType()
+    {
+        return "images";
+    }
+
+    /** @Serializer\Accessor(getter="getUrlResourcePath") */
+    private static $url_resource_path;
+    public function getUrlResourcePath()
+    {
+        return $this->getFile();
+    }
 }
