@@ -8,11 +8,12 @@ use JMS\Serializer\Annotation\Exclude;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Common\Tools;
+use Icse\PublicBundle\Entity\Interfaces\ResourceInterface;
 
 /**
  * PracticePart
  */
-class PracticePart
+class PracticePart implements ResourceInterface
 {
     /**
      * @Exclude
@@ -244,5 +245,18 @@ class PracticePart
         }
         $path .= Tools::slugify($this->getInstrument()) . '.pdf';
         return $path;
+    }
+
+    public function getDownloadName()
+    {
+        $name = '';
+        $piece = $this->getPiece();
+        if (!is_null($piece))
+        {
+            $name .= $piece->getComposer() . ', ';
+            $name .= $piece->getName() . ' ';
+        }
+        $name .= '('.$this->getInstrument().').pdf';
+        return $name;
     }
 }

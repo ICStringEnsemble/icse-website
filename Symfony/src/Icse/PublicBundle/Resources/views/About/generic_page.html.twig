@@ -2,15 +2,18 @@
 
 {% block content %}
 
-{% if imageFile != null %}
-{% set splitBody = pageBody | split('<p>', 2) %}
-{% if splitBody | length == 2 %}
-  {% set pageBody = '<p>' ~ splitBody[1] %}
-  {{ splitBody[0] | raw }}
+{% set page_body = section.text %}
+{% set image = section.image %}
+
+{% if image is not null %}
+{% set split_body = page_body | split('<p>', 2) %}
+{% if split_body | length == 2 %}
+    {{ split_body[0] | raw }}
+    {% set page_body = '<p>' ~ split_body[1] %}
 {% endif %}
-<img class='article_pic' src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':imageFile, 'size':'article'}) }}" /> 
+<img class='article_pic' src="{{ path('IcsePublicBundle_resource', {object:image, 'size':'article'}) }}" />
 {% endif %}
 
-{{ pageBody | raw }}
+{{ page_body | raw }}
 
 {% endblock %}

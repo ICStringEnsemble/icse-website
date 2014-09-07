@@ -12,7 +12,7 @@
     {# Picture #}
     {% if article.getPicture() %}
     <a class=picture href="{{ path('IcsePublicBundle_news_article', article) }}" title="{{ article.getHeadline() }}" >
-      <img alt="" src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':article.getPicture().getFile(), 'size':img_size}) }}" />
+      <img alt="" src="{{ path('IcsePublicBundle_resource', {object: article.picture, size: img_size}) }}" />
     </a>
     {% endif %}
     <div class="details">

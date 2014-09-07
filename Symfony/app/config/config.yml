@@ -78,7 +78,7 @@ fkr_imagine:
     driver: imagick
 
 fos_js_routing:
-    routes_to_expose: [ IcsePublicBundle_query_username, IcsePublicBundle_autoresource ]
+    routes_to_expose: [ IcsePublicBundle_query_username, IcsePublicBundle_resource ]
 
 jms_serializer:
     handlers:

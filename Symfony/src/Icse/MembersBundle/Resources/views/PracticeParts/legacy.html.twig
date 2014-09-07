@@ -71,7 +71,7 @@
 
 <ul>
   {% for part in piece.parts %}
-  <li><a href="{{ path('IcsePublicBundle_resource', {type: 'legacypdf', file: piece.folder ~ '/' ~ part.filename}) }}">{{ part.label }}</a></li>
+  <li><a href="{{ path('IcsePublicBundle_resource', {resource_type: 'legacypdf', url_resource_path: piece.folder ~ '/' ~ part.filename}) }}">{{ part.label }}</a></li>
   {% endfor %}
 </ul>
 {% endfor %}

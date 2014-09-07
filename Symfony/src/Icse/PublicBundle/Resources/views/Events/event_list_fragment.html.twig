@@ -8,7 +8,7 @@
     {# Event Poster #}
     {% if event.getPoster() %}
     <a class=picture href="{{ path('IcsePublicBundle_event', event) }}" title="{{ event.getName() }}" >
-      <img alt="" src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':event.getPoster().getFile(), 'size':'hpmainthumb'}) }}" />
+      <img alt="" src="{{ path('IcsePublicBundle_resource', {object: event.poster, 'size':'hpmainthumb'}) }}" />
     </a>
     {% endif %}
     <div class="details">

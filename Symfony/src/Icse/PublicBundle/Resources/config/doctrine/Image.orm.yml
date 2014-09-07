@@ -11,6 +11,9 @@ Icse\PublicBundle\Entity\Image:
         file:
             type: string
             length: 255
+        file_extension:
+            type: string
+            length: 10
         name:
             type: string
             length: 255

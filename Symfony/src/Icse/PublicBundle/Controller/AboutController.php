@@ -14,20 +14,14 @@ class AboutController extends Controller
         $section = $this->getDoctrine()
                     ->getRepository('IcsePublicBundle:SiteSection')
                     ->findOneByName($name);
-        if ($section->getPicture() !== null) {
-            $imageFile = $section->getPicture()->getFile();
-        } else {
-            $imageFile = null;
-        }
-        return array('text' => $section->getText(), 'image' => $imageFile);
+        return ['text' => $section->getText(), 'image' => $section->getPicture()];
     }
 
     public function ensembleAction()
     {
         $section = $this->getSiteSection('about_ensemble');
         return $this->render('IcsePublicBundle:About:generic_page.html.twig', [
-            'pageBody' => $section['text'],
-            'imageFile' => $section['image'],
+            'section' => $section,
             'pageTitle' => 'About the Ensemble',
             'currentSubSection' => 'ensemble'
         ]);
@@ -37,8 +31,7 @@ class AboutController extends Controller
     {
         $section = $this->getSiteSection('about_conductor');
         return $this->render('IcsePublicBundle:About:generic_page.html.twig', [
-            'pageBody' => $section['text'],
-            'imageFile' => $section['image'],
+            'section' => $section,
             'pageTitle' => 'The Conductor',
             'currentSubSection' => 'conductor'
         ]);

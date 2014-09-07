@@ -20,8 +20,8 @@
 </div>
 
 {% if article.getPicture() %}
-<a class="article_pic view_full_image" href="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':article.getPicture().getFile(), 'size':'enlarge'}) }}" title="{{ article.getHeadline() }}" >
-<img src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':article.getPicture().getFile(), 'size':'article'}) }}" />
+<a class="article_pic view_full_image" href="{{ path('IcsePublicBundle_resource', {object: article.picture, size:'enlarge'}) }}" title="{{ article.getHeadline() }}" >
+<img src="{{ path('IcsePublicBundle_resource', {object: article.picture, 'size':'article'}) }}" />
 </a> 
 {% endif %}
 

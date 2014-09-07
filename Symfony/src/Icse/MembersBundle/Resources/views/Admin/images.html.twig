@@ -31,7 +31,7 @@
 
   /* File Uploader */
   var uploadCount = 0;
-  var tmp_path = "{{ path('IcsePublicBundle_resource', {'type':'tmp', 'file':''}) }}"+'/';
+  var tmp_path = "{{ path('IcsePublicBundle_resource', {'resource_type':'tmp', 'url_resource_path':''}) }}"+'/';
   $('#files').change(function () {
     var len = this.files.length;
     for ( var i=0; i < len; i++ ) {

@@ -5,6 +5,7 @@ namespace Icse\MembersBundle\Controller\SuperAdmin;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Icse\PublicBundle\Entity\Subscriber;
+use Icse\PublicBundle\Entity\Image;
 use Common\Tools;
 
 class MiscController extends Controller
@@ -44,17 +45,35 @@ class MiscController extends Controller
             exec('/usr/bin/php ./Symfony/app/console -n doctrine:migrations:migrate', $output, $error);
             if ($error == 0)
             {
-              array_push($output, "Success");
+                array_push($output, "Success");
             }
             else
             {
-              array_push($output, "Fail");
+                array_push($output, "Fail");
             }
             $pageBody = implode('<br />', $output);
             return new Response($pageBody);
         } else {
             return new Response("Developer mode required; no changes made.");
         }
+    }
+
+    public function migrateImagesAction()
+    {
+        $images = $this->getDoctrine()->getRepository('IcsePublicBundle:Image')->findAll();
+        $old_dir = 'Symfony/uploads/images/';
+        $new_dir = 'Symfony/uploads/images2/';
+
+        /** @var $i Image */
+        foreach ($images as $i)
+        {
+            $file_name = $i->getFile();
+            $ext = pathinfo($file_name, PATHINFO_EXTENSION);
+            $i->setFileExtension($ext);
+            rename ($old_dir.$i->getFile(), $new_dir.$i->getId().'.'.$ext);
+        }
+        $this->getDoctrine()->getManager()->flush();
+        return new Response("Done");
     }
 
     public function testldapAction()
@@ -64,20 +83,20 @@ class MiscController extends Controller
         $search_result = ldap_search($ldap, 'o=Imperial College,c=GB', 'uid=' . $username);
         $entry = ldap_first_entry($ldap, $search_result);
         if ($entry) {
-            $attrs = ldap_get_attributes($ldap, $entry); 
-            $email = $attrs['mail'][0]; 
+            $attrs = ldap_get_attributes($ldap, $entry);
+            $email = $attrs['mail'][0];
             return new Response($email);
         } else {
             return new Response('Does not exist');
         }
-    
+
     }
 
     public function fixSubscriberEmailsAction()
     {
         $repository = $this->getDoctrine()->getRepository('IcsePublicBundle:Subscriber');
         $em = $this->getDoctrine()->getEntityManager();
-        $subscribers = $repository->findAll(); 
+        $subscribers = $repository->findAll();
         foreach ($subscribers as $s) {
             /* @var $s Subscriber */
             $login = $s->getLogin();
@@ -86,12 +105,12 @@ class MiscController extends Controller
                 $search_result = ldap_search($ldap, 'o=Imperial College,c=GB', 'uid=' . $login);
                 $entry = ldap_first_entry($ldap, $search_result);
                 if ($entry) {
-                    $attrs = ldap_get_attributes($ldap, $entry); 
+                    $attrs = ldap_get_attributes($ldap, $entry);
                     $email = $attrs['mail'][0];
                     $s->setEmail($email);
                     $em->persist($s);
                     $em->flush();
-                } 
+                }
             }
         }
         return new Response('done');
@@ -122,10 +141,10 @@ class MiscController extends Controller
 //get a list of lists as an array
 //print_r($mm->lists());
 //echo $mm->unsubscribe('user@example.co.uk');
-//echo count($members[0]); 
+//echo count($members[0]);
 
-    var_dump ($mm->members()); 
-    //var_dump ($mm->subscribe('user@example.co.uk')); 
+        var_dump ($mm->members());
+        //var_dump ($mm->subscribe('user@example.co.uk'));
 
         return new Response('hi');
     }

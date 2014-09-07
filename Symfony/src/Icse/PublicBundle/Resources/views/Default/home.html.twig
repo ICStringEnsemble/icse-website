@@ -38,7 +38,7 @@
   {% spaceless %} 
   {% for event in past_events %}
       <a href="{{ path('IcsePublicBundle_event', event) }}" title="{{ event.getName() }}" >
-        <img alt="" src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file':event.getPoster().getFile(), 'size':'hpimagestrip'}) }}" />
+        <img alt="" src="{{ path('IcsePublicBundle_resource', {object: event.poster, 'size':'hpimagestrip'}) }}" />
       </a>
   {% endfor %}
   {% endspaceless %} 
@@ -94,7 +94,7 @@
        data-cycle-log="false"
     >
     {% for image in slideshow_images %}
-    <img alt="" width=334 height=254 src="{{ path('IcsePublicBundle_autoresource', {'object': image, 'size':'hpslideshow'}) }}"/>
+    <img alt="" width=334 height=254 src="{{ path('IcsePublicBundle_resource', {'object': image, 'size':'hpslideshow'}) }}"/>
     {% endfor %}
   </div>
 

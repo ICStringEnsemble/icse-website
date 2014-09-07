@@ -449,7 +449,7 @@
 
                 newListedPart = function(entity){
                     var item = practice_part_prototype.clone(true);
-                    item.find('a.open').attr('href', Routing.generateIgnoringExtras('IcsePublicBundle_autoresource', entity));
+                    item.find('a.open').attr('href', Routing.generateIgnoringExtras('IcsePublicBundle_resource', entity));
                     ['instrument', 'sort_index'].forEach(function(input_name){
                         var input = item.find('input.' + input_name);
                         input.val(entity[input_name]);

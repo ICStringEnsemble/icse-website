@@ -87,6 +87,10 @@ IcseMembersBundle_linkappcache:
     pattern:  /members/superadmin/linkappcache
     defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:appcache }
 
+IcseMembersBundle_migrateimages:
+    pattern:  /members/superadmin/migrateimages
+    defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:migrateImages }
+
 IcseMembersBundle_zipdir:
     pattern:  /members/superadmin/zipdir/{source_path}
     defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:zipDir }

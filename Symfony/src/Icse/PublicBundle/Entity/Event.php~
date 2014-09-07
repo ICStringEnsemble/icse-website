@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Common\Tools;
 use Icse\MembersBundle\Entity\Member;
-use JMS\Serializer\Annotation\Exclude;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Icse\PublicBundle\Entity\Event
@@ -97,6 +97,10 @@ class Event
     {
         return $this->starts_at;
     }
+
+    use Traits\NullableStartTime;
+    /** @Serializer\Accessor(getter="isStartTimeKnown") */
+    private static $is_start_time_known;
 
     /**
      * Set starts_at
@@ -282,11 +286,11 @@ class Event
      */
     private $facebook_status;
 
-    /** @Exclude */
+    /** @Serializer\Exclude */
     public static $SOCIAL_EVENT_NOT_CREATED = 0;
-    /** @Exclude */
+    /** @Serializer\Exclude */
     public static $SOCIAL_EVENT_SYNCED = 1;
-    /** @Exclude */
+    /** @Serializer\Exclude */
     public static $SOCIAL_EVENT_UNSYNCED = 2;
 
     private static function socialStatusToIcon($stat)

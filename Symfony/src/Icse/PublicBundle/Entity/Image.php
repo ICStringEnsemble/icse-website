@@ -4,11 +4,13 @@ namespace Icse\PublicBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
+use Common\Tools;
+
 
 /**
  * Icse\PublicBundle\Entity\Image
  */
-class Image
+class Image implements Interfaces\ResourceInterface
 {
     private $tmp_dir = 'Symfony/uploads/tmp/';
     private $image_dir = 'Symfony/uploads/images/';
@@ -217,6 +219,50 @@ class Image
     private static $url_resource_path;
     public function getUrlResourcePath()
     {
-        return $this->getFile();
+        $path = $this->getId();
+        $base_name = preg_replace('/\.'.$this->getFileExtension()."$/", "", $this->getName());
+        if ($base_name) $path .= '/' . Tools::slugify($base_name);
+        $path .= '.' . $this->getFileExtension();
+        return $path;
+    }
+
+    public function getFilePath()
+    {
+        return $this->image_dir . $this->getId() . '.' . $this->getFileExtension();
+    }
+
+    public function getDownloadName()
+    {
+        $base_name = preg_replace('/\.'.$this->getFileExtension()."$/", "", $this->getName());
+        return ($base_name ? $base_name : $this->getId()) . '.' . $this->getFileExtension();
+    }
+
+    /**
+     * @var string
+     */
+    private $file_extension;
+
+
+    /**
+     * Set file_extension
+     *
+     * @param string $fileExtension
+     * @return Image
+     */
+    public function setFileExtension($fileExtension)
+    {
+        $this->file_extension = $fileExtension;
+
+        return $this;
+    }
+
+    /**
+     * Get file_extension
+     *
+     * @return string 
+     */
+    public function getFileExtension()
+    {
+        return $this->file_extension;
     }
 }

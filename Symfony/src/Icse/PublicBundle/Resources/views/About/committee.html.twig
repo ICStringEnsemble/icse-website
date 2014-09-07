@@ -16,7 +16,7 @@
     {% endif %}
     <div class="profile">
         {% if m.member.profile is not null and m.member.profile.picture is not null %}
-            <img width=155 height=200 src="{{ path('IcsePublicBundle_resource', {'type':'images', 'file': m.member.profile.picture.file, 'size':'committeeprofile'}) }}" >
+            <img width=155 height=200 src="{{ path('IcsePublicBundle_resource', {object: m.member.profile.picture, size:'committeeprofile'}) }}" >
         {% endif %}
         <div class="profiletext">
             <h3>{{ m.member.fullName }}</h3>

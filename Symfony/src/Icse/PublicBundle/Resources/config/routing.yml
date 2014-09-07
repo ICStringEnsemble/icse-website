@@ -14,6 +14,13 @@ IcsePublicBundle_news_article_endslash:
     pattern:  /event/{id}/
     defaults: {_controller: IcsePublicBundle:News:article, slug: ''}
 
+IcsePublicBundle_about_redirect:
+    path: /about
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: IcsePublicBundle_about
+        permanent: false
+
 IcsePublicBundle_about:
     pattern:  /about/ensemble
     defaults: { _controller: IcsePublicBundle:About:ensemble }
@@ -29,6 +36,13 @@ IcsePublicBundle_about_conductor:
 IcsePublicBundle_about_committee:
     pattern:  /about/committee
     defaults: { _controller: IcsePublicBundle:About:committee }
+
+IcsePublicBundle_events_redirect:
+    path: /events
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: IcsePublicBundle_events
+        permanent: false
 
 IcsePublicBundle_events:
     pattern:  /events/upcoming
@@ -82,16 +96,10 @@ IcsePublicBundle_login_check:
     pattern:   /login_check
 
 IcsePublicBundle_resource:
-    pattern:   /resources/{type}/{file}
-    defaults: { _controller: IcsePublicBundle:Resources:resource }
-    requirements: 
-        file: "[^\.]*\.?[^\.]*" # Directory traversal protection, but slashes allowed
-
-IcsePublicBundle_autoresource:
     pattern:   /resources/{resource_type}/{url_resource_path}
-    defaults: { _controller: IcsePublicBundle:Resources:auto }
+    defaults: { _controller: IcsePublicBundle:Resources:resource }
     requirements:
-        url_resource_path: "[^\.]*\.?[^\.]*"
+        url_resource_path: "[^\.]*\.?[^\.]*" # Directory traversal protection, but slashes allowed
 
 IcsePublicBundle_test_cal_feed:
     pattern: /testcal.ics
