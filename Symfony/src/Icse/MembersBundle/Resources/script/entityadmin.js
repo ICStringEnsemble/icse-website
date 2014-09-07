@@ -284,7 +284,10 @@
                 if (value === false) value = 0;
                 else if (value === true) value = 1;
                 else if ($(this).hasClass("date")) value = moment(parseInt(value)).format('DD/MM/YYYY');
-                else if ($(this).hasClass("time")) value = moment(parseInt(value)).format('h:mm a');
+                else if ($(this).hasClass("time")) {
+                    value = moment(parseInt(value)).format('h:mm a');
+                    if (main_name == 'starts_at' && entity['is_start_time_known'] === false) value = '';
+                }
                 else if (typeof value == 'object') {
                     if (value instanceof Array) value = null;
                     else if ($(this).prop("tagName") == "SELECT") value = value.id;

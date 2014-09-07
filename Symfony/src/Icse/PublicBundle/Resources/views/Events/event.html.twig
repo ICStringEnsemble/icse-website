@@ -1,4 +1,4 @@
-{% extends (event.getStartsAt()|date('U') < 'tomorrow'|date('U'))?
+{% extends (event.startsAt is not null and event.startsAt|date('U') < 'tomorrow'|date('U'))?
 'IcsePublicBundle:Events:past_events_year_template.html.twig':
 'IcsePublicBundle:Events:future_events_template.html.twig'
 %} 
@@ -30,7 +30,9 @@
 <div id="TitleAndDate">
 <h1>{{ event.getName() }}</h1>
 {# Event Time #}
-<div class="datetime">{{ event.getStartsAt() | date("l jS F Y, g:ia") |nl2br }}</div>
+{% if event.startsAt is not null %}
+<div class="datetime">{{ event.startsAt | date("l jS F Y" ~ (event.isStartTimeKnown ? ", g:ia")) }}</div>
+{% endif %}
 </div>
 
 {% if event.getPoster() %}

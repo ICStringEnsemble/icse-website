@@ -33,7 +33,7 @@ class EventController extends EntityAdminController
         $columns = array(
             array('heading' => 'Name', 'cell' => function(Event $x){return $x->getName();}),
             array('heading' => 'Date', 'cell' => function(Event $x){return $x->getStartsAt()? $x->getStartsAt()->format('D jS F Y') : "?";}),
-            array('heading' => 'Time', 'cell' => function(Event $x){return $x->getStartsAt()? $x->getStartsAt()->format('g:ia') : "?";}),
+            array('heading' => 'Time', 'cell' => function(Event $x){return $x->isStartTimeKnown()? $x->getStartsAt()->format('g:ia') : "?";}),
             array('heading' => 'Where', 'cell' => function(Event $x){return $x->getLocationName();}),
             array('heading' => '<i class="fa fa-facebook-square"></i>', 'cell' => function(Event $x){return $x->getFacebookStatusIcon();}),
 //            array('heading' => '<i class="fa fa-google-plus"></i>', 'cell' => function(Event $x){return '<i class="fa fa-times"></i>';}),
@@ -50,6 +50,7 @@ class EventController extends EntityAdminController
             'date_widget' => 'single_text',
             'time_widget' => 'single_text',
             'date_format' => 'dd/MM/yy',
+            'required' => false,
         ))
         ->add('location', 'entity', array(
             'class' => 'IcsePublicBundle:Venue',

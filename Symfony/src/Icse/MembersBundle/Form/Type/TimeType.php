@@ -4,7 +4,7 @@ namespace Icse\MembersBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
+use Icse\MembersBundle\Form\DataTransformer\NullableTimeToStringTransformer;
 
 
 class TimeType extends AbstractType
@@ -13,8 +13,6 @@ class TimeType extends AbstractType
     {
         if ('single_text' === $options['widget'])
         {
-        
-//            $format = 'H';
             $format = 'g';
 
             if ($options['with_minutes'])
@@ -22,25 +20,20 @@ class TimeType extends AbstractType
                 $format .= ':i';
             }
 
-            if ($options['with_seconds'])
-            {
-                $format .= ':s';
-            }
-            
             $format .= ' a';
-        
+
             $builder->resetViewTransformers();
-            $builder->addViewTransformer(new DateTimeToStringTransformer($options['model_timezone'], $options['view_timezone'], $format));
+            $builder->addViewTransformer(new NullableTimeToStringTransformer($options['model_timezone'], $options['view_timezone'], $format));
         }
     }
 
     public function getParent()
     {
-      return 'time';
+        return 'time';
     }
 
     public function getName()
     {
-      return 'time12';
+        return 'time12';
     }
 }

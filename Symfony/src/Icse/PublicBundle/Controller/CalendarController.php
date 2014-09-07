@@ -103,11 +103,14 @@ class CalendarController extends Controller
 
         foreach ($event_lib->iter() as $e)
         {
+            /** @var $e Event */
+
             $type = $event_lib->type($e);
             
             $title = '';
             $UID_prefix = '';
             $description = '';
+            $is_start_time_known = true;
             if ($type == 'rehearsal')
             {
                 $UID_prefix = 'R';
@@ -121,9 +124,10 @@ class CalendarController extends Controller
             {
                 $UID_prefix = 'E';
                 $title = $e->getName();
+                $is_start_time_known = $e->isStartTimeKnown();
             }
 
-            $vcalendar->add('VEVENT', [
+            $vevent = $vcalendar->add('VEVENT', [
                 'SUMMARY' => $title,
                 'DTSTART' => $e->getStartsAt(),
                 'DTEND' =>  $e->getEndsAt(),
@@ -132,7 +136,13 @@ class CalendarController extends Controller
                 'UID' =>  $UID_prefix.$e->getId().':'.$e->getStartsAt()->format('Ymd\THis').'@www.union.ic.ac.uk/arts/stringensemble',
                 'LOCATION' => $e->getLocation() ? $e->getLocation()->getName() : "",
                 'DESCRIPTION' => $description . "\n\n" . 'Last reloaded at '. (new \DateTime())->format('Y-m-d H:i:s'),
-            ]);            
+            ]);
+
+            if (!$is_start_time_known)
+            {
+                $vevent->DTSTART['VALUE'] = 'DATE';
+                $vevent->DTEND['VALUE'] = 'DATE';
+            }
         }
 
         $response = new Response($vcalendar->serialize(),

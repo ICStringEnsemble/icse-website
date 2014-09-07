@@ -46,6 +46,8 @@ class EventsController extends Controller
                 ->getRepository('IcsePublicBundle:Event')
                 ->findOneById($id);
 
+        if (is_null($event)) throw $this->createNotFoundException('Event does not exist');
+
         if ($slug !== $event->getSlug()) {
             return $this->redirect($this->generateUrl('IcsePublicBundle_event', $event), 301); 
         }

@@ -36,7 +36,7 @@ class EventRepository extends EntityRepository
         return $result;
     }
 
-    public function findEventsWithKnownTime()
+    public function findEventsWithKnownDate()
     {
       return $this->getEntityManager()
                   ->createQuery ('SELECT e 

@@ -24,7 +24,7 @@ class CalendarEvents
 
         if (in_array('event', $types))
         {
-            $concerts = $this->em->getRepository('IcsePublicBundle:Event')->findEventsWithKnownTime();
+            $concerts = $this->em->getRepository('IcsePublicBundle:Event')->findEventsWithKnownDate();
             $iterator->append(new \ArrayIterator($concerts));
         }
 

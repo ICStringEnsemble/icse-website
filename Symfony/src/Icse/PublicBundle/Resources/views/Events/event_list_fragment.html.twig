@@ -15,7 +15,7 @@
       {# Event Name #}
       <h3><a href="{{ path('IcsePublicBundle_event', event) }}">{{ event.getName() }}</a></h3>
       {# Event Time #}
-      <div class="datetime">{{ event.getStartsAt() | date("l jS F Y, g:ia") }}</div>
+      <div class="datetime">{{ event.startsAt | date("l jS F Y" ~ (event.isStartTimeKnown ? ", g:ia")) }}</div>
       {# Event Location #}
       {% if event.getLocation() %}
         <div class="location">{{ event.getLocation().getName() }}</div>

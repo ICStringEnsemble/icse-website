@@ -38,6 +38,7 @@ class DefaultController extends Controller
             $type = $event_lib->type($e);
             
             $title = '';
+            $all_day = false;
             if ($type == 'rehearsal')
             {
                 $title = 'Rehearsal';
@@ -45,6 +46,7 @@ class DefaultController extends Controller
             elseif ($type == 'event')
             {
                 $title = $e->getName();
+                if (!$e->isStartTimeKnown()) $all_day = true;
             }
 
             if ($e->getLocation())
@@ -56,7 +58,7 @@ class DefaultController extends Controller
                 'title' => $title,
                 'start' => $e->getStartsAt() ? $e->getStartsAt()->format('M d Y H:i:s') : '',
                 'end' => $e->getEndsAt() ? $e->getEndsAt()->format('M d Y H:i:s') : '',
-                'allDay' => false,
+                'allDay' => $all_day,
             ]);
         }
 
