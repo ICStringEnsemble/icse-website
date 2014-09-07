@@ -75,7 +75,7 @@
     <div id="top_nav">
       {% if allow_nav %}
       <ul>
-        {% set is_logged_in = (status_code is not defined and is_granted('ROLE_USER')) %}
+        {% set is_logged_in = (app.user and is_granted('ROLE_USER')) %}
         {% for item in main_nav_items %}
         <li {% if item.id == 'members' %}id="members_area_button" {% if is_logged_in %}class="logged_in"{% endif %} {% endif %} >
             <a {% if item.id == currentSection %}class='current'{% endif %} href="{{ item.url }}">{{ item.label }}</a>

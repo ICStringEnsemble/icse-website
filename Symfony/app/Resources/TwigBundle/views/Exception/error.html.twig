@@ -4,9 +4,34 @@
 
 {% block content %}
 
-<h1>Whoops! An Error Occurred</h1>
+<h1>Whoops!</h1>
 <h2>The Server returned "Error {{ status_code }}: {{ status_text }}"</h2>
 
-<p>Something is broken. Please e-mail us at icse@imperial.ac.uk and let us know what you were doing when this error occurred. We will fix it as soon as possible. Sorry for any inconvenience caused.</p>
+{% set webmaster_addr = 'webmaster@icstringensemble.org.uk' %}
+
+{% set email_body =
+'Dear ICSE Webmaster
+
+I encountered an Error '~ status_code ~' when I attempted to visit the page at '~ app.request.uri ~'.
+
+--Any other info--
+
+Please could you look into this?
+
+Thanks
+--Your name--
+' %}
+
+{% set get_in_touch %}
+get in touch at <a href="mailto:{{ webmaster_addr }}?{{ {'subject': 'ICSE Website: Error '~status_code, 'body': email_body} | url_encode }}">{{ webmaster_addr }}</a>, let us know what you were doing when this error occurred, and we will try to fix it as soon as possible.
+{% endset %}
+
+{% if status_code == '404' %}
+<p>Unfortunately, the page you requested does not exist. If you believe there's something wrong, please {{ get_in_touch }}</p>
+{% elseif status_code == '403' %}
+<p>It looks like you don't have permission to access this page. If you believe there's something wrong, please {{ get_in_touch }}</p>
+{% else %}
+<p>Oh no! It looks like this page is broken. Please {{ get_in_touch }}</p>
+{% endif %}
 
 {% endblock %} 
