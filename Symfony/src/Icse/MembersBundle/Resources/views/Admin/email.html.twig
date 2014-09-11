@@ -24,7 +24,7 @@
 {% endblock javascripts %}
 
 {% block content %}
-<a hidden id="ckeditor_localdir" href="{{ asset('bundles/icsemembers/lib/ckeditor/') }}"></a>
+<a hidden id="ckeditor_localdir" href="{{ asset('bundles/icsemembers/lib/ckeditor/', version=false) }}"></a>
 
 <h1>
     {% set page_nav_item = members_nav_items[currentSubSection] %}
