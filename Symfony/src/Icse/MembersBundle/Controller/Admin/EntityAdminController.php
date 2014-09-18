@@ -16,7 +16,7 @@ abstract class EntityAdminController extends Controller
 
     abstract protected function newInstance();
 
-    abstract protected function getTableContent();
+    abstract protected function getListContent();
 
     /**
      * @param $entity
@@ -26,9 +26,14 @@ abstract class EntityAdminController extends Controller
 
     abstract protected function putData($request, $entity);
 
-    protected function viewName()
+    protected function getViewName()
     {
         return 'IcseMembersBundle:Admin:entity_admin_template.html.twig';
+    }
+
+    protected function getListViewName()
+    {
+        return 'IcseMembersBundle:Admin/entity_instance_list:table.html.twig';
     }
 
     protected function indexData()
@@ -40,10 +45,8 @@ abstract class EntityAdminController extends Controller
     {
         $entity = $this->newInstancePrototype();
         $form = $this->getForm($entity);
-        $table_content = $this->getTableContent();
 
-        return $this->render($this->viewName(), array_merge([
-            'table_content' => $table_content,
+        return $this->render($this->getViewName(), array_merge([
             'form' => $form->createView()
         ], $this->indexData()));
     }
@@ -62,9 +65,9 @@ abstract class EntityAdminController extends Controller
             {
                 return $this->indexAction($request);
             }
-            else if ($arg == "table")
+            else if ($arg == "list")
             {
-                return $this->tableAction($request);
+                return $this->listAction($request);
             }
         }
         else if ($request->getMethod() == "POST")
@@ -90,10 +93,10 @@ abstract class EntityAdminController extends Controller
         throw $this->createNotFoundException();
     }
 
-    public function tableAction()
+    public function listAction()
     {
-        $table_content = $this->getTableContent();
-        return $this->render('IcseMembersBundle:Admin:table_fragment.html.twig', array('table_content' => $table_content));
+        $list_content = $this->getListContent();
+        return $this->render($this->getListViewName(), ['list_content' => $list_content]);
     }
 
     public function createAction(Request $request)

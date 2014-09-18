@@ -3,6 +3,7 @@
 namespace Icse\MembersBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Icse\PublicBundle\Entity\Traits\FileWrapper;
 use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\Exclude;
 use JMS\Serializer\Annotation as Serializer;
@@ -15,6 +16,8 @@ use Icse\PublicBundle\Entity\Interfaces\ResourceInterface;
  */
 class PracticePart implements ResourceInterface
 {
+    use FileWrapper;
+
     /**
      * @Exclude
      */
@@ -41,8 +44,6 @@ class PracticePart implements ResourceInterface
      */
     private $piece;
 
-    private $file;
-
     /**
      * Get id
      *
@@ -68,12 +69,12 @@ class PracticePart implements ResourceInterface
 
     public function getFormFileAndInstrument()
     {
-        return $this->getFile();
+        return $this->getUploadedFile();
     }
 
     public function setFormFileAndInstrument(UploadedFile $file)
     {
-        $this->setFile($file);
+        $this->setUploadedFile($file);
         $this->setInstrumentFromFilename($file->getClientOriginalName());
     }
 
@@ -172,57 +173,14 @@ class PracticePart implements ResourceInterface
         return $this->piece;
     }
 
-    /**
-     * Sets file.
-     *
-     * @param UploadedFile $file
-     */
-    public function setFile(UploadedFile $file = null)
-    {
-        $this->file = $file;
-    }
-
-    /**
-     * Get file.
-     *
-     * @return UploadedFile
-     */
-    public function getFile()
-    {
-        return $this->file;
-    }
-
-    private function getFileDirectory()
+    protected function getFileDirectory()
     {
         return self::$base_dir.'/'.$this->getPiece()->getId();
     }
 
-    private function getFileName()
+    protected function getFileName()
     {
         return $this->getId().'.pdf';
-    }
-
-    public function getFilePath()
-    {
-        return $this->getFileDirectory().'/'.$this->getFileName();
-    }
-
-    public function upload()
-    {
-        $this->getFile()->move($this->getFileDirectory(), $this->getFileName());
-        $this->setFile(null);
-    }
-
-    private $file_to_remove;
-
-    public function storeFilenameForRemove()
-    {
-        $this->file_to_remove = $this->getFilePath();
-    }
-
-    public function removeUpload()
-    {
-        unlink($this->file_to_remove);
     }
 
     /** @Serializer\Accessor(getter="getResourceType") */

@@ -16,7 +16,7 @@ class EventController extends EntityAdminController
         return $this->getDoctrine()->getRepository('IcsePublicBundle:Event');
     }
 
-    protected function viewName()
+    protected function getViewName()
     {
         return 'IcseMembersBundle:Admin:events.html.twig';
     }
@@ -26,20 +26,19 @@ class EventController extends EntityAdminController
         return new Event();
     }
 
-    protected function getTableContent()
+    protected function getListContent()
     {
         $entities = $this->repository()->findAllEventsDescUnknownFirst();
 
-        $columns = array(
-            array('heading' => 'Name', 'cell' => function(Event $x){return $x->getName();}),
-            array('heading' => 'Date', 'cell' => function(Event $x){return $x->getStartsAt()? $x->getStartsAt()->format('D jS F Y') : "?";}),
-            array('heading' => 'Time', 'cell' => function(Event $x){return $x->isStartTimeKnown()? $x->getStartsAt()->format('g:ia') : "?";}),
-            array('heading' => 'Where', 'cell' => function(Event $x){return $x->getLocationName();}),
-            array('heading' => '<i class="fa fa-facebook-square"></i>', 'cell' => function(Event $x){return $x->getFacebookStatusIcon();}),
-//            array('heading' => '<i class="fa fa-google-plus"></i>', 'cell' => function(Event $x){return '<i class="fa fa-times"></i>';}),
-            array('heading' => 'Last updated', 'cell' => function(Event $x){return $this->timeagoDate($x->getUpdatedAt()) . " by " .$x->getUpdatedBy()->getFirstName();}),
-            );
-        return array("columns" => $columns, "entities" => $entities);
+        $fields = [
+            'Name' => function(Event $x){return $x->getName();},
+            'Date' => function(Event $x){return $x->getStartsAt()? $x->getStartsAt()->format('D jS F Y') : "?";},
+            'Time' => function(Event $x){return $x->isStartTimeKnown()? $x->getStartsAt()->format('g:ia') : "?";},
+            'Where' => function(Event $x){return $x->getLocationName();},
+            '<i class="fa fa-facebook-square"></i>' => function(Event $x){return $x->getFacebookStatusIcon();},
+            'Last updated' => function(Event $x){return $this->timeagoDate($x->getUpdatedAt()) . " by " .$x->getUpdatedBy()->getFirstName();},
+        ];
+        return ["fields" => $fields, "entities" => $entities];
     }
 
     protected function getForm($entity)

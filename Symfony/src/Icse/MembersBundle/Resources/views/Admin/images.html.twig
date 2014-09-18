@@ -1,112 +1,21 @@
-{% extends 'IcseMembersBundle:Default:template.html.twig' %}
+{% extends 'IcseMembersBundle:Admin:entity_admin_template.html.twig' %}
 
-{% set pageTitle = 'Image Uploads' %}  
-{% set currentSubSection = 'images' %}  
+{% set pageTitle = 'Image Library' %}
+{% set currentSubSection = 'images' %}
 
-{% block content %}
+{% set entitySingular = 'image' %}
 
-<h1>Image Uploads</h1>
+{% set allow_drop_files = true %}
 
-<button id=new_image_button type=button>New Images</button>
+{% block extra_content %}
+    {{ form(new_image_form, {attr: {hidden: true, id: "new_image"} }) }}
 
-<div id=new_image_dialog title="Add New Images" hidden=hidden>
-  <form method="post" enctype="multipart/form-data" action={{ path('IcseMembersBundle_receive_upload') }}>
-    <input type="file" name="files[]" id="files" multiple /> 
-    {#<input type=submit>#}
-  </form>
-  <ul id="upload_list"></ul>
+<div hidden id="image_prototype" class="uploading-instance">
+    <div class="image-container">
+        <img>
+        <div class="overlay-container">
+            <div class="progress-bar"><span class="name"></span></div>
+        </div>
+    </div>
 </div>
-
-<script>
-  /* New image dialog */
-  $('#new_image_dialog').dialog({
-    autoOpen: false,
-    modal: true,
-    width: 500,
-    height: 500
-  });
-  $('#new_image_button').button().click(function(){
-    $('#new_image_dialog').dialog('open');
-  });
-
-  /* File Uploader */
-  var uploadCount = 0;
-  var tmp_path = "{{ path('IcsePublicBundle_resource', {'resource_type':'tmp', 'url_resource_path':''}) }}"+'/';
-  $('#files').change(function () {
-    var len = this.files.length;
-    for ( var i=0; i < len; i++ ) {
-      file = this.files[i];
-      if (file.type.match('image.*')) {
-        var uploadID = uploadCount++;
-        $('#upload_list').append('<li><div class=upload_item id=upload'+uploadID+' ><progress></progress></div></li>');
-        var formData = new FormData();
-        if (formData) {
-          formData.append("files[]", file);
-          $.ajax({
-            url: "{{ path('IcseMembersBundle_receive_upload') }}",
-            type: "POST",
-            data: formData,
-            dataType: 'json', 
-            processData: false,
-            contentType: false,
-            success: function (id, filename) {
-              return function (res) {
-                var image = res[0];
-                $('div#upload'+id+' progress').replaceWith('<div class=thumbnail><img src='+tmp_path+res[0]+'?size=thumb /></div>');
-                $('div#upload'+id).append(
-                    '<form action="{{ path('IcseMembersBundle_confirm_upload') }}" method="post" {{ form_enctype(form) }}>'
-                  + '{{ form_widget(form) }}'
-                  + '<input type="button" value="Cancel" />'
-                  + '<input type="submit" value="Save" />'
-                  + '<div class="info"></div>'
-                  + '</form> '
-                );
-                $('div#upload'+id+' input#file_name').val(filename);
-                $('div#upload'+id+' input#file_file').val(res[0]);
-
-                var frm = $('div#upload'+id+' form');
-                
-                frm.submit(function () {
-                    $.ajax({
-                        type: frm.attr('method'),
-                        url: frm.attr('action'),
-                        data: frm.serialize(),
-                        dataType: 'json', 
-                        success: function (result) {
-                          if (result == "success"){
-                            frm.closest('.upload_item').remove(); 
-                          }
-                        }
-                    });
-                    $('div#upload'+id+' input').prop('disabled', true);
-                    $('div#upload'+id+' .info').html('<img class="loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" />');
-
-                    return false; 
-                });
-              };
-            }(uploadID, file.name),
-            xhr: function (id) {
-              return function() {
-                xhr = $.ajaxSettings.xhr();
-                if(xhr.upload){
-                  xhr.upload.addEventListener('progress', function(e) {
-                    if(e.lengthComputable){
-                      $('div#upload'+id+' progress').attr({value:e.loaded,max:e.total});
-                    } 
-                  } , false);
-                }
-                return xhr;
-              }
-            }(uploadID)
-          });
-
-        }
-      }
-    }
-
-  });
-
-
-</script>
-
 {% endblock %}

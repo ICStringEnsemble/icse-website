@@ -26,17 +26,9 @@ IcseMembersBundle_my_profile:
     defaults: { _controller: IcseMembersBundle:AccountSettings:profile }
 
 # Admin
-IcseMembersBundle_image_uploads:
-    pattern:  /members/admin/images
-    defaults: { _controller: IcseMembersBundle:Admin/Image:imageUploads }
-
-IcseMembersBundle_receive_upload:
-    pattern:  /members/admin/upload
-    defaults: { _controller: IcseMembersBundle:Admin/Image:upload }
-
-IcseMembersBundle_confirm_upload:
-    pattern:  /members/admin/uploadconfirm
-    defaults: { _controller: IcseMembersBundle:Admin/Image:confirmUpload }
+IcseMembersBundle_imageadmin:
+    pattern:  /members/admin/images/{arg}
+    defaults: { _controller: IcseMembersBundle:Admin/Image:router, arg: ~ }
 
 IcseMembersBundle_rehearsaladmin:
     pattern:  /members/admin/rehearsals/{arg}
@@ -54,7 +46,7 @@ IcseMembersBundle_musicadmin:
     pattern:  /members/admin/music/{arg}
     defaults: { _controller: IcseMembersBundle:Admin/Music:router, arg: ~ }
 
-IcseMembersBundle_members:
+IcseMembersBundle_membersadmin:
     pattern:  /members/superadmin/members/{arg}
     defaults: { _controller: IcseMembersBundle:SuperAdmin/Members:router, arg: ~ }
 
@@ -86,10 +78,6 @@ IcseMembersBundle_phpinfo:
 IcseMembersBundle_linkappcache:
     pattern:  /members/superadmin/linkappcache
     defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:appcache }
-
-IcseMembersBundle_migrateimages:
-    pattern:  /members/superadmin/migrateimages
-    defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:migrateImages }
 
 IcseMembersBundle_zipdir:
     pattern:  /members/superadmin/zipdir/{source_path}

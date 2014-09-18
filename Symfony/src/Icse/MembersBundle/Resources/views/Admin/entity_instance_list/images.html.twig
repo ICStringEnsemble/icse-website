@@ -1,0 +1,15 @@
+{% extends 'IcseMembersBundle:Admin/entity_instance_list:template.html.twig' %}
+
+{% import 'IcseMembersBundle:Admin/entity_instance_list:template.html.twig' as parent %}
+
+{% block list_body %}
+<div {{ parent.list_attrs(['waterfall']) }}>
+{% for entity in list_content.entities %}
+    <div {{ parent.instance_attrs(entity, _context) }}>
+        <div class="image-container">
+            <img {{ entity | imgSrcAndSize('imageadmin') }}>
+        </div>
+    </div>
+{% endfor %}
+</div>
+{% endblock %}

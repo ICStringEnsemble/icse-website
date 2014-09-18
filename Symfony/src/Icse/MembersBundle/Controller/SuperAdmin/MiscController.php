@@ -58,24 +58,6 @@ class MiscController extends Controller
         }
     }
 
-    public function migrateImagesAction()
-    {
-        $images = $this->getDoctrine()->getRepository('IcsePublicBundle:Image')->findAll();
-        $old_dir = 'Symfony/uploads/images/';
-        $new_dir = 'Symfony/uploads/images2/';
-
-        /** @var $i Image */
-        foreach ($images as $i)
-        {
-            $file_name = $i->getFile();
-            $ext = pathinfo($file_name, PATHINFO_EXTENSION);
-            $i->setFileExtension($ext);
-            rename ($old_dir.$i->getFile(), $new_dir.$i->getId().'.'.$ext);
-        }
-        $this->getDoctrine()->getManager()->flush();
-        return new Response("Done");
-    }
-
     public function testldapAction()
     {
         $username = 'jbh1111';

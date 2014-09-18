@@ -5,83 +5,99 @@ namespace Icse\MembersBundle\Controller\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request; 
 use Symfony\Component\HttpFoundation\Response; 
-use Symfony\Component\HttpKernel\Exception\HttpException; 
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Validator\Constraints;
 use Icse\MembersBundle\Form\Type\FileInfoType;
 use Icse\PublicBundle\Entity\Image;
 
 
-class ImageController extends Controller
+class ImageController extends EntityAdminController
 {
-  private $tmp_dir = 'Symfony/uploads/tmp/';
-
-  public function imageUploadsAction()
+    protected function repository()
     {
-      $form = $this->createForm(new FileInfoType(), new Image());
-
-      return $this->render('IcseMembersBundle:Admin:images.html.twig', array('form' => $form->createView())); 
+        return $this->getDoctrine()->getRepository('IcsePublicBundle:Image');
     }
 
-  public function uploadAction(Request $request)
+    protected function getViewName()
     {
-      $files = $request->files->get('files'); 
+        return 'IcseMembersBundle:Admin:images.html.twig';
+    }
 
-      $new_names = array();
-      if ($files)
+    protected function getListViewName()
+    {
+        return 'IcseMembersBundle:Admin/entity_instance_list:images.html.twig';
+    }
+
+    protected function newInstance()
+    {
+        return new Image();
+    }
+
+    protected function indexData()
+    {
+        return [
+            'new_image_form' => $this->getAddNewImageForm($this->newInstance())->createView()
+        ];
+    }
+
+    protected function getListContent()
+    {
+        $entities = $this->repository()->findBy([], ['id'=>'desc']);
+
+        $fields = [
+            'ID' => function(Image $x){return $x->getId();},
+            'Name' => function(Image $x){return $x->getName();},
+            'Last updated' => function(Image $x){return $this->timeagoDate($x->getUpdatedAt()) . " by " .$x->getUpdatedBy()->getFirstName();},
+        ];
+        return ["fields" => $fields, "entities" => $entities];
+    }
+
+    protected function getAddNewImageForm($entity)
+    {
+        return $this->createFormBuilder($entity)
+            ->setMethod('POST')
+            ->add('file', 'file', [
+                'property_path' => 'form_file_and_names',
+                'constraints' => [new Constraints\NotNull],
+            ])
+            ->getForm();
+    }
+
+    protected function getForm($entity)
+    {
+        return $this->createFormBuilder($entity)
+            ->setMethod('PUT')
+            ->add('name', 'text')
+            ->getForm();
+    }
+
+    protected function putData($request, $entity)
+    {
+        /** @var $entity Image */
+        $is_creation = is_null($entity->getId());
+
+        $form = $is_creation ? $this->getAddNewImageForm($entity) : $this->getForm($entity);
+
+        $form->handleRequest($request);
+
+        $entity->setUpdatedAt(new \DateTime());
+        $entity->setUpdatedBy($this->get('security.context')->getToken()->getUser());
+
+        $em = $this->getDoctrine()->getManager();
+        if ($form->isValid())
         {
-          foreach ($files as $file)
-            {
-              $extension = $file->guessExtension();
-              if (!$extension)
-                {
-                  $extension = 'bin';
-                }
-              $new_filename = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36).'.'.$extension;
-              $file->move($this->tmp_dir, $new_filename);
-              chmod($this->tmp_dir.$new_filename, 0660);
-              array_push($new_names, $new_filename);
-            }
+            $em->persist($entity);
+            $em->flush();
+            return $this->get('ajax_response_gen')->returnSuccess(['entity' => $entity]);
         }
-
-      $pageBody = 'done';
-      return new Response(json_encode($new_names));
-    }
-
-  public function confirmUploadAction(Request $request)
-    {
-      if ($request->getMethod() == 'POST')
+        else
         {
-          $form_data = $this->get('request')->request->get('file');
-          $stored_filename = $form_data['file'];
-          if ($stored_filename)
+            if ($em->contains($entity))
             {
-              if (getimagesize($this->tmp_dir.$stored_filename)) $file = new Image();
-              else $file = new Image();
-
-              $form = $this->createForm(new FileInfoType(), $file);
-              $form->bind($request); 
-              if ($form->isValid())
-                {
-                  $file->setUpdatedAt(new \DateTime());
-                  $file->setUpdatedBy($this->get('security.context')->getToken()->getUser()->getId()); 
-
-                  $em = $this->getDoctrine()->getManager();
-                  $em->persist($file);
-                  $em->flush(); 
-                  return new Response(json_encode("success"));
-                }
-              else
-                {
-                  throw new HttpException(400, 'Form submission not valid');
-                }
+                $em->refresh($entity);
             }
-          else
-            {
-              throw new HttpException(400, 'No filename specified');
-            }
-        } 
-      else
-        {
-          throw new HttpException(400, 'No POST data received');
+            return $this->get('ajax_response_gen')->returnFail($form);
         }
     }
+
 }

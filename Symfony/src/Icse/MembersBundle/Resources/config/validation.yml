@@ -15,7 +15,7 @@ Icse\MembersBundle\Entity\Member:
 
 Icse\MembersBundle\Entity\PracticePart:
     properties:
-        file:
+        uploaded_file:
             - File:
                 mimeTypes: [application/pdf]
         instrument:

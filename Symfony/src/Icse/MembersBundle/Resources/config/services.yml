@@ -6,8 +6,8 @@ services:
         class: Icse\MembersBundle\Security\Authentication\Provider\ImperialProvider
         arguments: ['', @security.user_checker, '', @security.encoder_factory, %security.authentication.hide_user_not_found%]
 
-    icse.twig.util_extension:
-        class: Icse\MembersBundle\Twig\UtilExtension
+    icse.twig.table_utils:
+        class: Icse\MembersBundle\Twig\TableUtils
         tags:
             - { name: twig.extension } 
 

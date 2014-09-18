@@ -3,14 +3,20 @@ parameters:
 #    icse_public.example.class: Icse\PublicBundle\Example
 
 services:
+    icse.twig.utils:
+        class: Icse\PublicBundle\Twig\Utils
+        arguments: [@icse.image_resizer, @router]
+        tags:
+            - { name: twig.extension }
+
     icsemembers_mailman:
         class: Common\Mailman
-        arguments: [%icmailman_admin_url%, %icsemembers_mailman_list%, %icsemembers_mailman_pw%]  
+        arguments: [%icmailman_admin_url%, %icsemembers_mailman_list%, %icsemembers_mailman_pw%]
 
     icsepublic_mailman:
         class: Common\Mailman
-        arguments: [%icmailman_admin_url%, %icsepublic_mailman_list%, %icsepublic_mailman_pw%]  
+        arguments: [%icmailman_admin_url%, %icsepublic_mailman_list%, %icsepublic_mailman_pw%]
 
-#    icse_public.example:
-#        class: %icse_public.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    icse.image_resizer:
+        class: Icse\PublicBundle\Service\ImageResizer
+        arguments: ["@=service('kernel').getCacheDir()", @filesystem, @fkr_imagine]

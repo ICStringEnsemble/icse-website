@@ -1,0 +1,25 @@
+{% extends 'IcseMembersBundle:Admin/entity_instance_list:template.html.twig' %}
+
+{% block list_body %}
+<div class="table-container">
+<table class=entity_instance_table>
+    <thead>
+    <tr>
+        {%- for heading in list_content.fields | keys -%}
+            <th>{{ heading | raw }}</th>
+        {%- endfor -%}
+    </tr>
+    </thead>
+
+    <tbody {{ parent.list_attrs() }}>
+    {%- for entity in list_content.entities %}
+        <tr {{ parent.instance_attrs(entity, _context) }}>
+            {% for getter in list_content.fields %}
+                <td>{{ entity | getCell(getter) | raw }}</td>
+            {% endfor %}
+        </tr>
+    {% endfor -%}
+    </tbody>
+</table>
+</div>
+{% endblock %}

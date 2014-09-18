@@ -2,7 +2,7 @@
 
 namespace Icse\MembersBundle\Twig;
 
-class UtilExtension extends \Twig_Extension
+class TableUtils extends \Twig_Extension
 {
     public function getFilters()
     {
@@ -11,9 +11,9 @@ class UtilExtension extends \Twig_Extension
         );
     }
 
-    public function getCell($entity, $column)
+    public function getCell($entity, $getter)
     {
-        return call_user_func($column['cell'], $entity);
+        return call_user_func($getter, $entity);
     }
 
     public function yesOrNo($value)
@@ -23,6 +23,6 @@ class UtilExtension extends \Twig_Extension
 
     public function getName()
     {
-        return 'util_extension';
+        return 'icse.twig.table_utils';
     }
 } 

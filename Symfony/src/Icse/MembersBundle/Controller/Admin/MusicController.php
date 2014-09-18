@@ -22,7 +22,7 @@ class MusicController extends EntityAdminController
         return $this->getDoctrine()->getRepository('IcsePublicBundle:PieceOfMusic');
     }
 
-    protected function viewName()
+    protected function getViewName()
     {
         return 'IcseMembersBundle:Admin:music.html.twig';
     }
@@ -40,17 +40,17 @@ class MusicController extends EntityAdminController
         return $piece;
     }
 
-    protected function getTableContent()
+    protected function getListContent()
     {
         $entities = $this->repository()->findBy(array(), array('composer'=>'asc'));
 
-        $columns = array(
-            array('heading' => 'Composer', 'cell' => function(PieceOfMusic $x){return $x->getComposer();}),
-            array('heading' => 'Name', 'cell' => function(PieceOfMusic $x){return $x->getName();}),
-            array('heading' => 'Parts', 'cell' => function(PieceOfMusic $x){return count($x->getPracticeParts());}),
-            array('heading' => 'Last updated', 'cell' => function(PieceOfMusic $x){return $this->timeagoDate($x->getUpdatedAt()) . " by " .$x->getUpdatedBy()->getFirstName();}),
-            );
-        return array("columns" => $columns, "entities" => $entities);
+        $fields = [
+            'Composer' => function(PieceOfMusic $x){return $x->getComposer();},
+            'Name' => function(PieceOfMusic $x){return $x->getName();},
+            'Parts' => function(PieceOfMusic $x){return count($x->getPracticeParts());},
+            'Last updated' => function(PieceOfMusic $x){return $this->timeagoDate($x->getUpdatedAt()) . " by " .$x->getUpdatedBy()->getFirstName();},
+        ];
+        return ["fields" => $fields, "entities" => $entities];
     }
 
     protected function indexData()

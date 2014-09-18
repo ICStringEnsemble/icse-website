@@ -11,7 +11,7 @@ class RehearsalController extends EntityAdminController
         return $this->getDoctrine()->getRepository('IcseMembersBundle:Rehearsal');
     }
 
-    protected function viewName()
+    protected function getViewName()
     {
         return 'IcseMembersBundle:Admin:rehearsals.html.twig';
     }
@@ -21,21 +21,20 @@ class RehearsalController extends EntityAdminController
         return new Rehearsal();
     }
 
-    protected function getTableContent()
+    protected function getListContent()
     {
         $dm = $this->getDoctrine(); 
         $rehearsals = $dm->getRepository('IcseMembersBundle:Rehearsal')->findBy(array(), array('starts_at'=>'desc'));
 
-        $columns = array(
-            // array('heading' => 'ID', 'cell' => function($x){return $x->getID();}),
-            array('heading' => 'Date', 'cell' => function(Rehearsal $x){return $x->getStartsAt()? $x->getStartsAt()->format('D jS F Y') : "?";}),
-            array('heading' => 'Time', 'cell' => function(Rehearsal $x){return $x->getStartsAt()? $x->getStartsAt()->format('g:ia') : "?";}),
-            array('heading' => 'Where', 'cell' => function(Rehearsal $x){return $x->getLocation() ? $x->getLocation()->getName() : "?";}),
-            array('heading' => 'Title', 'cell' => function(Rehearsal $x){return $x->getName();}),
-            array('heading' => 'Comments', 'cell' => function(Rehearsal $x){return $x->getComments();}),
-            array('heading' => 'Last updated', 'cell' => function(Rehearsal $x){return $this->timeagoDate($x->getUpdatedAt()) . " by " .$x->getUpdatedBy()->getFirstName();}),
-            );
-        return array("columns" => $columns, "entities" => $rehearsals);
+        $fields = [
+            'Date' => function(Rehearsal $x){return $x->getStartsAt()? $x->getStartsAt()->format('D jS F Y') : "?";},
+            'Time' => function(Rehearsal $x){return $x->getStartsAt()? $x->getStartsAt()->format('g:ia') : "?";},
+            'Where' => function(Rehearsal $x){return $x->getLocation() ? $x->getLocation()->getName() : "?";},
+            'Title' => function(Rehearsal $x){return $x->getName();},
+            'Comments' => function(Rehearsal $x){return $x->getComments();},
+            'Last updated' => function(Rehearsal $x){return $this->timeagoDate($x->getUpdatedAt()) . " by " .$x->getUpdatedBy()->getFirstName();},
+        ];
+        return array("fields" => $fields, "entities" => $rehearsals);
     }
 
     /**

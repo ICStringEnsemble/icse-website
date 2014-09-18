@@ -19,7 +19,7 @@ class VenueController extends EntityAdminController
         return $this->getDoctrine()->getRepository('IcsePublicBundle:Venue');
     }
 
-    protected function viewName()
+    protected function getViewName()
     {
         return 'IcseMembersBundle:Admin:venues.html.twig';
     }
@@ -29,16 +29,16 @@ class VenueController extends EntityAdminController
         return new Venue();
     }
 
-    protected function getTableContent()
+    protected function getListContent()
     {
         $entities = $this->repository()->findBy(array(), array('name'=>'asc'));
 
-        $columns = array(
-            array('heading' => 'Name', 'cell' => function($x){return $x->getName();}),
-            array('heading' => 'Address', 'cell' => function($x){return $x->getAddress();}),
-            array('heading' => 'Last updated', 'cell' => function($x){return $this->timeagoDate($x->getUpdatedAt()) . " by " .$x->getUpdatedBy()->getFirstName();}),
-            );
-        return array("columns" => $columns, "entities" => $entities);
+        $fields = [
+            'Name' => function(Venue $x){return $x->getName();},
+            'Address' => function(Venue $x){return $x->getAddress();},
+            'Last updated' => function(Venue $x){return $this->timeagoDate($x->getUpdatedAt()) . " by " .$x->getUpdatedBy()->getFirstName();},
+        ];
+        return ["fields" => $fields, "entities" => $entities];
     }
 
     protected function getForm($entity)

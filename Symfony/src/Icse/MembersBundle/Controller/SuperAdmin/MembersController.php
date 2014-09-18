@@ -17,7 +17,7 @@ class MembersController extends EntityAdminController
         return $this->getDoctrine()->getRepository('IcseMembersBundle:Member');
     }
 
-    protected function viewName()
+    protected function getViewName()
     {
         return 'IcseMembersBundle:SuperAdmin:members.html.twig';
     }
@@ -27,23 +27,23 @@ class MembersController extends EntityAdminController
         return new Member();
     }
 
-    protected function getTableContent()
+    protected function getListContent()
     {
         $dm = $this->getDoctrine(); 
         $members = $dm->getRepository('IcseMembersBundle:Member')->findBy(array(), array('last_name'=>'asc'));
 
-        $columns = array(
-            array('heading' => 'ID', 'cell' => function(Member $member){return $member->getID();}),
-            array('heading' => 'Name', 'cell' => function(Member $member){return $member->getFullName();}),
-            array('heading' => 'Username', 'cell' => function(Member $member){return $member->getUsername();}),
-            array('heading' => 'Email', 'cell' => function(Member $member){return $member->getEmail();}),
-            array('heading' => 'Password', 'cell' => function(Member $member){return $member->getPassword()?"Stored":"Imperial";}),
-            array('heading' => 'Active', 'cell' => function(Member $member){return $member->getActive()? "Yes":"No";}),
-            array('heading' => 'Role', 'cell' => function(Member $member){return $member->getRole() == 100? "Super Admin":($member->getRole() == 10?"Admin":'('.strtolower($member->getRoles()[0]).')');}),
-            array('heading' => 'Paid', 'cell' => function(Member $member){return $member->getLastPaidMembershipOn()? $member->getLastPaidMembershipOn()->format('d/M/Y') : "Never";}),
-            array('heading' => 'Last Online', 'cell' => function(Member $member){return $member->getLastOnlineAt()? $this->timeagoDate($member->getLastOnlineAt()) : "Never";}),
-        );
-        return array("columns" => $columns, "entities" => $members, "serial_groups" => ['superadmin']);
+        $fields = [
+            'ID' => function(Member $member){return $member->getID();},
+            'Name' => function(Member $member){return $member->getFullName();},
+            'Username' => function(Member $member){return $member->getUsername();},
+            'Email' => function(Member $member){return $member->getEmail();},
+            'Password' => function(Member $member){return $member->getPassword()?"Stored":"Imperial";},
+            'Active' => function(Member $member){return $member->getActive()? "Yes":"No";},
+            'Role' => function(Member $member){return $member->getRole() == 100? "Super Admin":($member->getRole() == 10?"Admin":'('.strtolower($member->getRoles()[0]).')');},
+            'Paid' => function(Member $member){return $member->getLastPaidMembershipOn()? $member->getLastPaidMembershipOn()->format('d/M/Y') : "Never";},
+            'Last Online' => function(Member $member){return $member->getLastOnlineAt()? $this->timeagoDate($member->getLastOnlineAt()) : "Never";},
+        ];
+        return ["fields" => $fields, "entities" => $members, "serial_groups" => ['superadmin']];
     }
 
     protected function getForm($member)
@@ -178,20 +178,18 @@ class MembersController extends EntityAdminController
         }  
     }
 
-    public function indexAction()
+    private function getBatchUploadForm()
     {
-        $member = new Member();
-        $form = $this->getForm($member);
-        $table_content = $this->getTableContent();
+        return $this->createFormBuilder()
+            ->add('csv_file', 'file', array('label' => 'CSV File'))
+            ->getForm();
+    }
 
-        $csv_form = $this->createFormBuilder()
-                    ->add('csv_file', 'file', array('label' => 'CSV File'))
-                    ->getForm(); 
-  
-        return $this->render('IcseMembersBundle:SuperAdmin:members.html.twig', array('table_content' => $table_content,
-                                                                                    'form' => $form->createView(),
-                                                                                    'csv_form' => $csv_form->createView()
-                                                                                    ));
+    protected function indexData()
+    {
+        return [
+            'csv_form' => $this->getBatchUploadForm()->createView()
+        ];
     }
 
     private function generateMembersFromCSV(Request $request, File $csv_file)

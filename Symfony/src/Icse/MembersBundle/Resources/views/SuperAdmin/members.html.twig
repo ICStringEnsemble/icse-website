@@ -3,7 +3,7 @@
 {% set currentSubSection = 'memberslist' %}
 {% set entitySingular = 'member' %}
 
-{% block extra_table_buttons %}
+{% block extra_entity_main_buttons %}
   <li><button class="import show_if_none_selected" type=button>Import CSV</button></li>
   <li><button class="impersonate show_if_one_selected" type=button>Impersonate</button></li>
 {% endblock %}
@@ -65,7 +65,7 @@
   })
 
   $('button.impersonate').click(function(){ // Impersonate button
-    var username = $('tbody tr.ui-selected').data('entity').username;
+    var username = $('.entity_instance_list .instance.ui-selected').data('entity').username;
     window.location = "{{ path('IcseMembersBundle_home') }}" + "?_switch_user=" + username ;
   });
 

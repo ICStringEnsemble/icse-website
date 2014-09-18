@@ -17,7 +17,7 @@ class SignupListController extends EntityAdminController
         return $this->getDoctrine()->getRepository('IcsePublicBundle:Subscriber');
     }
 
-    protected function viewName()
+    protected function getViewName()
     {
         return 'IcseMembersBundle:Admin:signup_list.html.twig';
     }
@@ -27,24 +27,22 @@ class SignupListController extends EntityAdminController
         return new Subscriber();
     }
 
-    protected function getTableContent()
+    protected function getListContent()
     {
         $dm = $this->getDoctrine(); 
         $subscribers = $dm->getRepository('IcsePublicBundle:Subscriber')->findAllThisYear();
 
-        $columns = array(
-            // array('heading' => 'ID', 'cell' => function($x){return $x->getID();}),
-            array('heading' => 'Email', 'cell' => function($x){return $x->getEmail();}),
-            array('heading' => 'Name', 'cell' => function($x){return $x->getFullName();}),
-            array('heading' => 'Login', 'cell' => function($x){return $x->getLogin();}),
-            array('heading' => 'Department', 'cell' => function($x){return $x->getDepartment();}),
-            array('heading' => 'Player?', 'cell' => function($x){return $x->getPlayer() ? "Yes" : "No";}),
-            array('heading' => 'Instrument', 'cell' => function($x){return $x->getInstrument();}),
-            array('heading' => 'Standard', 'cell' => function($x){return $x->getStandard();}),
-            array('heading' => 'Submitted at', 'cell' => function($x){return $x->getSubscribedAt()->format('j/m/y H:i:s');}),
-            // array('heading' => 'Last updated', 'cell' => function($x){return $this->timeagoDate($x->getUpdatedAt()) . " by " .$x->getUpdatedBy()->getFirstName();}),
-            );
-        return array("columns" => $columns, "entities" => $subscribers);
+        $fields = [
+            'Email' => function($x){return $x->getEmail();},
+            'Name' => function($x){return $x->getFullName();},
+            'Login' => function($x){return $x->getLogin();},
+            'Department' => function($x){return $x->getDepartment();},
+            'Player?' => function($x){return $x->getPlayer() ? "Yes" : "No";},
+            'Instrument' => function($x){return $x->getInstrument();},
+            'Standard' => function($x){return $x->getStandard();},
+            'Submitted at' => function($x){return $x->getSubscribedAt()->format('j/m/y H:i:s');},
+        ];
+        return ["fields" => $fields, "entities" => $subscribers];
     }
 
     protected function getForm($subscriber)

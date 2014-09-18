@@ -2,15 +2,13 @@ Icse\PublicBundle\Entity\Image:
     type: entity
     table: null
     repositoryClass: Icse\PublicBundle\Entity\ImageRepository
-    fields:
+    id:
         id:
             type: integer
             id: true
             generator:
                 strategy: AUTO
-        file:
-            type: string
-            length: 255
+    fields:
         file_extension:
             type: string
             length: 10
@@ -20,10 +18,23 @@ Icse\PublicBundle\Entity\Image:
         category:
             type: string
             length: 255
+            nullable: true
+        width:
+            type: integer
+        height:
+            type: integer
+        legacy_name:
+            type: string
+            length: 255
+            nullable: true
         updated_at:
             type: datetime
+    manyToOne:
         updated_by:
-            type: integer
-    lifecycleCallbacks: 
-        prePersist: [ sanitiseFilename ]
-        postPersist: [ storeFile ]
+            targetEntity: Icse\MembersBundle\Entity\Member
+            joinColumn:
+                nullable: false
+    lifecycleCallbacks:
+        postPersist: [upload]
+        preRemove: [storeFilenameForRemove]
+        postRemove: [removeUpload]

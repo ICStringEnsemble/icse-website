@@ -1,0 +1,31 @@
+{% set serial_groups = list_content.serial_groups is defined ? list_content.serial_groups : [] %}
+{% set serial_groups = ['Default'] | merge(serial_groups) %}
+
+{% macro instance_attrs(entity, context) %}
+    {%- spaceless %}
+        {% set instance_classes = ["instance"] %}
+        {% if entity.startsAt is defined %}
+            {% if entity.startsAt is null or date(entity.startsAt) > date("today") %}
+                {% set instance_classes = instance_classes | merge(['future_date']) %}
+            {% endif %}
+        {% endif %}
+        {% if entity.updatedAt is defined and date(entity.updatedAt) > date("3 seconds ago") %}
+            {% set instance_classes = instance_classes | merge(['just_updated']) %}
+        {% endif %}
+    {% endspaceless -%}
+
+    data-entity="{{ entity | serialize('json', serialization_context().setGroups(context.serial_groups)) }}" class="{{ instance_classes | join(' ') }}"
+{%- endmacro %}
+
+{% macro list_attrs(classes) %}
+    {%- spaceless %}
+    {% set classes = classes | default([]) %}
+    {% set classes = classes | merge(["entity_instance_list"]) %}
+    {% endspaceless -%}
+    class="{{ classes | join(' ') }}"
+{%- endmacro %}
+
+{% import _self as parent %}
+
+{% block list_body %}
+{% endblock %}

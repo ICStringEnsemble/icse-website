@@ -24,7 +24,7 @@
         year_input.change(function(){
             var year = $(this).val();
 
-            var positions = $('.admintable').find('tr.ui-selectee').map(function(){
+            var positions = $('.entity_instance_list').find('.instance.ui-selectee').map(function(){
                 return $(this).data('entity');
             }).filter(function(){
                 return $(this)[0].start_year == year;

@@ -6,6 +6,7 @@
 {% set entityIdentifier = entitySingular | replace(' ', '_') %}
 {% set readOnly = readOnly | default(false) %}
 {% set enable_social_net = enable_social_net | default(false) %}
+{% set allow_drop_files = allow_drop_files | default(false) %}
 
 {% form_theme form _self %}
 
@@ -22,11 +23,18 @@
 
 {% block javascripts %}
 {{ parent() }}
-<script src="{{ asset('bundles/icsepublic/lib/timepicker/jquery.timepicker.min.js') }}"></script> 
-<script src="{{ asset('bundles/icsepublic/lib/js/moment.min.js') }}"></script> 
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+<script src="{{ asset('bundles/icsepublic/lib/timepicker/jquery.timepicker.min.js') }}"></script>
+<script src="{{ asset('bundles/icsepublic/lib/js/moment.min.js') }}"></script>
+<script src="{{ asset('bundles/icsepublic/lib/js/masonry.min.js') }}"></script>
+<script src="{{ asset('bundles/icsepublic/lib/js/imagesloaded.min.js') }}"></script>
 {% endblock %}
 
 {% block content %}
+{% if allow_drop_files %}
+<div class="drop_mask" data-enabled="true"></div>
+{% endif %}
 <h1>
     {% set page_nav_item = members_nav_items[currentSubSection] %}
     {% if page_nav_item.fa_icon is defined %}
@@ -35,7 +43,7 @@
     {{ pageTitle }}
 </h1>
 
-<ul class="table_buttons">
+<ul class="entity_main_buttons">
   {% spaceless %}
   <li><button class="refresh show_if_none_selected" type=button>Refresh</button></li>
   {% if not readOnly %}
@@ -43,7 +51,7 @@
   <li><button class="edit show_if_one_selected" type=button>Edit</button></li>
   <li><button class="delete show_if_any_selected" type=button>Delete</button></li>
   {% endif %}
-  {% block extra_table_buttons %}{% endblock %}
+  {% block extra_entity_main_buttons %}{% endblock %}
   <li><button class="unselectall show_if_any_selected" type=button>Unselect&nbsp;All</button></li>
   <li><img hidden class="not_button loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" /></li>
   {% endspaceless %}
@@ -64,8 +72,8 @@
   var enable_social_net = {{ enable_social_net ? 'true' : 'false' }};
 </script>
 
-<div id="admin_table_container">
-{% include 'IcseMembersBundle:Admin:table_fragment.html.twig' %}
+<div id="entity_instance_list_container">
+    {{ render(controller( app.request.attributes.get("_controller"), {arg: 'list'})) }}
 </div>
 
 {% if not readOnly %}
@@ -81,7 +89,7 @@
 <div hidden id=delete_dialog title="Delete {{ entitySingularTitle }}" >
 <p><span class="ui-icon ui-icon-alert"></span>
 Are you sure you want to permanently delete all of the selected {{ entityPlural }}?</p>
-<p>Note: if deletion is not successful, it may be necessary to first delete/modify any associated entities.</p>
+<p>Note: if deletion is not successful, it may be necessary to first remove any associations with other entities.</p>
 </div>
 
 {% endif %}
@@ -97,8 +105,7 @@ Are you sure you want to permanently delete all of the selected {{ entityPlural 
   filter='?uglifyjs2'
   output='bundles/icsemembers/js/entityadmin.js'
 %}
-<script src="{{ asset_url }}"></script> 
+<script src="{{ asset_url }}"></script>
 {% endjavascripts %}
-
 
 {% endblock %}

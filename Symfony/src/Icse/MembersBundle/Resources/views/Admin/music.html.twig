@@ -11,7 +11,7 @@
     {{ form_row(form.composer) }}
 
     <div id="practice_parts_section">
-        <div id="drop_mask"></div>
+        <div class="drop_mask height_fix"></div>
         <h2>Practice Parts</h2>
 
         <div class="show_if_edit">
@@ -32,7 +32,7 @@
             </ul>
 
             <input id="add_files_button" type="file" multiple="multiple" data-label="Add files...">
-            <span id="drag_instruction">or drag and drop</span>
+            <span class="dragndrop_instruction">or drag and drop</span>
         </div>
 
         <div class="show_if_create">
@@ -44,7 +44,4 @@
 
 {% block extra_content %}
     {{ form(new_part_form, {attr: {hidden: true, id: "piece_of_music_add_new_part_form"} }) }}
-
-    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
-    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
 {% endblock %}

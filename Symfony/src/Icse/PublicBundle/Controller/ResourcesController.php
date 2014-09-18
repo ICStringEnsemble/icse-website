@@ -2,8 +2,6 @@
 
 namespace Icse\PublicBundle\Controller;
 
-use Imagine\Image\Box as ImagineBox;
-use Imagine\Image\ImageInterface as ImagineInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,82 +16,6 @@ use Icse\MembersBundle\Entity\PracticePart;
 
 class ResourcesController extends Controller
 {
-    private $dir = 'Symfony/uploads/';
-
-    private function resizeImage ($path, $dest_suffix, $width, $height, $crop=false)
-    {
-        $dest_dir = $this->container->get( 'kernel' )->getCacheDir() . '/icse_resized_images';
-        $fs = $this->container->get('filesystem');
-        $fs->mkdir($dest_dir);
-
-        $path_parts = pathinfo($path);
-        $dest_path = $dest_dir . '/' . $path_parts['filename'] . '_' . $dest_suffix . '.' .  $path_parts['extension'];
-
-        if (!$fs->exists($dest_path))
-        {
-            $image = $this->get('fkr_imagine')->open($path);
-
-            $orig_size = $image->getSize();
-            $orig_ratio = $orig_size->getHeight() / $orig_size->getWidth();
-            if ($height === null) $height = $width * $orig_ratio;
-            else if ($width === null) $width = $height / $orig_ratio;
-            $size = new ImagineBox((int)$width, (int)$height);
-
-            $mode = $crop ? ImagineInterface::THUMBNAIL_OUTBOUND : ImagineInterface::THUMBNAIL_INSET;
-            $image->thumbnail($size, $mode)->save($dest_path);
-            $fs->chmod($dest_path, 0660);
-        }
-        return $dest_path;
-    }
-
-    private function handleImageResizeRequest($path, Request $request)
-    {
-        if ($request->query->has('size'))
-        {
-            $size_id = $request->query->get('size');
-
-            if ($size_id == 'thumb')
-            {
-                $path = $this->resizeImage($path, $size_id, 100, 100);
-            }
-            else if ($size_id == 'hpslideshow')
-            {
-                $path = $this->resizeImage($path, $size_id, 334, 254, true);
-            }
-            else if ($size_id == 'committeeprofile')
-            {
-                $path = $this->resizeImage($path, $size_id, 155, 200, true);
-            }
-            else if ($size_id == 'hpmainthumb')
-            {
-                $path = $this->resizeImage($path, $size_id, 200, null);
-            }
-            else if ($size_id == 'hpsidethumb')
-            {
-                $path = $this->resizeImage($path, $size_id, 100, null);
-            }
-            else if ($size_id == 'hpimagestrip')
-            {
-                $path = $this->resizeImage($path, $size_id, 205, 205);
-            }
-            else if ($size_id == 'article')
-            {
-                $path = $this->resizeImage($path, $size_id, 380, 380);
-            }
-            else if ($size_id == 'enlarge')
-            {
-                $path = $this->resizeImage($path, $size_id, 1920, 1920);
-            }
-            else if ($size_id == 'original')
-            {}
-            else
-            {
-                throw $this->createNotFoundException('Invalid size: '.$size_id);
-            }
-        }
-        return $path;
-    }
-
     private function serveFile($path, $name = null, $download = false)
     {
         if (!file_exists($path)) throw new \Exception("File Doesn't exist: $path");
@@ -120,15 +42,6 @@ class ResourcesController extends Controller
         return $response;
     }
 
-    public function tmpTypeAction($file, Request $request)
-    {
-        $path = $this->dir . 'tmp/' . $file;
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN') == false) {
-            throw new AccessDeniedException();
-        }
-        return $this->serveFile($path);
-    }
-
     public function getEntityFromId($id, $repo, $given_path, $request)
     {
         /** @var $entity ResourceInterface */
@@ -152,7 +65,12 @@ class ResourcesController extends Controller
         if ($image instanceof Response) return $image;
 
         $path = $image->getFilePath();
-        $path = $this->handleImageResizeRequest($path, $request);
+        if ($request->query->has('size'))
+        {
+            $resizer = $this->get('icse.image_resizer');
+            $path = $resizer->resize($path, $request->query->get('size'));
+        }
+
         return $this->serveFile($path, $image->getDownloadName());
     }
 
@@ -170,7 +88,7 @@ class ResourcesController extends Controller
 
     public function legacypdfTypeAction($file, Request $request)
     {
-        $path = $this->dir . 'legacypdf/' . $file;
+        $path = 'Symfony/uploads/legacypdf/' . $file;
         if ($this->get('security.context')->isGranted('ROLE_USER') == false) {
             throw new AccessDeniedException();
         }

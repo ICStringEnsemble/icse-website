@@ -16,9 +16,9 @@
         signuplist:          {label: 'Signups',            fa_icon:'fa-bullhorn',       url: path('IcseMembersBundle_signuplist')},
         __devel__:           {label: 'In Development', role: 'ROLE_SUPER_ADMIN'},
         eventadmin:          {label: 'Events',             fa_icon:'fa-ticket',         url: path('IcseMembersBundle_eventadmin')},
-        images:              {label: 'Images',             fa_icon:'fa-picture-o',      url: path('IcseMembersBundle_image_uploads')},
+        images:              {label: 'Images',             fa_icon:'fa-picture-o',      url: path('IcseMembersBundle_imageadmin')},
         __superadmin__:      {label: 'Super Admin', role: 'ROLE_SUPER_ADMIN'},
-        memberslist:         {label: 'Members List',       fa_icon:'fa-users',          url: path('IcseMembersBundle_members')},
+        memberslist:         {label: 'Members List',       fa_icon:'fa-users',          url: path('IcseMembersBundle_membersadmin')},
         committeelist:       {label: 'Committee',          fa_icon:'fa-university',     url: path('IcseMembersBundle_committee_edit')},
         sitedev:             {label: 'Site Dev',           fa_icon:'fa-wrench',         url: path('IcseMembersBundle_site_dev')},
         __account__:         {label: 'User: ' ~ app.user.fullName},
@@ -52,6 +52,36 @@
 {% endblock %}
 
 {% block header_to_footer %}
+
+<script>
+    (function(){
+
+        var transition_event = 'transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd';
+
+        $.fn.promiseOnTransitionEnd = function (){
+            var obj = $(this);
+            var dfd = $.Deferred();
+            obj.on(transition_event, function(e){
+                if ($(e.target).is(obj)) {
+                    dfd.resolveWith(this);
+                    $(this).off(transition_event);
+                }
+            });
+            return dfd.promise();
+        }
+
+        $.fn.removeTransitionClass = function(class_name){
+            $(this).removeClass(class_name);
+            return $(this).promiseOnTransitionEnd();
+        };
+
+        $.fn.addTransitionClass = function(class_name){
+            $(this).addClass(class_name);
+            return $(this).promiseOnTransitionEnd();
+        };
+    })();
+</script>
+
 <div id="nav_column">
   <div id="hidden_nav_col_cover"><div>Menu</div></div>
   <ul>
@@ -89,37 +119,30 @@
 </section>
 </div>
 <script>
-  $(document).ready(function(){
-
-    if(typeof onNavColumnToggle != 'function'){
-        window.onNavColumnToggle = function(){};
-    }
-
-    var nav_col_enabled = true;
-    function hideNavColumn(){
-        $('#above_footer').addClass("nav_col_hidden"); 
-        $('#hide_nav_col_button').addClass("rotate-180");
-        nav_col_enabled = false;
-        onNavColumnToggle();
-    }
-    function showNavColumn(){
-        $('#above_footer').removeClass("nav_col_hidden"); 
-        $('#hide_nav_col_button').removeClass("rotate-180");
-        nav_col_enabled = true;
-        onNavColumnToggle();
-    }
-    $('#hide_nav_col_button, #hidden_nav_col_cover').click(function(){
-      if (nav_col_enabled) {
-        hideNavColumn();
-      }
-      else {
-        showNavColumn();
-      }
-    });
-    $('#nav_column').find('li').bind('swipeleft', hideNavColumn);
-    $('#hidden_nav_col_cover').bind('swiperight', showNavColumn);
-
-    $.cookie('last_members_page', '{{ app.request.attributes.get('_route') }}', { expires: 14, path: '/' });
-  })
+    $(document).ready(function(){
+  
+        if(typeof onNavColumnToggle != 'function'){
+            window.onNavColumnToggle = function(){};
+        }
+    
+        var nav_col_enabled = true;
+        function hideNavColumn(){
+            nav_col_enabled = false;
+            $('#hide_nav_col_button').addClass("rotate-180");
+            $('#above_footer').addTransitionClass("nav_col_hidden").done(onNavColumnToggle);
+        }
+        function showNavColumn(){
+            nav_col_enabled = true;
+            $('#hide_nav_col_button').removeClass("rotate-180");
+            $('#above_footer').removeTransitionClass("nav_col_hidden").done(onNavColumnToggle);
+        }
+        $('#hide_nav_col_button, #hidden_nav_col_cover').click(function(){
+            nav_col_enabled ? hideNavColumn() : showNavColumn();
+        });
+        $('#nav_column').find('li').bind('swipeleft', hideNavColumn);
+        $('#hidden_nav_col_cover').bind('swiperight', showNavColumn);
+  
+        $.cookie('last_members_page', '{{ app.request.attributes.get('_route') }}', { expires: 14, path: '/' });
+    })
 </script>
 {% endblock %}

@@ -3,27 +3,29 @@
 namespace Icse\PublicBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Icse\PublicBundle\Entity\Traits\FileWrapper;
 use JMS\Serializer\Annotation as Serializer;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Icse\PublicBundle\Entity\Interfaces\ResourceInterface;
 use Common\Tools;
 
 
 /**
  * Icse\PublicBundle\Entity\Image
  */
-class Image implements Interfaces\ResourceInterface
+class Image implements ResourceInterface
 {
-    private $tmp_dir = 'Symfony/uploads/tmp/';
-    private $image_dir = 'Symfony/uploads/images/';
+    /**
+     * @Serializer\Exclude
+     */
+    static private $image_dir = 'Symfony/uploads/images/';
+
+    use FileWrapper;
 
     /**
      * @var integer $id
      */
     private $id;
-
-    /**
-     * @var string $file
-     */
-    private $file;
 
     /**
      * @var string $name
@@ -36,17 +38,24 @@ class Image implements Interfaces\ResourceInterface
     private $category;
 
     /**
+     * @var string
+     */
+    private $file_extension;
+
+    /**
+     * @var string
+     */
+    private $legacy_name;
+
+    /**
      * @var \DateTime $updated_at
      */
     private $updated_at;
 
     /**
-     * @var integer $updated_by
+     * @var \Icse\MembersBundle\Entity\Member $updated_by
      */
     private $updated_by;
-
-    private $original_tmp_file;
-
 
     /**
      * Get id
@@ -56,29 +65,6 @@ class Image implements Interfaces\ResourceInterface
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set file
-     *
-     * @param string $file
-     * @return Image
-     */
-    public function setFile($file)
-    {
-        $this->file = $file;
-    
-        return $this;
-    }
-
-    /**
-     * Get file
-     *
-     * @return string 
-     */
-    public function getFile()
-    {
-        return $this->file;
     }
 
     /**
@@ -150,62 +136,38 @@ class Image implements Interfaces\ResourceInterface
         return $this->updated_at;
     }
 
-    /**
-     * Set updated_by
-     *
-     * @param integer $updatedBy
-     * @return Image
-     */
-    public function setUpdatedBy($updatedBy)
-    {
-        $this->updated_by = $updatedBy;
-    
-        return $this;
-    }
-
-    /**
-     * Get updated_by
-     *
-     * @return integer 
-     */
-    public function getUpdatedBy()
-    {
-        return $this->updated_by;
-    }
-
-    public function sanitiseFilename()
-    {
-        $this->setFile(basename($this->getFile()));
-        if (strlen($this->getFile()) < 5 || !file_exists($this->tmp_dir.$this->getFile()))
-            throw $this->createNotFoundException('File does not exist'); 
-
-        $this->original_tmp_file = $this->getFile();
-        $new_filename = $this->getFile();
-        $path_info = pathinfo($new_filename);
-        $extension = $path_info['extension'];
-        while (file_exists($this->image_dir.$new_filename))
-          {
-            $new_filename = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36).'.'.$extension;
-          }
-        $this->setFile($new_filename);
-    }
-
-    public function storeFile()
-    {
-        if(rename($this->tmp_dir.$this->original_tmp_file, $this->image_dir.$this->getFile()))
-          {
-            return;
-          }
-        else
-          {
-            throw new \Exception('Could not relocate file');
-          }
-    }
-
     public function getWidth()
     {
-        list($width, $height) = getimagesize($this->image_dir.$this->getFile());
+        list($width, $height) = getimagesize($this->getFilePath());
         return $width;
+    }
+
+    public function setNameFromFile(UploadedFile $file)
+    {
+        $name = $file->getClientOriginalName();
+        $name = pathinfo($name, PATHINFO_FILENAME);
+        $name = preg_replace('/_/', ' ', $name);
+        $this->setName($name);
+    }
+
+    public function setFileExtensionFromFile(UploadedFile $file)
+    {
+        $ext = $file->guessExtension();
+        $orig_ext = $file->getClientOriginalExtension();
+        if ($orig_ext === 'jpg' && $ext == 'jpeg') $ext = 'jpg';
+        $this->setFileExtension($ext);
+    }
+
+    public function getFormFileAndNames()
+    {
+        $this->getUploadedFile();
+    }
+
+    public function setFormFileAndNames(UploadedFile $file)
+    {
+        $this->setUploadedFile($file);
+        $this->setNameFromFile($file);
+        $this->setFileExtensionFromFile($file);
     }
 
     /** @Serializer\Accessor(getter="getResourceType") */
@@ -226,9 +188,14 @@ class Image implements Interfaces\ResourceInterface
         return $path;
     }
 
-    public function getFilePath()
+    protected function getFileDirectory()
     {
-        return $this->image_dir . $this->getId() . '.' . $this->getFileExtension();
+        return self::$image_dir;
+    }
+
+    protected function getFileName()
+    {
+        return $this->getId() . '.' . $this->getFileExtension();
     }
 
     public function getDownloadName()
@@ -236,12 +203,6 @@ class Image implements Interfaces\ResourceInterface
         $base_name = preg_replace('/\.'.$this->getFileExtension()."$/", "", $this->getName());
         return ($base_name ? $base_name : $this->getId()) . '.' . $this->getFileExtension();
     }
-
-    /**
-     * @var string
-     */
-    private $file_extension;
-
 
     /**
      * Set file_extension
@@ -264,5 +225,120 @@ class Image implements Interfaces\ResourceInterface
     public function getFileExtension()
     {
         return $this->file_extension;
+    }
+
+    /**
+     * Set legacy_name
+     *
+     * @param string $legacyName
+     * @return Image
+     */
+    public function setLegacyName($legacyName)
+    {
+        $this->legacy_name = $legacyName;
+
+        return $this;
+    }
+
+    /**
+     * Get legacy_name
+     *
+     * @return string 
+     */
+    public function getLegacyName()
+    {
+        return $this->legacy_name;
+    }
+
+    /**
+     * Set updated_by
+     *
+     * @param \Icse\MembersBundle\Entity\Member $updatedBy
+     * @return Image
+     */
+    public function setUpdatedBy(\Icse\MembersBundle\Entity\Member $updatedBy)
+    {
+        $this->updated_by = $updatedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get updated_by
+     *
+     * @return \Icse\MembersBundle\Entity\Member 
+     */
+    public function getUpdatedBy()
+    {
+        return $this->updated_by;
+    }
+    /**
+     * @var integer
+     */
+    private $width;
+
+    /**
+     * @var integer
+     */
+    private $height;
+
+
+    /**
+     * Set width
+     *
+     * @param integer $width
+     * @return Image
+     */
+    public function setWidth($width)
+    {
+        $this->width = $width;
+
+        return $this;
+    }
+
+    /**
+     * Set height
+     *
+     * @param integer $height
+     * @return Image
+     */
+    public function setHeight($height)
+    {
+        $this->height = $height;
+
+        return $this;
+    }
+
+    /**
+     * Get height
+     *
+     * @return integer 
+     */
+    public function getHeight()
+    {
+        return $this->height;
+    }
+    /**
+     * @ORM\PostPersist
+     */
+    public function upload()
+    {
+        // Add your code here
+    }
+
+    /**
+     * @ORM\PreRemove
+     */
+    public function storeFilenameForRemove()
+    {
+        // Add your code here
+    }
+
+    /**
+     * @ORM\PostRemove
+     */
+    public function removeUpload()
+    {
+        // Add your code here
     }
 }

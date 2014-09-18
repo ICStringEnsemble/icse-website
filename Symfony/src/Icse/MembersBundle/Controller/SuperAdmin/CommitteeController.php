@@ -12,7 +12,7 @@ class CommitteeController extends EntityAdminController
         return $this->getDoctrine()->getRepository('IcseMembersBundle:CommitteeRole');
     }
 
-    protected function viewName()
+    protected function getViewName()
     {
         return 'IcseMembersBundle:SuperAdmin:committee.html.twig';
     }
@@ -22,17 +22,17 @@ class CommitteeController extends EntityAdminController
         return new CommitteeRole();
     }
 
-    protected function getTableContent()
+    protected function getListContent()
     {
         $entities = $this->repository()->findBy(array(), array('start_year'=>'desc', 'sort_index'=>'asc'));
 
-        $columns = array(
-            array('heading' => 'Index', 'cell' => function(CommitteeRole $x){return $x->getSortIndex();}),
-            array('heading' => 'Year', 'cell' => function(CommitteeRole $x){$y0=$x->getStartYear(); $y1=$y0+1; return "$y0&ndash;$y1";}),
-            array('heading' => 'Role', 'cell' => function(CommitteeRole $x){return $x->getPositionName();}),
-            array('heading' => 'Name', 'cell' => function(CommitteeRole $x){return $x->getMember()->getFullName();}),
-        );
-        return array("columns" => $columns, "entities" => $entities);
+        $fields = [
+            'Index' => function(CommitteeRole $x){return $x->getSortIndex();},
+            'Year' => function(CommitteeRole $x){$y0=$x->getStartYear(); $y1=$y0+1; return "$y0&ndash;$y1";},
+            'Role' => function(CommitteeRole $x){return $x->getPositionName();},
+            'Name' => function(CommitteeRole $x){return $x->getMember()->getFullName();},
+        ];
+        return ["fields" => $fields, "entities" => $entities];
     }
 
     protected function getForm($entity)

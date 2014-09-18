@@ -8,7 +8,7 @@
 
 {% set readOnly = true %}
 
-{% block extra_table_buttons %}
+{% block extra_entity_main_buttons %}
   <li><button class="listemails" type=button>Email addresses</button></li>
   <li><button onClick="window.print()" class="show_if_none_selected" type=button>Print</button></li>
 {% endblock %}
@@ -101,9 +101,9 @@ $( document ).ready(function(){
             $('#filter_list a').filter('#' + current_filter).addClass('current');
             $('#current_showing_label').html($('#filter_list a').filter('#' + current_filter).html());
 
-            $('#admin_table_container tbody tr').remove();
+            $('.entity_instance_list .instance').remove();
             filtered = all_rows.filter(filter_functions[current_filter]).clone();
-            filtered.appendTo('#admin_table_container tbody');
+            filtered.appendTo('.entity_instance_list');
             $('#n_people').html(filtered.length);
         };
     })();
@@ -135,12 +135,12 @@ $( document ).ready(function(){
             $('#sortorder_list a').removeClass('current');
             $('#sortorder_list a').filter('#' + current_sortorder).addClass('current');
 
-            $('#admin_table_container tbody tr').sort(sorting_functions[current_sortorder]).appendTo('#admin_table_container tbody');
+            $('.entity_instance_list .instance').sort(sorting_functions[current_sortorder]).appendTo('.entity_instance_list');
         };
     })();
 
     postTableReload = function(){
-        all_rows = $('#admin_table_container tbody tr').clone();
+        all_rows = $('.entity_instance_list .instance').clone();
         updateFilters();
         updateSorting();
     }
@@ -184,8 +184,8 @@ $( document ).ready(function(){
     $('button.listemails').click(function(){
         $('#email_list_dialog').dialog('open');
 
-        var rows = $('tbody tr.ui-selected');
-        if (rows.length == 0) rows = $('tbody tr');
+        var rows = $('.entity_instance_list .instance.ui-selected');
+        if (rows.length == 0) rows = $('.entity_instance_list .instance');
 
         var emails = "";
         rows.each(function(){
