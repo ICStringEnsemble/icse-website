@@ -128,21 +128,15 @@ class ImageResizer
     {
         if ($img instanceof Image)
         {
-            $path = $img->getFilePath();
+            $width = $img->getWidth();
+            $height = $img->getHeight();
         }
         else
         {
             $path = $img;
-        }
-
-        $original = $this->imagine->open($path)->getSize();
-        $width = $original->getWidth();
-        $height = $original->getHeight();
-
-        if ($img instanceof Image)
-        {
-            $img->setWidth($width);
-            $img->setHeight($height);
+            $original = $this->imagine->open($path)->getSize();
+            $width = $original->getWidth();
+            $height = $original->getHeight();
         }
 
         $resize_spec = $this->getResizeSpec($size_id);

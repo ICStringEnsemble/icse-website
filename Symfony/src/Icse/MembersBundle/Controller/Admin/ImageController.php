@@ -57,7 +57,7 @@ class ImageController extends EntityAdminController
         return $this->createFormBuilder($entity)
             ->setMethod('POST')
             ->add('file', 'file', [
-                'property_path' => 'form_file_and_names',
+                'property_path' => 'file_from_form',
                 'constraints' => [new Constraints\NotNull],
             ])
             ->getForm();

@@ -43,6 +43,16 @@ class Image implements ResourceInterface
     private $file_extension;
 
     /**
+     * @var integer
+     */
+    private $width;
+
+    /**
+     * @var integer
+     */
+    private $height;
+
+    /**
      * @var string
      */
     private $legacy_name;
@@ -136,12 +146,6 @@ class Image implements ResourceInterface
         return $this->updated_at;
     }
 
-    public function getWidth()
-    {
-        list($width, $height) = getimagesize($this->getFilePath());
-        return $width;
-    }
-
     public function setNameFromFile(UploadedFile $file)
     {
         $name = $file->getClientOriginalName();
@@ -158,16 +162,24 @@ class Image implements ResourceInterface
         $this->setFileExtension($ext);
     }
 
-    public function getFormFileAndNames()
+    public function setSizeFromFile(UploadedFile $file)
+    {
+        list($width, $height) = getimagesize($file->getPathname());
+        $this->setWidth($width);
+        $this->setHeight($height);
+    }
+
+    public function getFileFromForm()
     {
         $this->getUploadedFile();
     }
 
-    public function setFormFileAndNames(UploadedFile $file)
+    public function setFileFromForm(UploadedFile $file)
     {
         $this->setUploadedFile($file);
         $this->setNameFromFile($file);
         $this->setFileExtensionFromFile($file);
+        $this->setSizeFromFile($file);
     }
 
     /** @Serializer\Accessor(getter="getResourceType") */
@@ -272,16 +284,6 @@ class Image implements ResourceInterface
     {
         return $this->updated_by;
     }
-    /**
-     * @var integer
-     */
-    private $width;
-
-    /**
-     * @var integer
-     */
-    private $height;
-
 
     /**
      * Set width
@@ -294,6 +296,16 @@ class Image implements ResourceInterface
         $this->width = $width;
 
         return $this;
+    }
+
+    /**
+     * Get width
+     *
+     * @return integer 
+     */
+    public function getWidth()
+    {
+        return $this->width;
     }
 
     /**
@@ -317,28 +329,5 @@ class Image implements ResourceInterface
     public function getHeight()
     {
         return $this->height;
-    }
-    /**
-     * @ORM\PostPersist
-     */
-    public function upload()
-    {
-        // Add your code here
-    }
-
-    /**
-     * @ORM\PreRemove
-     */
-    public function storeFilenameForRemove()
-    {
-        // Add your code here
-    }
-
-    /**
-     * @ORM\PostRemove
-     */
-    public function removeUpload()
-    {
-        // Add your code here
     }
 }
