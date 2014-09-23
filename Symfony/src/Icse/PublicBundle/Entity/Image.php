@@ -72,6 +72,12 @@ class Image implements ResourceInterface
      */
     private $updated_by;
 
+
+    public function __construct()
+    {
+        $this->in_slideshow = false;
+    }
+
     /**
      * Get id
      *
