@@ -53,6 +53,11 @@ class Image implements ResourceInterface
     private $height;
 
     /**
+     * @var boolean
+     */
+    private $in_slideshow;
+
+    /**
      * @var string
      */
     private $legacy_name;
@@ -329,5 +334,38 @@ class Image implements ResourceInterface
     public function getHeight()
     {
         return $this->height;
+    }
+
+    /**
+     * Set in_slideshow
+     *
+     * @param boolean $inSlideshow
+     * @return Image
+     */
+    public function setInSlideshow($inSlideshow)
+    {
+        $this->in_slideshow = $inSlideshow;
+
+        return $this;
+    }
+
+    /**
+     * Get in_slideshow
+     *
+     * @return boolean 
+     */
+    public function getInSlideshow()
+    {
+        return $this->in_slideshow;
+    }
+
+    /**
+     * Get in_slideshow
+     *
+     * @return boolean
+     */
+    public function isInSlideshow()
+    {
+        return $this->getInSlideshow();
     }
 }

@@ -68,6 +68,7 @@ class ImageController extends EntityAdminController
         return $this->createFormBuilder($entity)
             ->setMethod('PUT')
             ->add('name', 'text')
+            ->add('in_slideshow', 'checkbox')
             ->getForm();
     }
 

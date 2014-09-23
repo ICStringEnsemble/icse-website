@@ -23,6 +23,8 @@ Icse\PublicBundle\Entity\Image:
             type: integer
         height:
             type: integer
+        in_slideshow:
+            type: boolean
         legacy_name:
             type: string
             length: 255

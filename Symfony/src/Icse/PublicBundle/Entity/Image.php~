@@ -43,6 +43,16 @@ class Image implements ResourceInterface
     private $file_extension;
 
     /**
+     * @var integer
+     */
+    private $width;
+
+    /**
+     * @var integer
+     */
+    private $height;
+
+    /**
      * @var string
      */
     private $legacy_name;
@@ -155,8 +165,8 @@ class Image implements ResourceInterface
     public function setSizeFromFile(UploadedFile $file)
     {
         list($width, $height) = getimagesize($file->getPathname());
-        $this->getWidth($width);
-        $this->getHeight($height);
+        $this->setWidth($width);
+        $this->setHeight($height);
     }
 
     public function getFileFromForm()
@@ -274,17 +284,6 @@ class Image implements ResourceInterface
     {
         return $this->updated_by;
     }
-    /**
-     * @var integer
-     */
-    private $width;
-
-    /**
-     * @var integer
-     */
-    private $height;
-
-
 
     /**
      * Set width
@@ -330,21 +329,5 @@ class Image implements ResourceInterface
     public function getHeight()
     {
         return $this->height;
-    }
-
-
-    public function upload()
-    {
-        // Add your code here
-    }
-
-    public function storeFilenameForRemove()
-    {
-        // Add your code here
-    }
-
-    public function removeUpload()
-    {
-        // Add your code here
     }
 }
