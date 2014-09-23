@@ -17,18 +17,23 @@
         el.unwrap();
     }
 
-    /* Misc Initialisation */
-    $('button').button();
-    $('input[type="file"]').each(function(){
+    function fileInputToButton(input){
         var wrapper = $('<span>', {
-            class: 'fileinput-button-wrapper'
+            class: 'fileinput-button-wrapper ' + input.attr('class')
         });
         wrapper.append($('<span>', {
-            text: $(this).data('label')
+            text: input.data('label')
         }));
-        wrapper.insertAfter($(this));
+        wrapper.insertAfter(input);
         wrapper.button();
-        $(this).detach().appendTo(wrapper);
+        input.detach().appendTo(wrapper);
+    }
+
+    /* Misc Initialisation */
+    $('button').button();
+
+    $('input[type="file"]').each(function(){
+        fileInputToButton($(this));
     });
     $('input.time').timepicker({ 'timeFormat': 'g:i a' });
     $('input.date').datepicker({ dateFormat: "dd/mm/yy" });
@@ -67,19 +72,23 @@
     }
 
     /* Loading Indicator Handling */
-    var loadingIndicatorJobs = 0;
+    var startLoading;
+    var stopLoading;
+    (function(){
+        var loadingIndicatorJobs = 0;
 
-    function startLoading() {
-        loadingIndicatorJobs += 1;
-        $('.entity_main_buttons .loading_spinner').show();
-    }
-
-    function stopLoading() {
-        loadingIndicatorJobs -= 1;
-        if (loadingIndicatorJobs == 0) {
-            $('.entity_main_buttons .loading_spinner').hide();
+        startLoading = function() {
+            loadingIndicatorJobs += 1;
+            $('.entity_main_buttons .loading_spinner').show();
         }
-    }
+
+        stopLoading = function() {
+            loadingIndicatorJobs -= 1;
+            if (loadingIndicatorJobs == 0) {
+                $('.entity_main_buttons .loading_spinner').hide();
+            }
+        }
+    })();
 
     /* Table Row Selection */
     $.fn.isAnyEntityInstanceSelected = function(){
@@ -90,9 +99,7 @@
     };
 
     function hideShowControlButtons(time) {
-        if(typeof time === "undefined") {
-            time = 200;
-        }
+        if (typeof time === "undefined") time = 200;
 
         var rows = $('.entity_instance_list .instance');
         if (!rows.isAnyEntityInstanceSelected()) {
@@ -307,6 +314,12 @@
         initEditForm(edit_form, entity);
     }
     $('button.edit').click(openEditDialog);
+
+    $('input.create[type="file"]').change(function(){
+        var handler = $(this).data('change-handler');
+        handler(this.files);
+        resetFormInput($(this));
+    });
 
     $('button.refresh').click(reloadTable); // Refresh button
 
@@ -596,20 +609,23 @@
                     return;
                 }
 
+                startLoading();
+                var image_list = $('.entity_instance_list');
                 var uploading_item = newUploadingImage();
                 var progress_bar = uploading_item.find('.progress-bar');
+                image_list.prepend(uploading_item);
 
                 var reader = new FileReader();
                 reader.onloadend = function(e){
                     uploading_item.find('img').attr('src', e.target.result);
-                    $('.entity_instance_list').prepend(uploading_item).masonry('prepended', uploading_item);
+                    image_list.masonry('prepended', uploading_item);
+                    stopLoading();
                 };
                 reader.readAsDataURL(file);
 
                 var form_data = new FormData(new_image_form[0]);
                 form_data.append("form[file]", file);
 
-                var complete = false;
                 $.ajax({
                     url: new_image_form.attr('action'),
                     type: new_image_form.attr('method'),
@@ -628,29 +644,13 @@
                         }
                         return xhr;
                     }
-                }).done(function(result){
-                    if (result.status == "success"){
-//                        var new_form_item = newListedPart(result.entity);
-//                        uploading_item.replaceWith(new_form_item);
-                        complete = true;
-                    }
                 }).always(function(){
-                    uploading_item.removeClass('uploading-instance').addClass('instance');
+                    uploading_item.addClass('instance').removeClass('uploading-instance');
                     if ($('.entity_instance_list').find('.uploading-instance').length === 0){
-//                        pane_buttons.button('enable');
-//                        loading_spinner.hide();
-//                        assignSortIndices();
+                        console.log("reload table");
                         reloadTable();
                     }
                 });
-
-
-
-
-
-
-
-
             };
 
             var handleAllFiles = function(files){
@@ -659,8 +659,8 @@
                 }
             };
 
-            var drop_mask = $('section .drop_mask');
-            drop_mask.data('drop-handler', handleAllFiles);
+            $('section .drop_mask').data('drop-handler', handleAllFiles);
+            $('input.create[type="file"]').data('change-handler', handleAllFiles);
         }
     })();
 

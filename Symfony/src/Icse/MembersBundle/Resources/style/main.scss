@@ -85,7 +85,7 @@ $nav_col_colour: #d4b896;
 
 #hide_nav_col_button {
     float: right;
-    @include transition(transform $sidebar_button_flip_animation_time); 
+    @include transition(transform $sidebar_button_flip_animation_time);
 }
 
 #hide_nav_col_button:hover {
@@ -236,6 +236,10 @@ ul.entity_main_buttons, ul.email_buttons {
     }
 
     .waterfall {
+        img {
+            @include transition(opacity 0.5s);
+        }
+
         .uploading-instance img {
             opacity: 0.5;
         }
@@ -249,6 +253,7 @@ ul.entity_main_buttons, ul.email_buttons {
             border-radius: 5px;
             overflow: hidden;
             width: $width;
+
 
             .image-container {
                 position: relative;

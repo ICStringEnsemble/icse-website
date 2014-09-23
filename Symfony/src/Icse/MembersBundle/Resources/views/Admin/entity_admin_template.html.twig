@@ -7,6 +7,7 @@
 {% set readOnly = readOnly | default(false) %}
 {% set enable_social_net = enable_social_net | default(false) %}
 {% set allow_drop_files = allow_drop_files | default(false) %}
+{% set create_by_upload = create_by_upload | default(false) %}
 
 {% form_theme form _self %}
 
@@ -44,17 +45,21 @@
 </h1>
 
 <ul class="entity_main_buttons">
-  {% spaceless %}
-  <li><button class="refresh show_if_none_selected" type=button>Refresh</button></li>
-  {% if not readOnly %}
-  <li><button class="create show_if_none_selected" type=button>Add&nbsp;{{ entitySingularTitle }}</button></li>
-  <li><button class="edit show_if_one_selected" type=button>Edit</button></li>
-  <li><button class="delete show_if_any_selected" type=button>Delete</button></li>
-  {% endif %}
-  {% block extra_entity_main_buttons %}{% endblock %}
-  <li><button class="unselectall show_if_any_selected" type=button>Unselect&nbsp;All</button></li>
-  <li><img hidden class="not_button loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" /></li>
-  {% endspaceless %}
+{% spaceless %}
+    <li><button class="refresh show_if_none_selected" type=button>Refresh</button></li>
+    {% if not readOnly %}
+        {% if create_by_upload %}
+            <li><input class="create show_if_none_selected" type="file" multiple="multiple" data-label="Add&nbsp;{{ entityPluralTitle }}"></li>
+        {% else %}
+            <li><button class="create show_if_none_selected" type=button>Add&nbsp;{{ entitySingularTitle }}</button></li>
+        {% endif %}
+    <li><button class="edit show_if_one_selected" type=button>Edit</button></li>
+    <li><button class="delete show_if_any_selected" type=button>Delete</button></li>
+    {% endif %}
+    {% block extra_entity_main_buttons %}{% endblock %}
+    <li><button class="unselectall show_if_any_selected" type=button>Unselect&nbsp;All</button></li>
+    <li><img hidden class="not_button loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" /></li>
+{% endspaceless %}
 </ul>
 
 {% block extra_controls %}{% endblock extra_controls %}
