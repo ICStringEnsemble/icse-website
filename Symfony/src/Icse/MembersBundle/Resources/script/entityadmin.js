@@ -260,6 +260,7 @@
         edit_form.find('input[name="_method"]').val('POST');
         edit_form.attr('action', currentPath);
         edit_form.find('input, textarea').not(':button, :submit, :reset, :hidden, :radio, :checkbox').val('');
+        edit_form.find('input').filter(':radio, :checkbox').prop('checked', false);
         edit_form.find('.error').remove();
         edit_form.find('.show_if_create').show();
         edit_form.find('.show_if_edit').hide();
@@ -283,7 +284,7 @@
         edit_form.find('.show_if_create').hide();
         edit_form.data('form_mode', 'edit');
         edit_form.attr('action', currentPath + '/' + entity.id);
-        edit_form.find('input, select, textarea').not(':button, :submit, :reset, :hidden, :radio, :checkbox').each(function(){
+        edit_form.find('input, select, textarea').not(':button, :submit, :reset, :hidden').each(function(){
             var name_attr = $(this).attr('name');
             if (typeof name_attr === "undefined") return;
             var name_array = name_attr.split('[');
@@ -292,23 +293,25 @@
                 return value.split(']')[0];
             });
             var main_name = name_array[0];
+            console.log(main_name);
+            var value = '';
             if (entity.hasOwnProperty(main_name)) {
-                var value = entity[main_name];
-                if (value === false) value = 0;
-                else if (value === true) value = 1;
-                else if ($(this).hasClass("date")) value = moment(parseInt(value)).format('DD/MM/YYYY');
+                value = entity[main_name];
+                if ($(this).hasClass("date")) value = moment(parseInt(value)).format('DD/MM/YYYY');
                 else if ($(this).hasClass("time")) {
                     value = moment(parseInt(value)).format('h:mm a');
                     if (main_name == 'starts_at' && entity['is_start_time_known'] === false) value = '';
                 }
                 else if (typeof value == 'object') {
                     if (value instanceof Array) value = null;
-                    else if ($(this).prop("tagName") == "SELECT") value = value.id;
+                    else if ($(this).is('select')) value = value.id;
                     else value = value.name;
                 }
-                $(this).val(value);
+            }
+            if ($(this).is(':radio, :checkbox')) {
+                if (typeof value === 'boolean') $(this).prop('checked', value);
             } else {
-                $(this).val('');
+                $(this).val(value);
             }
         });
         initEditForm(edit_form, entity);
