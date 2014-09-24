@@ -38,7 +38,7 @@ if (!function_exists('ldap_get_info')) { // If in testing environment
             return false;
         }
     }
-} else { // If in college
+} else { // If on union server
     function get_ldap_email($login)
     {
         $ldap = ldap_connect('addressbook.imperial.ac.uk');
@@ -134,16 +134,23 @@ class SignUpController extends Controller
             $em->flush();
 
             /* Add to Mailman */
-            $success_status = "success";
-            if(!$this->get('kernel')->isDebug())
+            $success_status = null;
+            $mailman_names = [];
+            if ($subscriber->isPlayer()) $mailman_names[] = 'icsemembers_mailman';
+            $mailman_names[] = 'icsepublic_mailman';
+
+            foreach ($mailman_names as $n)
             {
-                $mailman = $this->get($subscriber->isPlayer() ? 'icsemembers_mailman' : 'icsepublic_mailman');
-                if (!$mailman->subscribe($subscriber->getEmail()))
+                $mailman = $this->get($n);
+                if(!$this->get('kernel')->isDebug())
                 {
-                    if ($mailman->error == 'already') $success_status = 'already';
-                    else $success_status = 'mailmanfail';
+                    if (!$mailman->subscribe($subscriber->getEmail()) and is_null($success_status))
+                    {
+                        $success_status = ($mailman->error == 'already') ? 'already' : 'mailmanfail';
+                    }
                 }
             }
+            if (is_null($success_status)) $success_status = "success";
 
             return $this->redirect($this->generateUrl($_route, [
                 'ss' => $success_status,
