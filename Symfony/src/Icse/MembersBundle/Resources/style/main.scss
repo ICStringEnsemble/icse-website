@@ -178,6 +178,10 @@ ul.entity_main_buttons, ul.email_buttons {
             margin-left: 0.5em;
         }
     }
+
+    .dragndrop_instruction {
+        padding-left: 8px;
+    }
 }
 
 .saved_indicator {
@@ -452,14 +456,19 @@ span.membership_date {
 
     input {
         position: absolute;
-        top: 0;
-        right: 0;
+        top: 0; bottom: 0;
+        left: 0; right: 0;
+        width: 100%;
         margin: 0;
         opacity: 0;
         -ms-filter: 'alpha(opacity=0)';
         font-size: 200px;
         direction: ltr;
         cursor: pointer;
+
+        &::-webkit-file-upload-button {
+            display: none;
+        }
     }
 }
 

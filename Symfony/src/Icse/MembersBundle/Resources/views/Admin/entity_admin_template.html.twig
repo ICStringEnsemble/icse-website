@@ -49,7 +49,7 @@
     <li><button class="refresh show_if_none_selected" type=button>Refresh</button></li>
     {% if not readOnly %}
         {% if create_by_upload %}
-            <li><input class="create show_if_none_selected" type="file" multiple="multiple" data-label="Add&nbsp;{{ entityPluralTitle }}"></li>
+            <li><input class="create show_if_none_selected" type="file" multiple="multiple" title="Choose files" data-label="Add&nbsp;{{ entityPluralTitle }}"></li>
         {% else %}
             <li><button class="create show_if_none_selected" type=button>Add&nbsp;{{ entitySingularTitle }}</button></li>
         {% endif %}
@@ -58,6 +58,11 @@
     {% endif %}
     {% block extra_entity_main_buttons %}{% endblock %}
     <li><button class="unselectall show_if_any_selected" type=button>Unselect&nbsp;All</button></li>
+
+    {% if allow_drop_files %}
+        <li class="dragndrop_instruction show_if_none_selected">or drag and drop files</li>
+    {% endif %}
+
     <li><img hidden class="not_button loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" /></li>
 {% endspaceless %}
 </ul>
