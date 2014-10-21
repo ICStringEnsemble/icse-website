@@ -12,16 +12,4 @@ use Doctrine\ORM\EntityRepository;
  */
 class PieceOfMusicRepository extends EntityRepository
 {
-    public function findOneByIdWithIdIndexedPracticeParts($id)
-    {
-        return $this->getEntityManager()
-            ->createQuery ('
-                SELECT piece, part
-                FROM IcsePublicBundle:PieceOfMusic piece
-                LEFT JOIN  piece.practice_parts part INDEX BY part.id
-                WHERE piece.id = :id
-            ')
-            ->setParameter('id', $id)
-            ->getOneOrNullResult();
-    }
 }

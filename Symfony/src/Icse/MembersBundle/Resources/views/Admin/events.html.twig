@@ -11,5 +11,35 @@
     <li><button class="social_sync show_if_any_selected" type="button" disabled>Facebook&nbsp;Sync</button></li>
 {% endblock %}
 
-{% block extra_content %}
+{% block edit_form_fields %}
+    {{ form_row(form.name) }}
+    {{ form_row(form.starts_at) }}
+    {{ form_row(form.location) }}
+    {{ form_row(form.poster) }}
+
+    <div class="form_row">
+        {{ form_label(form.performances) }}
+        <div class="form_row_main">
+            <ul id="performances" class="collection sortable-list">
+                <li class="performance">
+                    {#<i class="handle fa fa-bars"></i>#}
+                    <span class="piece_full_name"></span>
+                    <i class="a-button delete fa fa-trash-o"></i>
+                    {{ form_widget(form.performances['__ID__'].piece, {attr: {class: 'piece_id'} }) }}
+                    {{ form_widget(form.performances['__ID__'].sort_index, {attr: {class: 'sort_index'} }) }}
+                </li>
+            </ul>
+            {{ form_widget(form.performance_adder, {attr: {
+                class: 'performance_adder entity-select',
+                placeholder: 'Add a piece...'
+            } }) }}
+        </div>
+    </div>
+    {{ form_row(form.name) }}
+
+    {#<input id="add_files_button" type="file" multiple="multiple" title="Choose files" data-label="Add files...">#}
+
+
+
+
 {% endblock %}

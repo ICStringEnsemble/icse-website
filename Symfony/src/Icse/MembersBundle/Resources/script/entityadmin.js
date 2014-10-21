@@ -13,7 +13,7 @@
     }
 
     function resetFormInput(el){
-        el.wrap('<form>').closest('form')[0].reset();
+        el.wrap('<form>').parent()[0].reset();
         el.unwrap();
     }
 
@@ -44,7 +44,15 @@
             $(this).before('<input type="text" style="width: 0; height: 0; top: -100px; position: absolute;">');
         }
     });
-    $('#edit_form').find('input:submit').before('<input type=hidden name="_method" value="POST" >');
+    var edit_form = $('#edit_form');
+    edit_form.find('input:submit').before('<input type=hidden name="_method" value="POST" >');
+
+    function initEntitySelect(elements){
+        elements.select2({
+            allowClear: true
+        });
+    }
+    initEntitySelect($('.entity-select'));
 
     var $html = $('html');
     $html.on("dragenter", function(event) {
@@ -255,11 +263,11 @@
     function openCreateDialog(){
         $('.edit_dialog .ui-dialog-buttonset .submit_button .ui-button-text').html('Create');
         $('#edit_dialog').dialog('open').dialog({ title: "Add " + entitySingularTitle });
-        var edit_form = $('#edit_form');
         edit_form.attr('method', 'POST');
         edit_form.find('input[name="_method"]').val('POST');
         edit_form.attr('action', currentPath);
         edit_form.find('input, textarea').not(':button, :submit, :reset, :hidden, :radio, :checkbox').val('');
+        edit_form.find('select').val('').trigger('change');
         edit_form.find('input').filter(':radio, :checkbox').prop('checked', false);
         edit_form.find('.error').remove();
         edit_form.find('.show_if_create').show();
@@ -275,8 +283,7 @@
         var entity = selection.first().data('entity');
         $('.edit_dialog .ui-dialog-buttonset .submit_button .ui-button-text').html('Save Changes');
         $('#edit_dialog').dialog('open').dialog({ title: "Edit " + entitySingularTitle });
-        // $('#edit_form').attr('method', 'PUT');
-        var edit_form = $('#edit_form');
+        // edit_form.attr('method', 'PUT');
         edit_form.find('input[name="_method"]').val('PUT');
         edit_form.attr('method', 'POST');
         edit_form.find('.error').remove();
@@ -312,6 +319,7 @@
                 if (typeof value === 'boolean') $(this).prop('checked', value);
             } else {
                 $(this).val(value);
+                if ($(this).is('select')) $(this).trigger('change');
             }
         });
         initEditForm(edit_form, entity);
@@ -435,10 +443,121 @@
         return false;
     });
 
+    function accessProperty (obj, property_str){
+        property_str.split('.').forEach(function(prop){
+            obj = obj[prop];
+        });
+        return obj;
+    }
+
+    function assignSortIndicesToList($list){
+        $list.find('li').each(function(){
+            $(this).find('input.sort_index').val($(this).index());
+        });
+    }
+
+    var maxSortIndexOfList = function($list){
+        var indices = $list.find('li').map(function(){
+            return $(this).find('input.sort_index').val();
+        });
+        return indices.length == 0 ? -1 : Math.max.apply(null, indices);
+    };
+
+    edit_form.find('.sortable-list').each(function(){
+        var $list = $(this);
+
+        $list.sortable({
+            placeholder: "drag-placeholder",
+            cancel: 'a,.a-button,input',
+            update: function(){assignSortIndicesToList($list)}
+        });
+    });
+
+    var newListItemMaker = function($list, item_selector, properties, post_process){
+        post_process = post_process ? post_process : function(){};
+
+        var prototype = $list.find(item_selector).detach();
+        prototype.find('input').removeAttr('id');
+
+        prototype.find('.a-button.delete').click(function(){
+            $(this).closest(item_selector).addTransitionClass('hidden').done(function(){
+                $(this).remove();
+            });
+            return false;
+        });
+
+        return function(entity){
+            var item = prototype.clone(true);
+            properties.forEach(function(prop_name){
+                var element = item.find('.' + prop_name.split('.').join('_'));
+                var val = accessProperty(entity, prop_name);
+                if (element.is('input'))
+                {
+                    element.val(val);
+                    element.attr('name', element.attr('name').replace('__ID__', entity.id));
+                }
+                else if (element.is('span'))
+                {
+                    element.html(val);
+                }
+            });
+            post_process(item, entity);
+            return item;
+        };
+    };
+
+    /* Concerts */
+    (function(){
+        if (edit_form.hasClass('event')) {
+
+            var performance_list = edit_form.find('ul#performances');
+            var newListedPerformance = newListItemMaker(performance_list, 'li.performance', ['piece.id', 'piece.full_name', 'sort_index']);
+
+            var performance_adder_parts = edit_form.find('.performance_adder');
+            var performance_adder_select = performance_adder_parts.filter('select');
+            var performance_adder_widget = performance_adder_parts.filter('div');
+
+            var new_count = 0;
+
+            performance_adder_select.change(function(){
+                var select_data = $(this).select2('data');
+                if (select_data !== null) {
+                    var piece_id = select_data.id;
+                    var piece_name = select_data.text;
+                    if (piece_id !== '') {
+                        $(this).select2('val', '');
+                        performance_adder_widget.hide();
+                        performance_adder_widget.slideDown(300);
+                        var new_item = newListedPerformance({
+                            id: 'new_' + new_count++,
+                            piece: {id: piece_id, full_name: piece_name},
+                            sort_index: maxSortIndexOfList(performance_list) + 1
+                        });
+                        performance_list.append(new_item);
+                    }
+                }
+            });
+
+            window.initCreateForm = function() {
+                performance_list.empty();
+                new_count = 0;
+            };
+
+            window.initEditForm = function(edit_form, event) {
+                new_count = 0;
+                var performances = event.performances;
+                performance_list.empty();
+                performances.forEach(function(this_performance){
+                    var new_form_item = newListedPerformance(this_performance);
+                    performance_list.append(new_form_item);
+                });
+            };
+        }
+    })();
+
     /* Music Library */
     (function(){
-        var edit_form = $('#edit_form.piece_of_music');
-        if (edit_form.length > 0) {
+        if (edit_form.hasClass('piece_of_music')) {
 
             var add_files_button = edit_form.find('#add_files_button');
             var add_new_part_form = $('#piece_of_music_add_new_part_form');
@@ -457,53 +576,14 @@
                 };
             })();
 
-            var newListedPart;
-            (function(){
-                var practice_part_prototype = practice_parts_list.find('li.part').detach();
-                practice_part_prototype.find('input').removeAttr('id');
-
-                practice_part_prototype.find('.a-button.delete').click(function(){
-                    $(this).closest('li.part').addTransitionClass('hidden').done(function(){
-                        $(this).remove();
-                    });
-                    return false;
-                });
-
-                newListedPart = function(entity){
-                    var item = practice_part_prototype.clone(true);
-                    item.find('a.open').attr('href', Routing.generateIgnoringExtras('IcsePublicBundle_resource', entity));
-                    ['instrument', 'sort_index'].forEach(function(input_name){
-                        var input = item.find('input.' + input_name);
-                        input.val(entity[input_name]);
-                        input.attr('name', input.attr('name').replace('__ID__', entity.id));
-                    });
-                    return item;
-                };
-            })();
-
-            var assignSortIndices = function(){
-                practice_parts_list.find('li').each(function(){
-                    $(this).find('input.sort_index').val($(this).index());
-                });
-            };
-
-            practice_parts_list.sortable({
-                placeholder: "drag-placeholder",
-                cancel: 'a,.a-button,input',
-                update: assignSortIndices
+            var newListedPart = newListItemMaker(practice_parts_list, 'li.part', ['instrument', 'sort_index'], function(item, entity){
+                item.find('a.open').attr('href', Routing.generateIgnoringExtras('IcsePublicBundle_resource', entity));
             });
-
-            var currentMaxSortIndex = function(){
-                var indices = practice_parts_list.find('li').map(function(){
-                    return $(this).find('input.sort_index').val();
-                });
-                return indices.length == 0 ? -1 : Math.max.apply(null, indices);
-            };
 
             var handleFile = function(file, button_pane){
                 var pane_buttons = button_pane.find('button');
                 var loading_spinner = button_pane.find('.loading_spinner');
-                var new_sort_index = currentMaxSortIndex()+1;
+                var new_sort_index = maxSortIndexOfList(practice_parts_list)+1;
                 add_new_part_form.find('input[name="form[sort_index]"]').val(new_sort_index);
                 var uploading_item = newUploadingPart();
                 uploading_item.find('.name').text(file.name);
@@ -549,7 +629,7 @@
                     if (practice_parts_list.find('.uploading-part').length === 0){
                         pane_buttons.button('enable');
                         loading_spinner.hide();
-                        assignSortIndices();
+                        assignSortIndicesToList(practice_parts_list);
                         reloadTable();
                     }
                 });
@@ -591,7 +671,7 @@
     /* Image Library */
     (function(){
         var edit_form = $('#edit_form.image');
-        if (edit_form.length > 0) {
+        if (edit_form.hasClass('image')) {
 
             var new_image_form = $('form#new_image');
             new_image_form.find('input[name="form[file]"]').remove();

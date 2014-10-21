@@ -34,18 +34,18 @@ trait FileWrapper
         return $this->getFileDirectory().'/'.$this->getFileName();
     }
 
-    public function upload()
+    public function _upload()
     {
         $this->getUploadedFile()->move($this->getFileDirectory(), $this->getFileName());
         $this->setUploadedFile(null);
     }
 
-    public function storeFilenameForRemove()
+    public function _storeFilenameForRemove()
     {
         $this->file_to_remove = $this->getFilePath();
     }
 
-    public function removeUpload()
+    public function _removeUpload()
     {
         unlink($this->file_to_remove);
     }

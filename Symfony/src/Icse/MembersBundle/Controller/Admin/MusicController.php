@@ -60,11 +60,6 @@ class MusicController extends EntityAdminController
         ];
     }
 
-    protected function updateEntityFinder()
-    {
-        return "findOneByIdWithIdIndexedPracticeParts";
-    }
-
     private function addNewPracticePart(Request $request, $piece)
     {
         $part = new PracticePart();
@@ -97,6 +92,11 @@ class MusicController extends EntityAdminController
             return $this->addNewPracticePart($request, $piece);
         }
         return parent::instanceOperationAction($request, $id, $op);
+    }
+
+    protected function getFormCollectionNames()
+    {
+        return ['practice_parts'];
     }
 
     protected function getForm($entity)
@@ -140,7 +140,6 @@ class MusicController extends EntityAdminController
         {
             foreach ($practice_parts_before as $old_part)
             {
-                /** @var $old_part PracticePart */
                 if ($entity->getPracticeParts()->contains($old_part) === false) $em->remove($old_part);
             }
 

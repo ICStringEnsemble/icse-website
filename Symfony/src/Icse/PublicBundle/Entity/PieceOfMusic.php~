@@ -3,6 +3,7 @@
 namespace Icse\PublicBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 use JMS\Serializer\Annotation\Groups;
 
 /**
@@ -86,6 +87,13 @@ class PieceOfMusic
     public function getComposer()
     {
         return $this->composer;
+    }
+
+    /** @Serializer\Accessor(getter="getFullName") */
+    private static $full_name;
+    public function getFullName()
+    {
+        return $this->getComposer() . ': ' . $this->getName();
     }
 
     /**

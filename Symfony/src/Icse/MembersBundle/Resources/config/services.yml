@@ -2,6 +2,13 @@ parameters:
 #    icse_members.example.class: Icse\MembersBundle\Example
 
 services:
+    lrotherfield.form.type.hidden_entity:
+        class: Lrotherfield\Component\Form\Type\HiddenEntityType
+        arguments:
+            - @doctrine.orm.entity_manager
+        tags:
+            - { name: form.type, alias: hidden_entity }
+
     security.authentication.provider.imperial:
         class: Icse\MembersBundle\Security\Authentication\Provider\ImperialProvider
         arguments: ['', @security.user_checker, '', @security.encoder_factory, %security.authentication.hide_user_not_found%]

@@ -1,12 +1,15 @@
 Icse\PublicBundle\Entity\PerformanceOfAPiece:
     type: entity
     table: null
-    fields:
+    id:
         id:
             type: integer
             id: true
             generator:
                 strategy: AUTO
+    fields:
+        sort_index:
+            type: integer
     manyToOne:
         piece:
             targetEntity: PieceOfMusic

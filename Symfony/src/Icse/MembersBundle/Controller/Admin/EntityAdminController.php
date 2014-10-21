@@ -2,6 +2,7 @@
 
 namespace Icse\MembersBundle\Controller\Admin;
 
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -105,23 +106,36 @@ abstract class EntityAdminController extends Controller
         return $this->putData($request, $entity);
     }
 
-    protected function getEntityById($id, $finder = 'findOneById') {
-        $entity = $this->repository()->$finder($id);
+    protected function getFormCollectionNames()
+    {
+        return [];
+    }
+
+    protected function getEntityById($id, $reindex_collections=false)
+    {
+        $collection_names = $reindex_collections ? $this->getFormCollectionNames() : [];
+
+        /** @var QueryBuilder $qb */
+        $qb = $this->repository()->createQueryBuilder('entity');
+        $qb->setParameter('id', $id)->where($qb->expr()->eq('entity.id', ':id'));
+        foreach($collection_names as $i => $c)
+        {
+            $qb->addSelect("c$i");
+            $qb->leftJoin("entity.$c", "c$i", null, null, "c$i.id");
+        }
+        $entity = $qb->getQuery()->getOneOrNullResult();
+
         if (!$entity) {
             throw $this->createNotFoundException('Entity does not exist');
         }
+
         return $entity;
     }
 
     public function updateAction(Request $request, $id)
     {
-        $entity = $this->getEntityById($id, $this->updateEntityFinder());
+        $entity = $this->getEntityById($id, true);
         return $this->putData($request, $entity);
-    }
-
-    protected function updateEntityFinder()
-    {
-        return 'findOneById';
     }
 
     public function deleteAction($id)

@@ -19,4 +19,7 @@ Icse\PublicBundle\Entity\PieceOfMusic:
             - NotBlank: ~
         composer:
             - NotBlank: ~
-
+Icse\PublicBundle\Entity\Event:
+    properties:
+        name:
+            - NotBlank: ~

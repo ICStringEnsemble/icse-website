@@ -41,6 +41,7 @@ class CommitteeController extends EntityAdminController
             ->add('member', 'entity', [
                 'class' => 'IcseMembersBundle:Member',
                 'property' => 'full_name',
+                'attr' => ['class' => 'entity-select']
             ])
             ->add('position_name', 'text')
             ->add('start_year', 'integer')

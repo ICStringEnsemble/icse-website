@@ -45,7 +45,7 @@
 {% if not event.getPerformances().isEmpty() %}
 <ul class="repertoire">
 {% for performance in event.getPerformances() %}
-<li>{{ performance.getPiece().getComposer() }}: {{ performance.getPiece().getName() }}</li>
+<li>{{ performance.piece.fullName }}</li>
 {% endfor %}
 </ul>
 {% endif %}

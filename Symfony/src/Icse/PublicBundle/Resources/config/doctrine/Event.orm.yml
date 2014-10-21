@@ -24,6 +24,12 @@ Icse\PublicBundle\Entity\Event:
         facebook_id:
             type: string
             nullable: true
+    oneToMany:
+        performances:
+            targetEntity: PerformanceOfAPiece
+            mappedBy: event
+            orderBy:
+                sort_index: ASC
     manyToOne:
         location:
             targetEntity: Venue
@@ -37,9 +43,5 @@ Icse\PublicBundle\Entity\Event:
             targetEntity: Icse\MembersBundle\Entity\Member
             joinColumn:
                 nullable: false
-    oneToMany:
-        performances:
-            targetEntity: PerformanceOfAPiece
-            mappedBy: event 
     lifecycleCallbacks: {  }
 

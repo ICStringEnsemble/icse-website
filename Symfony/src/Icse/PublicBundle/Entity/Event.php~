@@ -210,6 +210,13 @@ class Event
         return $this;
     }
 
+    public function addPrototypePerformance(PerformanceOfAPiece $performances)
+    {
+        $this->performances['__ID__'] = $performances;
+
+        return $this;
+    }
+
     /**
      * Remove performances
      *

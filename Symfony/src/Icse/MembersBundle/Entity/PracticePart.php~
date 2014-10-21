@@ -3,167 +3,31 @@
 namespace Icse\MembersBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Icse\PublicBundle\Entity\Traits\FileWrapper;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\Exclude;
+use JMS\Serializer\Annotation as Serializer;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Common\Tools;
+use Icse\PublicBundle\Entity\Interfaces\ResourceInterface;
 
 /**
- * Icse\MembersBundle\Entity\PracticePart
+ * PracticePart
  */
-class PracticePart
+class PracticePart implements ResourceInterface
 {
+    use FileWrapper;
+
     /**
-     * @var integer $id
+     * @Exclude
+     */
+    private static $base_dir = 'Symfony/uploads/practiceparts/';
+
+    /**
+     * @var integer
      */
     private $id;
 
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-    /**
-     * @var string $file
-     */
-    private $file;
-
-    /**
-     * @var string $type
-     */
-    private $type;
-
-    /**
-     * @var \DateTime $updated_at
-     */
-    private $updated_at;
-
-    /**
-     * @var integer $updated_by
-     */
-    private $updated_by;
-
-    /**
-     * @var Icse\PublicBundle\Entity\PieceOfMusic
-     */
-    private $piece;
-
-
-    /**
-     * Set file
-     *
-     * @param string $file
-     * @return PracticePart
-     */
-    public function setFile($file)
-    {
-        $this->file = $file;
-    
-        return $this;
-    }
-
-    /**
-     * Get file
-     *
-     * @return string 
-     */
-    public function getFile()
-    {
-        return $this->file;
-    }
-
-    /**
-     * Set type
-     *
-     * @param string $type
-     * @return PracticePart
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return string 
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * Set updated_at
-     *
-     * @param \DateTime $updatedAt
-     * @return PracticePart
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updated_at = $updatedAt;
-    
-        return $this;
-    }
-
-    /**
-     * Get updated_at
-     *
-     * @return \DateTime 
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updated_at;
-    }
-
-    /**
-     * Set updated_by
-     *
-     * @param integer $updatedBy
-     * @return PracticePart
-     */
-    public function setUpdatedBy($updatedBy)
-    {
-        $this->updated_by = $updatedBy;
-    
-        return $this;
-    }
-
-    /**
-     * Get updated_by
-     *
-     * @return integer 
-     */
-    public function getUpdatedBy()
-    {
-        return $this->updated_by;
-    }
-
-    /**
-     * Set piece
-     *
-     * @param Icse\PublicBundle\Entity\PieceOfMusic $piece
-     * @return PracticePart
-     */
-    public function setPiece(\Icse\PublicBundle\Entity\PieceOfMusic $piece = null)
-    {
-        $this->piece = $piece;
-    
-        return $this;
-    }
-
-    /**
-     * Get piece
-     *
-     * @return Icse\PublicBundle\Entity\PieceOfMusic 
-     */
-    public function getPiece()
-    {
-        return $this->piece;
-    }
     /**
      * @var string
      */
@@ -174,6 +38,21 @@ class PracticePart
      */
     private $sort_index;
 
+    /**
+     * @var \Icse\PublicBundle\Entity\PieceOfMusic
+     * @Groups({"piece"})
+     */
+    private $piece;
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set instrument
@@ -184,6 +63,56 @@ class PracticePart
     public function setInstrument($instrument)
     {
         $this->instrument = $instrument;
+
+        return $this;
+    }
+
+    public function getFormFileAndInstrument()
+    {
+        return $this->getUploadedFile();
+    }
+
+    public function setFormFileAndInstrument(UploadedFile $file)
+    {
+        $this->setUploadedFile($file);
+        $this->setInstrumentFromFilename($file->getClientOriginalName());
+    }
+
+    /**
+     * @Exclude
+     */
+    private static $FILE_INSTRUMENT_MAP = [
+        'v1' => 'violin 1',
+        'vi' => 'violin 1',
+        'v2' => 'violin 2',
+        'vii' => 'violin 2',
+        'v' => 'viola',
+        'c' => 'cello',
+        'b' => 'bass',
+    ];
+
+    /**
+     * Set instrument from filename
+     *
+     * @param string $filename
+     * @return PracticePart
+     */
+    public function setInstrumentFromFilename($filename)
+    {
+        $filename = strtolower(pathinfo($filename, PATHINFO_FILENAME));
+        $filename = preg_replace('/_/', ' ', $filename);
+        $words = explode(' ', $filename);
+
+        if (isset(self::$FILE_INSTRUMENT_MAP[$words[0]]))
+        {
+            $words[0] = self::$FILE_INSTRUMENT_MAP[$words[0]];
+        }
+
+        $filename = implode(' ', $words);
+        $filename = preg_replace('/(?<=[a-z])(?=\d)/', ' ', $filename); // insert space within, say, 'violin2a'
+        $filename = ucwords($filename);
+
+        $this->instrument = $filename;
 
         return $this;
     }
@@ -219,5 +148,97 @@ class PracticePart
     public function getSortIndex()
     {
         return $this->sort_index;
+    }
+
+    /**
+     * Set piece
+     *
+     * @param \Icse\PublicBundle\Entity\PieceOfMusic $piece
+     * @return PracticePart
+     */
+    public function setPiece(\Icse\PublicBundle\Entity\PieceOfMusic $piece)
+    {
+        $this->piece = $piece;
+
+        return $this;
+    }
+
+    /**
+     * Get piece
+     *
+     * @return \Icse\PublicBundle\Entity\PieceOfMusic 
+     */
+    public function getPiece()
+    {
+        return $this->piece;
+    }
+
+    protected function getFileDirectory()
+    {
+        return self::$base_dir.'/'.$this->getPiece()->getId();
+    }
+
+    protected function getFileName()
+    {
+        return $this->getId().'.pdf';
+    }
+
+    /** @Serializer\Accessor(getter="getResourceType") */
+    private static $resource_type;
+    public function getResourceType()
+    {
+        return "practiceparts";
+    }
+
+    /** @Serializer\Accessor(getter="getUrlResourcePath") */
+    private static $url_resource_path;
+    public function getUrlResourcePath()
+    {
+        $path = $this->getId() . '/';
+        $piece = $this->getPiece();
+        if (!is_null($piece))
+        {
+            $path .= Tools::slugify($piece->getComposer()) . '/';
+            $path .= Tools::slugify($piece->getName()) . '/';
+        }
+        $path .= Tools::slugify($this->getInstrument()) . '.pdf';
+        return $path;
+    }
+
+    public function getDownloadName()
+    {
+        $name = '';
+        $piece = $this->getPiece();
+        if (!is_null($piece))
+        {
+            $name .= $piece->getComposer() . ', ';
+            $name .= $piece->getName() . ' ';
+        }
+        $name .= '('.$this->getInstrument().').pdf';
+        return $name;
+    }
+
+    /**
+     * @ORM\PostPersist
+     */
+    public function upload()
+    {
+        $this->_upload();
+    }
+
+    /**
+     * @ORM\PreRemove
+     */
+    public function storeFilenameForRemove()
+    {
+        $this->_storeFilenameForRemove();
+    }
+
+    /**
+     * @ORM\PostRemove
+     */
+    public function removeUpload()
+    {
+        $this->_removeUpload();
     }
 }

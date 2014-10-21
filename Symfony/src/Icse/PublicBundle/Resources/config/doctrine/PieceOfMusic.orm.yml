@@ -2,12 +2,13 @@ Icse\PublicBundle\Entity\PieceOfMusic:
     type: entity
     repositoryClass: Icse\PublicBundle\Entity\PieceOfMusicRepository
     table: null
-    fields:
+    id:
         id:
             type: integer
             id: true
             generator:
                 strategy: AUTO
+    fields:
         composer:
             type: string
             length: 255

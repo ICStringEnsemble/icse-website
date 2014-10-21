@@ -120,6 +120,59 @@ form {
     }
 }
 
+.entity-select {
+    width: 204px;
+}
+
+html {
+    a.select2-choice {
+        &:link, &:visited, &:hover {
+            text-decoration:none;
+            color: #000;
+        }
+    }
+
+    li.ui-timepicker-selected,
+    .ui-timepicker-list li:hover,
+    .ui-timepicker-list .ui-timepicker-selected:hover,
+    .select2-results .select2-highlighted {
+        background: #E2C891;
+        color: #000;
+    }
+
+    .select2-container .select2-choice {
+        background-image: none;
+        border-radius: 0;
+        height: 24px;
+        line-height: 24px;
+    }
+
+    .select2-container .select2-choice .select2-arrow {
+        border-radius: 0;
+    }
+
+    .select2-container .select2-choice abbr {
+        top: 6em;
+    }
+
+    .select2-container .select2-choice .select2-arrow b {
+        background-position: 0 0;
+    }
+
+    .select2-container.animate_to_plaintext {
+        $time: 1s;
+
+        .select2-choice {
+            border-width: 0;
+            @include transition(all $time);
+        }
+
+        .select2-search-choice-close {
+            opacity: 0;
+            @include transition(all $time);
+        }
+    }
+}
 
 p.success {
     color: #090;
@@ -502,6 +555,83 @@ span.membership_date {
         float: left;
     }
 
+    ul.sortable-list {
+        .a-button, a {
+            &:link, &:visited {
+                color: #000;
+            }
+
+            &:hover {
+                color: #996633;
+                cursor: pointer;
+            }
+
+            &.delete {
+                &:hover {
+                    color: #f00;
+                }
+            }
+        }
+    }
+
+    #edit_form.event {
+
+        div.performance_adder {
+            float: left;
+        }
+
+        ul#performances {
+            overflow: hidden;
+
+            li {
+                height: 1.5em;
+                padding-bottom: 0.2em;
+                list-style: disc inside;
+
+                &:hover {
+                    cursor: grab;
+                    cursor: -moz-grab;
+                    cursor: -webkit-grab;
+                }
+
+                &.ui-sortable-helper {
+                    cursor: grabbing;
+                    cursor: -moz-grabbing;
+                    cursor: -webkit-grabbing;
+                }
+
+
+                &.drag-placeholder {
+                    list-style: none;
+                }
+
+                &.hidden {
+                    height: 0;
+                    padding: 0;
+                    margin: 0;
+                    opacity: 0;
+
+                    @include transition(all 0.2s ease-in);
+                }
+
+                .a-button.delete {
+                    margin-left: 10px;
+                }
+
+                .a-button.delete, &.ui-sortable-helper:hover .a-button.delete {
+                    display: none;
+                }
+
+                &:hover .a-button.delete {
+                    display: inline-block;
+                }
+            }
+
+        }
+
+
+    }
+
     #practice_parts_section {
         margin-bottom: 0.7em;
         overflow: hidden;
@@ -581,25 +711,9 @@ span.membership_date {
                 clear: none;
             }
 
-            .a-button, a {
-                &:link, &:visited {
-                    color: #000;
-                }
-
-                &:hover {
-                    color: #996633;
-                    cursor: pointer;
-                }
-
-                &.delete {
-                    float: right;
-
-                    &:hover {
-                        color: #f00;
-                    }
-                }
+            .a-button.delete {
+                float: right;
             }
-
 
             &.drag-placeholder {
                 background-color: transparent;

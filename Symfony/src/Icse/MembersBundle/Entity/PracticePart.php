@@ -217,4 +217,28 @@ class PracticePart implements ResourceInterface
         $name .= '('.$this->getInstrument().').pdf';
         return $name;
     }
+
+    /**
+     * @ORM\PostPersist
+     */
+    public function upload()
+    {
+        $this->_upload();
+    }
+
+    /**
+     * @ORM\PreRemove
+     */
+    public function storeFilenameForRemove()
+    {
+        $this->_storeFilenameForRemove();
+    }
+
+    /**
+     * @ORM\PostRemove
+     */
+    public function removeUpload()
+    {
+        $this->_removeUpload();
+    }
 }
