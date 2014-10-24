@@ -12,6 +12,22 @@ use Doctrine\ORM\EntityRepository;
  */
 class EventRepository extends EntityRepository
 {
+    public function findUpcomingEventsWithPracticeParts()
+    {
+        return $this->getEntityManager()
+            ->createQuery ('SELECT e, -e.starts_at AS HIDDEN inverseStart, perf, piece, parts
+                            FROM IcsePublicBundle:Event e
+                            JOIN e.performances perf
+                            JOIN perf.piece piece
+                            JOIN piece.practice_parts parts
+                            WHERE e.starts_at >= :time
+                            OR e.starts_at IS NULL
+                            ORDER BY inverseStart DESC
+                            ')
+            ->setParameters(array('time' => new \DateTime("today")))
+            ->getResult();
+    }
+
     /**
      * @return \AppendIterator
      */

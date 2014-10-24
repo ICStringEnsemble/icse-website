@@ -1,0 +1,51 @@
+{% extends 'IcseMembersBundle:Default:template.html.twig' %}
+
+{% set pageTitle = 'Practice Parts' %}  
+{% set currentSubSection = 'practice_parts' %}
+
+{% block content %}
+    <div id="practice_parts_page">
+
+        <h1>Practice Parts</h1>
+
+        {% if events is not empty %}
+        <p>Well done for checking this page out! Parts for our upcoming concert{{ events|length > 1 ? 's' }} can be found below, for you to practise at any time.</p>
+        {% else %}
+        <p>We love your enthusiasm, but unfortunately we don't have any practice parts for you at this time!</p>
+        {% endif %}
+
+        {% for event in events %}
+            <h2>
+                <div class="title">{{ event.name }}</div>
+                {% if event.startsAt is not null %}
+                    <div class="starts_at">{{ event.startsAt | date("l jS F Y" ~ (event.isStartTimeKnown ? ", g:ia")) }}</div>
+                {% endif %}
+            </h2>
+
+            {% for perf in event.performances %}
+                {% set piece = perf.piece %}
+                <h3>{{ piece.composer }}: {{ piece.name }}</h3>
+                <ul>
+                {% for part in piece.practiceParts %}
+                    <li><a href="{{ path('IcsePublicBundle_resource', part) }}">{{ part.instrument }}</a></li>
+                {% endfor %}
+                </ul>
+            {% endfor %}
+        {% endfor %}
+
+
+
+        {#{% for piece in pieces %}#}
+        {#<h2>{{ piece.name }}</h2>#}
+
+        {#<ul>#}
+          {#{% for part in piece.parts %}#}
+          {#<li><a href="{{ path('IcsePublicBundle_resource', {resource_type: 'legacypdf', url_resource_path: piece.folder ~ '/' ~ part.filename}) }}">{{ part.label }}</a></li>#}
+          {#{% endfor %}#}
+        {#</ul>#}
+        {#{% endfor %}#}
+
+    </div>
+
+
+{% endblock %}

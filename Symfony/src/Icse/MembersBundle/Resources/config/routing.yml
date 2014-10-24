@@ -12,9 +12,9 @@ IcseMembersBundle_calendar:
 
 IcseMembersBundle_practice_parts:
     pattern:  /members/practiceparts
-    defaults: { _controller: IcseMembersBundle:PracticeParts:legacy }
+    defaults: { _controller: IcseMembersBundle:PracticeParts:index }
 
-IcseMembersBundle_logout: # Don't change this without changing listener!
+IcseMembersBundle_logout:
     pattern:   /logout
 
 IcseMembersBundle_account_settings:

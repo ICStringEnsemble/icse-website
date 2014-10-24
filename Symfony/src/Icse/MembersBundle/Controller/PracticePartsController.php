@@ -9,8 +9,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PracticePartsController extends Controller
 {
+    public function indexAction()
+    {
+        $events = $this->getDoctrine()->getRepository('IcsePublicBundle:Event')->findUpcomingEventsWithPracticeParts();
+        return $this->render('IcseMembersBundle:PracticeParts:index.html.twig', ['events' => $events]);
+    }
+
     public function legacyAction()
     {
-      return $this->render('IcseMembersBundle:PracticeParts:legacy.html.twig', array());
+      return $this->render('IcseMembersBundle:PracticeParts:legacy.html.twig', []);
     }
 }

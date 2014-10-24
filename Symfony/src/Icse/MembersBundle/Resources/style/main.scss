@@ -484,6 +484,23 @@ ul.entity_main_buttons, ul.email_buttons {
     }
 }
 
+#practice_parts_page {
+    h2 {
+        overflow: hidden;
+        margin-bottom: 0.7em;
+
+        .title {
+            font-size: 1.2em;
+            float: left;
+        }
+        .starts_at {
+            font-size: 0.7em;
+            color: #928777;
+            float: right;
+        }
+    }
+}
+
 #icse_email.embedded {
     margin-top: 1em;
 }
