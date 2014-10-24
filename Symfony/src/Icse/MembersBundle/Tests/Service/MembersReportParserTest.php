@@ -73,7 +73,10 @@ Life / Associate,,,,
             $m->setLastName($d[2]);
             $m->setEmail($d[3]);
             $m->setLastPaidMembershipOn(new \DateTime($d[4].'T00:00'));
-            $m->setRole($m::$ROLE_AUTO);
+            $m->setRole($m::ROLE_AUTO);
+            $m->setPassword(null);
+            $m->setSalt(null);
+            $m->setPasswordOperation($m::PASSWORD_IMPERIAL);
             self::$expected_members[] = $m;
         }
     }

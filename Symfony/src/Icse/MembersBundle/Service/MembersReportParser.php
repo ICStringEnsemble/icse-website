@@ -65,6 +65,8 @@ class MembersReportParser
                     $member->setUsername($csv_row[$indices['login']]);
                     $member->setEmail($csv_row[$indices['email']]);
                     $member->setRole(member::ROLE_AUTO);
+                    $member->setPassword(null);
+                    $member->setSalt(null);
                     $member->setPasswordOperation(Member::PASSWORD_IMPERIAL);
                     $member->setLastPaidMembershipOn($this->parseDate($csv_row[$indices['date']]));
                     $member->setActive(true);
