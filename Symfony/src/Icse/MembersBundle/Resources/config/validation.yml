@@ -7,6 +7,8 @@ Icse\MembersBundle\Entity\Member:
             - NotBlank: ~
         last_name:
             - NotBlank: ~
+        username:
+            - NotBlank: ~
         email:
             - NotBlank: ~
             - Email:

@@ -30,5 +30,6 @@ parameters:
     google_secret: ~
 
     locale:            en
+    home_url:          https://www.icstringensemble.org.uk
     secret:            __CHANGE_ME__
     remember_me_key:   __CHANGE_ME__

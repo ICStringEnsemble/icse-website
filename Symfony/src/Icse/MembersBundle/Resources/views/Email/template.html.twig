@@ -19,7 +19,7 @@
                         <table>
                             <tr>
                                 <td id="header_cell">
-                                    <a href="http://www.union.ic.ac.uk/arts/stringensemble">
+                                    <a href="{{ home_url }}">
                                         <img height="100" title="Imperial College String Ensemble" alt="Imperial College String Ensemble" src="https://{{ app.request.host ~ asset('bundles/icsemembers/images/email_header.gif') }}" moz-do-not-send="true">
                                     </a>
                                 </td>
@@ -53,7 +53,7 @@
                                                         Want to {{ email_lines.contactus_line('contact us') }}
                                                     </span>
                                                 {% endif %}
-                                                Visit our <a href="http://www.union.ic.ac.uk/arts/stringensemble/">website</a>?
+                                                Visit our <a href="{{ home_url }}/">website</a>?
                                             </td>
                                         </tr>
                                     </table>

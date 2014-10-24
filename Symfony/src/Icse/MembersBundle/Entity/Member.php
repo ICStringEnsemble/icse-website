@@ -9,6 +9,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
 
+use JMS\Serializer\Annotation as Serializer;
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\Groups;
 
@@ -40,6 +41,18 @@ class Member implements AdvancedUserInterface, \Serializable
      * @Groups({"superadmin"})
      */
     private $password;
+
+    /**
+     * @var integer $password_operation
+     * @Groups({"noserialise"})
+     */
+    private $password_operation;
+
+    /**
+     * @var string $plain_password
+     * @Groups({"noserialise"})
+     */
+    private $plain_password;
 
     /**
      * @var string $email
@@ -75,8 +88,9 @@ class Member implements AdvancedUserInterface, \Serializable
     {
         $this->committee_roles = new Arraycollection;
         $this->active = true;
-        $this->role = 1;
+        $this->role = self::ROLE_AUTO;
         $this->created_at = new \DateTime();
+        $this->password_operation = self::PASSWORD_NO_CHANGE;
     }
 
     /**
@@ -132,15 +146,20 @@ class Member implements AdvancedUserInterface, \Serializable
         else return ['ROLE_USER'];
     }
 
+
+    const ROLE_AUTO = 1;
+    const ROLE_ADMIN = 10;
+    const ROLE_SUPER_ADMIN = 100;
+
     public function getRoles(\DateTime $dt = null)
     {
         switch($this->getRole())
         {
-            case 1:
+            case self::ROLE_AUTO:
                 return $this->getAutoRole($dt);
-            case 10:
+            case self::ROLE_ADMIN:
                 return ['ROLE_ADMIN'];
-            case 100:
+            case self::ROLE_SUPER_ADMIN:
                 return ['ROLE_SUPER_ADMIN'];
             default:
                 return ['ROLE_USER'];
@@ -570,5 +589,46 @@ class Member implements AdvancedUserInterface, \Serializable
         while ($last_august > $dt) $last_august->sub(new \DateInterval("P1Y"));
 
         return $last_paid >= $last_august;
+    }
+
+    const PASSWORD_NO_CHANGE = 0;
+    const PASSWORD_IMPERIAL = 1;
+    const PASSWORD_RANDOM = 2;
+    const PASSWORD_SET = 3;
+
+    /**
+     * @return integer
+     */
+    public function getPasswordOperation()
+    {
+        return $this->password_operation;
+    }
+
+    /**
+     * @param integer $password_operation
+     * @return Member
+     */
+    public function setPasswordOperation($password_operation)
+    {
+        $this->password_operation = $password_operation;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPlainPassword()
+    {
+        return $this->plain_password;
+    }
+
+    /**
+     * @param string $plain_password
+     * @return Member
+     */
+    public function setPlainPassword($plain_password)
+    {
+        $this->plain_password = $plain_password;
+        return $this;
     }
 }

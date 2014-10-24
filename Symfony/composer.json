@@ -32,7 +32,8 @@
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",
-        "lrotherfield/form": "1.1.x-dev"
+        "lrotherfield/form": "1.1.x-dev",
+        "mikey179/vfsStream": "1.*"
     },
     "scripts": {
         "post-install-cmd": [

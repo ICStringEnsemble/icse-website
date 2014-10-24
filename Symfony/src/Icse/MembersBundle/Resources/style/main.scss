@@ -254,7 +254,7 @@ ul.entity_main_buttons, ul.email_buttons {
     label {
         width: 100px;
     }
-    .field_row_main {
+    .form_row_main {
         margin-left: 100px;
 
         input {
@@ -506,6 +506,7 @@ span.membership_date {
 .fileinput-button-wrapper {
     position: relative;
     overflow: hidden;
+    margin-bottom: 0.1em;
 
     input {
         position: absolute;

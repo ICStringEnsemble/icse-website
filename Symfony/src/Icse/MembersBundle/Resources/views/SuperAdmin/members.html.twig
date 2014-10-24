@@ -8,6 +8,10 @@
   <li><button class="impersonate show_if_one_selected" type=button>Impersonate</button></li>
 {% endblock %}
 
+{% set PASSWORD_IMPERIAL = constant('Icse\\MembersBundle\\Entity\\Member::PASSWORD_IMPERIAL') %}
+{% set PASSWORD_NO_CHANGE = constant('Icse\\MembersBundle\\Entity\\Member::PASSWORD_NO_CHANGE') %}
+{% set PASSWORD_SET = constant('Icse\\MembersBundle\\Entity\\Member::PASSWORD_SET') %}
+
 {% block extra_content %}
 
 <div id="import_csv_dialog" title="Import Membership List"> 
@@ -19,15 +23,15 @@
     <li><a href="https://eactivities.union.ic.ac.uk/common/data_handler.php?id=1700&type=csv&name=Members_Report">Download membership list</a></li>
     <li>Upload the downloaded file:</li>
   </ul>
-  <form id="import_csv_form" action="{{ path(app.request.get('_route')) }}" method="post" {{ form_enctype(csv_form) }}>
-    {{ form_widget(csv_form) }}
+    {{ form_start(csv_form, {'attr': {'id': 'import_csv_form'}}) }}
+    {{ form_row(csv_form.csv_file) }}
     <input hidden type="submit" />
-  </form> 
+    {{ form_end(csv_form) }}
 </div>
 
 <script>
   function enableDisableNewPasswordFields(slideTime){
-    if ($('#form_password_choice input[value="set"]').is(':checked')){
+    if ($('#form_password_operation input[value={{ PASSWORD_SET }}]').is(':checked')){
         $('.new_password_fields').slideDown(slideTime);
         $('.new_password_fields input').prop('required', true);
     } else {
@@ -36,7 +40,7 @@
         $('.new_password_fields input').val('');
     }
   };
-  $('#form_password_choice').change(200, enableDisableNewPasswordFields);
+  $('#form_password_operation').change(200, enableDisableNewPasswordFields);
 
   $('#import_csv_dialog').dialog({
     autoOpen: false,
@@ -71,9 +75,9 @@
 
   var initCreateForm = function() {
     // Member specific stuff
-    $("#edit_form input[name='form[password_choice]'][value=imperial]").prop('checked', true); 
+    $("#edit_form input[name='form[password_operation]'][value={{ PASSWORD_IMPERIAL }}]").prop('checked', true);
     enableDisableNewPasswordFields(0);
-    $("#edit_form input[name='form[password_choice]'][value=no_change]").each(function(){
+    $("#edit_form input[name='form[password_operation]'][value={{ PASSWORD_NO_CHANGE }}]").each(function(){
       $(this).hide();
       $("#edit_form label[for=" + $(this).attr('id') + "]").hide();
     });
@@ -81,9 +85,9 @@
 
   var initEditForm = function() {
     // Member specific stuff
-    $("#edit_form input[name='form[password_choice]'][value=no_change]").prop('checked', true); 
+    $("#edit_form input[name='form[password_operation]'][value={{ PASSWORD_NO_CHANGE }}]").prop('checked', true);
     enableDisableNewPasswordFields(0);
-    $("#edit_form input[name='form[password_choice]'][value=no_change]").each(function(){
+    $("#edit_form input[name='form[password_operation]'][value={{ PASSWORD_NO_CHANGE }}]").each(function(){
       $(this).show();
       $("#edit_form label[for=" + $(this).attr('id') + "]").show();
     }); 

@@ -39,121 +39,154 @@ class MembersController extends EntityAdminController
             'Email' => function(Member $member){return $member->getEmail();},
             'Password' => function(Member $member){return $member->getPassword()?"Stored":"Imperial";},
             'Active' => function(Member $member){return $member->getActive()? "Yes":"No";},
-            'Role' => function(Member $member){return $member->getRole() == 100? "Super Admin":($member->getRole() == 10?"Admin":'('.strtolower($member->getRoles()[0]).')');},
+            'Role' => function(Member $member){return $member->getRole() == $member::ROLE_SUPER_ADMIN? "Super Admin":($member->getRole() == $member::ROLE_ADMIN?"Admin":'('.strtolower($member->getRoles()[0]).')');},
             'Paid' => function(Member $member){return $member->getLastPaidMembershipOn()? $member->getLastPaidMembershipOn()->format('d/M/Y') : "Never";},
             'Last Online' => function(Member $member){return $member->getLastOnlineAt()? $this->timeagoDate($member->getLastOnlineAt()) : "Never";},
         ];
         return ["fields" => $fields, "entities" => $members, "serial_groups" => ['superadmin']];
     }
 
+    /**
+     * @param Member $member
+     * @return \Symfony\Component\Form\Form
+     */
     protected function getForm($member)
     {
         $form = $this->createFormBuilder($member)
+            ->setMethod($member->getID() === null ? 'POST' : 'PUT')
             ->add('first_name', 'text')
             ->add('last_name', 'text')
             ->add('username', 'text')
             ->add('email', 'email')
-            ->add('active', 'choice', array(
-                'choices' => array(true => 'Yes', false => 'No')
-            ))
-            ->add('last_paid_membership_on', 'date', array(
+            ->add('active', 'choice', [
+                'choices' => [true => 'Yes', false => 'No']
+            ])
+            ->add('last_paid_membership_on', 'date', [
                 'label' => 'Paid membership',
                 'widget' => 'single_text',
                 'required' => false,
                 'format' => 'dd/MM/yy'
-            ))
-            ->add('role', 'choice', array(
-                'choices' => array(1 => 'Auto', 10 => 'Admin', 100 => 'Super Admin')
-            ))
-            ->add('password_choice', 'choice', array(
-                'choices' => array('no_change' => 'Don\'t Change', 'imperial' => 'Imperial Password', 'random' => 'Random Password', 'set' => 'Choose a Password'),
+            ])
+            ->add('role', 'choice', [
+                'choices' => [$member::ROLE_AUTO => 'Auto', $member::ROLE_ADMIN => 'Admin', $member::ROLE_SUPER_ADMIN => 'Super Admin']
+            ])
+            ->add('password_operation', 'choice', [
+                'choices' => [
+                    Member::PASSWORD_NO_CHANGE => "Don't Change",
+                    Member::PASSWORD_IMPERIAL => 'Imperial Password',
+                    Member::PASSWORD_RANDOM => 'Random Password',
+                    Member::PASSWORD_SET => 'Choose a Password'
+                ],
                 'label' => 'Password',
-                'expanded' => true,
-                'mapped' => false
-            ))
-            ->add('plain_password', 'repeated', array(
+                'expanded' => true
+            ])
+            ->add('plain_password', 'repeated', [
                 'type' => 'password',
                 'required' => false,
-                'mapped' => false,
                 'invalid_message' => "Passwords must match",
-                'first_options' => array('label' => 'New Password'),
-                'second_options' => array('label' => 'Repeat Password'),
-            ))
+                'first_options' => ['label' => 'New Password'],
+                'second_options' => ['label' => 'Repeat Password'],
+            ])
             ->getForm(); 
         return $form;
     }
 
-    private function sendNewAccountEmail($member, $password_type='imperial', $plain_password='')
+    /**
+     * @param Member $member
+     */
+    private function sendNewAccountEmail($member)
     {
         $mailer = $this->get('icse.mailer');
         $mailer->setTemplate('IcseMembersBundle:Email:account_created.html.twig')
-            ->setBodyFields([
-                'first_name' => $member->getFirstName(),
-                'username' => $member->getUsername(),
-                'email' => $member->getEmail(),
-                'password_type' => $password_type,
-                'plain_password' => $plain_password,
-            ])
+            ->setBodyFields(['member' => $member])
             ->setSubject('ICSE Online Account Created')
             ->send($member->getEmail(), $member->getFirstName());
     }
 
-    private function sendTempPasswordEmail($member, $plain_password='')
+    /**
+     * @param Member $member
+     */
+    private function sendTempPasswordEmail($member)
     {
         $mailer = $this->get('icse.mailer');
         $mailer->setTemplate('IcseMembersBundle:Email:temporary_password.html.twig')
-            ->setBodyFields([
-                'first_name' => $member->getFirstName(),
-                'username' => $member->getUsername(),
-                'email' => $member->getEmail(),
-                'plain_password' => $plain_password,
-            ])
+            ->setBodyFields(['member' => $member])
             ->setSubject('ICSE Account Password Reset')
             ->send($member->getEmail(), $member->getFirstName());
     }
 
-    private function isValidEmail($input)
+    /**
+     * @param Member $member
+     */
+    private function applyPasswordOp($member)
     {
-        $emailConstraint = new \Symfony\Component\Validator\Constraints\Email;
-        $emailConstraint->checkMX = true;
-        $errorList = $this->get('validator')->validateValue($input, $emailConstraint);
-        return count($errorList) == 0;
+        $op = $member->getPasswordOperation();
+
+        if ($op == Member::PASSWORD_NO_CHANGE) return;
+
+        if ($op == Member::PASSWORD_IMPERIAL)
+        {
+            $member->setPassword(null);
+            $member->setSalt(null);
+            return;
+        }
+
+        if ($op == Member::PASSWORD_RANDOM)
+        {
+            $member->setPlainPassword(Tools::randString(15));
+        }
+        else if ($op == Member::PASSWORD_SET)
+        {
+            if (strlen($member->getPlainPassword()) < 8)
+            {
+                throw new \InvalidArgumentException("Password must be at least 8 characters");
+            }
+        }
+        else
+        {
+            throw new \InvalidArgumentException("Invalid password type");
+        }
+
+        $member->setSalt(Tools::randString(40));
+        $encoder = $this->get('security.encoder_factory')->getEncoder($member);
+        $pass_hash = $encoder->encodePassword($member->getPlainPassword(), $member->getSalt());
+        $member->setPassword($pass_hash);
+    }
+
+    private function handleBatchRequest($request)
+    {
+        $form = $this->getBatchUploadForm();
+        $form->handleRequest($request);
+        if ($form->isValid())
+        {
+            $file = $form->getData()['csv_file'];
+            return $this->updateMembersFromCSV($file);
+        }
+        else
+        {
+            return $this->get('ajax_response_gen')->returnFail($form);
+        }
     }
 
     protected function putData($request, $member)
     {
+        if (isset($request->files->get('form')['csv_file']))
+        {
+            return $this->handleBatchRequest($request);
+        }
+
         /* @var $member Member */
         $is_new_account = ($member->getID() === null);
         $form = $this->getForm($member);
-        $form->submit($request);
+        $form->handleRequest($request);
 
-        $password_type = $form->get('password_choice')->getData();
-        $plain_password = '';
-        
-        if ($password_type == 'no_change') {
-        
-        } else if ($password_type == 'imperial') {
-            $member->setSalt(null);
-            $member->setPassword(null);
-        } else { // set a password
-            if ($password_type == 'random') {
-                $plain_password = Tools::randString(15);
-            } else if ($password_type == 'set') {
-                $plain_password = $form->get('plain_password')->getData();
-                if (strlen($plain_password) < 8) {
-                    $form->addError(new FormError("Password must be at least 8 characters"));
-                }
-            } else {
-                $form->addError(new FormError("Invalid password type"));
-            }
-
-            if ($form->isValid()) {
-                $member->setSalt(Tools::randString(40));
-                $encoder = $this->get('security.encoder_factory');  
-                $pass_hash = $encoder->getEncoder($member)->encodePassword($plain_password, $member->getSalt());
-                $member->setPassword($pass_hash);
-            }
- 
+        try
+        {
+            $this->applyPasswordOp($member);
+        }
+        catch (\InvalidArgumentException $e)
+        {
+            $form->addError(new FormError($e->getMessage()));
         }
 
         $em = $this->getDoctrine()->getManager();
@@ -164,24 +197,31 @@ class MembersController extends EntityAdminController
 
             if ($is_new_account)
             {
-                $this->sendNewAccountEmail($member, $password_type, $plain_password);
+                $this->postAddNewMember($member);
             }
-            else if ($password_type == 'random')
+            else if ($member->getPasswordOperation() == Member::PASSWORD_RANDOM)
             {
-                $this->sendTempPasswordEmail($member, $plain_password);
+                $this->sendTempPasswordEmail($member);
             }
 
             return $this->get('ajax_response_gen')->returnSuccess();
-        } else {
+        }
+        else
+        {
             if ($em->contains($member)) $em->refresh($member);
             return $this->get('ajax_response_gen')->returnFail($form);
         }  
     }
 
+    private function postAddNewMember($member)
+    {
+        $this->sendNewAccountEmail($member);
+    }
+
     private function getBatchUploadForm()
     {
         return $this->createFormBuilder()
-            ->add('csv_file', 'file', array('label' => 'CSV File'))
+            ->add('csv_file', 'file')
             ->getForm();
     }
 
@@ -192,115 +232,44 @@ class MembersController extends EntityAdminController
         ];
     }
 
-    private function generateMembersFromCSV(Request $request, File $csv_file)
+    private function updateMembersFromCSV(File $csv_file)
     {
-        $file_handle = fopen($csv_file->getPathname(), 'r');
-        $csv_row = fgetcsv($file_handle);
-        $line_number = 1;
-        $next_csv_line_is_heading = true;
-        if (!$csv_row)
+        $parser = $this->get('icse.members_report_parser');
+        $em = $this->getDoctrine()->getManager();
+        $repo = $this->getDoctrine()->getRepository('IcseMembersBundle:Member');
+
+        try
         {
-            return $this->get('ajax_response_gen')->returnFail("Nothing in file");
+            foreach ($parser->generateMembersFromCSV($csv_file->getPathname()) as $generated_member)
+            {
+                /** @var Member $generated_member */
+                /** @var Member $member */
+                $member = $repo->findOneByUsername($generated_member->getUsername());
+                if ($member === null) $member = $repo->findOneByEmail($generated_member->getEmail());
+                if ($member === null)
+                {
+                    $member = $generated_member;
+
+                    $errors = $this->get('validator')->validate($member);
+                    if (count($errors) > 0) throw new \Exception((string)$errors);
+
+                    $em->persist($member);
+                    $em->flush();
+                    $this->postAddNewMember($member);
+                }
+                else
+                {
+                    $member->setLastPaidMembershipOn(max($member->getLastPaidMembershipOn(), $generated_member->getLastPaidMembershipOn()));
+                    $member->setActive(true);
+                }
+            }
         }
-
-        $dm = $this->getDoctrine();
-        $em = $dm->getManager();
-        $member_repo = $dm->getRepository('IcseMembersBundle:Member');
-
-        while ($csv_row)
+        catch (\Exception $e)
         {
-            if (count($csv_row) > 1) // is csv line
-            {
-                if ($next_csv_line_is_heading)
-                {
-                    $headings = array_flip($csv_row);
-                    try {
-                        $date_index = Tools::arrayGet($headings, 'Date');
-                        $login_index = Tools::arrayGet($headings, 'Login');
-                        $first_name_index = Tools::arrayGet($headings, 'First Name');
-                        $last_name_index = Tools::arrayGet($headings, 'Last Name');
-                        $email_index = Tools::arrayGet($headings, 'Email');
-                    } catch (\UnexpectedValueException $e) {
-                        return $this->get('ajax_response_gen')->returnFail("Line ".$line_number.": CSV headings not as expected.");
-                    }
-                    $next_csv_line_is_heading = false;
-                }
-                else // is data line
-                {
-                    $member = $member_repo->findOneBy(['username' => $csv_row[$login_index]]);
-                    if ($member === null) $member = $member_repo->findOneBy(['email' => $csv_row[$email_index]]);
-                    if ($member === null)
-                    {
-                        $member = new Member();
-                        $is_new = true;
-                    }
-                    else
-                    {
-                        $is_new = false;
-                    }
-
-                    try
-                    {
-                        if ($is_new)
-                        {
-                            $member->setFirstName($csv_row[$first_name_index]);
-                            $member->setLastName($csv_row[$last_name_index]);
-                            $member->setUsername($csv_row[$login_index]);
-                            $member->setEmail($csv_row[$email_index]);
-                            $member->setRole(1);
-                            $member->setSalt(null);
-                            $member->setPassword(null);
-
-                            if (!$member->getFirstName() or !$member->getLastName() or !$member->getUsername() or !$this->isValidEmail($member->getEmail()))
-                            {
-                                throw new \UnexpectedValueException("Field empty or invalid");
-                            }
-                        }
-
-                        if (strlen($csv_row[$date_index]) != 10) throw new \UnexpectedValueException("Unexpected date format " . strlen($csv_row[$date_index]));
-
-                        $new_payment_date = \DateTime::createFromFormat('d/m/Y', $csv_row[$date_index]);
-                        $member->setLastPaidMembershipOn(max($member->getLastPaidMembershipOn(), $new_payment_date));
-                        $member->setActive(true);
-                    }
-                    catch (\UnexpectedValueException $e)
-                    {
-                        return $this->get('ajax_response_gen')->returnFail("Error at line " . $line_number . " " . $e->getMessage());
-                    }
-
-                    if ($is_new)
-                    {
-                        $em->persist($member);
-                        $em->flush();
-                        $this->sendNewAccountEmail($member, 'imperial');
-                    }
-                }
-            }
-            else // not csv line
-            {
-                $next_csv_line_is_heading = true;
-            }
-
-            $csv_row = fgetcsv($file_handle);
-            $line_number += 1;
+            return $this->get('ajax_response_gen')->returnFail($e->getMessage());
         }
 
         $em->flush();
         return $this->get('ajax_response_gen')->returnSuccess();
     }
-
-    public function createAction(Request $request)
-    {
-        $uploadedFiles = $request->files->get('form');
-        if (isset($uploadedFiles['csv_file']))
-        {
-            return $this->generateMembersFromCSV($request, $uploadedFiles['csv_file']);
-        }
-        else
-        {
-            $member = new Member();
-            return $this->putData($request, $member);
-        }
-    }
-
 }

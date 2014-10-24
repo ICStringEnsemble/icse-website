@@ -18,15 +18,17 @@
     }
 
     function fileInputToButton(input){
-        var wrapper = $('<span>', {
-            class: 'fileinput-button-wrapper ' + input.attr('class')
-        });
-        wrapper.append($('<span>', {
-            text: input.data('label')
-        }));
-        wrapper.insertAfter(input);
-        wrapper.button();
-        input.detach().appendTo(wrapper);
+        if (input.data('label')) {
+            var wrapper = $('<span>', {
+                class: 'fileinput-button-wrapper ' + input.attr('class')
+            });
+            wrapper.append($('<span>', {
+                text: input.data('label')
+            }));
+            wrapper.insertAfter(input);
+            wrapper.button();
+            input.detach().appendTo(wrapper);
+        }
     }
 
     /* Misc Initialisation */
@@ -318,6 +320,7 @@
             if ($(this).is(':radio, :checkbox')) {
                 if (typeof value === 'boolean') $(this).prop('checked', value);
             } else {
+                if (typeof value === 'boolean') value = value ? 1 : 0;
                 $(this).val(value);
                 if ($(this).is('select')) $(this).trigger('change');
             }

@@ -6,10 +6,11 @@ class Tools
 {
     public static function arrayGet($array, $index) {
         if (isset($array[$index])) {
-            return $array[$index];
+            $val = $array[$index];
         } else {
             throw new \UnexpectedValueException("\"" . $index . "\" does not exist in array."); 
         }
+        return $val;
     }
 
     public static function randString($length) {

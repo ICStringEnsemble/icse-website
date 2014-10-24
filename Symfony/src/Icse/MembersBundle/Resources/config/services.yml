@@ -36,6 +36,10 @@ services:
         class: Icse\MembersBundle\Service\CalendarEvents
         arguments: [@doctrine.orm.entity_manager]
 
+    icse.members_report_parser:
+        class: Icse\MembersBundle\Service\MembersReportParser
+#        arguments: [@doctrine.orm.entity_manager]
+
     icse.form.type.time12:
         class: Icse\MembersBundle\Form\Type\TimeType
         tags:
