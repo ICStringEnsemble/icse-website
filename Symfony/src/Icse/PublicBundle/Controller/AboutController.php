@@ -17,9 +17,25 @@ class AboutController extends Controller
         return ['text' => $section->getText(), 'image' => $section->getPicture()];
     }
 
+    private function nthYearOfIcse()
+    {
+        $icse_start = new \DateTime("2004-02-01");
+        $today = new \DateTime();
+        $interval = $today->diff($icse_start);
+        $years = $interval->format('%y');
+
+        $formatter = new \NumberFormatter('en_GB', \NumberFormatter::SPELLOUT);
+        $formatter->setTextAttribute(\NumberFormatter::DEFAULT_RULESET, "%spellout-ordinal");
+
+        return $formatter->format($years);
+    }
+
+
     public function ensembleAction()
     {
         $section = $this->getSiteSection('about_ensemble');
+        $section = str_replace('__NTH_YEAR__', $this->nthYearOfIcse(), $section);
+
         return $this->render('IcsePublicBundle:About:generic_page.html.twig', [
             'section' => $section,
             'pageTitle' => 'About the Ensemble',
