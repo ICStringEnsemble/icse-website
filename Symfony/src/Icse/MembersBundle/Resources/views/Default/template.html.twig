@@ -6,6 +6,7 @@
 {% set members_nav_items = {
         __main__:            {},
         home:                {label: 'Home',               fa_icon:'fa-home',           url: path('IcseMembersBundle_home')},
+        newsletters:         {label: 'Newsletters',        fa_icon:'fa-newspaper-o',    url: path('IcseMembersBundle_past_newsletters')},
         calendar:            {label: 'Calendar',           fa_icon:'fa-calendar',       url: path('IcseMembersBundle_calendar')},
         practice_parts:      {label: 'Practice Parts',     fa_icon:'fa-file-text-o',    url: path('IcseMembersBundle_practice_parts')},
         __admin__:           {label: 'Admin', role: 'ROLE_ADMIN'},
@@ -31,15 +32,22 @@
 {% block stylesheets %}
 {{ parent() }}
 {% stylesheets 
-  '@IcseMembersBundle/Resources/style/main.scss'
-  '@IcseMembersBundle/Resources/style/upload.scss'
-  filter='compass,css_url_rewrite,?uglifycss'
-  output='bundles/icsemembers/css/main.css'
+    '@IcseMembersBundle/Resources/style/main.scss'
+    '@IcseMembersBundle/Resources/style/upload.scss'
+    filter='compass,css_url_rewrite,?uglifycss'
+    output='bundles/icsemembers/css/main.css'
 %}
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
-{% endstylesheets %} 
+{% endstylesheets %}
+{% stylesheets
+    '@IcseMembersBundle/Resources/style/email.scss'
+    filter='compass,css_url_rewrite,?uglifycss'
+    output='bundles/icsemembers/css/email.css'
+%}
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+{% endstylesheets %}
 <link rel="stylesheet" type="text/css" media="all" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/humanity/jquery-ui.css" />
-<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block javascripts %}

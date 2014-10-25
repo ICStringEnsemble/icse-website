@@ -484,19 +484,24 @@ ul.entity_main_buttons, ul.email_buttons {
     }
 }
 
-#practice_parts_page {
+#practice_parts_page, #past_newsletters_page {
     h2 {
         overflow: hidden;
         margin-bottom: 0.7em;
+        position: relative;
 
         .title {
             font-size: 1.2em;
+            padding-top: 0.5em;
             float: left;
         }
-        .starts_at {
+        .starts_at, .info {
             font-size: 0.7em;
             color: #928777;
             float: right;
+            position: absolute;
+            bottom: -0.1em;
+            right: 0;
         }
     }
 }

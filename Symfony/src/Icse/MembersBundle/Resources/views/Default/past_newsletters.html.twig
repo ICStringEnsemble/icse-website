@@ -1,0 +1,37 @@
+{% extends 'IcseMembersBundle:Default:template.html.twig' %}
+
+{% set pageTitle = 'Newsletters' %}
+{% set currentSubSection = 'newsletters' %}
+
+{% block content %}
+
+<h1>Newsletters</h1>
+
+<div id="past_newsletters_page">
+
+{% for n in newsletters %}
+
+    {% if n.type == constant('TYPE_MEMBERS', n) %}
+        {% set mailinglist = 'members' %}
+    {% elseif n.type == constant('TYPE_PUBLIC', n) %}
+        {% set mailinglist = 'public' %}
+    {% else %}
+        {% set mailinglist = 'none' %}
+    {% endif %}
+
+    <h2>
+        <div class="title">{{ n.subject }}</div>
+        <div class="info">Sent by {{ n.sentBy.firstName }} on {{ n.sentAt | date("l jS F Y, g:ia") }}, to the {{ mailinglist }} list</div>
+    </h2>
+
+    {% embed 'IcseMembersBundle:Email:template.html.twig' with {to_embed: true, mailinglist: mailinglist} %}
+        {% block content %}
+            {{ n.body | raw }}
+        {% endblock %}
+    {% endembed %}
+
+{% endfor %}
+
+</div>
+
+{% endblock %}

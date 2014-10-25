@@ -12,4 +12,15 @@ use Doctrine\ORM\EntityRepository;
  */
 class SentNewsletterRepository extends EntityRepository
 {
+    public function findLastNToMailinglist($n=1)
+    {
+        return $this->getEntityManager()
+            ->createQuery('SELECT n
+                           FROM IcseMembersBundle:SentNewsletter n
+                           WHERE n.dest = :dest_id
+                           ORDER BY n.sent_at DESC')
+            ->setParameter('dest_id', SentNewsletter::DEST_MAILINGLIST)
+            ->setMaxResults($n)
+            ->getResult();
+    }
 }

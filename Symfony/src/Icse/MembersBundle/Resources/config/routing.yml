@@ -6,6 +6,10 @@ IcseMembersBundle_home:
     pattern:  /members
     defaults: { _controller: IcseMembersBundle:Default:index }
 
+IcseMembersBundle_past_newsletters:
+    pattern:  /members/newsletters
+    defaults: { _controller: IcseMembersBundle:PastNewsletters:index }
+
 IcseMembersBundle_calendar:
     pattern:  /members/calendar
     defaults: { _controller: IcseMembersBundle:Default:calendar }

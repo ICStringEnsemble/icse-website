@@ -4,15 +4,8 @@
 {% set currentSubSection = 'sendemail' %}
 
 {% block stylesheets %}
-<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsemembers/lib/tagit/css/jquery.tagit.css') }}" />
 {{ parent() }}
-{% stylesheets
-    '@IcseMembersBundle/Resources/style/email.scss'
-    filter='compass,css_url_rewrite,?uglifycss'
-    output='bundles/icsemembers/css/email.css'
-%}
-<link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
-{% endstylesheets %}
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsemembers/lib/tagit/css/jquery.tagit.css') }}" />
 {% endblock stylesheets %}
 
 {% block javascripts %}
