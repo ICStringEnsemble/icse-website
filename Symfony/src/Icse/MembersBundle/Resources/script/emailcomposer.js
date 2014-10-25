@@ -84,8 +84,8 @@
 
     var email_options;
     var email_options_pane = $('#email_options_pane');
-    var mailing_list_radios = email_options_pane.find('input[name=mailing_list]');
-    var send_to_radios = email_options_pane.find('input[name=send_to_option]');
+    var mailing_list_radios = email_options_pane.find("input[name='form[mailing_list]']");
+    var send_to_radios = email_options_pane.find("input[name='form[send_to_option]']");
 
     var save_draft = function(){};
     var save_options = function(){};
@@ -193,11 +193,8 @@
     });
 
     function getEmailDataForPOST(){
-        var data = {
-            body: editor.ckeditorGet().getData()
-        };
-        $.extend(data, email_options);
-        return data;
+        email_options_pane.find('#form_body').val(editor.ckeditorGet().getData());
+        return email_options_pane.find('form').serialize();
     }
 
     $('button.preview').click(function(){

@@ -32,7 +32,7 @@
     {{ join_intro }}
     {% endautoescape %}
 
-    <form {% if freshersfair %}class="freshersfair"{% endif %} id="join_us" action="" method="post" {{ form_enctype(form) }} >
+    <form class="standard{{ freshersfair ? ' freshersfair' }}" id="join_us" action="" method="post" {{ form_enctype(form) }} >
         <div class="global_errors">
             {{ form_errors(form) }}
         </div>

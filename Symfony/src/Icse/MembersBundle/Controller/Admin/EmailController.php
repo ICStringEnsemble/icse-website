@@ -18,9 +18,14 @@ class EmailController extends Controller
     ];
 
     private static $NEWSLETTER_TYPE_MAP = [
-        'members' => SentNewsletter::MEMBERS_NEWSLETTER,
-        'public' => SentNewsletter::PUBLIC_NEWSLETTER,
-        'none' => SentNewsletter::UNDEFINED_NEWSLETTER,
+        'members' => SentNewsletter::TYPE_MEMBERS,
+        'public' => SentNewsletter::TYPE_PUBLIC,
+        'none' => SentNewsletter::TYPE_OTHER,
+    ];
+
+    private static $NEWSLETTER_DEST_MAP = [
+        'mailing_list' => SentNewsletter::DEST_MAILINGLIST,
+        'other' => SentNewsletter::DEST_OTHER,
     ];
 
     public function routerAction(Request $request, $arg)
@@ -46,30 +51,33 @@ class EmailController extends Controller
         $email_params = [
             'upcoming_rehearsals' => $upcoming_rehearsals,
             'mailinglist' => 'all',
+            'form' => $this->getEmailForm()->createView()
         ];
-
-        $draft_body = '';
-        if ($draft_body)
-        {
-            $email_params['email_body'] = $draft_body;
-        }
 
         return $this->render('IcseMembersBundle:Admin:email.html.twig', $email_params);
     }
 
-    private function getEmailForm()
+    private function getEmailForm($method='POST')
     {
-        $form = $this->get('form.factory')
-            ->createNamedBuilder(null, 'form', null, array('csrf_protection' => false))
-            ->add('body', 'text')
-            ->add('email_subject', 'text')
-            ->add('mailing_list', 'choice', array(
-                'choices'   => ['members'=>'', 'public'=>'', 'none'=>'']
-            ))
-            ->add('send_to_option', 'choice', array(
-                'choices'   => ['mailing_list'=>'', 'other'=>'']
-            ))
-            ->add('send_to_address', 'text')
+        $form = $this->createFormBuilder()
+            ->setMethod($method)
+            ->add('body', 'hidden')
+            ->add('email_subject', 'text', [
+                'data' => 'ICSE Weekly Update',
+            ])
+            ->add('mailing_list', 'choice', [
+                'choices'   => ['members'=>'Members', 'public'=>'Public', 'none'=>'Neither'],
+                'expanded' => true,
+                'data' => 'members',
+            ])
+            ->add('send_to_option', 'choice', [
+                'choices'   => ['mailing_list'=>'Straight to the mailing list', 'other'=>'Just to: '],
+                'expanded' => true,
+                'data' => 'mailing_list',
+            ])
+            ->add('send_to_address', 'hidden', [
+                'data' => 'icse@imperial.ac.uk',
+            ])
             ->getForm();
         return $form;
     }
@@ -95,7 +103,7 @@ class EmailController extends Controller
 
     public function previewAction(Request $request)
     {
-        $form = $this->getEmailForm();
+        $form = $this->getEmailForm('GET');
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -116,6 +124,7 @@ class EmailController extends Controller
         $newsletter->setSentAt(new \DateTime);
         $newsletter->setSentBy($this->get('security.context')->getToken()->getUser());
         $newsletter->setType(self::$NEWSLETTER_TYPE_MAP[$data['mailing_list']]);
+        $newsletter->setDest(self::$NEWSLETTER_DEST_MAP[$data['send_to_option']]);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($newsletter);

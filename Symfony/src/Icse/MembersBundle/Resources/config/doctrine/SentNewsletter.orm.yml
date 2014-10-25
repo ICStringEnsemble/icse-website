@@ -11,6 +11,8 @@ Icse\MembersBundle\Entity\SentNewsletter:
     fields:
         type:
             type: integer
+        dest:
+            type: integer
         subject:
             type: string
             length: 255

@@ -9,6 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SentNewsletter
 {
+    const TYPE_OTHER = 0;
+    const TYPE_MEMBERS = 1;
+    const TYPE_PUBLIC = 2;
+
+    const DEST_OTHER = 0;
+    const DEST_MAILINGLIST = 1;
 
     /**
      * @var integer
@@ -20,9 +26,10 @@ class SentNewsletter
      */
     private $type;
 
-    const UNDEFINED_NEWSLETTER = 0;
-    const MEMBERS_NEWSLETTER = 1;
-    const PUBLIC_NEWSLETTER = 2;
+    /**
+     * @var integer
+     */
+    private $dest;
 
     /**
      * @var string
@@ -168,5 +175,28 @@ class SentNewsletter
     public function getSentBy()
     {
         return $this->sent_by;
+    }
+
+    /**
+     * Set dest
+     *
+     * @param integer $dest
+     * @return SentNewsletter
+     */
+    public function setDest($dest)
+    {
+        $this->dest = $dest;
+
+        return $this;
+    }
+
+    /**
+     * Get dest
+     *
+     * @return integer 
+     */
+    public function getDest()
+    {
+        return $this->dest;
     }
 }

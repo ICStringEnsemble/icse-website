@@ -43,11 +43,13 @@
     {% endspaceless %}
 </ul>
 
+
 <div id="email_options_pane">
+{{ form_start(form) }}
     <div id="subject_row">
         <label class="row_label">Subject</label>
         <div class="row_body">
-            <input type="text" id="email_subject" name="email_subject" value="ICSE Weekly Update">
+            {{ form_widget(form.email_subject, {id: 'email_subject'}) }}
         </div>
     </div>
 
@@ -55,12 +57,10 @@
         <label class="row_label">Mailing List</label>
         <div class="row_body">
             {% spaceless %}
-            <input type="radio" id="mailing_list_members" name="mailing_list" value="members" checked>
-            <label for="mailing_list_members">Members</label>
-            <input type="radio" id="mailing_list_public" name="mailing_list" value="public">
-            <label for="mailing_list_public">Public</label>
-            <input type="radio" id="mailing_list_none" name="mailing_list" value="none">
-            <label for="mailing_list_none">Neither</label>
+            {% for opt in form.mailing_list %}
+                {{ form_widget(opt) }}
+                {{ form_label(opt) }}
+            {% endfor %}
             {% endspaceless %}
         </div>
     </div>
@@ -69,13 +69,15 @@
         <label class="row_label">Send</label>
         <div class="row_body">
             {% spaceless %}
-            <input type="radio" id="send_to_mailinglist" name="send_to_option" value="mailing_list" checked>
-            <label for="send_to_mailinglist">Straight to the mailing list</label>
-            <input type="radio" id="send_to_other" name="send_to_option" value="other">
-            <label for="send_to_other">Just to: </label><input hidden type="text" id="send_to_address" name="send_to_address" value="icse@imperial.ac.uk">
+                {% for opt in form.send_to_option %}
+                    {{ form_widget(opt) }}
+                    {{ form_label(opt) }}
+                {% endfor %}
+            {{ form_widget(form.send_to_address, {id:'send_to_address'}) }}
             {% endspaceless %}
         </div>
     </div>
+{{ form_end(form) }}
 </div>
 
 {% include 'IcseMembersBundle:Email:email_editable.html.twig' %}

@@ -23,7 +23,7 @@
     <li><a href="https://eactivities.union.ic.ac.uk/common/data_handler.php?id=1700&type=csv&name=Members_Report">Download membership list</a></li>
     <li>Upload the downloaded file:</li>
   </ul>
-    {{ form_start(csv_form, {'attr': {'id': 'import_csv_form'}}) }}
+    {{ form_start(csv_form, {'attr': {id: 'import_csv_form', class: 'standard'}}) }}
     {{ form_row(csv_form.csv_file) }}
     <input hidden type="submit" />
     {{ form_end(csv_form) }}

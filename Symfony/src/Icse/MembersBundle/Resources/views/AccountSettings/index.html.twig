@@ -15,7 +15,7 @@
 Your email address is currently set to {{ email }}. You can use this address to login to the members
 area, and we may also use it for contacting you.
 </p>
-<form method="post" action="">
+<form class="standard" method="post" action="">
   <div>
     {% if ceResponse['newemail'] is defined %}
     <p class="error_wide">{{ ceResponse['newemail'] }}</p>
@@ -45,7 +45,7 @@ You are currently using a separate ICSE password.
 {% endif %}
 </p>
 
-<form method="post" action="">
+<form class="standard" method="post" action="">
   <div>
     {% if cpResponse['oldpass'] is defined %}
     <p class="error_wide">{{ cpResponse['oldpass'] }}</p>

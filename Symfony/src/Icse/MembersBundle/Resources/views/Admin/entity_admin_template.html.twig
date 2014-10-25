@@ -91,7 +91,7 @@
 {% if not readOnly %}
 
 <div hidden id=edit_dialog >
-    {{ form_start(form, {attr: {id: 'edit_form', class: entityIdentifier},}) }}
+    {{ form_start(form, {attr: {id: 'edit_form', class: ['standard', entityIdentifier] | join(' ') },}) }}
     {% block edit_form_fields %}{% endblock %}
     {{ form_rest(form) }}
     <input hidden type="submit">
