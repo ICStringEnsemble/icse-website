@@ -4,7 +4,8 @@ namespace Common;
 
 class Tools
 {
-    public static function arrayGet($array, $index) {
+    public static function arrayGet($array, $index)
+    {
         if (isset($array[$index])) {
             $val = $array[$index];
         } else {
@@ -13,7 +14,8 @@ class Tools
         return $val;
     }
 
-    public static function randString($length) {
+    public static function randString($length)
+    {
         $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";	
         $size = strlen( $chars );
       $str = "";
@@ -23,6 +25,10 @@ class Tools
         return $str;
     }  
 
+    public static function asciify($str)
+    {
+        return iconv('utf-8', 'ASCII//TRANSLIT//IGNORE', $str);
+    }
 
     public static function slugify($text)
     {
@@ -33,27 +39,22 @@ class Tools
         $text = trim($text, '-');
      
         // transliterate
-        if (function_exists('iconv'))
-        {
-            $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
-        }
-     
+        $text = self::asciify($text);
+
         // lowercase
         $text = strtolower($text);
      
         // remove unwanted characters
         $text = preg_replace('~[^-\w]+~', '', $text);
      
-        if (empty($text))
-        {
-            return 'n-a';
-        }
-     
+        if (empty($text)) $text = 'n-a';
+
         return $text; 
     }
 
 
-    public static function getErrorMessages(\Symfony\Component\Form\Form $form) {
+    public static function getErrorMessages(\Symfony\Component\Form\Form $form)
+    {
         $errors = array();
         foreach ($form->getErrors() as $key => $error) {
             $template = $error->getMessageTemplate();

@@ -32,20 +32,5 @@
                 </ul>
             {% endfor %}
         {% endfor %}
-
-
-
-        {#{% for piece in pieces %}#}
-        {#<h2>{{ piece.name }}</h2>#}
-
-        {#<ul>#}
-          {#{% for part in piece.parts %}#}
-          {#<li><a href="{{ path('IcsePublicBundle_resource', {resource_type: 'legacypdf', url_resource_path: piece.folder ~ '/' ~ part.filename}) }}">{{ part.label }}</a></li>#}
-          {#{% endfor %}#}
-        {#</ul>#}
-        {#{% endfor %}#}
-
     </div>
-
-
 {% endblock %}

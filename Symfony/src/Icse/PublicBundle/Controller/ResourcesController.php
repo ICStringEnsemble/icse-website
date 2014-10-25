@@ -28,6 +28,7 @@ class ResourcesController extends Controller
         $response->headers->set('content-type', $mime_type);
 
         if (is_null($name)) $name = basename($path);
+        $name = Tools::asciify($name);
 
         if ($download === true)
         {
