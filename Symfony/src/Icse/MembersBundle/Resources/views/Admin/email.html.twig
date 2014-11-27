@@ -1,4 +1,4 @@
-{% extends 'IcseMembersBundle:Default:template.html.twig' %}
+{% extends 'IcseMembersBundle:Admin:template.html.twig' %}
 
 {% set pageTitle = 'Send Email' %}  
 {% set currentSubSection = 'sendemail' %}
@@ -10,22 +10,12 @@
 
 {% block javascripts %}
 {{ parent() }}
-<script src="//cdn.ckeditor.com/4.4.3/standard-all/ckeditor.js"></script>
-<script src="{{ asset('bundles/icsemembers/lib/ckeditor/adapters/jquery.js') }}"></script>
 <script src="{{ asset('bundles/icsepublic/lib/js/jquery.storageapi.min.js') }}"></script>
 <script src="{{ asset('bundles/icsemembers/lib/tagit/js/tag-it.min.js') }}"></script>
 {% endblock javascripts %}
 
 {% block content %}
-<a hidden id="ckeditor_localdir" href="{{ asset('bundles/icsemembers/lib/ckeditor/', version=false) }}"></a>
-
-<h1>
-    {% set page_nav_item = members_nav_items[currentSubSection] %}
-    {% if page_nav_item.fa_icon is defined %}
-        <i class="fa fa-fw {{ page_nav_item.fa_icon }}"></i>
-    {% endif %}
-    Send Email
-</h1>
+{{ parent() }}
 
 <ul class="email_buttons">
     {% spaceless %}
@@ -78,6 +68,7 @@
 <div id="preview_dialog" data-base-url="{{ path('IcseMembersBundle_sendemail', {'arg': 'preview'}) }}"></div>
 
 {% javascripts
+'@IcseMembersBundle/Resources/script/doceditor.js'
 '@IcseMembersBundle/Resources/script/emailcomposer.js'
 filter='?uglifyjs2'
 output='bundles/icsemembers/js/emailcomposer.js'

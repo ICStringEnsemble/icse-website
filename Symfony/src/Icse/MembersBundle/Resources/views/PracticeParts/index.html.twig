@@ -1,12 +1,10 @@
 {% extends 'IcseMembersBundle:Default:template.html.twig' %}
 
-{% set pageTitle = 'Practice Parts' %}  
 {% set currentSubSection = 'practice_parts' %}
 
 {% block content %}
     <div id="practice_parts_page">
-
-        <h1>Practice Parts</h1>
+        {{ parent() }}
 
         {% if events is not empty %}
         <p>Well done for checking this page out! Parts for our upcoming concert{{ events|length > 1 ? 's' }} can be found below, for you to practise at any time.</p>

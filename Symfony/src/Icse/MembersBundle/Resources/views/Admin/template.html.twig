@@ -1,0 +1,8 @@
+{% extends 'IcseMembersBundle:Default:template.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="//cdn.ckeditor.com/4.4.3/standard-all/ckeditor.js"></script>
+    <script src="{{ asset('bundles/icsemembers/lib/ckeditor/adapters/jquery.js') }}"></script>
+{% endblock javascripts %}
+

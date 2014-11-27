@@ -29,6 +29,11 @@
         exitimpersonation:   {label: 'Exit Impersonation',                              url: path('IcseMembersBundle_home', {_switch_user: '_exit'}), role: 'ROLE_PREVIOUS_ADMIN'},
 } %}
 
+{% set page_nav_item = (currentSubSection in members_nav_items|keys) ? members_nav_items[currentSubSection] : null %}
+{% if page_nav_item is not null %}
+{% set pageTitle = pageTitle | default(page_nav_item.label) %}
+{% endif %}
+
 {% block stylesheets %}
 {{ parent() }}
 {% stylesheets 
@@ -120,9 +125,16 @@
     {% endfor %}
   </ul>
 </div>
+<a hidden id="bundles_basedir" href="{{ asset('bundles/', version=false) }}"></a>
 <div id="section_container">
 <section>
 {% block content %}
+    {% if pageTitle is defined %}
+    <h1>
+        {%- if page_nav_item.fa_icon is defined %}<i class="fa fa-fw {{ page_nav_item.fa_icon }}"></i>{% endif %}
+        {{ pageTitle }}
+    </h1>
+    {% endif %}
 {% endblock %}
 </section>
 </div>

@@ -773,3 +773,12 @@ span.membership_date {
         margin-bottom: 0.6em;
     }
 }
+
+.cke_button_icon.cke_button__headingbutton_icon {
+    display: none;
+}
+
+.cke_button_label.cke_button__headingbutton_label {
+    display: inline;
+    padding: 0;
+}

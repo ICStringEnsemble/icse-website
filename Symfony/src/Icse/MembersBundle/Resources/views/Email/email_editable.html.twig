@@ -3,7 +3,7 @@
 {% set to_embed = true %}
 
 {% block content %}
-<div id="editable" contenteditable="true">
+<div id="editable" class="doceditor" contenteditable="true">
 {% if email_body is defined %}
 {{ email_body }}
 {% else %}

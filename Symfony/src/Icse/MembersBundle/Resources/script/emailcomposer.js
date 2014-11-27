@@ -4,37 +4,12 @@
     var preview_frame = $('#preview_dialog');
     var editor = $('#editable');
     var icse_email = $('#icse_email');
-    var ckeditor_localdir = $('#ckeditor_localdir').attr('href');
     preview_frame.dialog({
         autoOpen: false,
         modal: true,
         resizable: true,
         width: 800,
         height: 500
-    });
-
-    CKEDITOR.plugins.addExternal('webkit-span-fix', ckeditor_localdir + '/plugins/webkit-span-fix/', 'plugin.js');
-
-    editor.ckeditor(function(){}, {
-        extraPlugins : 'webkit-span-fix,sourcedialog,image2,entities',
-        customConfig : '',
-        extraAllowedContent: '*[id](*)',
-        toolbar :
-            [
-                { name: 'basicstyles', items : [ 'Bold','Italic','Underline','-','RemoveFormat' ] },
-                { name: 'paragraph', items : [  ] },
-                { name: 'insert', items : [ 'NumberedList','BulletedList', '-', 'Link', 'Image','HorizontalRule' ] },
-                '/',
-                { name: 'styles', items : [ 'Format' ] },
-                /*{ name: 'document', items : [ 'Save','NewPage','DocProps','Preview','Print','-','Templates' ] },*/
-                /*{ name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },*/
-                { name: 'editing', items : [ 'Sourcedialog', '-', 'Scayt' ] },
-                { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] }
-            ],
-        width: 490,
-        image2_alignClasses: [ 'image-left', 'image-center', 'image-right' ],
-        image2_captionedClass: 'image-captioned',
-        entities_processNumerical: true
     });
 
     function ui_confirm_and_do(msg, ok_txt, do_it) {
@@ -97,7 +72,7 @@
 
             if (draft_body) {
                 draft_body = $('<div>').append(draft_body);
-                var template_body = $('<div>').append(editor.ckeditorGet().getData());
+                var template_body = $('<div>').append(editor.icseDocEditor().getContent());
 
                 var new_rehearsals_section = template_body.find('#email_upcoming_rehearsals');
                 var draft_rehearsals_section = draft_body.find('#email_upcoming_rehearsals');
@@ -107,7 +82,7 @@
                     draft_body.append(new_rehearsals_section)
                 }
 
-                editor.ckeditorGet().setData(draft_body.html());
+                editor.icseDocEditor().setContent(draft_body.html());
             }
 
             email_options = draft_storage.get(['subject','mailing_list','send_to_option','send_to_address']);
@@ -127,7 +102,7 @@
         load_draft();
 
         save_draft = function() {
-            var body = editor.ckeditorGet().getData();
+            var body = editor.icseDocEditor().getContent();
             draft_storage.set('body', body);
             $('.saved_indicator').show();
         };
@@ -139,7 +114,7 @@
     }
 
     var typing_timer;
-    editor.ckeditorGet().on("change", function(){
+    editor.icseDocEditor().onChange(function(){
         $('.saved_indicator').hide();
         clearTimeout(typing_timer);
         typing_timer = setTimeout(save_draft, 1000);
@@ -193,7 +168,7 @@
     });
 
     function getEmailDataForPOST(){
-        email_options_pane.find('#form_body').val(editor.ckeditorGet().getData());
+        email_options_pane.find('#form_body').val(editor.icseDocEditor().getContent());
         return email_options_pane.find('form').serialize();
     }
 

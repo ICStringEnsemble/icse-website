@@ -1,4 +1,4 @@
-{% extends 'IcseMembersBundle:Default:template.html.twig' %}
+{% extends 'IcseMembersBundle:Admin:template.html.twig' %}
 
 {% set entityPlural = entityPlural | default(entitySingular ~ 's') %}
 {% set entitySingularTitle = entitySingular | title %}
@@ -38,13 +38,7 @@
 {% if allow_drop_files %}
 <div class="drop_mask" data-enabled="true"></div>
 {% endif %}
-<h1>
-    {% set page_nav_item = members_nav_items[currentSubSection] %}
-    {% if page_nav_item.fa_icon is defined %}
-        <i class="fa fa-fw {{ page_nav_item.fa_icon }}"></i>
-    {% endif %}
-    {{ pageTitle }}
-</h1>
+{{ parent() }}
 
 <ul class="entity_main_buttons">
 {% spaceless %}
@@ -113,6 +107,7 @@ Are you sure you want to permanently delete all of the selected {{ entityPlural 
 {% block extra_content %}{% endblock %}
 
 {% javascripts
+  '@IcseMembersBundle/Resources/script/doceditor.js'
   '@IcseMembersBundle/Resources/script/entityadmin.js'
   filter='?uglifyjs2'
   output='bundles/icsemembers/js/entityadmin.js'

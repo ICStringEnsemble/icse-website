@@ -92,7 +92,12 @@ class EventController extends EntityAdminController
             'required' => false,
             'mapped' => false,
         ])
-        ->getForm(); 
+        ->add('description', 'textarea', [
+            'required' => false,
+            'label' => 'Information',
+            'attr' => ['class' => 'doceditor'],
+        ])
+        ->getForm();
         return $form;
     }
 

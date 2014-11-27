@@ -1,6 +1,5 @@
 {% extends 'IcseMembersBundle:Default:template.html.twig' %}
 
-{% set pageTitle = 'Calendar' %}  
 {% set currentSubSection = 'calendar' %}  
 
 {% block stylesheets %}
@@ -14,8 +13,7 @@
 {% endblock %}
 
 {% block content %}
-
-<h1>Calendar</h1>
+{{ parent() }}
 
 <div id="calendar_div"></div>
 
