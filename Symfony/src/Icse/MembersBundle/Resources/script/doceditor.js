@@ -3,34 +3,43 @@
     var editors = $('.doceditor');
     var bundles_basedir = $('#bundles_basedir').attr('href');
 
-    var extra_plugins = 'sourcedialog,image2,entities';
+    var extra_plugins = 'sourcedialog,image2,entities,autogrow';
 
     ['webkit-span-fix', 'heading-button'].forEach(function(p){
         CKEDITOR.plugins.addExternal(p, bundles_basedir+'/icsemembers/lib/ckeditor/plugins/'+p+'/', 'plugin.js');
         extra_plugins += ',' + p;
     });
 
-    editors.ckeditor(function(){}, {
-        extraPlugins : extra_plugins,
-        customConfig : '',
-        extraAllowedContent: '*[id](*)',
-        toolbar :
-            [
-                { name: 'styles', items : [ 'HeadingButton' ] },
-                { name: 'basicstyles', items : [ 'Bold','Italic',/*'Underline',*/'-','RemoveFormat' ] },
-                /*{ name: 'document', items : [ 'Save','NewPage','DocProps','Preview','Print','-','Templates' ] },*/
-                /*{ name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },*/
-                { name: 'editing', items : [ 'Scayt', '-', 'Sourcedialog' ] },
-                '/',
-                { name: 'styles2', items : [ 'Format' ] },
-                { name: 'insert', items : [ 'NumberedList','BulletedList', '-', 'Link', 'Image','HorizontalRule' ] },
-                { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] },
-                //{ name: 'paragraph', items : [  ] },
-            ],
-        width: 490,
-        image2_alignClasses: [ 'image-left', 'image-center', 'image-right' ],
-        image2_captionedClass: 'image-captioned',
-        entities_processNumerical: true
+    editors.each(function(){
+        var source_plugin;
+        if ($(this).is('textarea')) {
+            source_plugin = 'Source'
+        } else {
+            source_plugin = 'Sourcedialog'
+        }
+
+        $(this).ckeditor(function(){}, {
+            extraPlugins : extra_plugins,
+            customConfig : '',
+            extraAllowedContent: '*[id](*)',
+            toolbar :
+                [
+                    { name: 'styles', items : [ 'HeadingButton' ] },
+                    { name: 'basicstyles', items : [ 'Bold','Italic',/*'Underline',*/'-','RemoveFormat' ] },
+                    /*{ name: 'document', items : [ 'Save','NewPage','DocProps','Preview','Print','-','Templates' ] },*/
+                    /*{ name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },*/
+                    { name: 'editing', items : [ 'Scayt', '-', source_plugin ] },
+                    '/',
+                    { name: 'styles2', items : [ 'Format' ] },
+                    { name: 'insert', items : [ 'NumberedList','BulletedList', '-', 'Link', 'Image','HorizontalRule' ] },
+                    { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] },
+                    //{ name: 'paragraph', items : [  ] },
+                ],
+            //width: 490,
+            image2_alignClasses: [ 'image-left', 'image-center', 'image-right' ],
+            image2_captionedClass: 'image-captioned',
+            entities_processNumerical: true
+        });
     });
 
     function IcseDocEditor(obj) {

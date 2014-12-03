@@ -184,7 +184,15 @@
 
     /* Dialogs */
 
-    $('#edit_dialog').dialog({
+    $.widget('ui.dialog', $.ui.dialog, {
+        _allowInteraction: function(event) {
+            return !!$(event.target).closest('[class*="cke"]').length || this._super(event);
+        }
+    });
+
+    var edit_dialog = $('#edit_dialog');
+
+    edit_dialog.dialog({
         autoOpen: false,
         modal: true,
         width: 500,
@@ -208,7 +216,10 @@
                 },
                 'class': 'cancel_button'
             }
-        ]
+        ],
+        resizeStop: function( event, ui ) {
+            edit_dialog.find('.doceditor').ckeditor().editor.execCommand('autogrow');
+        }
     });
 
     function deleteSelectedEntities(){
@@ -261,6 +272,14 @@
 
     $('.entity_main_buttons .loading_spinner').clone().prependTo('.ui-dialog-buttonset');
 
+
+    var form_elements_to_synchronise =
+        edit_form
+            .find('input, select, textarea')
+            .not(':button, :submit, :reset')
+            .not('input[name="_method"], input[name$="[_token]"]')
+        ;
+
     /* Button Handlers */
     function openCreateDialog(){
         $('.edit_dialog .ui-dialog-buttonset .submit_button .ui-button-text').html('Create');
@@ -268,8 +287,8 @@
         edit_form.attr('method', 'POST');
         edit_form.find('input[name="_method"]').val('POST');
         edit_form.attr('action', currentPath);
-        edit_form.find('input, textarea').not(':button, :submit, :reset, :hidden, :radio, :checkbox').val('');
-        edit_form.find('select').val('').trigger('change');
+        form_elements_to_synchronise.not(':radio, :checkbox').val('');
+        edit_form.find('select').trigger('change');
         edit_form.find('input').filter(':radio, :checkbox').prop('checked', false);
         edit_form.find('.error').remove();
         edit_form.find('.show_if_create').show();
@@ -293,7 +312,7 @@
         edit_form.find('.show_if_create').hide();
         edit_form.data('form_mode', 'edit');
         edit_form.attr('action', currentPath + '/' + entity.id);
-        edit_form.find('input, select, textarea').not(':button, :submit, :reset, :hidden').each(function(){
+        form_elements_to_synchronise.each(function(){
             var name_attr = $(this).attr('name');
             if (typeof name_attr === "undefined") return;
             var name_array = name_attr.split('[');
@@ -302,7 +321,6 @@
                 return value.split(']')[0];
             });
             var main_name = name_array[0];
-            console.log(main_name);
             var value = '';
             if (entity.hasOwnProperty(main_name)) {
                 value = entity[main_name];
