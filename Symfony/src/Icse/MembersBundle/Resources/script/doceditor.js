@@ -2,6 +2,7 @@
 
     var editors = $('.doceditor');
     var bundles_basedir = $('#bundles_basedir').attr('href');
+    var main_css = $('#main_stylesheet').attr('href');
 
     var extra_plugins = 'sourcedialog,image2,entities,autogrow';
 
@@ -11,11 +12,13 @@
     });
 
     editors.each(function(){
-        var source_plugin;
+        var source_plugin = 'Sourcedialog';
+        var contents_css = '';
+        var body_class = '';
         if ($(this).is('textarea')) {
             source_plugin = 'Source'
-        } else {
-            source_plugin = 'Sourcedialog'
+            contents_css = main_css;
+            body_class = 'icseeditorcontent';
         }
 
         $(this).ckeditor(function(){}, {
@@ -32,13 +35,15 @@
                     '/',
                     { name: 'styles2', items : [ 'Format' ] },
                     { name: 'insert', items : [ 'NumberedList','BulletedList', '-', 'Link', 'Image','HorizontalRule' ] },
-                    { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] },
+                    { name: 'tools', items : [ /*'Maximize',*/ 'ShowBlocks','-','About' ] },
                     //{ name: 'paragraph', items : [  ] },
                 ],
             //width: 490,
             image2_alignClasses: [ 'image-left', 'image-center', 'image-right' ],
             image2_captionedClass: 'image-captioned',
-            entities_processNumerical: true
+            entities_processNumerical: true,
+            contentsCss: contents_css,
+            bodyClass: body_class
         });
     });
 

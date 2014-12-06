@@ -8,7 +8,7 @@
 ] %}
 {% set allow_nav = no_nav is defined ? not no_nav : true %}
 <!DOCTYPE HTML>
-<html>
+<html class="main">
 {% spaceless %}
 <head>
 <title>
@@ -32,7 +32,7 @@
   filter='compass,css_url_rewrite,?uglifycss'
   output='bundles/icsepublic/css/main.css'
 %}
-<link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
+<link id="main_stylesheet" rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}" />
 {% endstylesheets %}
 {% stylesheets 
   '@IcsePublicBundle/Resources/style/print.scss'
@@ -59,7 +59,7 @@
 
 {% endspaceless %}
 </head>
-<body>
+<body class="main">
   <div id="above_footer" {% block aboveFooterAttrs %}{% endblock %}>
     <header>
     <hgroup>

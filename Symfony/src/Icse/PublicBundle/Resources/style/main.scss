@@ -14,10 +14,12 @@ $nav_colour2: #333;
 $nav_colour3: #aaa;
 
 html, body {
-    height: 100%;
+    &.main {
+        height: 100%;
+    }
 }
 
-html {
+html.main {
     overflow-y: scroll;
 
     &.no-yscrollbar {
@@ -148,20 +150,17 @@ nav a {
 }
 
 .ui-widget {
-        font-size: 96% !important;
+    font-size: 96% !important;
 } 
 
-section, .ui-dialog {
+.ui-dialog {
     line-height: 1.5em;
 }
 
-section {
-    padding: 0 $page-side-padding;
-    padding-top:1em;
-    padding-bottom:0em;
-    float: left;
-    width: $page-width - 2 * $page-side-padding;
-    
+
+%generic_element_styles {
+    line-height: 1.5em;
+
     h1 {
         font-size: 1.6em;
         font-weight: bold;
@@ -194,21 +193,97 @@ section {
     }
 
 
-    p, ul {
+    p, ul, ol {
         margin-bottom: 1em;
         max-width: 714px;
     }
+}
 
-    .main_content ul, ol {
-        list-style: disc;
+%main_content_element_styles {
+    $section_bottom_margin: 1em;
+
+    p, pre {
+        margin-left: 0;
+        margin-right: 0;
+        margin-top: 0;
+        margin-bottom: $section_bottom_margin;
+    }
+
+    ul {
+        list-style-type:disc;
+    }
+
+    ol {
+        list-style-type:decimal;
+    }
+
+    ul, ol {
+        margin-top: 0.5em;
+        margin-bottom: $section_bottom_margin - 0.1em;
+        padding-left: 30px;
 
         li {
-            margin-left: 40px;
-            padding-left: 5px;
+            margin-left: 15px;
             margin-bottom: 0.5em;
+        }
+
+        ul, ol {
+            margin-bottom: 0.2em;
         }
     }
 
+    hr {
+        color: #643906;
+        background-color: #643906;
+        border: none;
+        height: 2px;
+        margin-bottom: 0.7em;
+
+        &+p, &+ul, &+ol {
+            margin-top: 1em;
+        }
+    }
+
+    strong {
+        font-weight: bold;
+    }
+
+    em {
+        font-style: italic;
+    }
+
+    sup {
+        vertical-align: super;
+        font-size: smaller;
+    }
+
+    sub {
+        vertical-align: sub;
+        font-size: smaller;
+    }
+}
+
+
+section {
+    padding: 0 $page-side-padding;
+    padding-top:1em;
+    padding-bottom:0em;
+    float: left;
+    width: $page-width - 2 * $page-side-padding;
+
+    @extend %generic_element_styles;
+
+    .main_content {
+        @extend %main_content_element_styles;
+    }
+
+}
+
+.icseeditorcontent {
+    margin: 20px;
+
+    @extend %generic_element_styles;
+    @extend %main_content_element_styles;
 }
 
 footer {
