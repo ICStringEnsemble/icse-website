@@ -374,4 +374,28 @@ class Image implements ResourceInterface
     {
         return $this->getInSlideshow();
     }
+
+    /**
+     * @ORM\PostPersist
+     */
+    public function upload()
+    {
+        $this->_upload();
+    }
+
+    /**
+     * @ORM\PreRemove
+     */
+    public function storeFilenameForRemove()
+    {
+        $this->_storeFilenameForRemove();
+    }
+
+    /**
+     * @ORM\PostRemove
+     */
+    public function removeUpload()
+    {
+        $this->_removeUpload();
+    }
 }

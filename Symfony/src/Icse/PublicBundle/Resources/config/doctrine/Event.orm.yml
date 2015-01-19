@@ -19,10 +19,10 @@ Icse\PublicBundle\Entity\Event:
             nullable: true 
         updated_at:
             type: datetime
-        facebook_status:
-            type: integer
         facebook_id:
             type: string
+        facebook_synced_at:
+            type: datetime
             nullable: true
     oneToMany:
         performances:

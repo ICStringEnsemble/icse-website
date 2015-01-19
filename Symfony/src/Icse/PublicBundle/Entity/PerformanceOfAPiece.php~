@@ -3,6 +3,8 @@
 namespace Icse\PublicBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Icse\PublicBundle\Entity\PieceOfMusic;
+use Icse\PublicBundle\Entity\Event;
 
 /**
  * Icse\PublicBundle\Entity\PerformanceOfAPiece
@@ -15,15 +17,25 @@ class PerformanceOfAPiece
     private $id;
 
     /**
-     * @var Icse\PublicBundle\Entity\PieceOfMusic
+     * @var Event
+     */
+    private $event;
+
+    /**
+     * @var PieceOfMusic
      */
     private $piece;
+
+    /**
+     * @var integer
+     */
+    private $sort_index;
 
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -33,51 +45,69 @@ class PerformanceOfAPiece
     /**
      * Set piece
      *
-     * @param Icse\PublicBundle\Entity\PieceOfMusic $piece
+     * @param PieceOfMusic $piece
      * @return PerformanceOfAPiece
      */
-    public function setPiece(\Icse\PublicBundle\Entity\PieceOfMusic $piece = null)
+    public function setPiece(PieceOfMusic $piece = null)
     {
         $this->piece = $piece;
-    
+
         return $this;
     }
 
     /**
      * Get piece
      *
-     * @return Icse\PublicBundle\Entity\PieceOfMusic 
+     * @return PieceOfMusic
      */
     public function getPiece()
     {
         return $this->piece;
     }
-    /**
-     * @var Icse\PublicBundle\Entity\Event
-     */
-    private $event;
-
 
     /**
      * Set event
      *
-     * @param Icse\PublicBundle\Entity\Event $event
+     * @param Event $event
      * @return PerformanceOfAPiece
      */
-    public function setEvent(\Icse\PublicBundle\Entity\Event $event = null)
+    public function setEvent(Event $event = null)
     {
         $this->event = $event;
-    
+
         return $this;
     }
 
     /**
      * Get event
      *
-     * @return Icse\PublicBundle\Entity\Event 
+     * @return Event
      */
     public function getEvent()
     {
         return $this->event;
+    }
+
+    /**
+     * Set sort_index
+     *
+     * @param integer $sortIndex
+     * @return PerformanceOfAPiece
+     */
+    public function setSortIndex($sortIndex)
+    {
+        $this->sort_index = $sortIndex;
+
+        return $this;
+    }
+
+    /**
+     * Get sort_index
+     *
+     * @return integer
+     */
+    public function getSortIndex()
+    {
+        return $this->sort_index;
     }
 }

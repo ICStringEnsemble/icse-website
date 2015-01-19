@@ -329,7 +329,7 @@
                     value = moment(parseInt(value)).format('h:mm a');
                     if (main_name == 'starts_at' && entity['is_start_time_known'] === false) value = '';
                 }
-                else if (typeof value == 'object') {
+                else if (typeof value == 'object' && value !== null) {
                     if (value instanceof Array) value = null;
                     else if ($(this).is('select')) value = value.id;
                     else value = value.name;

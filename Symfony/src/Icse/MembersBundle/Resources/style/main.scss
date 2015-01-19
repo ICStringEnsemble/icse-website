@@ -607,9 +607,11 @@ span.membership_date {
             overflow: hidden;
 
             li {
-                height: 1.5em;
+                min-height: 1.5em;
+                margin-left: 20px;
+                padding-left: 0;
                 padding-bottom: 0.2em;
-                list-style: disc inside;
+                list-style: disc outside;
 
                 &:hover {
                     cursor: grab;

@@ -11,13 +11,12 @@
         practice_parts:      {label: 'Practice Parts',     fa_icon:'fa-file-text-o',    url: path('IcseMembersBundle_practice_parts')},
         __admin__:           {label: 'Admin', role: 'ROLE_ADMIN'},
         rehearsaladmin:      {label: 'Rehearsals',         fa_icon:'fa-calendar-o',     url: path('IcseMembersBundle_rehearsaladmin')},
+        eventadmin:          {label: 'Events',             fa_icon:'fa-ticket',         url: path('IcseMembersBundle_eventadmin')},
         musicadmin:          {label: 'Music Library',      fa_icon:'fa-music',          url: path('IcseMembersBundle_musicadmin')},
         venueadmin:          {label: 'Venues',             fa_icon:'fa-building-o',     url: path('IcseMembersBundle_venueadmin')},
         images:              {label: 'Image Library',      fa_icon:'fa-picture-o',      url: path('IcseMembersBundle_imageadmin')},
         sendemail:           {label: 'Send Email',         fa_icon:'fa-envelope-o',     url: path('IcseMembersBundle_sendemail')},
         signuplist:          {label: 'Signups',            fa_icon:'fa-bullhorn',       url: path('IcseMembersBundle_signuplist')},
-        __devel__:           {label: 'In Development', role: 'ROLE_SUPER_ADMIN'},
-        eventadmin:          {label: 'Events',             fa_icon:'fa-ticket',         url: path('IcseMembersBundle_eventadmin')},
         __superadmin__:      {label: 'Super Admin', role: 'ROLE_SUPER_ADMIN'},
         memberslist:         {label: 'Members List',       fa_icon:'fa-users',          url: path('IcseMembersBundle_membersadmin')},
         committeelist:       {label: 'Committee',          fa_icon:'fa-university',     url: path('IcseMembersBundle_committee_edit')},
@@ -28,6 +27,7 @@
         logout:              {label: 'Logout',             fa_icon:'fa-sign-out',       url: path('IcseMembersBundle_logout')},
         exitimpersonation:   {label: 'Exit Impersonation',                              url: path('IcseMembersBundle_home', {_switch_user: '_exit'}), role: 'ROLE_PREVIOUS_ADMIN'},
 } %}
+        {#__devel__:           {label: 'In Development', role: 'ROLE_SUPER_ADMIN'},#}
 
 {% set page_nav_item = (currentSubSection in members_nav_items|keys) ? members_nav_items[currentSubSection] : null %}
 {% if page_nav_item is not null %}

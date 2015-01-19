@@ -38,6 +38,13 @@ class EventController extends EntityAdminController
         return $event;
     }
 
+    private function facebookStatusIcon(Event $x)
+    {
+        if (!$x->isFacebookEnabled()) return '-';
+        else if (!$x->isFacebookSynced()) return '<i class="fa fa-unlink"></i>';
+        else return '<i class="fa fa-check"></i>';
+    }
+
     protected function getListContent()
     {
         $entities = $this->repository()->findAllEventsDescUnknownFirst();
@@ -48,7 +55,7 @@ class EventController extends EntityAdminController
             'Time' => function(Event $x){return $x->isStartTimeKnown()? $x->getStartsAt()->format('g:ia') : "?";},
             'Where' => function(Event $x){return $x->getLocationName();},
             'Performances' => function(Event $x){return count($x->getPerformances());},
-            '<i class="fa fa-facebook-square"></i>' => function(Event $x){return $x->getFacebookStatusIcon();},
+//            '<i class="fa fa-facebook-square"></i>' => function(Event $x){return $this->facebookStatusIcon($x);},
             'Last updated' => function(Event $x){return $this->timeagoDate($x->getUpdatedAt()) . " by " .$x->getUpdatedBy()->getFirstName();},
         ];
         return ["fields" => $fields, "entities" => $entities];
@@ -118,7 +125,7 @@ class EventController extends EntityAdminController
         $fb_api = $this->get('acts.social_api.apis.facebook');
         $fb_api->authenticateWithCredentials($fb_page_token);
 
-        if ($event->getFacebookStatus() == Event::$SOCIAL_EVENT_NOT_CREATED)
+        if (!$event->isFacebookEnabled()) // Create new
         {
             $page_id = $this->container->getParameter('facebook_page_id');
             /** @noinspection PhpUndefinedMethodInspection */
@@ -135,7 +142,7 @@ class EventController extends EntityAdminController
             if ($fb_event_id)
             {
                 $event->setFacebookId($fb_event_id);
-                $event->setFacebookStatus(Event::$SOCIAL_EVENT_SYNCED);
+                $event->setFacebookSyncedAt(new \DateTime());
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($event);
                 $em->flush();
@@ -143,14 +150,28 @@ class EventController extends EntityAdminController
             }
             return $this->get('ajax_response_gen')->returnFail(['fb_error' => true]);
         }
-        return $this->get('ajax_response_gen')->returnSuccess();
+        else // Update existing
+        {
+//            $fb_ret = $fb_api->doUpdateEvent(
+//                $event->getFacebookId(),
+//                $event->getName(),
+//                "Some description",
+//                $event->getStartsAt()->format('c'),
+//                $event->getEndsAt()->format('c'),
+//                $event->getLocationName(),
+//                ''
+//            );
+//            $event->setFacebookSyncedAt(new \DateTime());
+
+            return $this->get('ajax_response_gen')->returnSuccess();
+        }
     }
 
     public function deleteAction($id)
         /* @var $event Event */
     {
         $event = $this->getEntityById($id);
-        if ($event->isSocialNetworkEnabled())
+        if ($event->isFacebookEnabled())
         {
             $request = $this->getRequest();
             $fb_page_token = $request->request->get('fb');
@@ -179,11 +200,6 @@ class EventController extends EntityAdminController
 
         $entity->setUpdatedAt(new \DateTime());
         $entity->setUpdatedBy($this->get('security.context')->getToken()->getUser());
-
-        if ($is_new_event)
-        {
-            $entity->setFacebookStatus(Event::$SOCIAL_EVENT_NOT_CREATED);
-        }
 
         $em = $this->getDoctrine()->getManager();
         if ($form->isValid())
