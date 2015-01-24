@@ -57,6 +57,11 @@ class Event
      * @var \DateTime
      */
     private $facebook_synced_at;
+    /**
+     * @var \DateTime
+     */
+    private $ends_at;
+
 
     /**
      * Constructor
@@ -125,16 +130,38 @@ class Event
      */
     public function getEndsAt()
     {
-        if ($this->starts_at == null)
+        return $this->ends_at;
+    }
+
+    public function getApproxEndsAt()
+    {
+        if ($this->ends_at !== null)
         {
-            return null;
+            return $this->ends_at;
         }
-        else
+        else if ($this->starts_at !== null)
         {
             $ends_at = clone $this->starts_at;
             $ends_at->modify('+3 hours');
             return $ends_at;
         }
+        else
+        {
+            return null;
+        }
+    }
+
+    /**
+     * Set ends_at
+     *
+     * @param \DateTime $endsAt
+     * @return Event
+     */
+    public function setEndsAt($endsAt)
+    {
+        $this->ends_at = $endsAt;
+
+        return $this;
     }
 
     /**
@@ -351,4 +378,5 @@ class Event
     {
         return $this->facebook_synced_at;
     }
+
 }

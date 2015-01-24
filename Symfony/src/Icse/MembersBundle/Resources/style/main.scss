@@ -570,6 +570,24 @@ span.membership_date {
     }
 }
 
+form {
+    div.end_time_widget {
+        input.duration {
+            width: 40px;
+            text-align: right;
+            margin-right: 5px;
+        }
+
+        .unit, .arrow {
+            margin-right: 11px;
+        }
+
+        .indicator_area {
+            font-weight: bold;
+        }
+    }
+}
+
 #edit_dialog {
     overflow-x: hidden;
 

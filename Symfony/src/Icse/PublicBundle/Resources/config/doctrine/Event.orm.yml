@@ -17,6 +17,9 @@ Icse\PublicBundle\Entity\Event:
         starts_at:
             type: datetime
             nullable: true 
+        ends_at:
+            type: datetime
+            nullable: true
         updated_at:
             type: datetime
         facebook_id:

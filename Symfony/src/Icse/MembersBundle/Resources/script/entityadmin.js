@@ -49,6 +49,66 @@
     var edit_form = $('#edit_form');
     edit_form.find('input:submit').before('<input type=hidden name="_method" value="POST" >');
 
+    /* Duration / End time widget */
+    edit_form.find('div.end_time_widget').each(function(){
+        var $this = $(this);
+        var duration_inp = $this.find('input.duration');
+        var indicator = $this.find('.end_time_indicator');
+        var indicator_area = $this.find('.indicator_area');
+        var end_time_inp = $this.find('input.end_time');
+        var start_time_widget = $this.closest('form > *').prevAll(':has(input.time):first');
+        var start_date_inp = start_time_widget.find('input.date');
+        var start_time_inp = start_time_widget.find('input.time');
+        var user_inps = duration_inp.add(start_date_inp).add(start_time_inp);
+        var update_indicator = function(time){
+            if (time === null) {
+                indicator_area.hide();
+            } else {
+                indicator.text(time.format('h:mm a'));
+                indicator_area.show();
+            }
+        };
+        user_inps.on('input change', function(){
+            var time_s = start_time_inp.val();
+            var date_s = start_date_inp.val();
+            var dur_s = $.trim(duration_inp.val());
+            var dur_parts = dur_s.split(':');
+            var hour_s = dur_parts[0];
+            var minute_s = dur_parts[1];
+            if ( time_s && date_s && (hour_s||minute_s) && (!hour_s||!isNaN(hour_s)) && (!minute_s||!isNaN(minute_s)) ) {
+                var time = moment(date_s + ' ' + time_s, "DD/MM/YYYY hh:mm a");
+                time.add(dur_parts[0], 'hours');
+                time.add(dur_parts[1], 'minutes');
+                end_time_inp.val(time.toISOString());
+                update_indicator(time);
+            } else {
+                end_time_inp.val('');
+                update_indicator(null);
+            }
+        });
+        end_time_inp.on('change', function(){
+            var time_s = start_time_inp.val();
+            var date_s = start_date_inp.val();
+            var end_time_s = end_time_inp.val();
+            if (time_s && date_s && end_time_s) {
+                var start_time = moment(date_s + ' ' + time_s, "DD/MM/YYYY hh:mm a");
+                var end_time = moment(end_time_s, moment.ISO_8601);
+                var duration_s = end_time.diff(start_time, 'hours', true).toString();
+                var duration_parts = duration_s.split('.');
+                var frac_part = duration_parts[1];
+                if (frac_part && frac_part.length > 1) {
+                    var minutes = Math.round(('0.' + frac_part) * 60);
+                    duration_s = duration_parts[0] + ':' + minutes;
+                }
+                duration_inp.val(duration_s);
+                update_indicator(end_time);
+            } else {
+                duration_inp.val(null);
+                update_indicator(null);
+            }
+        });
+    });
+
     function initEntitySelect(elements){
         elements.select2({
             allowClear: true
@@ -288,7 +348,8 @@
         edit_form.find('input[name="_method"]').val('POST');
         edit_form.attr('action', currentPath);
         form_elements_to_synchronise.not(':radio, :checkbox').val('');
-        edit_form.find('select').trigger('change');
+        form_elements_to_synchronise.change();
+        edit_form.find('select').change();
         edit_form.find('input').filter(':radio, :checkbox').prop('checked', false);
         edit_form.find('.error').remove();
         edit_form.find('.show_if_create').show();
@@ -324,12 +385,18 @@
             var value = '';
             if (entity.hasOwnProperty(main_name)) {
                 value = entity[main_name];
-                if ($(this).hasClass("date")) value = moment(parseInt(value)).format('DD/MM/YYYY');
+                if (value === null) {}
+                else if ($(this).hasClass("date")) {
+                    value = moment(parseInt(value)).format('DD/MM/YYYY');
+                }
                 else if ($(this).hasClass("time")) {
                     value = moment(parseInt(value)).format('h:mm a');
                     if (main_name == 'starts_at' && entity['is_start_time_known'] === false) value = '';
                 }
-                else if (typeof value == 'object' && value !== null) {
+                else if ($(this).hasClass("iso_time")) {
+                    value = moment(parseInt(value)).toISOString();
+                }
+                else if (typeof value == 'object') {
                     if (value instanceof Array) value = null;
                     else if ($(this).is('select')) value = value.id;
                     else value = value.name;
@@ -340,7 +407,7 @@
             } else {
                 if (typeof value === 'boolean') value = value ? 1 : 0;
                 $(this).val(value);
-                if ($(this).is('select')) $(this).trigger('change');
+                $(this).change();
             }
         });
         initEditForm(edit_form, entity);

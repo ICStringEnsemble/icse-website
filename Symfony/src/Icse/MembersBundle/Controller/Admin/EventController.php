@@ -4,6 +4,7 @@ namespace Icse\MembersBundle\Controller\Admin;
 
 use Acts\SocialApiBundle\Exception\ApiException;
 use Doctrine\Common\Collections\ArrayCollection;
+use Icse\MembersBundle\Form\Type\EndTimeType;
 use Icse\MembersBundle\Form\Type\PerformanceOfAPieceType;
 use Icse\PublicBundle\Entity\PerformanceOfAPiece;
 use Symfony\Component\HttpFoundation\Request;
@@ -70,18 +71,21 @@ class EventController extends EntityAdminController
     {
         $form = $this->createFormBuilder($entity)
         ->add('name', 'text')
-        ->add('starts_at', 'datetime12', array(
+        ->add('starts_at', 'datetime12', [
             'date_widget' => 'single_text',
             'time_widget' => 'single_text',
             'date_format' => 'dd/MM/yy',
             'required' => false,
-        ))
-        ->add('location', 'entity', array(
+        ])
+        ->add('ends_at', new EndTimeType(), [
+            'required' => false,
+        ])
+        ->add('location', 'entity', [
             'class' => 'IcsePublicBundle:Venue',
             'property' => 'name',
             'required' => false,
             'attr' => ['class' => 'entity-select']
-        ))
+        ])
         ->add('poster', 'entity', [
             'class' => 'IcsePublicBundle:Image',
             'property' => 'name',
@@ -134,7 +138,7 @@ class EventController extends EntityAdminController
                 $event->getName(),
                 "Some description",
                 $event->getStartsAt()->format('c'),
-                $event->getEndsAt()->format('c'),
+                $event->getApproxEndsAt()->format('c'),
                 $event->getLocationName(),
                 ''
             );
@@ -152,16 +156,16 @@ class EventController extends EntityAdminController
         }
         else // Update existing
         {
-//            $fb_ret = $fb_api->doUpdateEvent(
-//                $event->getFacebookId(),
-//                $event->getName(),
-//                "Some description",
-//                $event->getStartsAt()->format('c'),
-//                $event->getEndsAt()->format('c'),
-//                $event->getLocationName(),
-//                ''
-//            );
-//            $event->setFacebookSyncedAt(new \DateTime());
+            $fb_ret = $fb_api->doUpdateEvent(
+                $event->getFacebookId(),
+                $event->getName(),
+                "Some description",
+                $event->getStartsAt()->format('c'),
+                $event->getApproxEndsAt()->format('c'),
+                $event->getLocationName(),
+                ''
+            );
+            $event->setFacebookSyncedAt(new \DateTime());
 
             return $this->get('ajax_response_gen')->returnSuccess();
         }
@@ -192,8 +196,6 @@ class EventController extends EntityAdminController
     {
         $performances_before = new ArrayCollection;
         foreach ($entity->getPerformances() as $p) $performances_before->add($p);
-
-        $is_new_event = ($entity->getID() === null);
 
         $form = $this->getForm($entity);
         $form->submit($request->request->get($form->getName()));

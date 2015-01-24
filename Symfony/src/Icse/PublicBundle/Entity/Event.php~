@@ -49,6 +49,14 @@ class Event
      * @var \Doctrine\Common\Collections\Collection
      */
     private $performances;
+    /**
+     * @var string
+     */
+    private $facebook_id;
+    /**
+     * @var \DateTime
+     */
+    private $facebook_synced_at;
 
     /**
      * Constructor
@@ -288,71 +296,14 @@ class Event
         return $this;
     }
 
-    /**
-     * @var integer
-     */
-    private $facebook_status;
-
-    /** @Serializer\Exclude */
-    public static $SOCIAL_EVENT_NOT_CREATED = 0;
-    /** @Serializer\Exclude */
-    public static $SOCIAL_EVENT_SYNCED = 1;
-    /** @Serializer\Exclude */
-    public static $SOCIAL_EVENT_UNSYNCED = 2;
-
-    private static function socialStatusToIcon($stat)
+    public function isFacebookEnabled()
     {
-        switch($stat) {
-            case self::$SOCIAL_EVENT_NOT_CREATED:
-                return '-';
-                break;
-            case self::$SOCIAL_EVENT_SYNCED:
-                return '<i class="fa fa-check"></i>';
-                break;
-            case self::$SOCIAL_EVENT_UNSYNCED:
-                return '<i class="fa fa-unlink"></i>';
-                break;
-        }
-        return '';
+        return $this->getFacebookSyncedAt() !== null;
     }
 
-    /**
-     * @var string
-     */
-    private $facebook_id;
-
-
-    /**
-     * Set facebook_status
-     *
-     * @param integer $facebookStatus
-     * @return Event
-     */
-    public function setFacebookStatus($facebookStatus)
+    public function isFacebookSynced()
     {
-        $this->facebook_status = $facebookStatus;
-    
-        return $this;
-    }
-
-    /**
-     * Get facebook_status
-     *
-     * @return integer
-     */
-    public function getFacebookStatus()
-    {
-        return $this->facebook_status;
-    }
-
-    public function isSocialNetworkEnabled()
-    {
-        return $this->getFacebookStatus() != self::$SOCIAL_EVENT_NOT_CREATED;
-    }
-
-    public function getFacebookStatusIcon()
-    {
-        return $this->socialStatusToIcon($this->getFacebookStatus());
+        return $this->getFacebookSyncedAt() >= $this->getUpdatedAt();
     }
 
     /**
@@ -376,5 +327,28 @@ class Event
     public function getFacebookId()
     {
         return $this->facebook_id;
+    }
+
+    /**
+     * Set facebook_synced_at
+     *
+     * @param \DateTime $facebookSyncedAt
+     * @return Event
+     */
+    public function setFacebookSyncedAt($facebookSyncedAt)
+    {
+        $this->facebook_synced_at = $facebookSyncedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get facebook_synced_at
+     *
+     * @return \DateTime 
+     */
+    public function getFacebookSyncedAt()
+    {
+        return $this->facebook_synced_at;
     }
 }

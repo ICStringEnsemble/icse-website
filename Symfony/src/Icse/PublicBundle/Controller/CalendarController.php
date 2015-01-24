@@ -130,7 +130,7 @@ class CalendarController extends Controller
             $vevent = $vcalendar->add('VEVENT', [
                 'SUMMARY' => $title,
                 'DTSTART' => $e->getStartsAt(),
-                'DTEND' =>  $e->getEndsAt(),
+                'DTEND' =>  $e->getApproxEndsAt(),
                 'DTSTAMP' => new \DateTime('now', new \DateTimeZone('utc')),
                 'LAST-MODIFIED' => $e->getUpdatedAt()->setTimezone(new \DateTimeZone('utc')),
                 'UID' =>  $UID_prefix.$e->getId().':'.$e->getStartsAt()->format('Ymd\THis').'@www.union.ic.ac.uk/arts/stringensemble',

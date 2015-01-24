@@ -14,7 +14,7 @@ framework:
     templating:
         engines: ['twig']
         assets_version_format: %%s?v%%s
-        assets_version: 6
+        assets_version: 7
     default_locale:  %locale%
     http_method_override: true
     session:
@@ -25,9 +25,9 @@ framework:
 twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
-    form:
-        resources:
-            - 'IcsePublicBundle:Form:custom_fields.html.twig'
+    form_themes:
+        - 'IcsePublicBundle:Form:custom_fields.html.twig'
+        - 'IcseMembersBundle:Form:fields.html.twig'
     globals:
         facebook_page_id: %facebook_page_id%
         facebook_app_id: %facebook_app_id%

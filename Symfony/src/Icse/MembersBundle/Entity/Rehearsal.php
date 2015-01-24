@@ -38,16 +38,10 @@ class Rehearsal
      * @var Member
      */
     private $updated_by;
-
     /**
-     * @return \DateTime
+     * @var \DateTime
      */
-    public function getEndsAt()
-    {
-        $ends_at = clone $this->starts_at;
-        $ends_at->modify('+3 hours');
-        return $ends_at;
-    }
+    private $ends_at;
 
     /**
      * Get id
@@ -193,6 +187,41 @@ class Rehearsal
     public function setUpdatedBy(Member $updatedBy = null)
     {
         $this->updated_by = $updatedBy;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getEndsAt()
+    {
+        return $this->ends_at;
+    }
+
+    public function getApproxEndsAt()
+    {
+        if ($this->ends_at !== null)
+        {
+            return $this->ends_at;
+        }
+        else
+        {
+            $ends_at = clone $this->starts_at;
+            $ends_at->modify('+3 hours');
+            return $ends_at;
+        }
+    }
+
+    /**
+     * Set ends_at
+     *
+     * @param \DateTime $endsAt
+     * @return Rehearsal
+     */
+    public function setEndsAt($endsAt)
+    {
+        $this->ends_at = $endsAt;
 
         return $this;
     }

@@ -17,6 +17,9 @@ Icse\MembersBundle\Entity\Rehearsal:
             nullable: true
         starts_at:
             type: datetime
+        ends_at:
+            type: datetime
+            nullable: true
         updated_at:
             type: datetime
     manyToOne:

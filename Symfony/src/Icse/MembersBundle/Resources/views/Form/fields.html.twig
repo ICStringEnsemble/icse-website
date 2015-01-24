@@ -1,0 +1,16 @@
+
+{% block icse_end_time_widget %}
+    {% spaceless %}
+        <div class="end_time_widget">
+            <input type="text" class="duration">
+            <span class="unit">hours</span>
+            <span class="indicator_area">
+                <span class="arrow">&#10137;</span>
+                <span class="end_time_indicator">8:30pm</span>
+            </span>
+            {% set type="hidden" %}
+            {% set attr={class: "end_time iso_time"} %}
+            {{- block('form_widget_simple') -}}
+        </div>
+    {% endspaceless %}
+{% endblock %}

@@ -2,6 +2,7 @@
 
 namespace Icse\MembersBundle\Controller;
 
+use Icse\PublicBundle\Entity\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request; 
@@ -33,6 +34,7 @@ class DefaultController extends Controller
         
         $event_lib = $this->get('icse.calendar_events');
 
+        /** @var Event $e */
         foreach ($event_lib->iter() as $e)
         {
             $type = $event_lib->type($e);
@@ -54,10 +56,13 @@ class DefaultController extends Controller
                 $title .= ' ('.$e->getLocation()->getName().')';
             }
 
+            $start = $e->getStartsAt();
+            $end = $e->getApproxEndsAt();
+
             array_push($events[$type], [
                 'title' => $title,
-                'start' => $e->getStartsAt() ? $e->getStartsAt()->format('M d Y H:i:s') : '',
-                'end' => $e->getEndsAt() ? $e->getEndsAt()->format('M d Y H:i:s') : '',
+                'start' => $start ? $start->format('M d Y H:i:s') : '',
+                'end' => $end ? $end->format('M d Y H:i:s') : '',
                 'allDay' => $all_day,
             ]);
         }

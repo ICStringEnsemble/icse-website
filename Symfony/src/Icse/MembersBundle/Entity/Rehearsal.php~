@@ -49,6 +49,11 @@ class Rehearsal
         return $ends_at;
     }
 
+    public function getApproxEndsAt()
+    {
+        return $this->getEndsAt();
+    }
+
     /**
      * Get id
      *

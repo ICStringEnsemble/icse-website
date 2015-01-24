@@ -3,6 +3,7 @@
 namespace Icse\MembersBundle\Controller\Admin;
 
 use Icse\MembersBundle\Entity\Rehearsal;
+use Icse\MembersBundle\Form\Type\EndTimeType;
 
 class RehearsalController extends EntityAdminController
 {
@@ -50,10 +51,14 @@ class RehearsalController extends EntityAdminController
             ,   'time_widget' => 'single_text'
             ,   'date_format' => 'dd/MM/yy'
             ))
+        ->add('ends_at', new EndTimeType(), [
+            'required' => false,
+        ])
         ->add('location', 'entity', array(
                 'class' => 'IcsePublicBundle:Venue',
                 'property' => 'name',
                 'required' => false,
+                'attr' => ['class' => 'entity-select']
             ))
         ->add('name', 'text', array('required' => false, 'label' => 'Title'))
         ->add('comments', 'textarea', array('required' => false))
