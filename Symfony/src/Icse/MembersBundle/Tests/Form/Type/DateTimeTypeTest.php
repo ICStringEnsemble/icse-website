@@ -46,7 +46,7 @@ class DateTimeTypeTest extends TypeTestCase
                 ],
                 true,
                 true,
-                new \DateTime("11th June 2010 12:00:01 am")
+                new \DateTime("11th June 2010 11:59:59 pm")
             ],
             [
                 [
