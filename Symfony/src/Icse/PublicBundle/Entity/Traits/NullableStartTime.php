@@ -2,6 +2,7 @@
 
 namespace Icse\PublicBundle\Entity\Traits;
 
+use Icse\MembersBundle\Form\DataTransformer\NullableTimeToStringTransformer;
 
 trait NullableStartTime
 {
@@ -9,7 +10,7 @@ trait NullableStartTime
     {
         $time = $this->getStartsAt();
         if (is_null($time)) return false;
-        if ($time->format('H-i-s') == '00-00-01') return false;
+        if ($time->format('H-i-s') == NullableTimeToStringTransformer::MAGIC_NULL_TIME) return false;
         return true;
     }
 }

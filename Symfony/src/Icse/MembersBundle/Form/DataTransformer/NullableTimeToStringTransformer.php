@@ -7,13 +7,15 @@ use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransf
 
 class NullableTimeToStringTransformer extends DateTimeToStringTransformer
 {
+    const MAGIC_NULL_TIME = '23-59-59';
+
     /**
      * Transforms a DateTime object into a date string with the configured format
      * and timezone
      */
     public function transform($value)
     {
-        if (!is_null($value) && $value->format('H-i-s') == '00-00-01')
+        if (!is_null($value) && $value->format('H-i-s') == self::MAGIC_NULL_TIME)
         {
             $value = null;
         }
@@ -28,7 +30,7 @@ class NullableTimeToStringTransformer extends DateTimeToStringTransformer
         $result = parent::reverseTransform($value);
         if (is_null($result))
         {
-            $result = \DateTime::createFromFormat('H-i-s|', '00-00-01');
+            $result = \DateTime::createFromFormat('H-i-s|', self::MAGIC_NULL_TIME);
         }
         return $result;
     }

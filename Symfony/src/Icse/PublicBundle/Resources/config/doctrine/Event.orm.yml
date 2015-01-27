@@ -24,6 +24,7 @@ Icse\PublicBundle\Entity\Event:
             type: datetime
         facebook_id:
             type: string
+            nullable: true
         facebook_synced_at:
             type: datetime
             nullable: true
