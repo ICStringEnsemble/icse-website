@@ -26,7 +26,7 @@ class DefaultController extends Controller
       $dm = $this->getDoctrine();
 
       $slideshow_images = $dm->getRepository('IcsePublicBundle:Image')
-                             ->findSlideshowImages();
+                             ->findSlideshowImages(10);
 
       $today_events = $dm->getRepository('IcsePublicBundle:Event')
                          ->findTodayEvents(); 

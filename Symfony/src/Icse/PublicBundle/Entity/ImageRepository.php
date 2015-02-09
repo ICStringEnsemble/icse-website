@@ -12,8 +12,17 @@ use Doctrine\ORM\EntityRepository;
  */
 class ImageRepository extends EntityRepository
 {
-    public function findSlideshowImages()
+    public function findSlideshowImages($n = null)
     {
-        return $this->findBy(['in_slideshow' => true]);
+        $images = $this->findBy(['in_slideshow' => true]);
+        if (is_null($n))
+        {
+            return $images;
+        }
+        else
+        {
+            shuffle($images);
+            return array_slice($images, 0, $n);
+        }
     }
 }
