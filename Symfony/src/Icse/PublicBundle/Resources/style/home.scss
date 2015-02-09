@@ -77,11 +77,31 @@ $col_right_width: $page-width - $col_left_width - 4*$page-side-padding;
 
     #facebook_widget {
         background-color: #fff;
-        margin-bottom: 1em;
     }
 
-    #twitter-widget-0, a.twitter-timeline, #next_rehearsal {
+    .g-plus-section, #next_rehearsal, #facebook_widget {
+        margin-bottom: 0.6em;
+    }
+
+    .twitter-follow-button {
+        margin-bottom: 0.4em;
+    }
+
+    #sponsors-section {
         margin-bottom: 1em;
+
+        li {
+            display: inline-block;
+            vertical-align: middle;
+
+            img {
+                width: 103px;
+            }
+
+            &:not(:first-child) {
+                margin-left: 10px;
+            }
+        }
     }
 
 }
