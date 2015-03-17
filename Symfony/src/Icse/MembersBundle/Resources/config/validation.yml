@@ -14,6 +14,10 @@ Icse\MembersBundle\Entity\Member:
             - Email:
                 message: Not a valid email address
                 checkMX: true
+        active:
+            - NotBlank: ~
+        role:
+            - NotBlank: ~
 
 Icse\MembersBundle\Entity\PracticePart:
     properties:
@@ -21,4 +25,11 @@ Icse\MembersBundle\Entity\PracticePart:
             - File:
                 mimeTypes: [application/pdf]
         instrument:
+            - NotBlank: ~
+
+Icse\MembersBundle\Entity\CommitteeRole:
+    properties:
+        position_name:
+            - NotBlank: ~
+        member:
             - NotBlank: ~

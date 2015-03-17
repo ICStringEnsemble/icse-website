@@ -6,8 +6,8 @@
 {% set entityPlural = 'pieces of music' %}
 
 {% block edit_form_fields %}
-    {{ form_row(form.name) }}
     {{ form_row(form.composer) }}
+    {{ form_row(form.name) }}
 
     <div id="practice_parts_section">
         <div class="drop_mask height_fix"></div>

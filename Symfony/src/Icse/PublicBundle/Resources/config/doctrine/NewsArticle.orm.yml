@@ -16,8 +16,6 @@ Icse\PublicBundle\Entity\NewsArticle:
             nullable: true
         body:
             type: text
-        featured_until:
-            type: datetime
         posted_at:
             type: datetime
         updated_at:
@@ -27,7 +25,11 @@ Icse\PublicBundle\Entity\NewsArticle:
             targetEntity: Image
             joinColumn:
                 nullable: true
-        updated_by: 
+        posted_by:
+            targetEntity: Icse\MembersBundle\Entity\Member
+            joinColumn:
+                nullable: true # REVISIT
+        updated_by:
             targetEntity: Icse\MembersBundle\Entity\Member
             joinColumn:
                 nullable: false

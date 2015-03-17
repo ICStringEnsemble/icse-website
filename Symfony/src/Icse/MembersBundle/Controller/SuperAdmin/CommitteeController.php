@@ -35,19 +35,16 @@ class CommitteeController extends EntityAdminController
         return ["fields" => $fields, "entities" => $entities];
     }
 
-    protected function getForm($entity)
+    protected function buildForm($form)
     {
-        $form = $this->createFormBuilder($entity)
-            ->add('member', 'entity', [
-                'class' => 'IcseMembersBundle:Member',
-                'property' => 'full_name',
-                'attr' => ['class' => 'entity-select']
-            ])
-            ->add('position_name', 'text')
-            ->add('start_year', 'integer')
-            ->add('sort_index', 'integer', ['label' => 'Sort index'])
-            ->getForm();
-        return $form;
+        $form->add('member', 'entity', [
+            'class' => 'IcseMembersBundle:Member',
+            'property' => 'full_name',
+            'attr' => ['class' => 'entity-select'],
+        ]);
+        $form->add('position_name', 'icse_text_autosuggest');
+        $form->add('start_year', 'integer');
+        $form->add('sort_index', 'integer', ['label' => 'Sort index']);
     }
 
     private function makeSortIndexAvailable(CommitteeRole $fixed_entity)
@@ -68,29 +65,9 @@ class CommitteeController extends EntityAdminController
         }
     }
 
-    protected function putData($request, $entity)
+    protected function prePersistEntity($entity)
     {
-        $form = $this->getForm($entity);
-        $form->submit($request);
-
-        $em = $this->getDoctrine()->getManager();
-        if ($form->isValid())
-        {
-            $this->makeSortIndexAvailable($entity);
-
-            $em->persist($entity);
-            $em->flush();
-            return $this->get('ajax_response_gen')->returnSuccess();
-        }
-        else
-        {
-            // Cancel any changes
-            if ($em->contains($entity))
-            {
-                $em->refresh($entity);
-            }
-            return $this->get('ajax_response_gen')->returnFail($form);
-        }
+        $this->makeSortIndexAvailable($entity);
     }
 
 }

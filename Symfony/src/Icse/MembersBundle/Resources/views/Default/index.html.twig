@@ -9,8 +9,10 @@
 
 <p>Hi {{ app.user.firstName }}!</p>
 
-<p>This is our new Members Section. There isn't much to see at the moment, but hopefully it will grow in the future.
-For now, be sure to add our rehearsal timetable to your personal calendar and check out the practice parts!</p>
+<p>
+    This is our Members Section.
+    Be sure to add our rehearsal timetable to your personal calendar, and check out the practice parts!
+</p>
 
 {% set membership_is_good = app.user.hasCurrentMembership %}
 
@@ -25,7 +27,23 @@ For now, be sure to add our rehearsal timetable to your personal calendar and ch
         Membership fees go towards the cost of snacks, drinks and music hire, as well as the many other things that ICSE has to pay for!
     </p>
 
-    <p>If you have in fact paid membership and this notice still appears, please <a href="mailto:icse@imperial.ac.uk?subject=ICSE%20Membership">get in touch</a> and we'll make sure the system is up to date.</p>
+    {% set email_body =
+'Dear ICSE
+
+I have purchased membership, yet the website is still telling me I have not yet paid.
+
+Please could you look into this?
+
+Thanks
+%s' | format(app.user.fullName) %}
+
+    <p>
+        If you have in fact paid membership and this notice still appears, please
+        <a href="mailto:icse@imperial.ac.uk?{{ {subject: 'ICSE Membership', body: email_body} | url_encode }}" >
+            get in touch
+        </a>
+        and we'll make sure the system is up to date.
+    </p>
 {% endif %}
 
 

@@ -36,7 +36,7 @@ class ImageController extends EntityAdminController
     protected function indexData()
     {
         return [
-            'new_image_form' => $this->getAddNewImageForm($this->newInstance())->createView()
+            'new_image_form' => $this->getCreationForm($this->newInstance())->createView()
         ];
     }
 
@@ -52,53 +52,17 @@ class ImageController extends EntityAdminController
         return ["fields" => $fields, "entities" => $entities];
     }
 
-    protected function getAddNewImageForm($entity)
+    protected function buildCreationForm($form)
     {
-        return $this->createFormBuilder($entity)
-            ->setMethod('POST')
-            ->add('file', 'file', [
-                'property_path' => 'file_from_form',
-                'constraints' => [new Constraints\NotNull],
-            ])
-            ->getForm();
+        $form->add('file', 'file', [
+            'property_path' => 'file_from_form',
+            'constraints' => [new Constraints\NotNull],
+        ]);
     }
 
-    protected function getForm($entity)
+    protected function buildEditForm($form)
     {
-        return $this->createFormBuilder($entity)
-            ->setMethod('PUT')
-            ->add('name', 'text')
-            ->add('in_slideshow', 'checkbox', ['required' => false])
-            ->getForm();
+        $form->add('name', 'text');
+        $form->add('in_slideshow', 'checkbox', ['required' => false]);
     }
-
-    protected function putData($request, $entity)
-    {
-        /** @var $entity Image */
-        $is_creation = is_null($entity->getId());
-
-        $form = $is_creation ? $this->getAddNewImageForm($entity) : $this->getForm($entity);
-
-        $form->handleRequest($request);
-
-        $entity->setUpdatedAt(new \DateTime());
-        $entity->setUpdatedBy($this->get('security.context')->getToken()->getUser());
-
-        $em = $this->getDoctrine()->getManager();
-        if ($form->isValid())
-        {
-            $em->persist($entity);
-            $em->flush();
-            return $this->get('ajax_response_gen')->returnSuccess(['entity' => $entity]);
-        }
-        else
-        {
-            if ($em->contains($entity))
-            {
-                $em->refresh($entity);
-            }
-            return $this->get('ajax_response_gen')->returnFail($form);
-        }
-    }
-
 }

@@ -41,42 +41,10 @@ class VenueController extends EntityAdminController
         return ["fields" => $fields, "entities" => $entities];
     }
 
-    protected function getForm($entity)
+    protected function buildForm($form)
     {
-        $form = $this->createFormBuilder($entity)
-        ->add('name', 'text')
-        ->add('address', 'textarea', ['required' => false])
-        ->add('embed_map', 'text', ['required' => false])
-        ->getForm(); 
-        return $form;
+        $form->add('name', 'text');
+        $form->add('address', 'textarea', ['required' => false]);
+        $form->add('embed_map', 'text', ['required' => false]);
     }
-
-    protected function putData($request, $entity)
-    {
-        $form = $this->getForm($entity);
-        $form->bind($request);
-
-        $entity->setUpdatedAt(new \DateTime());
-        $entity->setUpdatedBy($this->get('security.context')->getToken()->getUser());
-
-        $em = $this->getDoctrine()->getManager();
-        if ($form->isValid())
-        {
-            $em->persist($entity);
-            $em->flush();
-            return $this->get('ajax_response_gen')->returnSuccess();
-        }
-        else
-        {
-            // Cancel any changes
-            if ($em->contains($entity))
-            {
-                $em->refresh($entity);
-            }
-            return $this->get('ajax_response_gen')->returnFail($form);
-        }  
-    }
-
-
-
 }

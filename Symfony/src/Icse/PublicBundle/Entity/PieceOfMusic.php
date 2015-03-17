@@ -3,6 +3,7 @@
 namespace Icse\PublicBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Icse\MembersBundle\Entity\PracticePart;
 use JMS\Serializer\Annotation as Serializer;
 use JMS\Serializer\Annotation\Groups;
 
@@ -178,12 +179,13 @@ class PieceOfMusic
     /**
      * Add practice_parts
      *
-     * @param \Icse\MembersBundle\Entity\PracticePart $practiceParts
+     * @param PracticePart $practicePart
      * @return PieceOfMusic
      */
-    public function addPracticePart(\Icse\MembersBundle\Entity\PracticePart $practiceParts)
+    public function addPracticePart(PracticePart $practicePart)
     {
-        $this->practice_parts[] = $practiceParts;
+        $practicePart->setPiece($this);
+        $this->practice_parts[] = $practicePart;
 
         return $this;
     }
@@ -191,14 +193,14 @@ class PieceOfMusic
     /**
      * Remove practice_parts
      *
-     * @param \Icse\MembersBundle\Entity\PracticePart $practiceParts
+     * @param PracticePart $practiceParts
      */
-    public function removePracticePart(\Icse\MembersBundle\Entity\PracticePart $practiceParts)
+    public function removePracticePart(PracticePart $practiceParts)
     {
         $this->practice_parts->removeElement($practiceParts);
     }
 
-    public function addPrototypePracticePart(\Icse\MembersBundle\Entity\PracticePart $practiceParts)
+    public function addPrototypePracticePart(PracticePart $practiceParts)
     {
         $this->practice_parts['__ID__'] = $practiceParts;
 

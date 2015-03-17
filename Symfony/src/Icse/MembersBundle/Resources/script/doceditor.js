@@ -19,6 +19,10 @@
             source_plugin = 'Source'
             contents_css = main_css;
             body_class = 'icseeditorcontent';
+
+            if ($(this).hasClass('newsarticleeditor')) {
+                body_class += ' newsarticleeditor';
+            }
         }
 
         $(this).ckeditor(function(){}, {

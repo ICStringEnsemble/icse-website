@@ -235,19 +235,20 @@ class Event
     /**
      * Add performances
      *
-     * @param PerformanceOfAPiece $performances
+     * @param PerformanceOfAPiece $performance
      * @return Event
      */
-    public function addPerformance(PerformanceOfAPiece $performances)
+    public function addPerformance(PerformanceOfAPiece $performance)
     {
-        $this->performances[] = $performances;
+        $performance->setEvent($this);
+        $this->performances->add($performance);
     
         return $this;
     }
 
-    public function addPrototypePerformance(PerformanceOfAPiece $performances)
+    public function addPrototypePerformance(PerformanceOfAPiece $performance)
     {
-        $this->performances['__ID__'] = $performances;
+        $this->performances['__ID__'] = $performance;
 
         return $this;
     }
@@ -255,11 +256,11 @@ class Event
     /**
      * Remove performances
      *
-     * @param PerformanceOfAPiece $performances
+     * @param PerformanceOfAPiece $performance
      */
-    public function removePerformance(PerformanceOfAPiece $performances)
+    public function removePerformance(PerformanceOfAPiece $performance)
     {
-        $this->performances->removeElement($performances);
+        $this->performances->removeElement($performance);
     }
 
     /**

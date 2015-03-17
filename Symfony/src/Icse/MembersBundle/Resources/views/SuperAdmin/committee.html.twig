@@ -9,27 +9,58 @@
 <script>
 
     var initCreateForm;
+    var initEditForm;
 
     (function(){
 
         var edit_form = $("#edit_form");
         var year_input = edit_form.find("input[name='form[start_year]']");
         var sort_input = edit_form.find("input[name='form[sort_index]']");
+        var role_input = edit_form.find("input[name='form[position_name]']");
+
+        var getListedEntities = function() {
+            return $('.entity_instance_list').find('.instance.ui-selectee').map(function(){
+                return $(this).data('entity');
+            });
+        };
+
+        var unique = function (a) {
+            var seen = {};
+            var out = [];
+            var len = a.length;
+            var j = 0;
+            for(var i = 0; i < len; i++) {
+                var item = a[i];
+                if(seen[item] !== 1) {
+                    seen[item] = 1;
+                    out[j++] = item;
+                }
+            }
+            return out;
+        };
+
+        var updateCommitteeRoleAutosuggest = function(){
+            var roles = getListedEntities().map(function(){
+                return this.position_name;
+            }).get();
+            role_input.data('updateSource')(unique(roles));
+        };
 
         initCreateForm = function() {
             year_input.val(moment().year());
             year_input.change();
+            updateCommitteeRoleAutosuggest();
         };
+
+        initEditForm = updateCommitteeRoleAutosuggest;
 
         year_input.change(function(){
             var year = $(this).val();
 
-            var positions = $('.entity_instance_list').find('.instance.ui-selectee').map(function(){
-                return $(this).data('entity');
-            }).filter(function(){
-                return $(this)[0].start_year == year;
+            var positions = getListedEntities().filter(function(){
+                return this.start_year == year;
             }).map(function(){
-                return $(this)[0].sort_index;
+                return this.sort_index;
             });
 
             var new_position = positions.length == 0 ? 0 : Math.max.apply(null, positions) + 1;

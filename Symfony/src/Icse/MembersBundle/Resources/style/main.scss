@@ -120,10 +120,6 @@ form.standard {
     }
 }
 
-.entity-select {
-    width: 204px;
-}
-
 html {
     a.select2-choice {
         &:link, &:visited, &:hover {
@@ -585,6 +581,10 @@ form {
         .indicator_area {
             font-weight: bold;
         }
+    }
+
+    .entity-select {
+        width: 204px;
     }
 }
 

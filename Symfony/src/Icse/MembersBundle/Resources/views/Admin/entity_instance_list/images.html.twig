@@ -3,11 +3,12 @@
 {% import 'IcseMembersBundle:Admin/entity_instance_list:template.html.twig' as parent %}
 
 {% block list_body %}
+{% set transparent_placeholder = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" %}
 <div {{ parent.list_attrs(['waterfall']) }}>
 {% for entity in list_content.entities %}
     <div {{ parent.instance_attrs(entity, _context) }}>
         <div class="image-container">
-            <img {{ entity | imgSrcAndSize('imageadmin') }}>
+            <img src={{ transparent_placeholder }} {{ entity | lazyImgSrcAndSize('imageadmin') }}>
         </div>
     </div>
 {% endfor %}

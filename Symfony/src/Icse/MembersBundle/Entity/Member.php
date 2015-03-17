@@ -195,8 +195,6 @@ class Member implements AdvancedUserInterface, \Serializable
         return $this->isActive();
     }
 
-
-
     /**
      * Get id
      *

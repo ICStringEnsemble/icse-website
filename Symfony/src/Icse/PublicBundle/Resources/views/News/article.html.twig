@@ -1,5 +1,5 @@
 {% extends 'IcsePublicBundle:News:template.html.twig' %}  
-{% set pageTitle = article.getHeadline() %} 
+{% set pageTitle = article.headline %}
 
 {% block stylesheets %}
 {{ parent() }}
@@ -13,23 +13,29 @@
 
 {% block content %}
 <div id="news_article">
-<div id="news_head">
-  <h1>{{ article.getHeadline() }}</h1>
-  <h2>{{ article.getSubHead() }}</h2>
-<div class="posted_at">Posted on {{ article.getPostedAt() | date("l jS F Y g:ia") }}</div> 
-</div>
+  <div id="news_head">
+    <h1>{{ article.headline }}</h1>
+    <h2>{{ article.subHead }}</h2>
+  <div class="posted_at">Posted on {{ article.postedAt | date("l jS F Y g:ia") }}</div>
+  </div>
 
-{% if article.getPicture() %}
-<a class="article_pic view_full_image" href="{{ path('IcsePublicBundle_resource', {object: article.picture, size:'enlarge'}) }}" title="{{ article.getHeadline() }}" >
-<img src="{{ path('IcsePublicBundle_resource', {object: article.picture, 'size':'article'}) }}" />
-</a> 
-{% endif %}
+  {% if article.picture %}
+  <a class="article_pic view_full_image" href="{{ path('IcsePublicBundle_resource', {object: article.picture, size:'enlarge'}) }}" title="{{ article.headline }}" >
+  <img src="{{ path('IcsePublicBundle_resource', {object: article.picture, 'size':'article'}) }}" />
+  </a>
+  {% endif %}
 
-<div class="main_content">
-{{ article.getBody() | raw }}
-</div>
+  <div class="main_content">
+  {{ article.body | raw }}
+  </div>
 
-<div class="posted_by">{{ article.getUpdatedBy().getFullName() }}</div>
+  <div class="posted_by">
+    {{ article.postedBy ? article.postedBy.fullName : "" }}
+    {% set committee_role = app.user.getMostCurrentCommitteeRole(article.postedAt) %}
+    {% if committee_role is not null %}
+      <span class="role">({{ committee_role.positionName }}, {{ committee_role.startYear }}&ndash;{{ "%d" | format(committee_role.startYear + 1) | slice(-2) }})</span>
+    {% endif %}
+  </div>
 </div>
 
 <script>

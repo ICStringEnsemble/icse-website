@@ -38,6 +38,10 @@ IcseMembersBundle_rehearsaladmin:
     pattern:  /members/admin/rehearsals/{arg}
     defaults: { _controller: IcseMembersBundle:Admin/Rehearsal:router, arg: ~ }
 
+IcseMembersBundle_newsadmin:
+    pattern:  /members/admin/news/{arg}
+    defaults: { _controller: IcseMembersBundle:Admin/News:router, arg: ~ }
+
 IcseMembersBundle_eventadmin:
     pattern:  /members/admin/events/{arg}
     defaults: { _controller: IcseMembersBundle:Admin/Event:router, arg: ~ }

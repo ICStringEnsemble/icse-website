@@ -3,8 +3,7 @@
 {% set currentSubSection = 'eventadmin' %}
 {% set entitySingular = 'event' %}
 
-{% set enable_social_net = true %}
-
+{#{% set enable_social_net = true %}#}
 {#{% block extra_entity_main_buttons %}#}
     {#<li><button class="social_sync show_if_any_selected" type="button" disabled>Facebook&nbsp;Sync</button></li>#}
 {#{% endblock %}#}
@@ -34,11 +33,4 @@
             } }) }}
         </div>
     </div>
-    {{ form_row(form.name) }}
-
-    {#<input id="add_files_button" type="file" multiple="multiple" title="Choose files" data-label="Add files...">#}
-
-
-
-
 {% endblock %}

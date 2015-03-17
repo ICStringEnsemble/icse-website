@@ -30,6 +30,7 @@ class Utils extends \Twig_Extension
             'imgWidthAndHeight' => new \Twig_Filter_Method($this, 'imgWidthAndHeight'),
             'imgSrc' => new \Twig_Filter_Method($this, 'imgSrc'),
             'imgSrcAndSize' => new \Twig_Filter_Method($this, 'imgSrcAndSize'),
+            'lazyImgSrcAndSize' => new \Twig_Filter_Method($this, 'lazyImgSrcAndSize'),
         ];
     }
 
@@ -39,17 +40,22 @@ class Utils extends \Twig_Extension
         return "width=$width height=$height";
     }
 
-    public function imgSrc(Image $img, $size_id=null)
+    public function imgSrc(Image $img, $size_id=null, $lazy=false)
     {
         $params = ['object' => $img];
         if (!is_null($size_id)) $params = array_merge($params, ["size" => $size_id]);
         $path = $this->router->generate('IcsePublicBundle_resource', $params);
-        return "src=$path";
+        return $lazy ? "data-original=$path" : "src=$path";
     }
 
-    public function imgSrcAndSize(Image $img, $size_id=null)
+    public function imgSrcAndSize(Image $img, $size_id=null, $lazy=false)
     {
-        return $this->imgWidthAndHeight($img, $size_id) . " " . $this->imgSrc($img, $size_id);
+        return $this->imgWidthAndHeight($img, $size_id) . " " . $this->imgSrc($img, $size_id, $lazy);
+    }
+
+    public function lazyImgSrcAndSize(Image $img, $size_id=null)
+    {
+        return $this->imgSrcAndSize($img, $size_id, true);
     }
 
     public function getName()

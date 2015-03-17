@@ -45,40 +45,6 @@ class SignupListController extends EntityAdminController
         return ["fields" => $fields, "entities" => $subscribers];
     }
 
-    protected function getForm($subscriber)
-    {
-        $form = $this->createFormBuilder($subscriber)
-        ->getForm(); 
-        return $form;
-    }
-
-    protected function putData($request, $subscriber)
-    {
-        // $is_new = ($subscriber->getID() === null);
-        $form = $this->getForm($subscriber);
-        $form->bind($request);
-
-        // $subscriber->setUpdatedAt(new \DateTime());
-        // $subscriber->setUpdatedBy($this->get('security.context')->getToken()->getUser());
-
-        $em = $this->getDoctrine()->getManager();
-        if ($form->isValid())
-        {
-            $em->persist($subscriber);
-            $em->flush();
-            return $this->get('ajax_response_gen')->returnSuccess();
-        }
-        else
-        {
-            // Cancel any changes
-            if ($em->contains($subscriber))
-            {
-                $em->refresh($subscriber);
-            }
-            return $this->get('ajax_response_gen')->returnFail($form);
-        }  
-    }
-
-
-
+    protected function buildForm($form)
+    {}
 }

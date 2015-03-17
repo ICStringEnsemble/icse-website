@@ -51,7 +51,10 @@ class NewsArticle
      */
     private $updated_by;
 
-
+    /**
+     * @var \Icse\MembersBundle\Entity\Member
+     */
+    private $posted_by;
 
     /**
      * Get id
@@ -191,8 +194,6 @@ class NewsArticle
         return $this;
     }
 
-
-
     /**
      * Set picture
      *
@@ -231,32 +232,27 @@ class NewsArticle
     {
         return $this->updated_by;
     }
-    /**
-     * @var \DateTime
-     */
-    private $featured_until;
-
 
     /**
-     * Set featured_until
+     * Set posted_by
      *
-     * @param \DateTime $featuredUntil
+     * @param \Icse\MembersBundle\Entity\Member $postedBy
      * @return NewsArticle
      */
-    public function setFeaturedUntil($featuredUntil)
+    public function setPostedBy(\Icse\MembersBundle\Entity\Member $postedBy)
     {
-        $this->featured_until = $featuredUntil;
-    
+        $this->posted_by = $postedBy;
+
         return $this;
     }
 
     /**
-     * Get featured_until
+     * Get posted_by
      *
-     * @return \DateTime 
+     * @return \Icse\MembersBundle\Entity\Member 
      */
-    public function getFeaturedUntil()
+    public function getPostedBy()
     {
-        return $this->featured_until;
+        return $this->posted_by;
     }
 }

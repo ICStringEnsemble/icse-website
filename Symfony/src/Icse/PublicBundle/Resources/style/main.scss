@@ -263,6 +263,12 @@ nav a {
     }
 }
 
+%news_article_extra_styles {
+    p:first-child {
+        font-weight: bold;
+    }
+}
+
 
 section {
     padding: 0 $page-side-padding;
@@ -277,6 +283,9 @@ section {
         @extend %main_content_element_styles;
     }
 
+    #news_article .main_content {
+        @extend %news_article_extra_styles;
+    }
 }
 
 .icseeditorcontent {
@@ -284,6 +293,10 @@ section {
 
     @extend %generic_element_styles;
     @extend %main_content_element_styles;
+
+    &.newsarticleeditor {
+        @extend %news_article_extra_styles;
+    }
 }
 
 footer {
@@ -378,12 +391,16 @@ form.standard {
 
     input {
         &[type=text], &[type=email], &[type=password] {
-            //display: block;
-            //float:left;
+//            display: block;
+//            float:left;
+//            vertical-align: middle;
             width: 200px;
-            vertical-align: middle;
             margin-top: 0;
             margin-right: 10px;
+        }
+
+        &[type=number] {
+            width: 100px;
         }
 
         &[type=date], &[type=time] {
@@ -650,10 +667,9 @@ section #news_article {
     .posted_at, .posted_by {
         color: #888;
         font-size: 0.8em;
-    } 
-
-    p.intro {
-        font-weight: bold;
+    }
+    .posted_by .role {
+        font-style: italic;
     }
 }
 

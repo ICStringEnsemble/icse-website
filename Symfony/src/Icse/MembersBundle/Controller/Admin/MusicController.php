@@ -46,7 +46,7 @@ class MusicController extends EntityAdminController
 
         $fields = [
             'Composer' => function(PieceOfMusic $x){return $x->getComposer();},
-            'Name' => function(PieceOfMusic $x){return $x->getName();},
+            'Title' => function(PieceOfMusic $x){return $x->getName();},
             'Parts' => function(PieceOfMusic $x){return count($x->getPracticeParts());},
             'Last updated' => function(PieceOfMusic $x){return $this->timeagoDate($x->getUpdatedAt()) . " by " .$x->getUpdatedBy()->getFirstName();},
         ];
@@ -60,17 +60,16 @@ class MusicController extends EntityAdminController
         ];
     }
 
-    private function addNewPracticePart(Request $request, $piece)
+    private function addNewPracticePart(Request $request, PieceOfMusic $piece)
     {
         $part = new PracticePart();
-        $part->setPiece($piece);
-        $part->setSortIndex(0);
 
         $form = $this->getNewPracticePartForm($part);
         $form->handleRequest($request);
 
         if ($form->isValid())
         {
+            $piece->addPracticePart($part);
             $em = $this->getDoctrine()->getManager();
             $em->persist($part);
             $em->flush();
@@ -99,16 +98,14 @@ class MusicController extends EntityAdminController
         return ['practice_parts'];
     }
 
-    protected function getForm($entity)
+    protected function buildForm($form)
     {
-        $form = $this->createFormBuilder($entity, ['cascade_validation' => true])
-            ->add('name', 'text')
-            ->add('composer', 'text')
-            ->add('practice_parts', 'collection', [
-                'type' => new PracticePartType,
-                'allow_delete' => true
-            ]);
-        return $form->getForm();
+        $form->add('composer', 'text');
+        $form->add('name', 'text', ['label' => 'Title']);
+        $form->add('practice_parts', 'collection', [
+            'type' => new PracticePartType,
+            'allow_delete' => true
+        ]);
     }
 
     private function getNewPracticePartForm(PracticePart $part)
@@ -122,43 +119,5 @@ class MusicController extends EntityAdminController
             ->add('sort_index')
             ->getForm();
     }
-
-    protected function putData($request, $entity)
-    {
-        /** @var $entity PieceOfMusic */
-        $practice_parts_before = new ArrayCollection;
-        foreach ($entity->getPracticeParts() as $part) $practice_parts_before->add($part);
-
-        $form = $this->getForm($entity);
-        $form->submit($request->request->get($form->getName()));
-
-        $entity->setUpdatedAt(new \DateTime());
-        $entity->setUpdatedBy($this->get('security.context')->getToken()->getUser());
-
-        $em = $this->getDoctrine()->getManager();
-        if ($form->isValid())
-        {
-            foreach ($practice_parts_before as $old_part)
-            {
-                if ($entity->getPracticeParts()->contains($old_part) === false) $em->remove($old_part);
-            }
-
-            $em->persist($entity);
-            $em->flush();
-            return $this->get('ajax_response_gen')->returnSuccess(['entity' => $entity]);
-        }
-        else
-        {
-            // Cancel any changes
-            if ($em->contains($entity))
-            {
-                $em->refresh($entity);
-                foreach ($entity->getPracticeParts() as $part) $em->refresh($part);
-            }
-            return $this->get('ajax_response_gen')->returnFail($form);
-        }  
-    }
-
-
 
 }

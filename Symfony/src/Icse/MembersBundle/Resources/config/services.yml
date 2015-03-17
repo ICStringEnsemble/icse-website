@@ -50,3 +50,8 @@ services:
         tags:
             - { name: form.type, alias: datetime12 }
 
+    icse.form.type.text_autosuggest:
+        class: Icse\MembersBundle\Form\Type\TextAutosuggestType
+        tags:
+            - { name: form.type, alias: icse_text_autosuggest }
+

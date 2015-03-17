@@ -14,3 +14,9 @@
         </div>
     {% endspaceless %}
 {% endblock %}
+
+
+{% block icse_text_autosuggest_widget %}
+    {% set attr={class: "text-autosuggest"} %}
+    {{- block('form_widget_simple') -}}
+{% endblock %}

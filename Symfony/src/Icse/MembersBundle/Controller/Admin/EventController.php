@@ -67,49 +67,47 @@ class EventController extends EntityAdminController
         return ['performances'];
     }
 
-    protected function getForm($entity)
+    protected function buildForm($form)
     {
-        $form = $this->createFormBuilder($entity)
-        ->add('name', 'text')
-        ->add('starts_at', 'datetime12', [
+        $form->add('name', 'text');
+        $form->add('starts_at', 'datetime12', [
             'date_widget' => 'single_text',
             'time_widget' => 'single_text',
             'date_format' => 'dd/MM/yy',
             'required' => false,
-        ])
-        ->add('ends_at', new EndTimeType(), [
+        ]);
+        $form->add('ends_at', new EndTimeType(), [
             'required' => false,
-        ])
-        ->add('location', 'entity', [
+        ]);
+        $form->add('location', 'entity', [
             'class' => 'IcsePublicBundle:Venue',
             'property' => 'name',
             'required' => false,
             'attr' => ['class' => 'entity-select']
-        ])
-        ->add('poster', 'entity', [
+        ]);
+        $form->add('poster', 'entity', [
             'class' => 'IcsePublicBundle:Image',
             'property' => 'name',
             'required' => false,
             'attr' => ['class' => 'entity-select']
-        ])
-        ->add('performances', 'collection', [
+        ]);
+        $form->add('performances', 'collection', [
             'type' => new PerformanceOfAPieceType(),
             'allow_add' => true,
             'allow_delete' => true,
-        ])
-        ->add('performance_adder', 'entity', [
+            'by_reference' => false,
+        ]);
+        $form->add('performance_adder', 'entity', [
             'class' => 'IcsePublicBundle:PieceOfMusic',
             'property' => 'full_name',
             'required' => false,
             'mapped' => false,
-        ])
-        ->add('description', 'textarea', [
+        ]);
+        $form->add('description', 'textarea', [
             'required' => false,
             'label' => 'Information',
             'attr' => ['class' => 'doceditor'],
-        ])
-        ->getForm();
-        return $form;
+        ]);
     }
 
     protected function instanceOperationAction($request, $id, $op)
@@ -190,50 +188,5 @@ class EventController extends EntityAdminController
         }
         return parent::deleteAction($id);
     }
-
-    protected function putData($request, $entity)
-        /* @var $entity Event */
-    {
-        $performances_before = new ArrayCollection;
-        foreach ($entity->getPerformances() as $p) $performances_before->add($p);
-
-        $form = $this->getForm($entity);
-        $form->submit($request->request->get($form->getName()));
-
-        $entity->setUpdatedAt(new \DateTime());
-        $entity->setUpdatedBy($this->get('security.context')->getToken()->getUser());
-
-        $em = $this->getDoctrine()->getManager();
-        if ($form->isValid())
-        {
-            $em->persist($entity);
-
-            foreach ($performances_before as $old_p)
-            {
-                if ($entity->getPerformances()->contains($old_p) === false) $em->remove($old_p);
-            }
-
-            foreach($entity->getPerformances() as $p)
-            {
-                $p->setEvent($entity);
-                $em->persist($p);
-            }
-
-            $em->flush();
-            return $this->get('ajax_response_gen')->returnSuccess(['entity' => $entity]);
-        }
-        else
-        {
-            // Cancel any changes
-            if ($em->contains($entity))
-            {
-                $em->refresh($entity);
-                foreach($entity->getPerformances() as $p) if ($em->contains($p)) $em->refresh($p);
-            }
-            return $this->get('ajax_response_gen')->returnFail($form);
-        }  
-    }
-
-
 
 }

@@ -38,65 +38,28 @@ class RehearsalController extends EntityAdminController
         return array("fields" => $fields, "entities" => $rehearsals);
     }
 
-    /**
-     * @param Rehearsal $rehearsal
-     * @return \Symfony\Component\Form\Form
-     */
-    protected function getForm($rehearsal)
+    protected function buildForm($form)
     {
-        $rehearsal->setStartsAt(new \DateTime("this friday 6pm"));
-        $form = $this->createFormBuilder($rehearsal)
-        ->add('starts_at', 'datetime12', array(
-                'date_widget' => 'single_text'
-            ,   'time_widget' => 'single_text'
-            ,   'date_format' => 'dd/MM/yy'
-            ))
-        ->add('ends_at', new EndTimeType(), [
+        $form->add('starts_at', 'datetime12', [
+            'date_widget' => 'single_text',
+            'time_widget' => 'single_text',
+            'date_format' => 'dd/MM/yy',
+        ]);
+        $form->add('ends_at', new EndTimeType(), [
             'required' => false,
-        ])
-        ->add('location', 'entity', array(
-                'class' => 'IcsePublicBundle:Venue',
-                'property' => 'name',
-                'required' => false,
-                'attr' => ['class' => 'entity-select']
-            ))
-        ->add('name', 'text', array('required' => false, 'label' => 'Title'))
-        ->add('comments', 'textarea', array('required' => false))
-        ->getForm(); 
-        return $form;
+        ]);
+        $form->add('location', 'entity', [
+            'class' => 'IcsePublicBundle:Venue',
+            'property' => 'name',
+            'required' => false,
+            'attr' => ['class' => 'entity-select'],
+        ]);
+        $form->add('name', 'text', [
+            'required' => false,
+            'label' => 'Title',
+        ]);
+        $form->add('comments', 'textarea', [
+            'required' => false,
+        ]);
     }
-
-    /**
-     * @param $request
-     * @param Rehearsal $rehearsal
-     * @return mixed
-     */
-    protected function putData($request, $rehearsal)
-    {
-        $form = $this->getForm($rehearsal);
-        $form->bind($request);
-
-        $rehearsal->setUpdatedAt(new \DateTime());
-        $rehearsal->setUpdatedBy($this->get('security.context')->getToken()->getUser());
-
-        $em = $this->getDoctrine()->getManager();
-        if ($form->isValid())
-        {
-            $em->persist($rehearsal);
-            $em->flush();
-            return $this->get('ajax_response_gen')->returnSuccess();
-        }
-        else
-        {
-            // Cancel any changes
-            if ($em->contains($rehearsal))
-            {
-                $em->refresh($rehearsal);
-            }
-            return $this->get('ajax_response_gen')->returnFail($form);
-        }  
-    }
-
-
-
 }

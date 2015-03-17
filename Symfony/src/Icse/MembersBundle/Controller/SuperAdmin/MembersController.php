@@ -2,6 +2,7 @@
 
 namespace Icse\MembersBundle\Controller\SuperAdmin;
 
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormError;
@@ -46,49 +47,43 @@ class MembersController extends EntityAdminController
         return ["fields" => $fields, "entities" => $members, "serial_groups" => ['superadmin']];
     }
 
-    /**
-     * @param Member $member
-     * @return \Symfony\Component\Form\Form
-     */
-    protected function getForm($member)
+    protected function buildForm($form)
     {
-        $form = $this->createFormBuilder($member)
-            ->setMethod($member->getID() === null ? 'POST' : 'PUT')
-            ->add('first_name', 'text')
-            ->add('last_name', 'text')
-            ->add('username', 'text')
-            ->add('email', 'email')
-            ->add('active', 'choice', [
-                'choices' => [true => 'Yes', false => 'No']
-            ])
-            ->add('last_paid_membership_on', 'date', [
-                'label' => 'Paid membership',
-                'widget' => 'single_text',
-                'required' => false,
-                'format' => 'dd/MM/yy'
-            ])
-            ->add('role', 'choice', [
-                'choices' => [$member::ROLE_AUTO => 'Auto', $member::ROLE_ADMIN => 'Admin', $member::ROLE_SUPER_ADMIN => 'Super Admin']
-            ])
-            ->add('password_operation', 'choice', [
-                'choices' => [
-                    Member::PASSWORD_NO_CHANGE => "Don't Change",
-                    Member::PASSWORD_IMPERIAL => 'Imperial Password',
-                    Member::PASSWORD_RANDOM => 'Random Password',
-                    Member::PASSWORD_SET => 'Choose a Password'
-                ],
-                'label' => 'Password',
-                'expanded' => true
-            ])
-            ->add('plain_password', 'repeated', [
-                'type' => 'password',
-                'required' => false,
-                'invalid_message' => "Passwords must match",
-                'first_options' => ['label' => 'New Password'],
-                'second_options' => ['label' => 'Repeat Password'],
-            ])
-            ->getForm(); 
-        return $form;
+        $form->add('first_name', 'text');
+        $form->add('last_name', 'text');
+        $form->add('username', 'text');
+        $form->add('email', 'email');
+        $form->add('active', 'choice', [
+            'choices' => [true => 'Yes', false => 'No'],
+            'required' => true
+        ]);
+        $form->add('last_paid_membership_on', 'date', [
+            'label' => 'Paid membership',
+            'widget' => 'single_text',
+            'required' => false,
+            'format' => 'dd/MM/yy'
+        ]);
+        $form->add('role', 'choice', [
+            'choices' => [Member::ROLE_AUTO => 'Auto', Member::ROLE_ADMIN => 'Admin', Member::ROLE_SUPER_ADMIN => 'Super Admin'],
+            'required' => true
+        ]);
+        $form->add('password_operation', 'choice', [
+            'choices' => [
+                Member::PASSWORD_NO_CHANGE => "Don't Change",
+                Member::PASSWORD_IMPERIAL => 'Imperial Password',
+                Member::PASSWORD_RANDOM => 'Random Password',
+                Member::PASSWORD_SET => 'Choose a Password'
+            ],
+            'label' => 'Password',
+            'expanded' => true
+        ]);
+        $form->add('plain_password', 'repeated', [
+            'type' => 'password',
+            'required' => false,
+            'invalid_message' => "Passwords must match",
+            'first_options' => ['label' => 'New Password'],
+            'second_options' => ['label' => 'Repeat Password'],
+        ]);
     }
 
     /**
@@ -168,60 +163,49 @@ class MembersController extends EntityAdminController
         }
     }
 
-    protected function putData($request, $member)
+    public function createAction(Request $request)
     {
         if (isset($request->files->get('form')['csv_file']))
         {
             return $this->handleBatchRequest($request);
         }
+        return parent::createAction($request);
+    }
 
-        /* @var $member Member */
-        $is_new_account = ($member->getID() === null);
-        $form = $this->getForm($member);
-        $form->handleRequest($request);
-
+    protected function preCheckFormValid(Form $form, $entity)
+    {
         try
         {
-            $this->applyPasswordOp($member);
+            $this->applyPasswordOp($entity);
         }
         catch (\InvalidArgumentException $e)
         {
             $form->addError(new FormError($e->getMessage()));
         }
-
-        $em = $this->getDoctrine()->getManager();
-        if ($form->isValid())
-        {
-            $em->persist($member);
-            $em->flush();
-
-            if ($is_new_account)
-            {
-                $this->postAddNewMember($member);
-            }
-            else if ($member->getPasswordOperation() == Member::PASSWORD_RANDOM)
-            {
-                $this->sendTempPasswordEmail($member);
-            }
-
-            return $this->get('ajax_response_gen')->returnSuccess();
-        }
-        else
-        {
-            if ($em->contains($member)) $em->refresh($member);
-            return $this->get('ajax_response_gen')->returnFail($form);
-        }  
     }
 
-    private function postAddNewMember($member)
+    protected function postCreateEntity($member)
     {
         $this->sendNewAccountEmail($member);
+    }
+
+    /**
+     * @param Member $member
+     */
+    protected function postEditEntity($member)
+    {
+        if ($member->getPasswordOperation() == Member::PASSWORD_RANDOM)
+        {
+            $this->sendTempPasswordEmail($member);
+        }
     }
 
     private function getBatchUploadForm()
     {
         return $this->createFormBuilder()
-            ->add('csv_file', 'file')
+            ->add('csv_file', 'file', [
+                'attr' => ['accept' => ".csv"]
+            ])
             ->getForm();
     }
 
@@ -255,7 +239,7 @@ class MembersController extends EntityAdminController
 
                     $em->persist($member);
                     $em->flush();
-                    $this->postAddNewMember($member);
+                    $this->postCreateEntity($member);
                 }
                 else
                 {

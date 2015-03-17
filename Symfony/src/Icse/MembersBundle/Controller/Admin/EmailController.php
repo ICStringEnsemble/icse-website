@@ -122,7 +122,7 @@ class EmailController extends Controller
         $newsletter->setSubject($data['email_subject']);
         $newsletter->setBody($data['body']);
         $newsletter->setSentAt(new \DateTime);
-        $newsletter->setSentBy($this->get('security.context')->getToken()->getUser());
+        $newsletter->setSentBy($this->getUser());
         $newsletter->setType(self::$NEWSLETTER_TYPE_MAP[$data['mailing_list']]);
         $newsletter->setDest(self::$NEWSLETTER_DEST_MAP[$data['send_to_option']]);
 
