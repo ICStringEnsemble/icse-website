@@ -30,8 +30,8 @@
   </div>
 
   <div class="posted_by">
-    {{ article.postedBy ? article.postedBy.fullName : "" }}
-    {% set committee_role = app.user.getMostCurrentCommitteeRole(article.postedAt) %}
+    {{ article.postedBy.fullName }}
+    {% set committee_role = article.postedBy.getMostCurrentCommitteeRole(article.postedAt) %}
     {% if committee_role is not null %}
       <span class="role">({{ committee_role.positionName }}, {{ committee_role.startYear }}&ndash;{{ "%d" | format(committee_role.startYear + 1) | slice(-2) }})</span>
     {% endif %}

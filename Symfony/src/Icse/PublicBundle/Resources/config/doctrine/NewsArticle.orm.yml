@@ -28,7 +28,7 @@ Icse\PublicBundle\Entity\NewsArticle:
         posted_by:
             targetEntity: Icse\MembersBundle\Entity\Member
             joinColumn:
-                nullable: true # REVISIT
+                nullable: false
         updated_by:
             targetEntity: Icse\MembersBundle\Entity\Member
             joinColumn:
