@@ -1,6 +1,4 @@
-@import "compass/css3/transform"; 
-@import "compass/css3/transition";
-@import "compass/css3/box-sizing";
+@import "compass/css3";
 $nav_col_width: 240px;
 $hidden_nav_col_width: 34px;
 $nav_col_edge_width: 2px;
@@ -9,90 +7,178 @@ $sidebar_animation_time: 0.2s;
 $sidebar_button_flip_animation_time: 1s;
 $nav_col_colour: #d4b896;
 
-#above_footer {
-    background: url(@IcseMembersBundle/images/bg.png) #fff repeat-y left;
-    @include transition(background $sidebar_animation_time); 
+//#above_footer {
+//    background: url(@IcseMembersBundle/images/bg.png) #fff repeat-y left;
+//    @include transition(background $sidebar_animation_time);
+//}
+//
+//#above_footer.nav_col_hidden {
+//    background-position: -206px 0;
+//    background-image: url(@IcseMembersBundle/images/bg_hidden_nav.png);
+//}
+
+body.main {
+    @include display-flex;
+    @include flex-flow(column nowrap);
+
+    #above_footer {
+
+        min-height: 0;
+        background: #fff;
+
+        div.footer_push {
+            display: none;
+        }
+
+        @include flex(1 0 auto);
+        @include display-flex;
+        @include flex-flow(column nowrap);
+
+        & > header, & > nav {
+            @include flex(0 0 auto);
+        }
+    }
+
+    footer {
+        margin-top: 0;
+        @include flex(0 0 auto);
+    }
 }
 
-#above_footer.nav_col_hidden {
-    background-position: -206px 0;
-    background-image: url(@IcseMembersBundle/images/bg_hidden_nav.png);
+#members-section-body {
+    @include flex(1 0 auto);
+    @include display-flex;
+    @include align-items(stretch);
+    @include flex-flow(row nowrap);
+    overflow-y: hidden;
 }
 
-#above_footer.full_width {
-    background: #fff;
-} 
+nav.members {
+    z-index: 80;
+    position: relative;
+    width: $nav_col_width - $nav_col_edge_width;
+    @include flex(0 0 auto);
 
-#nav_column {
-    float: left;
-    position:relative;
-    width: 0px;
-    left: 0;
-    @include transition(left $sidebar_animation_time);
-    height: auto !important;
-}
+    margin-left: 0;
+    @include transition(margin-left $sidebar_animation_time);
 
-.nav_col_hidden #nav_column {
-    left: $hidden_nav_col_width - $nav_col_width;
-}
+    border-right: $nav_col_edge_width solid #000;
+    @include box-shadow(-12px 0 12px 12px rgba(0,0,0,0.6));
 
-#nav_column li {
-    display: block;
-    float: left;
-    clear: left;
-}
+    background-color: $nav_col_colour;
 
-#nav_col_head, #nav_column li.category {
-    width: $nav_col_width - 2 * $nav_col_side_padding;
-    padding: 0.5em $nav_col_side_padding;
-    color: #fff;
-    background: #000;
-}
-
-#nav_column li a {
-
-    &:link, &:visited {
+    li {
         display: block;
-        width: $nav_col_width - 2 * $nav_col_side_padding - $nav_col_edge_width;
-        padding: 0.5em $nav_col_side_padding;
-        text-decoration: none;
-        color: #000;
-        background-color: $nav_col_colour; 
 
-        &.current {
-            background-color: lighten($nav_col_colour, 10%);
+        a, &#nav_col_head, &.category {
+            padding: 0.5em $nav_col_side_padding;
+            height: 2em;
+//            line-height: 1.1em;
+        }
+
+        a {
+            display: block;
+            text-decoration: none;
+            color: #000;
+
+            &:hover {
+                background-color: darken($nav_col_colour, 10%);
+            }
+
+            &.current {
+                background-color: lighten($nav_col_colour, 10%);
+
+                &:hover {
+                    background-color: lighten($nav_col_colour, 20%);
+                }
+            }
+        }
+
+        &#nav_col_head, &.category {
+            color: #fff;
+            background: #000;
         }
     }
 
-    &:hover {
-            background-color: darken($nav_col_colour, 10%); 
-        &.current {
-            background-color: lighten($nav_col_colour, 20%);
+    .hide-button {
+        z-index: 99;
+        float: right;
+        @include transition(transform $sidebar_button_flip_animation_time);
+        position: relative;
+
+        &:hover {
+            cursor: pointer;
         }
     }
 
+    .hidden-cover {
+        @include transition(visibility 0 linear $sidebar_animation_time, opacity $sidebar_animation_time);
+        visibility: hidden;
+        opacity: 0;
+
+        position: absolute;
+        left: 0;
+        right: -1px;
+        top: 0;
+        bottom: 0;
+        background-color: #000;
+        z-index: 90;
+
+        .label {
+            color: #fff;
+            position: absolute;
+            top: 2em;
+            right: 0.5em;
+            width: 0;
+            @include rotate(90deg);
+            @include apply-origin(top left, false);
+        }
+    }
+
+    &.hidden {
+        margin-left: $hidden_nav_col_width - $nav_col_width;
+
+        .hidden-cover {
+            @include transition-delay(0);
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .hide-button {
+            @include rotate(-180deg);
+        }
+
+    }
 }
 
 #section_container {
-    margin-left: $nav_col_width;
-    overflow: hidden; 
-    @include transition(margin-left $sidebar_animation_time);  
+    @include flex(1 0);
+//    margin-left: $nav_col_width;
+//    overflow: hidden;
+//    @include transition(margin-left $sidebar_animation_time);
 }
 
-.nav_col_hidden #section_container {
-    margin-left: $hidden_nav_col_width;
-}
 
-#hide_nav_col_button {
-    float: right;
-    @include transition(transform $sidebar_button_flip_animation_time);
-}
+//#hidden_nav_col_cover {
+//    visibility: hidden;
+//    opacity: 0;
+//    width: $nav_col_width;
+//    height:100%;
+//    position: absolute;
+//    left: 0;
+//    z-index: 0;
+//    background-color: #000;
+//    @include transition(visibility 0s linear $sidebar_animation_time, opacity $sidebar_animation_time);
+//}
 
-#hide_nav_col_button:hover {
-    cursor: pointer;
-} 
+//.nav_col_hidden #hidden_nav_col_cover {
+//    visibility: visible;
+//    opacity: 1;
+//    @include transition-delay(0s);
+//}
 
-section {
+
+section.members-main {
     width: auto;
     float: none;
     position: relative;
@@ -120,87 +206,66 @@ form.standard {
     }
 }
 
+
+@import "select2-theme/layout";
+
 html {
-    a.select2-choice {
-        &:link, &:visited, &:hover {
-            text-decoration:none;
-            color: #000;
-        }
-    }
 
     li.ui-timepicker-selected,
     .ui-timepicker-list li:hover,
-    .ui-timepicker-list .ui-timepicker-selected:hover,
-    .select2-results .select2-highlighted {
+    .ui-timepicker-list .ui-timepicker-selected:hover /*,
+    .select2-results .select2-highlighted*/ {
         background: #E2C891;
         color: #000;
     }
 
-    .select2-container .select2-choice {
-        background-image: none;
-        border-radius: 0;
-        height: 24px;
-        line-height: 24px;
-    }
-
-    .select2-container .select2-choice .select2-arrow {
-        border-radius: 0;
-    }
-
-    .select2-container .select2-choice abbr {
-        top: 6em;
-    }
-
-    .select2-container .select2-choice .select2-arrow b {
-        background-position: 0 0;
-    }
-
-    .select2-container.animate_to_plaintext {
-        $time: 1s;
-
-        .select2-choice {
-            border-width: 0;
-            @include transition(all $time);
-        }
-
-        .select2-search-choice-close {
-            opacity: 0;
-            @include transition(all $time);
-        }
-    }
+//    a.select2-choice {
+//        &:link, &:visited, &:hover {
+//            text-decoration:none;
+//            color: #000;
+//        }
+//    }
+//    .select2-container, .select2-results {
+//        font-size: 0.8em;
+//    }
+//
+//    .select2-container .select2-choice {
+//        background-image: none;
+//        border-radius: 0;
+//        height: 24px;
+//        line-height: 24px;
+//        padding-left: 4px;
+//    }
+//
+//    .select2-container .select2-choice .select2-arrow {
+//        border-radius: 0;
+//    }
+//
+//    .select2-container .select2-choice abbr {
+//        top: 6em;
+//    }
+//
+//    .select2-container .select2-choice .select2-arrow b {
+//        background-position: 0 0;
+//    }
+//
+//    .select2-container.animate_to_plaintext {
+//        $time: 1s;
+//
+//        .select2-choice {
+//            border-width: 0;
+//            @include transition(all $time);
+//        }
+//
+//        .select2-search-choice-close {
+//            opacity: 0;
+//            @include transition(all $time);
+//        }
+//    }
 }
 
 p.success {
     color: #090;
-}
-
-#hidden_nav_col_cover {
-    visibility: hidden;
-    opacity: 0;
-    width: $nav_col_width;
-    height:100%;
-    position: absolute;
-    left: 0;
-    z-index: 0;
-    background-color: #000;
-    @include transition(visibility 0s linear $sidebar_animation_time, opacity $sidebar_animation_time); 
-}
-
-.nav_col_hidden #hidden_nav_col_cover {
-    visibility: visible;
-    opacity: 1;
-    @include transition-delay(0s); 
-} 
-
-
-#hidden_nav_col_cover div {
-    color: #fff;
-    position:absolute;
-    top: 2em;
-    right: 0.5em;
-    width: 0px;
-    @include rotate(90deg);
-    @include apply-origin(top left, false);
 }
 
 .ui-dialog-buttonset .loading_spinner {
@@ -209,9 +274,41 @@ p.success {
 }
 
 ul.entity_main_buttons, ul.email_buttons {
-    height: 2.3em;
     margin-bottom: 0;
     max-width: none;
+
+    background-color: #fff;
+    display: inline-block;
+    z-index: 9;
+
+
+    &.alt1 {
+        padding: 0.4em;
+        border-radius: 0.5em;
+        @include transition(box-shadow 0.4s);
+
+        &.stuck {
+            position: fixed;
+            top: 5px;
+            @include box-shadow(#5d5d5d 2px 2px 10px);
+        }
+    }
+
+
+    &.alt2 {
+        padding: 0.4em 0;
+        border-radius: 0.1em;
+
+        &.stuck {
+            position: fixed;
+            top: 0;
+            margin: 0 -20px;
+            padding-left: 20px;
+            width: 100%;
+            @include box-shadow(#5d5d5d 2px 2px 10px);
+            @include transition(box-shadow 0.4s);
+        }
+    }
 
     li {
         display: inline-block;
@@ -524,7 +621,6 @@ span.membership_date {
 .fileinput-button-wrapper {
     position: relative;
     overflow: hidden;
-    margin-bottom: 0.1em;
 
     input {
         position: absolute;
@@ -566,7 +662,7 @@ span.membership_date {
     }
 }
 
-form {
+form.standard {
     div.end_time_widget {
         input.duration {
             width: 40px;
@@ -581,10 +677,6 @@ form {
         .indicator_area {
             font-weight: bold;
         }
-    }
-
-    .entity-select {
-        width: 204px;
     }
 }
 

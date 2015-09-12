@@ -4,5 +4,15 @@
     {{ parent() }}
     <script src="//cdn.ckeditor.com/4.4.3/standard-all/ckeditor.js"></script>
     <script src="{{ asset('bundles/icsemembers/lib/ckeditor/adapters/jquery.js') }}"></script>
+    <script src="//cdn.jsdelivr.net/select2/4.0.0/js/select2.js"></script>
+
+    <script>
+        $.fn.select2.defaults.set("theme", "icse");
+        $.fn.select2.defaults.set("placeholder", "");
+    </script>
 {% endblock javascripts %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/select2/4.0.0/css/select2.min.css">
+{% endblock %}

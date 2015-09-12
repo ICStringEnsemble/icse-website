@@ -61,11 +61,13 @@
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 <script src="{{ asset('bundles/icsepublic/lib/js/jquery.mobile.custom.min.js') }}"></script> 
 <script src="{{ asset('bundles/icsepublic/lib/js/jquery.cookie.min.js') }}"></script>
-{#<script src="{{ asset('bundles/icsepublic/lib/js/jquery.ui.touch-punch.min.js') }}"></script> #}
-{#<script src="{{ asset('bundles/icsepublic/lib/js/jquery.touchToClick.min.js') }}"></script>#}
+<script src="//cdn.jsdelivr.net/jquery.waypoints/2.0.5/waypoints.min.js"></script>
+<script src="//cdn.jsdelivr.net/jquery.waypoints/2.0.5/shortcuts/sticky-elements/waypoints-sticky.min.js"></script>
 {% endblock %}
 
 {% block header_to_footer %}
+
+<a hidden id="bundles_basedir" href="{{ asset('bundles/', version=false) }}"></a>
 
 <script>
     (function(){
@@ -96,73 +98,84 @@
     })();
 </script>
 
-<div id="nav_column">
-  <div id="hidden_nav_col_cover"><div>Menu</div></div>
-  <ul>
-    {# ICSE Resources #}
-    <li id="nav_col_head">Members Area<img title="Hide/Show" id="hide_nav_col_button" src="{{ asset('bundles/icsemembers/images/leftarrow.png') }}" /></li>
-    {% set this_group = default_group %}
-    {% for item_id, item in members_nav_items %}
-        {% set is_header = item_id starts with '__' %}
-        {% if is_header %}
-            {% set this_group = default_group | merge(item) %}
-        {% endif %}
-        {% if is_granted(this_group.role) and (item.role is not defined or is_granted(item.role)) %}
-            {% if is_header %}
-                {% if this_group.label is defined %}
-                    <li class="category">{{ this_group.label }}</li>
+<div id="members-section-body">
+    <nav class="members">
+        <ul>
+            {# ICSE Resources #}
+            <li id="nav_col_head">
+                Members Area
+                <i title="Hide/Show" class="hide-button fa fa-arrow-left"></i>
+            </li>
+            {% set this_group = default_group %}
+            {% for item_id, item in members_nav_items %}
+                {% set is_header = item_id starts with '__' %}
+                {% if is_header %}
+                    {% set this_group = default_group | merge(item) %}
                 {% endif %}
-            {% else %}
-                <li>
-                    <a {{ item_id == currentSubSection ? 'class=current' }} href="{{ item.url }}">
-                        {% if item.fa_icon is defined %}
-                            <i class="fa fa-fw {{ item.fa_icon }}"></i>
+                {% if is_granted(this_group.role) and (item.role is not defined or is_granted(item.role)) %}
+                    {% if is_header %}
+                        {% if this_group.label is defined %}
+                            <li class="category">{{ this_group.label }}</li>
                         {% endif %}
-                        {{ item.label }}
-                    </a>
-                </li>
-            {% endif %}
-        {% endif %}
-    {% endfor %}
-  </ul>
-</div>
-<a hidden id="bundles_basedir" href="{{ asset('bundles/', version=false) }}"></a>
-<div id="section_container">
-<section>
-{% block content %}
-    {% if pageTitle is defined %}
-    <h1>
-        {%- if page_nav_item.fa_icon is defined %}<i class="fa fa-fw {{ page_nav_item.fa_icon }}"></i>{% endif %}
-        {{ pageTitle }}
-    </h1>
-    {% endif %}
-{% endblock %}
-</section>
+                    {% else %}
+                        <li>
+                            <a {{ item_id == currentSubSection ? 'class=current' }} href="{{ item.url }}">
+                                {% if item.fa_icon is defined %}
+                                    <i class="fa fa-fw {{ item.fa_icon }}"></i>
+                                {% endif %}
+                                {{ item.label }}
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </ul>
+        <div class="hidden-cover">
+            <div class="label">Menu</div>
+        </div>
+    </nav>
+    <div id="section_container">
+        <section class="members-main">
+            {% block content %}
+                {% if pageTitle is defined %}
+                    <h1>
+                        {%- if page_nav_item.fa_icon is defined %}<i class="fa fa-fw {{ page_nav_item.fa_icon }}"></i>{% endif %}
+                        {{ pageTitle }}
+                    </h1>
+                {% endif %}
+            {% endblock %}
+        </section>
+    </div>
 </div>
 <script>
     $(document).ready(function(){
-  
+
+        var members_nav = $('nav.members');
+        var nav_col_enabled = true;
+
         if(typeof onNavColumnToggle != 'function'){
             window.onNavColumnToggle = function(){};
         }
-    
-        var nav_col_enabled = true;
+
         function hideNavColumn(){
-            nav_col_enabled = false;
-            $('#hide_nav_col_button').addClass("rotate-180");
-            $('#above_footer').addTransitionClass("nav_col_hidden").done(onNavColumnToggle);
+            if (nav_col_enabled) {
+                nav_col_enabled = false;
+                members_nav.addTransitionClass("hidden").done(onNavColumnToggle);
+            }
         }
         function showNavColumn(){
-            nav_col_enabled = true;
-            $('#hide_nav_col_button').removeClass("rotate-180");
-            $('#above_footer').removeTransitionClass("nav_col_hidden").done(onNavColumnToggle);
+            if (!nav_col_enabled) {
+                nav_col_enabled = true;
+                members_nav.removeTransitionClass("hidden").done(onNavColumnToggle);
+            }
         }
-        $('#hide_nav_col_button, #hidden_nav_col_cover').click(function(){
+        members_nav.find('.hide-button').click(function(){
             nav_col_enabled ? hideNavColumn() : showNavColumn();
         });
-        $('#nav_column').find('li').bind('swipeleft', hideNavColumn);
-        $('#hidden_nav_col_cover').bind('swiperight', showNavColumn);
-  
+        members_nav.bind('swipeleft', hideNavColumn);
+        members_nav.bind('swiperight', showNavColumn);
+        members_nav.find('.hidden-cover').click(showNavColumn);
+
         $.cookie('last_members_page', '{{ app.request.attributes.get('_route') }}', { expires: 14, path: '/' });
     })
 </script>

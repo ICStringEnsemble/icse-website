@@ -60,6 +60,7 @@
 {% endspaceless %}
 </head>
 <body class="main">
+
   <div id="above_footer" {% block aboveFooterAttrs %}{% endblock %}>
     <header>
     <hgroup>
@@ -70,7 +71,7 @@
     </h1>
     </hgroup>
     </header>
-    <nav>
+    <nav class="main">
     {% block navbars %}
     <div id="top_nav">
       {% if allow_nav %}
@@ -79,7 +80,7 @@
         {% for item in main_nav_items %}
         <li {% if item.id == 'members' %}id="members_area_button" {% if is_logged_in %}class="logged_in"{% endif %} {% endif %} >
             <a {% if item.id == currentSection %}class='current'{% endif %} href="{{ item.url }}">{{ item.label }}</a>
-        </li> 
+        </li>
         {% endfor %}
       </ul>
       {% endif %}
@@ -95,9 +96,11 @@
     {% endblock header_to_footer %}
     <div class="footer_push"></div>
   </div>
+
   <footer>
   Copyright &copy; 2005&ndash;{{ "now" | date ("Y") }} Imperial College String Ensemble {% if allow_nav %}| <a href="{{ path('IcsePublicBundle_contact') }}">Contact Us</a>{% endif %}
   </footer>
+
 {% block after_footer %}{% endblock %}
 </body>
 </html>
