@@ -136,6 +136,16 @@
         }
     }
 
+    (function(){
+        var entity_main_buttons = $('.entity_main_buttons');
+        entity_main_buttons.height(entity_main_buttons.height());
+        entity_main_buttons.waypoint('sticky', {'offset': window.location.hash == "#alt1" ? '5px' : '0'});
+
+        if (["#alt1", "#alt2"].indexOf(window.location.hash) >= 0) {
+            entity_main_buttons.addClass(window.location.hash.slice(1));
+        }
+    })();
+
     /* Loading Indicator Handling */
     var startLoading;
     var stopLoading;
@@ -327,7 +337,7 @@
         }
     });
 
-    $('.entity_main_buttons .loading_spinner').clone().prependTo('.ui-dialog-buttonset');
+    $('.entity_main_buttons .loading_spinner').clone().hide().prependTo('.ui-dialog-buttonset');
 
     var set_select_to_default = function() {
         var $select = $(this);

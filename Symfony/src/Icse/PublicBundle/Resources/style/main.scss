@@ -1,5 +1,5 @@
 @import "compass/reset";
-@import "compass/css3/transform"; 
+@import "compass/css3";
 $default-font-size: 16px;
 $page-width:  994px;
 $page-side-padding: 20px;
@@ -12,6 +12,18 @@ $h2_colour: #643906;
 $nav_colour1: #000;
 $nav_colour2: #333;
 $nav_colour3: #aaa;
+
+// Reset input elements
+
+input, textarea {
+    color: inherit;
+    font-size: inherit;
+    font-family: inherit;
+
+    &:focus {
+        outline: 0;
+    }
+}
 
 html, body {
     &.main {
@@ -44,17 +56,17 @@ body {
     background: url(@IcsePublicBundle/images/bg.png) #eee repeat-y center;
 }
 
-header {
+header.main {
     background-color: #fff;
-}
 
-hgroup {
-    width: $page-width - 2 * $page-side-padding;
-    margin: 0 auto;
-    padding: 7px $page-side-padding;
-    background-image: url(@IcsePublicBundle/images/banner_violin.png);
-    background-repeat: no-repeat;
-    background-position: bottom right;
+     & > div {
+        width: $page-width - 2 * $page-side-padding;
+        margin: 0 auto;
+        padding: 7px $page-side-padding;
+        background-image: url(@IcsePublicBundle/images/banner_violin.png);
+        background-repeat: no-repeat;
+        background-position: bottom right;
+    }
 }
 
 #top_nav {
@@ -69,7 +81,7 @@ hgroup {
     background-color: $nav_colour2;
 }
 
-nav ul {
+nav.main ul {
     width: $page-width;
     margin: 0 auto;
     list-style: none;
@@ -80,12 +92,12 @@ nav ul {
     background-color: $nav_colour3;
 }
 
-nav li {
+nav.main li {
     display: block;
     float: left;
 }
 
-nav a {
+nav.main a {
     &:link, &:visited {
         display: block;
         padding: 0.5em 20px;
@@ -271,11 +283,12 @@ nav a {
 
 
 section {
-    padding: 0 $page-side-padding;
-    padding-top:1em;
-    padding-bottom:0em;
-    float: left;
-    width: $page-width - 2 * $page-side-padding;
+    &.main {
+        float: left;
+        width: $page-width - 2 * $page-side-padding;
+    }
+
+    padding: 1em $page-side-padding 0em;
 
     @extend %generic_element_styles;
 
@@ -350,11 +363,13 @@ $form-label-separation: 20px;
 
 form.standard {
     margin-top: 1em;
+    padding-bottom: 1px;
     overflow: auto;
 
     div.form_row {
         overflow: hidden;
         margin-bottom: 0.9em;
+        padding-bottom: 2px;
 
         .form_row_main {
             clear: none;
@@ -389,18 +404,76 @@ form.standard {
         padding-bottom: 0.7em;
     }
 
+    %text-box-styles {
+        width: 200px;
+        border: 1px solid #B1B1B1;
+
+        &:focus {
+            border-color: #AD8F61;
+        }
+    }
+
+    %single-line-text-box-styles {
+        min-height: 1.4em;
+        padding: 0 2px;
+        margin-top: 0;
+        margin-right: 10px;
+    }
+
+    %button-styles {
+        & {
+            @include border-radius(3px);
+            @include transition(background 0.2s);
+            font-family: inherit;
+            font-size: inherit;
+            min-height: 1.4em;
+            color: #ffffff;
+            background: #ad8f61;
+            padding: 0.3em 15px;
+            border: 0;
+        }
+
+        &:hover {
+            background: #997e56;
+            cursor: pointer;
+        }
+
+        &:disabled {
+            background: #aaa;
+            cursor: default;
+            @include transition(background 0s);
+        }
+    }
+
+    textarea {
+        @extend %text-box-styles;
+        margin-bottom: -5px;
+    }
+
+    button {
+        @extend %button-styles;
+    }
+
+    select {
+        width: 206px;
+    }
+
     input {
-        &[type=text], &[type=email], &[type=password] {
-//            display: block;
-//            float:left;
-//            vertical-align: middle;
-            width: 200px;
-            margin-top: 0;
-            margin-right: 10px;
+        &:not([type]),
+        &[type='text'],
+        &[type='password'],
+        &[type='number'],
+        &[type='email'],
+        &[type='url'],
+        &[type='search'],
+        &[type='tel'] {
+            @extend %text-box-styles;
+            @extend %single-line-text-box-styles;
         }
 
         &[type=number] {
             width: 100px;
+            padding-right: 0;
         }
 
         &[type=date], &[type=time] {
@@ -417,6 +490,10 @@ form.standard {
 
         &[type=radio], &[type=checkbox] {
             margin-top: 0.4em;
+        }
+
+        &[type=button], &[type=submit] {
+            @extend %button-styles;
         }
 
         &[type=submit] {
@@ -497,7 +574,8 @@ form.standard {
                 margin-top: 0.15em;
 
                 &[type=button] {
-                    margin-left: 8px;
+                    margin-left: 4px;
+                    padding: 0.1em 10px;
                 }
             }
         }
@@ -513,14 +591,15 @@ form.standard {
 
     input#remember_me {
         float: left;
-        margin-top: 0.5em;
-        margin-left: 30px;
+        margin-top: 0.6em;
+        margin-left: 20px;
     }
 
     label#remember_me_label {
         clear: none;
         width: auto;
         padding-left: 5px;
+        margin-top: 0.2em;
     }
 
     #username_or_email_error, .error_list li {
@@ -646,30 +725,33 @@ textarea#email_textarea {
 
 }
 
-section #news_head {
-    margin-bottom: 1em;
-    padding-bottom: 0.4em;
-    border-bottom: 3px solid #000; 
-    h1 {
-        padding-bottom: 0.3em;
+section.main {
+
+    #news_head {
+        margin-bottom: 1em;
+        padding-bottom: 0.4em;
+        border-bottom: 3px solid #000;
+        h1 {
+            padding-bottom: 0.3em;
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 0;
+            border: none;
+            font-weight: normal;
+        }
     }
 
-    h2 {
-        margin-top: 0;
-        margin-bottom: 0;
-        border: none;
-        font-weight: normal;
-    }
-}
-
-section #news_article {
-    margin-bottom: 1em;
-    .posted_at, .posted_by {
-        color: #888;
-        font-size: 0.8em;
-    }
-    .posted_by .role {
-        font-style: italic;
+    #news_article {
+        margin-bottom: 1em;
+        .posted_at, .posted_by {
+            color: #888;
+            font-size: 0.8em;
+        }
+        .posted_by .role {
+            font-style: italic;
+        }
     }
 }
 

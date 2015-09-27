@@ -1,4 +1,4 @@
-{% extends 'IcseMembersBundle:Default:template.html.twig' %}
+{% extends 'IcseMembersBundle:Admin:template.html.twig' %}
 
 {% set pageTitle = 'My Profile' %}
 {% set currentSubSection = 'myprofile' %}
@@ -14,5 +14,11 @@
 </h1>
 
 {{ form(form, {attr: {class: 'standard'}}) }}
+
+<script>
+    $('select#form_picture').select2({
+        allowClear: true
+    });
+</script>
 
 {% endblock %}
