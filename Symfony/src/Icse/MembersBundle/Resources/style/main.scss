@@ -208,6 +208,7 @@ p.success {
 }
 
 ul.entity_main_buttons, ul.email_buttons {
+    padding: 0.4em 0;
     margin-bottom: 0;
     max-width: none;
 
@@ -215,32 +216,14 @@ ul.entity_main_buttons, ul.email_buttons {
     display: inline-block;
     z-index: 9;
 
-
-    &.alt1 {
-        padding: 0.4em;
-        border-radius: 0.5em;
+    &.stuck {
+        position: fixed;
+        top: 0;
+        margin: 0 -20px;
+        padding-left: 20px;
+        width: 100%;
+        @include box-shadow(#5d5d5d 2px 2px 10px);
         @include transition(box-shadow 0.4s);
-
-        &.stuck {
-            position: fixed;
-            top: 5px;
-            @include box-shadow(#5d5d5d 2px 2px 10px);
-        }
-    }
-
-    &.alt2 {
-        padding: 0.4em 0;
-        border-radius: 0.1em;
-
-        &.stuck {
-            position: fixed;
-            top: 0;
-            margin: 0 -20px;
-            padding-left: 20px;
-            width: 100%;
-            @include box-shadow(#5d5d5d 2px 2px 10px);
-            @include transition(box-shadow 0.4s);
-        }
     }
 
     li {
