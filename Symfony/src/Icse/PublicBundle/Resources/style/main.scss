@@ -56,17 +56,17 @@ body {
     background: url(@IcsePublicBundle/images/bg.png) #eee repeat-y center;
 }
 
-header {
+header.main {
     background-color: #fff;
-}
 
-hgroup {
-    width: $page-width - 2 * $page-side-padding;
-    margin: 0 auto;
-    padding: 7px $page-side-padding;
-    background-image: url(@IcsePublicBundle/images/banner_violin.png);
-    background-repeat: no-repeat;
-    background-position: bottom right;
+     & > div {
+        width: $page-width - 2 * $page-side-padding;
+        margin: 0 auto;
+        padding: 7px $page-side-padding;
+        background-image: url(@IcsePublicBundle/images/banner_violin.png);
+        background-repeat: no-repeat;
+        background-position: bottom right;
+    }
 }
 
 #top_nav {
@@ -283,11 +283,12 @@ nav.main a {
 
 
 section {
-    padding: 0 $page-side-padding;
-    padding-top:1em;
-    padding-bottom:0em;
-    float: left;
-    width: $page-width - 2 * $page-side-padding;
+    &.main {
+        float: left;
+        width: $page-width - 2 * $page-side-padding;
+    }
+
+    padding: 1em $page-side-padding 0em;
 
     @extend %generic_element_styles;
 
@@ -724,30 +725,33 @@ textarea#email_textarea {
 
 }
 
-section #news_head {
-    margin-bottom: 1em;
-    padding-bottom: 0.4em;
-    border-bottom: 3px solid #000; 
-    h1 {
-        padding-bottom: 0.3em;
+section.main {
+
+    #news_head {
+        margin-bottom: 1em;
+        padding-bottom: 0.4em;
+        border-bottom: 3px solid #000;
+        h1 {
+            padding-bottom: 0.3em;
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 0;
+            border: none;
+            font-weight: normal;
+        }
     }
 
-    h2 {
-        margin-top: 0;
-        margin-bottom: 0;
-        border: none;
-        font-weight: normal;
-    }
-}
-
-section #news_article {
-    margin-bottom: 1em;
-    .posted_at, .posted_by {
-        color: #888;
-        font-size: 0.8em;
-    }
-    .posted_by .role {
-        font-style: italic;
+    #news_article {
+        margin-bottom: 1em;
+        .posted_at, .posted_by {
+            color: #888;
+            font-size: 0.8em;
+        }
+        .posted_by .role {
+            font-style: italic;
+        }
     }
 }
 

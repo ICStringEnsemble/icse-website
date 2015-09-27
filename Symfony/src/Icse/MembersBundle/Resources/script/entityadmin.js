@@ -337,7 +337,7 @@
         }
     });
 
-    $('.entity_main_buttons .loading_spinner').clone().prependTo('.ui-dialog-buttonset');
+    $('.entity_main_buttons .loading_spinner').clone().hide().prependTo('.ui-dialog-buttonset');
 
     var set_select_to_default = function() {
         var $select = $(this);

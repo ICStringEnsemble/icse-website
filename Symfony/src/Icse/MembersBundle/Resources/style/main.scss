@@ -7,22 +7,13 @@ $sidebar_animation_time: 0.2s;
 $sidebar_button_flip_animation_time: 1s;
 $nav_col_colour: #d4b896;
 
-//#above_footer {
-//    background: url(@IcseMembersBundle/images/bg.png) #fff repeat-y left;
-//    @include transition(background $sidebar_animation_time);
-//}
-//
-//#above_footer.nav_col_hidden {
-//    background-position: -206px 0;
-//    background-image: url(@IcseMembersBundle/images/bg_hidden_nav.png);
-//}
+@import "select2-theme/layout";
 
 body.main {
     @include display-flex;
     @include flex-flow(column nowrap);
 
     #above_footer {
-
         min-height: 0;
         background: #fff;
 
@@ -56,28 +47,47 @@ body.main {
 nav.members {
     z-index: 80;
     position: relative;
-    width: $nav_col_width - $nav_col_edge_width;
+    width: $nav_col_width;
     @include flex(0 0 auto);
 
     margin-left: 0;
     @include transition(margin-left $sidebar_animation_time);
 
-    border-right: $nav_col_edge_width solid #000;
-    @include box-shadow(-12px 0 12px 12px rgba(0,0,0,0.6));
+    &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: -5px;
+        bottom: -5px;
+        right: 0;
+        z-index: -1;
 
-    background-color: $nav_col_colour;
+        @include box-shadow(0 0 8px 2px rgba(0,0,0,0.6));
+    }
+
+    @include display-flex;
+    @include align-items(stretch);
+
+    ul {
+        @include flex(1 0 auto);
+
+        background-color: $nav_col_colour;
+        border-right: $nav_col_edge_width solid #000;
+    }
 
     li {
         display: block;
 
         a, &#nav_col_head, &.category {
+            @include display-flex;
+            @include flex-flow(column nowrap);
+            @include justify-content(center);
+
+            height: 1.4em;
             padding: 0.5em $nav_col_side_padding;
-            height: 2em;
-//            line-height: 1.1em;
         }
 
         a {
-            display: block;
             text-decoration: none;
             color: #000;
 
@@ -127,8 +137,8 @@ nav.members {
         .label {
             color: #fff;
             position: absolute;
-            top: 2em;
-            right: 0.5em;
+            top: 2.3em;
+            right: 0.6em;
             width: 0;
             @include rotate(90deg);
             @include apply-origin(top left, false);
@@ -151,36 +161,8 @@ nav.members {
     }
 }
 
-#section_container {
-    @include flex(1 0);
-//    margin-left: $nav_col_width;
-//    overflow: hidden;
-//    @include transition(margin-left $sidebar_animation_time);
-}
-
-
-//#hidden_nav_col_cover {
-//    visibility: hidden;
-//    opacity: 0;
-//    width: $nav_col_width;
-//    height:100%;
-//    position: absolute;
-//    left: 0;
-//    z-index: 0;
-//    background-color: #000;
-//    @include transition(visibility 0s linear $sidebar_animation_time, opacity $sidebar_animation_time);
-//}
-
-//.nav_col_hidden #hidden_nav_col_cover {
-//    visibility: visible;
-//    opacity: 1;
-//    @include transition-delay(0s);
-//}
-
-
 section.members-main {
-    width: auto;
-    float: none;
+    @include flex(1 0 auto);
     position: relative;
 }
 
@@ -206,62 +188,13 @@ form.standard {
     }
 }
 
-
-@import "select2-theme/layout";
-
 html {
-
     li.ui-timepicker-selected,
     .ui-timepicker-list li:hover,
-    .ui-timepicker-list .ui-timepicker-selected:hover /*,
-    .select2-results .select2-highlighted*/ {
+    .ui-timepicker-list .ui-timepicker-selected:hover {
         background: #E2C891;
         color: #000;
     }
-
-//    a.select2-choice {
-//        &:link, &:visited, &:hover {
-//            text-decoration:none;
-//            color: #000;
-//        }
-//    }
-//    .select2-container, .select2-results {
-//        font-size: 0.8em;
-//    }
-//
-//    .select2-container .select2-choice {
-//        background-image: none;
-//        border-radius: 0;
-//        height: 24px;
-//        line-height: 24px;
-//        padding-left: 4px;
-//    }
-//
-//    .select2-container .select2-choice .select2-arrow {
-//        border-radius: 0;
-//    }
-//
-//    .select2-container .select2-choice abbr {
-//        top: 6em;
-//    }
-//
-//    .select2-container .select2-choice .select2-arrow b {
-//        background-position: 0 0;
-//    }
-//
-//    .select2-container.animate_to_plaintext {
-//        $time: 1s;
-//
-//        .select2-choice {
-//            border-width: 0;
-//            @include transition(all $time);
-//        }
-//
-//        .select2-search-choice-close {
-//            opacity: 0;
-//            @include transition(all $time);
-//        }
-//    }
 }
 
 p.success {
@@ -271,6 +204,7 @@ p.success {
 .ui-dialog-buttonset .loading_spinner {
     vertical-align: middle;
     margin-right: 10px;
+    display: inline-block;
 }
 
 ul.entity_main_buttons, ul.email_buttons {
@@ -293,7 +227,6 @@ ul.entity_main_buttons, ul.email_buttons {
             @include box-shadow(#5d5d5d 2px 2px 10px);
         }
     }
-
 
     &.alt2 {
         padding: 0.4em 0;
@@ -488,7 +421,6 @@ ul.entity_main_buttons, ul.email_buttons {
 #add_to_cal_button, #add_google_cal_button {
     display: block;
     float: left;
-    // height: 36px;
     margin-right: 10px;
     margin-bottom: 1em;
 }

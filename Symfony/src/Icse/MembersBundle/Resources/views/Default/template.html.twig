@@ -103,8 +103,10 @@
         <ul>
             {# ICSE Resources #}
             <li id="nav_col_head">
-                Members Area
-                <i title="Hide/Show" class="hide-button fa fa-arrow-left"></i>
+                <span>
+                    Members Area
+                    <i title="Hide/Show" class="hide-button fa fa-arrow-left"></i>
+                </span>
             </li>
             {% set this_group = default_group %}
             {% for item_id, item in members_nav_items %}
@@ -115,15 +117,17 @@
                 {% if is_granted(this_group.role) and (item.role is not defined or is_granted(item.role)) %}
                     {% if is_header %}
                         {% if this_group.label is defined %}
-                            <li class="category">{{ this_group.label }}</li>
+                            <li class="category"><span>{{ this_group.label }}</span></li>
                         {% endif %}
                     {% else %}
                         <li>
                             <a {{ item_id == currentSubSection ? 'class=current' }} href="{{ item.url }}">
-                                {% if item.fa_icon is defined %}
-                                    <i class="fa fa-fw {{ item.fa_icon }}"></i>
-                                {% endif %}
-                                {{ item.label }}
+                                <span>
+                                    {% if item.fa_icon is defined %}
+                                        <i class="fa fa-fw {{ item.fa_icon }}"></i>
+                                    {% endif %}
+                                    {{ item.label }}
+                                </span>
                             </a>
                         </li>
                     {% endif %}
@@ -134,18 +138,16 @@
             <div class="label">Menu</div>
         </div>
     </nav>
-    <div id="section_container">
-        <section class="members-main">
-            {% block content %}
-                {% if pageTitle is defined %}
-                    <h1>
-                        {%- if page_nav_item.fa_icon is defined %}<i class="fa fa-fw {{ page_nav_item.fa_icon }}"></i>{% endif %}
-                        {{ pageTitle }}
-                    </h1>
-                {% endif %}
-            {% endblock %}
-        </section>
-    </div>
+    <section class="members-main">
+        {% block content %}
+            {% if pageTitle is defined %}
+                <h1>
+                    {%- if page_nav_item.fa_icon is defined %}<i class="fa fa-fw {{ page_nav_item.fa_icon }}"></i>{% endif %}
+                    {{ pageTitle }}
+                </h1>
+            {% endif %}
+        {% endblock %}
+    </section>
 </div>
 <script>
     $(document).ready(function(){

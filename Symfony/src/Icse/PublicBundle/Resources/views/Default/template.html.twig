@@ -62,14 +62,14 @@
 <body class="main">
 
   <div id="above_footer" {% block aboveFooterAttrs %}{% endblock %}>
-    <header>
-    <hgroup>
-    <h1>
-      {% if allow_nav %}<a href="{{ path('IcsePublicBundle_home') }}">{% endif %}
-      <img height=139 src="{{ asset('bundles/icsepublic/images/banner_logo.png') }}" alt="Imperial College String Ensemble"/>
-      {% if allow_nav %}</a>{% endif %}
-    </h1>
-    </hgroup>
+    <header class="main">
+        <div>
+            <h1>
+              {% if allow_nav %}<a href="{{ path('IcsePublicBundle_home') }}">{% endif %}
+              <img height=139 src="{{ asset('bundles/icsepublic/images/banner_logo.png') }}" alt="Imperial College String Ensemble"/>
+              {% if allow_nav %}</a>{% endif %}
+            </h1>
+        </div>
     </header>
     <nav class="main">
     {% block navbars %}
@@ -89,7 +89,7 @@
     </nav>
     {% block header_to_footer %}
     <div id="header_to_footer">
-    <section>
+    <section class="main">
     {% block content %}{% endblock %}
     </section>
     </div>
