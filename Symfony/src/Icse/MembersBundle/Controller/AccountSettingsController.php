@@ -22,9 +22,10 @@ class AccountSettingsController extends Controller
      
     public function indexAction(Request $request)
     {
-        $cpResponse = array();
-        $ceResponse = array();
-        $user = $this->get('security.context')->getToken()->getUser(); 
+        $cpResponse = [];
+        $ceResponse = [];
+        /** @var Member $user */
+        $user = $this->get('security.token_storage')->getToken()->getUser();
 
         if ($request->request->get('form_id') == "cp") // if change password
         { 
@@ -41,7 +42,7 @@ class AccountSettingsController extends Controller
             {
                 $user->setPassword(null);
                 $user->setSalt(null);
-                $cpResponse['success'] = "Password was sucessfully changed";
+                $cpResponse['success'] = "Password was successfully changed";
             }
             elseif ($request->request->get('new_password') != $request->request->get('new_password_again'))
             {
@@ -96,13 +97,13 @@ class AccountSettingsController extends Controller
 
     public function profileAction(Request $request)
     {
-        if (!$this->get('security.context')->isGranted('ROLE_HAVE_PROFILE'))
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_HAVE_PROFILE'))
         {
             throw $this->createAccessDeniedException();
         }
 
         /** @var Member $user */
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $profile = $user->getProfile();
 
         if (is_null($profile))
@@ -112,7 +113,7 @@ class AccountSettingsController extends Controller
         }
 
         $form = $this->createFormBuilder($profile)
-            ->add('picture', 'entity', ['class' => 'IcsePublicBundle:Image', 'property' => 'name', 'required' => false])
+            ->add('picture', 'entity', ['class' => 'IcsePublicBundle:Image', 'choice_label' => 'name', 'required' => false])
             ->add('instrument')
             ->add('join_year')
             ->add('study_subject', 'text', ['label' => 'Subject studied', 'required' => false])

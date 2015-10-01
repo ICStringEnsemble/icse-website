@@ -4,7 +4,7 @@ namespace Icse\MembersBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
 class PracticePartType extends AbstractType {
@@ -15,7 +15,7 @@ class PracticePartType extends AbstractType {
         $builder->add('sort_index', 'hidden');
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => 'Icse\MembersBundle\Entity\PracticePart',

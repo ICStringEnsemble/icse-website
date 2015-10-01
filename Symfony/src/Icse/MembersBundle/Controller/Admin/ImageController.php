@@ -2,14 +2,9 @@
 
 namespace Icse\MembersBundle\Controller\Admin;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request; 
-use Symfony\Component\HttpFoundation\Response; 
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Validator\Constraints;
-use Icse\MembersBundle\Form\Type\FileInfoType;
 use Icse\PublicBundle\Entity\Image;
-
 
 class ImageController extends EntityAdminController
 {
@@ -52,7 +47,7 @@ class ImageController extends EntityAdminController
         return ["fields" => $fields, "entities" => $entities];
     }
 
-    protected function buildCreationForm($form)
+    protected function buildCreationForm(FormBuilder $form)
     {
         $form->add('file', 'file', [
             'property_path' => 'file_from_form',
@@ -60,7 +55,7 @@ class ImageController extends EntityAdminController
         ]);
     }
 
-    protected function buildEditForm($form)
+    protected function buildEditForm(FormBuilder $form)
     {
         $form->add('name', 'text');
         $form->add('in_slideshow', 'checkbox', ['required' => false]);

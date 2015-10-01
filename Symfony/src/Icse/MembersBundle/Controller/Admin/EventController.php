@@ -3,13 +3,12 @@
 namespace Icse\MembersBundle\Controller\Admin;
 
 use Acts\SocialApiBundle\Exception\ApiException;
-use Doctrine\Common\Collections\ArrayCollection;
 use Icse\MembersBundle\Form\Type\EndTimeType;
 use Icse\MembersBundle\Form\Type\PerformanceOfAPieceType;
 use Icse\PublicBundle\Entity\PerformanceOfAPiece;
+use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Icse\PublicBundle\Entity\Event;
-use Icse\PublicBundle\Entity\PieceOfMusic;
 
 class EventController extends EntityAdminController
 {
@@ -67,7 +66,7 @@ class EventController extends EntityAdminController
         return ['performances'];
     }
 
-    protected function buildForm($form)
+    protected function buildForm(FormBuilder $form)
     {
         $form->add('name', 'text');
         $form->add('starts_at', 'datetime12', [
@@ -81,13 +80,13 @@ class EventController extends EntityAdminController
         ]);
         $form->add('location', 'entity', [
             'class' => 'IcsePublicBundle:Venue',
-            'property' => 'name',
+            'choice_label' => 'name',
             'required' => false,
             'attr' => ['class' => 'entity-select']
         ]);
         $form->add('poster', 'entity', [
             'class' => 'IcsePublicBundle:Image',
-            'property' => 'name',
+            'choice_label' => 'name',
             'required' => false,
             'attr' => ['class' => 'entity-select']
         ]);
@@ -99,7 +98,7 @@ class EventController extends EntityAdminController
         ]);
         $form->add('performance_adder', 'entity', [
             'class' => 'IcsePublicBundle:PieceOfMusic',
-            'property' => 'full_name',
+            'choice_label' => 'full_name',
             'required' => false,
             'mapped' => false,
         ]);

@@ -14,7 +14,7 @@ use Doctrine\Common\Util\Inflector;
 class UrlGenerator extends BaseUrlGenerator
 {
 
-    protected function doGenerate($variables, $defaults, $requirements, $tokens, $parameters, $name, $referenceType, $hostTokens)
+    protected function doGenerate($variables, $defaults, $requirements, $tokens, $parameters, $name, $referenceType, $hostTokens, array $requiredSchemes = array())
     {
         if (is_object($parameters)) {
             $object = $parameters;

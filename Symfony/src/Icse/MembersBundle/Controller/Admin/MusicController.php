@@ -2,18 +2,14 @@
 
 namespace Icse\MembersBundle\Controller\Admin;
 
-use Icse\MembersBundle\Entity\PracticePart;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\Validator\Constraints;
-use Doctrine\Common\Collections\ArrayCollection;
 
-use Icse\MembersBundle\Form\Type\PracticePartType;
+use Icse\MembersBundle\Entity\PracticePart;
 use Icse\PublicBundle\Entity\PieceOfMusic;
-use Common\Tools; 
+use Icse\MembersBundle\Form\Type\PracticePartType;
 
 class MusicController extends EntityAdminController
 {
@@ -98,7 +94,7 @@ class MusicController extends EntityAdminController
         return ['practice_parts'];
     }
 
-    protected function buildForm($form)
+    protected function buildForm(FormBuilder $form)
     {
         $form->add('composer', 'text');
         $form->add('name', 'text', ['label' => 'Title']);

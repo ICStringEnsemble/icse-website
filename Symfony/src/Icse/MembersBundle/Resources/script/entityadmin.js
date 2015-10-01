@@ -281,7 +281,8 @@
             }
         ],
         resizeStop: function( event, ui ) {
-            edit_dialog.find('.doceditor').ckeditor().editor.execCommand('autogrow');
+            var editor = edit_dialog.find('.doceditor');
+            if (editor.length) editor.ckeditor().editor.execCommand('autogrow');
         }
     });
 

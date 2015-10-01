@@ -450,7 +450,7 @@ form.standard {
         margin-bottom: -5px;
     }
 
-    button {
+    button:not(.ui-button) {
         @extend %button-styles;
     }
 
@@ -492,7 +492,8 @@ form.standard {
             margin-top: 0.4em;
         }
 
-        &[type=button], &[type=submit] {
+        &[type=button]:not(.ui-button),
+        &[type=submit]:not(.ui-button) {
             @extend %button-styles;
         }
 

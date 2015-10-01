@@ -2,6 +2,7 @@
 
 namespace Icse\MembersBundle\Controller\Admin;
 
+use Symfony\Component\Form\FormBuilder;
 use Icse\PublicBundle\Entity\NewsArticle;
 
 class NewsController extends EntityAdminController
@@ -35,13 +36,13 @@ class NewsController extends EntityAdminController
         return ["fields" => $fields, "entities" => $articles];
     }
 
-    protected function buildForm($form)
+    protected function buildForm(FormBuilder $form)
     {
         $form->add('headline', 'text');
         $form->add('subhead', 'text');
         $form->add('picture', 'entity', [
             'class' => 'IcsePublicBundle:Image',
-            'property' => 'name',
+            'choice_label' => 'name',
             'required' => false,
             'attr' => ['class' => 'entity-select']
         ]);

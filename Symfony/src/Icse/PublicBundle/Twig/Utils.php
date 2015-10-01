@@ -27,10 +27,10 @@ class Utils extends \Twig_Extension
     public function getFilters()
     {
         return [
-            'imgWidthAndHeight' => new \Twig_Filter_Method($this, 'imgWidthAndHeight'),
-            'imgSrc' => new \Twig_Filter_Method($this, 'imgSrc'),
-            'imgSrcAndSize' => new \Twig_Filter_Method($this, 'imgSrcAndSize'),
-            'lazyImgSrcAndSize' => new \Twig_Filter_Method($this, 'lazyImgSrcAndSize'),
+            new \Twig_SimpleFilter('imgWidthAndHeight', [$this, 'imgWidthAndHeight']),
+            new \Twig_SimpleFilter('imgSrc',            [$this, 'imgSrc']           ),
+            new \Twig_SimpleFilter('imgSrcAndSize',     [$this, 'imgSrcAndSize']    ),
+            new \Twig_SimpleFilter('lazyImgSrcAndSize', [$this, 'lazyImgSrcAndSize']),
         ];
     }
 

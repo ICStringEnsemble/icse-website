@@ -1,33 +1,36 @@
 <?php
 namespace Icse\MembersBundle\EventListener;
 
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Event\PostResponseEvent;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\Security\Core\SecurityContextInterface; 
-use Doctrine\ORM\EntityManager; 
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class LastOnlineAtListener
 {
-    private $securityContext; 
-    private $entityManager; 
+    private $token_storage; 
+    private $auth_checker; 
+    private $entity_manager;
 
-    public function __construct(SecurityContextInterface $securityContext, EntityManager $entityManager)
+    public function __construct(TokenStorageInterface $token_storage, AuthorizationCheckerInterface $auth_checker, EntityManager $entity_manager)
     {
-        $this->securityContext = $securityContext;
-        $this->entityManager = $entityManager;
+        $this->token_storage = $token_storage;
+        $this->auth_checker  = $auth_checker;
+        $this->entity_manager = $entity_manager;
     } 
 
     public function onTerminate(PostResponseEvent $event)
     {
-        $token = $this->securityContext->getToken();
-        if ($token &&  $this->securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')
-                   && !$this->securityContext->isGranted('ROLE_PREVIOUS_ADMIN'))  // if logged in and not being impersonated
+        $token = $this->token_storage->getToken();
+        if ($token &&  $this->auth_checker->isGranted('IS_AUTHENTICATED_REMEMBERED')
+                   && !$this->auth_checker->isGranted('ROLE_PREVIOUS_ADMIN'))  // if logged in and not being impersonated
         {
-            $user = $this->securityContext->getToken()->getUser();
+            $user = $token->getUser();
             $user->setLastOnlineAt(new \DateTime());
             try
             {
-                $this->entityManager->flush();
+                $this->entity_manager->flush();
             }
             catch (\Doctrine\ORM\ORMException $e)
             {}

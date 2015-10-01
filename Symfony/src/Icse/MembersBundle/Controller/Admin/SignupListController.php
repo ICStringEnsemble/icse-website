@@ -2,13 +2,8 @@
 
 namespace Icse\MembersBundle\Controller\Admin;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\FormError;
-
+use Symfony\Component\Form\FormBuilder;
 use Icse\PublicBundle\Entity\Subscriber;
-use Common\Tools; 
 
 class SignupListController extends EntityAdminController
 {
@@ -45,6 +40,6 @@ class SignupListController extends EntityAdminController
         return ["fields" => $fields, "entities" => $subscribers];
     }
 
-    protected function buildForm($form)
+    protected function buildForm(FormBuilder $form)
     {}
 }

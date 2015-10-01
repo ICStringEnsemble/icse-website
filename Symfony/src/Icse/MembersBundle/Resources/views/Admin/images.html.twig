@@ -5,6 +5,7 @@
 
 {% set allow_drop_files = true %}
 {% set create_by_upload = true %}
+{% set creation_upload_accept = 'image/jpeg,image/gif,image/png' %}
 
 {% block extra_content %}
     {{ form(new_image_form, {attr: {hidden: true, id: "new_image"} }) }}

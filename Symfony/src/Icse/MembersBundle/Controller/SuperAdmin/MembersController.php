@@ -3,6 +3,7 @@
 namespace Icse\MembersBundle\Controller\SuperAdmin;
 
 use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormError;
@@ -47,7 +48,7 @@ class MembersController extends EntityAdminController
         return ["fields" => $fields, "entities" => $members, "serial_groups" => ['superadmin']];
     }
 
-    protected function buildForm($form)
+    protected function buildForm(FormBuilder $form)
     {
         $form->add('first_name', 'text');
         $form->add('last_name', 'text');

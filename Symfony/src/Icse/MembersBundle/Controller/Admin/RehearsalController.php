@@ -2,6 +2,7 @@
 
 namespace Icse\MembersBundle\Controller\Admin;
 
+use Symfony\Component\Form\FormBuilder;
 use Icse\MembersBundle\Entity\Rehearsal;
 use Icse\MembersBundle\Form\Type\EndTimeType;
 
@@ -38,7 +39,7 @@ class RehearsalController extends EntityAdminController
         return array("fields" => $fields, "entities" => $rehearsals);
     }
 
-    protected function buildForm($form)
+    protected function buildForm(FormBuilder $form)
     {
         $form->add('starts_at', 'datetime12', [
             'date_widget' => 'single_text',
@@ -50,7 +51,7 @@ class RehearsalController extends EntityAdminController
         ]);
         $form->add('location', 'entity', [
             'class' => 'IcsePublicBundle:Venue',
-            'property' => 'name',
+            'choice_label' => 'name',
             'required' => false,
             'attr' => ['class' => 'entity-select'],
         ]);

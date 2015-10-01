@@ -1,13 +1,15 @@
 (function(){
 
     var editors = $('.doceditor');
-    var bundles_basedir = $('#bundles_basedir').attr('href');
+    var bundles_basedir_parts = $('#bundles_basedir').attr('href').split('?');
+    var bundles_basedir = bundles_basedir_parts[0];
+    var bundles_version = bundles_basedir_parts[1];
     var main_css = $('#main_stylesheet').attr('href');
 
     var extra_plugins = 'sourcedialog,image2,entities,autogrow';
 
     ['webkit-span-fix', 'heading-button'].forEach(function(p){
-        CKEDITOR.plugins.addExternal(p, bundles_basedir+'/icsemembers/lib/ckeditor/plugins/'+p+'/', 'plugin.js');
+        CKEDITOR.plugins.addExternal(p, bundles_basedir+'/icsemembers/lib/ckeditor/plugins/'+p+'/', 'plugin.js?'+bundles_version);
         extra_plugins += ',' + p;
     });
 

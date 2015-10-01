@@ -4,7 +4,7 @@ namespace Icse\MembersBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\DataTransformer\DataTransformerChain;
 use Icse\MembersBundle\Form\DataTransformer\NullToIncompleteArrayTransformer;
 
@@ -35,7 +35,7 @@ class DateTimeType extends AbstractType
         }
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'with_seconds' => true,

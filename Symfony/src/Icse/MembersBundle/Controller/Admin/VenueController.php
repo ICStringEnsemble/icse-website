@@ -2,15 +2,8 @@
 
 namespace Icse\MembersBundle\Controller\Admin;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\FormError;
-
-use Icse\MembersBundle\Form\Type\DateTimeType;
-
+use Symfony\Component\Form\FormBuilder;
 use Icse\PublicBundle\Entity\Venue;
-use Common\Tools; 
 
 class VenueController extends EntityAdminController
 {
@@ -41,7 +34,7 @@ class VenueController extends EntityAdminController
         return ["fields" => $fields, "entities" => $entities];
     }
 
-    protected function buildForm($form)
+    protected function buildForm(FormBuilder $form)
     {
         $form->add('name', 'text');
         $form->add('address', 'textarea', ['required' => false]);

@@ -6,9 +6,9 @@ class TableUtils extends \Twig_Extension
 {
     public function getFilters()
     {
-        return array(
-            'getCell' => new \Twig_Filter_Method($this, 'getCell'),
-        );
+        return [
+            new \Twig_SimpleFilter('getCell', [$this, 'getCell']),
+        ];
     }
 
     public function getCell($entity, $getter)

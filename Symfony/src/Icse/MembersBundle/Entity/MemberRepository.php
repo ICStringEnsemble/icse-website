@@ -28,7 +28,7 @@ class MemberRepository extends EntityRepository implements UserProviderInterface
     try {
       $user = $query->getSingleResult();
     } catch (NoResultException $e) {
-      throw new UsernameNotFoundException(sprintf('Unable to find a Member object identified by "%s".', $username), null, 0, $e);
+      throw new UsernameNotFoundException(sprintf('Unable to find a Member object identified by "%s".', $username));
     }
 
     return $user;

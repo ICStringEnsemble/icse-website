@@ -32,15 +32,16 @@
 <script>
   function enableDisableNewPasswordFields(slideTime){
     if ($('#form_password_operation input[value={{ PASSWORD_SET }}]').is(':checked')){
-        $('.new_password_fields').slideDown(slideTime);
-        $('.new_password_fields input').prop('required', true);
+      $('.new_password_fields').slideDown(slideTime);
+      $('.new_password_fields input').prop('required', true);
     } else {
-        $('.new_password_fields').slideUp(slideTime);
-        $('.new_password_fields input').prop('required', false);
-        $('.new_password_fields input').val('');
+      $('.new_password_fields').slideUp(slideTime);
+      $('.new_password_fields input').prop('required', false);
+      $('.new_password_fields input').val('');
     }
   };
-  $('#form_password_operation').change(200, enableDisableNewPasswordFields);
+  enableDisableNewPasswordFields(0);
+  $('#form_password_operation').change(200, function(e){enableDisableNewPasswordFields(e.data);});
 
   $('#import_csv_dialog').dialog({
     autoOpen: false,

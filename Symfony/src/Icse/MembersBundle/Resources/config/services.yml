@@ -22,7 +22,7 @@ services:
         class: Icse\MembersBundle\EventListener\LastOnlineAtListener
         tags:
             - { name: kernel.event_listener, event: kernel.terminate, method: onTerminate }
-        arguments: [@security.context, @doctrine.orm.entity_manager] 
+        arguments: [@security.token_storage, @security.authorization_checker, @doctrine.orm.entity_manager]
 
     icse.mailer:
         class: Icse\MembersBundle\Service\IcseMailer

@@ -2,6 +2,7 @@
 
 namespace Icse\MembersBundle\Controller\SuperAdmin;
 
+use Symfony\Component\Form\FormBuilder;
 use Icse\MembersBundle\Controller\Admin\EntityAdminController;
 use Icse\MembersBundle\Entity\CommitteeRole;
 
@@ -35,11 +36,11 @@ class CommitteeController extends EntityAdminController
         return ["fields" => $fields, "entities" => $entities];
     }
 
-    protected function buildForm($form)
+    protected function buildForm(FormBuilder $form)
     {
         $form->add('member', 'entity', [
             'class' => 'IcseMembersBundle:Member',
-            'property' => 'full_name',
+            'choice_label' => 'full_name',
             'attr' => ['class' => 'entity-select'],
         ]);
         $form->add('position_name', 'icse_text_autosuggest');

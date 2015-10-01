@@ -1,21 +1,18 @@
 {% extends 'IcseMembersBundle:Admin:template.html.twig' %}
 
 {% set entityPlural = entityPlural | default(entitySingular ~ 's') %}
-{% set entitySingularTitle = entitySingular | title | replace({' ': '&nbsp;'}) %}
-{% set entityPluralTitle = entityPlural | title | replace({' ': '&nbsp;'}) %}
-{% set entityIdentifier = entitySingular | replace(' ', '_') %}
+{% set entitySingularTitle   = entitySingular | title %}
+{% set entitySingularTitleNb = entitySingularTitle | replace({' ': '&nbsp;'}) %}
+{% set entityPluralTitle     = entityPlural | title %}
+{% set entityPluralTitleNb   = entityPluralTitle | replace({' ': '&nbsp;'}) %}
+{% set entityIdentifier = entitySingular | replace({' ': '_'}) %}
 {% set readOnly = readOnly | default(false) %}
 {% set enable_social_net = enable_social_net | default(false) %}
 {% set allow_drop_files = allow_drop_files | default(false) %}
 {% set create_by_upload = create_by_upload | default(false) %}
+{% set creation_upload_accept = creation_upload_accept | default("") %}
 
-{% form_theme form _self %}
-
-{% block _form_plain_password_row %}
-    <div class="new_password_fields">
-      {{ form_row(form) }} 
-    </div>
-{% endblock %}
+{% form_theme form 'IcseMembersBundle:Form:new_password_fields.html.twig' %}
 
 {% block stylesheets %}
 {{ parent() }}
@@ -45,9 +42,9 @@
     <li><button class="refresh show_if_none_selected" type=button>Refresh</button></li>
     {% if not readOnly %}
         {% if create_by_upload %}
-            <li><input class="create show_if_none_selected" type="file" multiple="multiple" title="Choose files" data-label="Add&nbsp;{{ entityPluralTitle | raw }}"></li>
+            <li><input class="create show_if_none_selected" type="file" accept="{{ creation_upload_accept }}" multiple="multiple" title="Choose files" data-label="Add&nbsp;{{ entityPluralTitleNb | raw }}"></li>
         {% else %}
-            <li><button class="create show_if_none_selected" type=button>Add&nbsp;{{ entitySingularTitle | raw }}</button></li>
+            <li><button class="create show_if_none_selected" type=button>Add&nbsp;{{ entitySingularTitleNb | raw }}</button></li>
         {% endif %}
     <li><button class="edit show_if_one_selected" type=button>Edit</button></li>
     <li><button class="delete show_if_any_selected" type=button>Delete</button></li>
@@ -91,7 +88,7 @@
     {{ form_end(form) }}
 </div>
 
-<div hidden id=delete_dialog title="Delete {{ entitySingularTitle }}" >
+<div hidden id=delete_dialog title="Delete {{ entityPluralTitle }}" >
 <p><span class="ui-icon ui-icon-alert"></span>
 Are you sure you want to permanently delete all of the selected {{ entityPlural }}?</p>
 <p>Note: if deletion is not successful, it may be necessary to first remove any associations with other entities.</p>
