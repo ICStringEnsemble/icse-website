@@ -42,4 +42,9 @@ class SignupListController extends EntityAdminController
 
     protected function buildForm(FormBuilder $form)
     {}
+
+    public function offlineViewerAction()
+    {
+        return $this->render('IcseMembersBundle:Admin:signup_list_offline.html.twig');
+    }
 }

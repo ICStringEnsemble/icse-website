@@ -300,7 +300,7 @@
             if (window.IN_OFFLINE_MODE) {
                 var person_name;
                 var object = {
-                    submitted_at: moment().add(TIME_OFFSET).toISOString(),
+                    submitted_at: moment().add(TIME_OFFSET).toDate(),
                     form_data: form_data
                 };
 
@@ -330,6 +330,7 @@
                 t.objectStore("signup").add(object);
 
                 t.oncomplete = function(e) {
+                    localStorage.setItem('icse_offline_signup_notify', moment().toISOString());
                     var success_page = $('<body>', {
                         html: $('<section>', {
                             class: 'main',

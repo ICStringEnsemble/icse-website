@@ -66,6 +66,10 @@ IcseMembersBundle_signuplist:
     pattern:  /members/admin/signups/{arg}
     defaults: { _controller: IcseMembersBundle:Admin/SignupList:router, arg: ~ }
 
+IcseMembersBundle_signuplist_offline:
+    pattern:  /members/admin/signups_offline
+    defaults: { _controller: IcseMembersBundle:Admin/SignupList:offlineViewer }
+
 IcseMembersBundle_sendemail:
     pattern:  /members/admin/email/{arg}
     defaults: { _controller: IcseMembersBundle:Admin/Email:router, arg: ~ }

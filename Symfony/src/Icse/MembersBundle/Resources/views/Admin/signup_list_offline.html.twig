@@ -1,0 +1,132 @@
+{% extends 'IcseMembersBundle:Admin:template.html.twig' %}
+
+{% set pageTitle = 'Offline Freshers Signups' %}
+{% set currentSubSection = 'signuplist' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="//cdn.jsdelivr.net/momentjs/2.8.3/moment-with-locales.min.js"></script>
+    <script>moment.locale('en-gb')</script>
+{% endblock javascripts %}
+
+{% block content %}
+    {{ parent() }}
+
+    <span id="delete_all_button">Delete all</span>
+
+    <div id="entity_instance_list_container">
+        <div class="table-container">
+            <table class=entity_instance_table>
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Player</th>
+                    <th>Submitted at</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr class="instance">
+                        <td class="name"></td>
+                        <td class="email"></td>
+                        <td class="player"></td>
+                        <td class="submitted_at"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        var db;
+        const DB_NAME = 'icsedb';
+        const DB_VERSION = 1;
+
+        var $table = $('table.entity_instance_table');
+        var $tbody = $table.find('tbody');
+        var prototype = $tbody.find('tr.instance').detach();
+        var delete_all_button = $('#delete_all_button');
+        delete_all_button.button();
+
+        function open_db() {
+            var dfd = $.Deferred();
+            var req = indexedDB.open(DB_NAME, DB_VERSION);
+            req.onsuccess = function (e) {
+                db = e.target.result;
+                db.onerror = function(e) {
+                    alert("Database error: " + e.target.errorCode);
+                };
+                dfd.resolve();
+            };
+            req.onerror = function (e) {
+                console.error("open_db:", e.target.errorCode);
+                dfd.reject();
+            };
+
+            req.onupgradeneeded = function (e) {
+                console.log("Upgrading DB");
+                db = e.target.result;
+
+                if(!db.objectStoreNames.contains("signup")) {
+                    db.createObjectStore("signup", { keyPath: "id", autoIncrement: true });
+                }
+            };
+
+            req.onblocked = function(e) {
+                alert("Please close all other tabs with this site open!");
+            };
+
+            return dfd.promise();
+        }
+
+        var reload_table = function(){
+            $tbody.empty();
+            var o = db.transaction("signup", "readwrite").objectStore("signup");
+
+            o.openCursor(null, "prev").onsuccess = function(event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    var item = prototype.clone();
+                    item.find('.name').text(cursor.value.first_name + ' ' + cursor.value.last_name);
+                    item.find('.email').text(cursor.value.email);
+
+                    var mtime = moment(cursor.value.submitted_at);
+                    cursor.value.submitted_at = mtime.toDate();
+                    item.find('.submitted_at').text(mtime.format('LLL'));
+
+                    item.find('.player').text(cursor.value.player == "1" ? "Yes" : "No");
+                    item.data('entity', cursor.value);
+
+                    $tbody.append(item);
+                    o.put(cursor.value);
+                    cursor.continue();
+                }
+            };
+        };
+
+        open_db().done(reload_table);
+
+        $(window).bind('storage', function (e) {
+            if (e.originalEvent.key == "icse_offline_signup_notify") reload_table();
+        });
+
+        delete_all_button.click(function(){
+            $tbody.empty();
+            var o = db.transaction("signup", "readwrite").objectStore("signup");
+
+            o.openCursor().onsuccess = function(event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    o.delete(cursor.key);
+                    cursor.continue();
+                }
+                else
+                {
+                    reload_table();
+                }
+            };
+        });
+
+    </script>
+
+{% endblock %}
