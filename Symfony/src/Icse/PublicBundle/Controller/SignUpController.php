@@ -163,7 +163,7 @@ class SignUpController extends Controller
         $slideshow_images = [];
         if ($freshers && $request->isMethod('GET'))
         {
-            $slideshow_images = $this->getDoctrine()->getRepository('IcsePublicBundle:Image')->findSlideshowImages();
+            $slideshow_images = $this->getDoctrine()->getRepository('IcsePublicBundle:Image')->findSlideshowImages(20);
         }
 
         return $this->render('IcsePublicBundle:SignUp:join.html.twig', [

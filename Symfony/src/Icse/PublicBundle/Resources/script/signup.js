@@ -11,12 +11,109 @@
 
     $(document).ready(function() {
 
+        var db;
+        const DB_NAME = 'icsedb';
+        const DB_VERSION = 1;
+
         var SLIDE_TIME = 300;
         var freshersfair = $('form#join_us').hasClass('freshersfair');
-        var page_prototype = $('section').clone();
+        var page_prototype = $('section.main').clone();
 
         var is_a_player;
         var username_or_email_looked_up;
+
+        var all_departments = $([
+            'Aeronautics',
+            'Bioengineering',
+            'Chemical Engineering',
+            'Civil and Environmental Engineering',
+            'Computing',
+            'Dyson School of Design Engineering',
+            'Earth Science and Engineering',
+            'Electrical and Electronic Engineering',
+            'Materials',
+            'Mechanical Engineering',
+            'Institute of Clinical Sciences',
+            'Department of Medicine',
+            'National Heart and Lung Institute',
+            'School of Public Health',
+            'Department of Surgery and Cancer',
+            'Lee Kong Chian School of Medicine - London Office',
+            'Imperial College Academic Health Science Centre',
+            'Imperial College Healthcare NHS Trust',
+            'Chemistry',
+            'Mathematics',
+            'Physics',
+            'Life Sciences',
+            'Centre for Environmental Policy',
+            'Business School',
+            'Finance',
+            'Innovation and Entrepreneurship',
+            'Management',
+            'Data Science Institute',
+            'Energy Futures Lab',
+            'Institute of Global Health Innovation',
+            'Grantham Institute - Climate Change and the Environment',
+            'Institute for Security Science and Technology',
+            'Careers Service',
+            'Centre for Academic English',
+            'Centre for Languages, Culture and Communication',
+            'Educational Development Unit',
+            'Graduate School',
+            'Library',
+            'Post Doc Development Centre',
+            'School of Professional Development'
+        ]);
+
+        const TIME_OFFSET = (function(){
+            var server_time = moment($('#current_server_time').text());
+            var client_time = moment();
+            return server_time.diff(client_time);
+        })();
+
+        window.ON_CHANGE_OFFLINE_MODE = function(){
+            var submit_button = $('input#submit');
+            if (IN_OFFLINE_MODE) {
+                submit_button.prop('disabled', true);
+                open_db().done(function(){
+                    submit_button.prop('disabled', false);
+                });
+            } else {
+                if ("close" in db) db.close();
+                submit_button.prop('disabled', false);
+            }
+        };
+
+        function open_db() {
+            var dfd = $.Deferred();
+            var req = indexedDB.open(DB_NAME, DB_VERSION);
+            req.onsuccess = function (e) {
+                db = e.target.result;
+                db.onerror = function(e) {
+                    alert("Database error: " + e.target.errorCode);
+                };
+                dfd.resolve();
+            };
+            req.onerror = function (e) {
+                console.error("open_db:", e.target.errorCode);
+                dfd.reject();
+            };
+
+            req.onupgradeneeded = function (e) {
+                console.log("Upgrading DB");
+                db = e.target.result;
+
+                if(!db.objectStoreNames.contains("signup")) {
+                    db.createObjectStore("signup", { keyPath: "id", autoIncrement: true });
+                }
+            };
+
+            req.onblocked = function(e) {
+                alert("Please close all other tabs with this site open!");
+            };
+
+            return dfd.promise();
+        }
 
         /*
          * Function to update the form layout, to show and hide elements according to the current state
@@ -45,6 +142,15 @@
             }
         }
 
+        function looks_like_email(input) {
+            var re = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+            return re.test(input);
+        }
+        function looks_like_username(input) {
+            var re = /^[a-zA-Z0-9]+$/i;
+            return re.test(input);
+        }
+
         /*
          * Function to perform AJAX lookup of username/email, and update the state
          */
@@ -56,32 +162,57 @@
                 lookup_inputs.prop('disabled', true);
                 spinner.show();
                 var input = $('#username_or_email_field').val();
-                $.ajax({
-                    dataType: "json",
-                    url: Routing.generate('IcsePublicBundle_query_username'),
-                    data: {input: input}
-                }).done(function(jsonData){
-                    if (jsonData['type'] == 'email'){
+
+                var on_done_success = function(data){
+                    if (data['type'] == 'email'){
                         username_or_email_looked_up = 'email';
                         $('#form_email').val(input);
                         $('#form_login').val("");
                         $('#form_department').val("");
-                    } else if (jsonData['type'] == 'username'){
+                    } else if (data['type'] == 'username'){
                         username_or_email_looked_up = 'username';
-                        $('#form_first_name').val(jsonData['first_name']);
-                        $('#form_last_name').val(jsonData['last_name']);
-                        $('#form_email').val(jsonData['email']);
                         $('#form_login').val(input);
-                        $('#form_department').val(jsonData['department']);
+                        if ("first_name" in data) {
+                            $('#form_first_name').val(data['first_name']);
+                            $('#form_last_name').val(data['last_name']);
+                            $('#form_email').val(data['email']);
+                            $('#form_department').val(data['department']);
+                        }
                     } else {
                         username_or_email_looked_up = 'error'
                     }
                     $('.error_list').remove();
                     update_form_layout(slide_time);
-                }).always(function(){
+                    if (slide_time) {
+                        setTimeout(function(){
+                            $('input#form_first_name').focus();
+                        }, 300);
+                    }
+                };
+                var on_done_always = function(){
                     lookup_inputs.prop('disabled', false);
                     spinner.hide();
-                });
+                };
+
+                if (window.IN_OFFLINE_MODE) {
+                    var type =
+                        looks_like_email(input)    ? 'email' :
+                        looks_like_username(input) ? 'username' :
+                                                     'other'
+                    ;
+                    on_done_success({type: type});
+                    on_done_always();
+                } else {
+                    $.ajax({
+                        dataType: "json",
+                        url: Routing.generate('IcsePublicBundle_query_username'),
+                        data: {input: input}
+                    }).done(
+                        on_done_success
+                    ).always(
+                        on_done_always
+                    );
+                }
             }
         }
 
@@ -122,6 +253,11 @@
             }
             update_requiredness_instrument()
             update_form_layout(slide_time);
+            if (slide_time) {
+                setTimeout(function(){
+                    $('input#username_or_email_field').focus();
+                }, 300);
+            }
         }
 
         /*
@@ -137,25 +273,19 @@
             }
         }
 
-        function ajaxSubmit() {
+        function ajaxSubmit(event) {
+            event.preventDefault();
             var submit_button = $('input#submit');
             var spinner = $('.loading_spinner.final_submit');
             submit_button.prop('disabled', true);
             spinner.show();
-            var form_data = new FormData(this);
+            var form_data = $(this).serializeArray();
 
-            $.ajax({
-                type: $(this).attr('method'),
-                url: $(this).attr('action'),
-                data: form_data,
-                dataType: 'html',
-                cache: false,
-                contentType: false,
-                processData: false
-            }).always(function(){
+            var on_always = function(){
                 submit_button.prop('disabled', false);
                 spinner.hide();
-            }).done(function(result){
+            };
+            var on_done = function(result){
                 $('section').replaceWith($(result).find('section'));
                 setUpForm();
 
@@ -165,8 +295,61 @@
                         setUpForm();
                     }, 3000);
                 }
-            });
+            };
 
+            if (window.IN_OFFLINE_MODE) {
+                var person_name;
+                var object = {
+                    submitted_at: moment().add(TIME_OFFSET).toISOString(),
+                    form_data: form_data
+                };
+
+                var re_get_name = /^form\[(\w+)\]/;
+                var re_is_array = /^(.*)\[\]$/;
+
+                form_data.forEach(function(o){
+                    var name = o.name.replace(re_get_name, "$1");
+                    var value = o.value;
+
+                    if (name=="first_name") person_name = value;
+
+                    var is_array_result = re_is_array.exec(name);
+                    if (is_array_result !== null) {
+                        name = is_array_result[1];
+                        if (object.hasOwnProperty(name)) {
+                            object[name].push(value);
+                        } else {
+                            object[name] = [value];
+                        }
+                    } else {
+                        object[name] = value;
+                    }
+                });
+
+                var t = db.transaction("signup", "readwrite");
+                t.objectStore("signup").add(object);
+
+                t.oncomplete = function(e) {
+                    var success_page = $('<body>', {
+                        html: $('<section>', {
+                            class: 'main',
+                            html: $('<p>', {
+                                text: "Thanks "+person_name+", we'll be in touch shortly."
+                            })
+                        })
+                    });
+                    on_always();
+                    on_done(success_page);
+                };
+            } else {
+                $.ajax({
+                    type: $(this).attr('method'),
+                    url: $(this).attr('action'),
+                    data: form_data,
+                    dataType: 'html',
+                    cache: false
+                }).always(on_always).done(on_done);
+            }
             return false;
         }
 
@@ -175,6 +358,7 @@
                 username_or_email_looked_up = null;
                 update_form_layout(SLIDE_TIME);
             } else if (e.keyCode == 13) {
+                e.preventDefault();
                 lookup_username_or_email_with_slide();
             }
         }
@@ -197,8 +381,24 @@
                 update_form_layout(0);
             }
 
+            $('#form_department').autocomplete({
+                source: function (context, callback) {
+                    callback(
+                        all_departments.filter(function (i, a) {
+                            return $.fuzzyMatch(a, context.term).score;
+                        }).sort(function (a, b) {
+                            var score_a = $.fuzzyMatch(a, context.term).score,
+                                score_b = $.fuzzyMatch(b, context.term).score;
+                            return score_a < score_b ? 1 : score_a === score_b ? 0 : -1;
+                        })
+                        .slice(0, 3)
+                    );
+                },
+                delay: 1
+            });
+
             $('#username_or_email_lookup #lookup_button').click(lookup_username_or_email_with_slide);
-            $('#username_or_email_field').keyup(handleUsernameOrEmailKeypress);
+            $('#username_or_email_field').keydown(handleUsernameOrEmailKeypress);
             $('#username_or_email_field').bind('paste', handleUsernameOrEmailPaste);
             $('#form_instrument').change(update_requiredness_instrument);
             $('#form_instrument').change(enableDisableOtherInstrument);

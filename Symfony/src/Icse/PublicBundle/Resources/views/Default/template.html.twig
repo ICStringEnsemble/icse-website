@@ -7,6 +7,7 @@
               {label: 'Members', id:'members', url:path('IcseMembersBundle_return')}
 ] %}
 {% set allow_nav = no_nav is defined ? not no_nav : true %}
+{% set allow_offline_mode = allow_offline_mode is defined ? allow_offline_mode : false %}
 <!DOCTYPE HTML>
 <html class="main">
 {% spaceless %}
@@ -98,7 +99,49 @@
   </div>
 
   <footer>
-  Copyright &copy; 2005&ndash;{{ "now" | date ("Y") }} Imperial College String Ensemble {% if allow_nav %}| <a href="{{ path('IcsePublicBundle_contact') }}">Contact Us</a>{% endif %}
+  Copyright &copy; 2005&ndash;{{ "now" | date ("Y") }} Imperial College String Ensemble
+
+  {% if allow_nav %}
+    | <a href="{{ path('IcsePublicBundle_contact') }}">Contact Us</a>
+  {% elseif allow_offline_mode %}
+    <span class="if_offline_support">
+        |
+        <span id="offline-mode-indicator">
+            <a class="online">Currently Online</a>
+            <a class="offline">Currently Offline</a>
+        </span>
+    </span>
+
+    <script>
+        var IN_OFFLINE_MODE = false;
+        var ON_CHANGE_OFFLINE_MODE = function(){};
+
+        (function(){
+            if(!("indexedDB" in window)) {
+                $('.if_offline_support').hide();
+            }
+
+            var indicator = $('#offline-mode-indicator');
+
+            var update_indicator = function(){
+                if (IN_OFFLINE_MODE) {
+                    indicator.find('.online').hide();
+                    indicator.find('.offline').show();
+                } else {
+                    indicator.find('.offline').hide();
+                    indicator.find('.online').show();
+                }
+            };
+            update_indicator();
+
+            indicator.click(function(){
+                IN_OFFLINE_MODE = !IN_OFFLINE_MODE;
+                update_indicator();
+                ON_CHANGE_OFFLINE_MODE();
+            });
+        })();
+    </script>
+  {% endif %}
   </footer>
 
 {% block after_footer %}{% endblock %}

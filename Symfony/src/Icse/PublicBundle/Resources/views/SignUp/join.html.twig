@@ -12,6 +12,9 @@
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    <script src="{{ asset('bundles/icsepublic/lib/js/jquery.fuzzymatch.min.js') }}"></script>
+    <script src="//cdn.jsdelivr.net/momentjs/2.8.3/moment.min.js"></script>
     {% if freshersfair %}
         <script src="{{ asset('bundles/icsepublic/lib/js/jquery.animate-enhanced.min.js') }}"></script>
         <script src="{{ asset('bundles/icsepublic/lib/superslides/jquery.superslides.min.js') }}"></script>
@@ -23,6 +26,7 @@
     {{ parent() }}
     {% if freshersfair %}
         <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/icsepublic/lib/superslides/superslides.min.css') }}" />
+        <link rel="stylesheet" type="text/css" media="all" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/humanity/jquery-ui.css" />
     {% endif %}
 {% endblock %}
 
@@ -31,6 +35,8 @@
     {% autoescape false %}
     {{ join_intro }}
     {% endautoescape %}
+
+    <span id="current_server_time" hidden>{{ "now" | date('c') }}</span>
 
     <form class="standard{{ freshersfair ? ' freshersfair' }}" id="join_us" action="" method="post" {{ form_enctype(form) }} >
         <div class="global_errors">
