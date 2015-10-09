@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Icse\MembersBundle\Entity\Member
@@ -628,5 +629,19 @@ class Member implements AdvancedUserInterface, \Serializable
     {
         $this->plain_password = $plain_password;
         return $this;
+    }
+
+    public function validate(ExecutionContextInterface $context)
+    {
+        if ($this->getPasswordOperation() == self::PASSWORD_SET) {
+            $len = strlen($this->getPlainPassword());
+            $error = "";
+            if      ($len <   8) $error = 'Your new password must be at least 8 characters';
+            else if ($len > 999) $error = 'Your new password must be less than 1000 characters';
+
+            if ($error) $context->buildViolation($error)
+                ->atPath('plain_password')
+                ->addViolation();
+        }
     }
 }

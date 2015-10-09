@@ -58,7 +58,7 @@ class Subscriber
     private $standard;
 
     /**
-     * @var datetime $subscribed_at
+     * @var \DateTime $subscribed_at
      */
     private $subscribed_at;
 
@@ -256,7 +256,7 @@ class Subscriber
     /**
      * Set subscribed_at
      *
-     * @param datetime $subscribedAt
+     * @param \DateTime $subscribedAt
      */
     public function setSubscribedAt($subscribedAt)
     {
@@ -266,7 +266,7 @@ class Subscriber
     /**
      * Get subscribed_at
      *
-     * @return datetime 
+     * @return \DateTime
      */
     public function getSubscribedAt()
     {
@@ -287,23 +287,21 @@ class Subscriber
     {
         if ($this->isPlayer())
         {
-            $other_index = array_search('other', $this->getInstrument());
+            $instruments = $this->getInstrument();
+            if (is_string($instruments)) $instruments = explode(', ', $instruments);
+            $other_index = array_search('other', $instruments);
             $plays_other_instrument = ($other_index !== false);
-            if (!$this->getInstrument() || ($plays_other_instrument && !$this->getOtherInstrument()))
+            if (!$instruments || ($plays_other_instrument && !$this->getOtherInstrument()))
             {
-                $context->addViolationAt('instrument', 'Please specify your instrument.', array(), null);
+                $context->buildViolation('Please specify your instrument')->atPath('instrument')->addViolation();
             }
-            if ($plays_other_instrument)
-            {
-                $instruments = $this->getInstrument();
-                $instruments[$other_index] = $this->getOtherInstrument();
-                $this->setInstrument($instruments);
-            }
-            $instrument_string = implode (', ', $this->getInstrument());
-            $this->setInstrument($instrument_string);
+            if ($plays_other_instrument) $instruments[$other_index] = $this->getOtherInstrument();
+            $instruments = implode (', ', $instruments);
+            $this->setInstrument($instruments);
+
             if (!$this->getStandard())
             {
-                $context->addViolationAt('standard', 'Please indicate your playing standard.', array(), null);
+                $context->buildViolation('Please indicate your playing standard')->atPath('standard')->addViolation();
             }
         }
         else

@@ -4,95 +4,106 @@ namespace Icse\MembersBundle\Controller;
 
 use Icse\MembersBundle\Entity\Member;
 use Icse\MembersBundle\Entity\MemberProfile;
+use Icse\MembersBundle\Validator\Constraints\UserPassword;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Common\Tools;
 use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class AccountSettingsController extends Controller
 {
-
-    private function isValidEmail($input)
+    /**
+     * @param Member $user
+     * @return Form
+     */
+    private function getPasswordForm(Member $user)
     {
-        $emailConstraint = new Email;
-        $emailConstraint->checkMX = true;
-        $errorList = $this->get('validator')->validateValue($input, $emailConstraint); 
-        return count($errorList) == 0; 
+        return $this->get('form.factory')->createNamedBuilder('password', 'form',  $user)
+            ->add('old_password', 'password', [
+                'required' => true,
+                'mapped' => false,
+                'label' => 'Old Password',
+                'constraints' => new UserPassword(["message" => "Incorrect password"]),
+            ])
+            ->add('password_operation', 'choice', [
+                'choices' => [
+                    Member::PASSWORD_IMPERIAL => "No, I'll use my Imperial College password",
+                    Member::PASSWORD_SET => "Yes, make a separate password for ICSE"
+                ],
+                'label' => 'Create a new ICSE password?',
+                'expanded' => true,
+                'constraints' => new NotBlank()
+            ])
+            ->add('plain_password', 'repeated', [
+                'type' => 'password',
+                'required' => false,
+                'invalid_message' => "Both passwords must match",
+                'first_options' => ['label' => 'Choose a new password'],
+                'second_options' => ['label' => 'Enter it again'],
+            ])
+            ->add('save', 'submit')
+            ->getForm();
+    }
+
+    /**
+     * @param Member $user
+     * @return Form
+     */
+    private function getEmailAddrForm(Member $user)
+    {
+        return $this->get('form.factory')->createNamedBuilder('email_addr', 'form',  $user)
+            ->add('email', 'email', [
+                'required' => true,
+                'label' => 'New email address',
+                'data' => ''
+            ])
+            ->add('save', 'submit')
+            ->getForm();
     }
      
     public function indexAction(Request $request)
     {
-        $cpResponse = [];
-        $ceResponse = [];
         /** @var Member $user */
         $user = $this->get('security.token_storage')->getToken()->getUser();
+        $successes = [];
 
-        if ($request->request->get('form_id') == "cp") // if change password
-        { 
-            $encoder = $this->get('security.encoder_factory'); 
-            if (!\Icse\MembersBundle\Security\Authentication\Provider\queryCredsValid($user, $request->request->get('old_password'), $encoder)) // if old password incorrect
-            { 
-                $cpResponse['oldpass'] = "Incorrect password";
-            }
-            elseif ($request->request->get('icse_passwd') == null)
-            {
-                $cpResponse['icsepass'] = "Please specify";
-            }
-            elseif ($request->request->get('icse_passwd') == 1)
-            {
-                $user->setPassword(null);
+        $password_form = $this->getPasswordForm($user);
+        $password_form->handleRequest($request);
+        if ($password_form->isValid()) {
+            if ($user->getPasswordOperation() == Member::PASSWORD_IMPERIAL) {
                 $user->setSalt(null);
-                $cpResponse['success'] = "Password was successfully changed";
+                $user->setPassword(null);
             }
-            elseif ($request->request->get('new_password') != $request->request->get('new_password_again'))
-            {
-                $cpResponse['newpass'] = "Passwords don't match";
-            }
-            elseif (strlen($request->request->get('new_password')) < 8)
-            {
-                $cpResponse['newpass'] = "Password must be at least 8 characters";
-            }
-            else
-            {
+            else if ($user->getPasswordOperation() == Member::PASSWORD_SET) {
                 $user->setSalt(Tools::randString(40));
-                $pass_hash = $encoder->getEncoder($user)->encodePassword($request->request->get('new_password'), $user->getSalt());
-                $user->setPassword($pass_hash);
-                $cpResponse['success'] = "Password was sucessfully changed";
+                $encoded = $this->container
+                    ->get('security.password_encoder')
+                    ->encodePassword($user, $user->getPlainPassword());
+                $user->setPassword($encoded);
             }
-
-            $em = $this->getDoctrine()->getManager();
-            if (isset($cpResponse['success']))
-            {
-                $em->flush();
-            }
-            else
-            {
-                $em->refresh($user);
-                $cpResponse['passtype'] = $request->request->get('icse_passwd');
-            }
+            $successes[] = "password";
+            $password_form = $this->getPasswordForm(new Member);
         }
+
+        $email_form = $this->getEmailAddrForm($user);
+        $email_form->handleRequest($request);
+        if ($email_form->isValid()) {
+            $successes[] = "email";
+            $email_form = $this->getEmailAddrForm(new Member);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        if (count($successes)) $em->flush();
+        else                   $em->refresh($user);
         
-        else if ($request->request->get('form_id') == "ce")  // change email
-        {
-            if ($this->isValidEmail($request->request->get('new_email')))
-            {
-                $user->setEmail($request->request->get('new_email'));
-                $em = $this->getDoctrine()->getManager();
-                $em->flush();
-                $ceResponse['success'] = "Email address was successfully changed";
-            }
-            else
-            {
-                $ceResponse['newemail'] = "Invalid email address";
-            }
-        }
-
-        $imperial_password = !($user->getPassword());
-        $email = $user->getEmail();
-        return $this->render('IcseMembersBundle:AccountSettings:index.html.twig', array("ImperialPasswd" => $imperial_password,
-                                                                                        "email" => $email, 
-                                                                                        "ceResponse" => $ceResponse, 
-                                                                                        "cpResponse" => $cpResponse));
+        return $this->render('IcseMembersBundle:AccountSettings:index.html.twig', [
+            "user" => $user,
+            "successes" => $successes,
+            "password_form" => $password_form->createView(),
+            "email_addr_form" => $email_form->createView()
+        ]);
     }
 
     public function profileAction(Request $request)

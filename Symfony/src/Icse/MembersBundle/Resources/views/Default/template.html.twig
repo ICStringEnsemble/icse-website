@@ -1,5 +1,6 @@
 {% extends 'IcsePublicBundle:Default:template.html.twig' %}
 {% set currentSection = 'members' %}
+{% set body_class = body_class | default("members-main") %}
 
 {% set default_group = {role: 'ROLE_USER'} %}
 

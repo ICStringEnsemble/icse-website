@@ -60,7 +60,8 @@
 
 {% endspaceless %}
 </head>
-<body class="main">
+{% set body_class = body_class | default("main") %}
+<body class="{{ body_class }}">
 
   <div id="above_footer" {% block aboveFooterAttrs %}{% endblock %}>
     <header class="main">

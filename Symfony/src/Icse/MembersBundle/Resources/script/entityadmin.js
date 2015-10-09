@@ -1,4 +1,4 @@
-(function(){
+$(document).ready(function(){
 
     if(typeof initCreateForm != 'function'){
         window.initCreateForm = function(){};
@@ -6,10 +6,6 @@
 
     if(typeof initEditForm != 'function'){
         window.initEditForm = function(){};
-    }
-
-    if(typeof postTableReload != 'function'){
-        window.postTableReload = function(){};
     }
 
     function resetFormInput(el){
@@ -217,19 +213,21 @@
             });
             imgs.lazyload();
         }
+        return false;
     }
-    attachTableHandlers();
 
-    window.onNavColumnToggle = function() {
-        $('.entity_instance_list').filter('.waterfall').masonry();
-    };
+    var $instance_list_container = $('#entity_instance_list_container');
+    $instance_list_container.on("handlers_need_reattaching", attachTableHandlers);
+    $instance_list_container.on("post_reload", function(){
+        $instance_list_container.trigger("handlers_need_reattaching");
+    });
+    $instance_list_container.trigger("post_reload");
 
     /* Reload Table */
     function reloadTable(){
         var dfd = $.Deferred();
-        $('#entity_instance_list_container').load(currentPath + '/list', function(){
-            attachTableHandlers();
-            postTableReload();
+        $instance_list_container.load(currentPath + '/list', function(){
+            $instance_list_container.trigger("post_reload");
             stopLoading();
             hideShowControlButtons();
             $('.ui-widget-overlay').height($(document).height());
@@ -238,6 +236,10 @@
         startLoading();
         return dfd.promise();
     }
+
+    window.onNavColumnToggle = function() {
+        $('.entity_instance_list').filter('.waterfall').masonry();
+    };
 
     function getTableRowById(id){
         return $('.entity_instance_list .instance').filter(function(){
@@ -360,7 +362,7 @@
         edit_form.find('select').each(set_select_to_default);
         form_elements_to_synchronise.change();
         edit_form.find('input').filter(':radio, :checkbox').prop('checked', false);
-        edit_form.find('.error').remove();
+        edit_form.find('.error_list').remove();
         edit_form.find('.show_if_create').show();
         edit_form.find('.show_if_edit').hide();
         edit_form.data('form_mode', 'create');
@@ -377,7 +379,7 @@
         // edit_form.attr('method', 'PUT');
         edit_form.find('input[name="_method"]').val('PUT');
         edit_form.attr('method', 'POST');
-        edit_form.find('.error').remove();
+        edit_form.find('.error_list').remove();
         edit_form.find('.show_if_edit').show();
         edit_form.find('.show_if_create').hide();
         edit_form.data('form_mode', 'edit');
@@ -450,16 +452,26 @@
         $('#delete_dialog').dialog('open');
     });
 
-    var attachErrorsToForm = function this_function (form_element, name_stem, errors) {
+    var genErrorList = function (existing_list, new_error) {
+        var list;
+        if (existing_list.length && existing_list.hasClass('error_list')) list = existing_list;
+        else list = $('<div>',{
+            'class' : 'error_list',
+            'html'  : $('<ul>')
+        });
+        list.find('ul').append(new_error);
+        return list;
+    }
+
+    var attachErrorsToForm = function this_function (form_element, name_stem, errors, friendly_name) {
+        form_element.find('.error_list').remove();
         for (var key in errors) if (errors.hasOwnProperty(key)) {
             var child = errors[key];
             var field_name = name_stem + '[' + key + ']';
+            if (isNaN(key)) friendly_name = key;
 
-            if (typeof  child == 'string') {
-                var error_element = $('<div>',{
-                    'class' : 'error',
-                    'text' :  child
-                });
+            if (typeof child == 'string') {
+                var error_element = $('<li>', { 'text' :  child });
 
                 var bad_field_element = form_element.find('*[name="'+field_name+'"]');
                 if (bad_field_element.length == 0) {
@@ -467,14 +479,18 @@
                 }
 
                 if (bad_field_element.length == 0) { // insert as global error
-                    if (isNaN(key)) error_element.text(key + ': ' + error_element.text());  // add key to message
-                    error_element.addClass('global_error').appendTo(form_element);
+                    if (typeof(friendly_name)!=='undefined') {
+                        error_element.text(friendly_name + ': ' + error_element.text());  // add key to message
+                    }
+                    var error_list = genErrorList(form_element.children().first(), error_element);
+                    error_list.prependTo(form_element);
                 } else { // attach error to bad field
-                    bad_field_element.before(error_element);
+                    var error_list = genErrorList(bad_field_element.prev(), error_element);
+                    bad_field_element.before(error_list);
                 }
             }
             else if (typeof child == 'object') {
-                this_function(form_element, field_name, child);
+                this_function(form_element, field_name, child, friendly_name);
             }
         }
     };
@@ -513,7 +529,7 @@
             $(this).data('was_disabled', $(this).prop('disabled'));
         });
         all_buttons.button('disable');
-        form_element.find('.error').remove();
+        form_element.find('.error_list').remove();
         var formData, contentType, processData;
         if (form_element.find('input:file').length !== 0) {      // if files, we have to use multipart/form-data; doesn't play nicely with PUT
             formData = new FormData(form_element[0]);
@@ -1037,4 +1053,4 @@
         });
     });
 
-})();
+});

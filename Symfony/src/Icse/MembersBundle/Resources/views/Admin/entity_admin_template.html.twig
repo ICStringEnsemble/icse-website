@@ -6,7 +6,7 @@
 {% set entityPluralTitle     = entityPlural | title %}
 {% set entityPluralTitleNb   = entityPluralTitle | replace({' ': '&nbsp;'}) %}
 {% set entityIdentifier = entitySingular | replace({' ': '_'}) %}
-{% set readOnly = readOnly | default(false) %}
+{% set readOnly = (readOnly | default(false)) and not is_granted('ROLE_SUPER_ADMIN') %}
 {% set enable_social_net = enable_social_net | default(false) %}
 {% set allow_drop_files = allow_drop_files | default(false) %}
 {% set create_by_upload = create_by_upload | default(false) %}
@@ -46,8 +46,8 @@
         {% else %}
             <li><button class="create show_if_none_selected" type=button>Add&nbsp;{{ entitySingularTitleNb | raw }}</button></li>
         {% endif %}
-    <li><button class="edit show_if_one_selected" type=button>Edit</button></li>
-    <li><button class="delete show_if_any_selected" type=button>Delete</button></li>
+        <li><button class="edit show_if_one_selected" type=button>Edit</button></li>
+        <li><button class="delete show_if_any_selected" type=button>Delete</button></li>
     {% endif %}
     {% block extra_entity_main_buttons %}{% endblock %}
 

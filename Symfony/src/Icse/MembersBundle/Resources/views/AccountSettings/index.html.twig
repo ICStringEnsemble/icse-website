@@ -8,98 +8,66 @@
 <h1>Account Settings</h1>
 
 <h2>Change Email Address</h2>
-{% if ceResponse['success'] is defined %}
-<p class="success">{{ ceResponse['success'] }}</p>
+
+{% if "email" in successes %}
+<p class="success">Your email address was successfully changed</p>
 {% endif %}
-<p>
-Your email address is currently set to {{ email }}. You can use this address to login to the members
+
+<p class="main_content">
+Your email address is currently set to <strong>{{ user.email }}</strong>. You can use this address to login to the members
 area, and we may also use it for contacting you.
 </p>
-<form class="standard" method="post" action="">
-  <div>
-    {% if ceResponse['newemail'] is defined %}
-    <p class="error_wide">{{ ceResponse['newemail'] }}</p>
-    {% endif %}
-    <div class="field_row">
-      <label for="form_new_email">New email address</label>
-      <input type="email" id="form_new_email" name="new_email" required="required" />
-    </div>
-  </div>
-  <input type="hidden" name="form_id" value="ce" /> 
-  <input type="submit" value="Change Email Address"/>
-</form>
+
+{{ form_start(email_addr_form, {attr: {class: 'standard account-settings' }}) }}
+{{ form_widget(email_addr_form) }}
+{{ form_end(email_addr_form) }}
 
 <h2>Change Password</h2>
 
-{% if cpResponse['success'] is defined %}
-<p class="success">{{ cpResponse['success'] }}</p>
+{% if "password" in successes %}
+<p class="success">Your password was successfully changed</p>
 {% endif %}
 
-<p>
+<p class="main_content">
 You can either log in using your Imperial College password (in which case we will not store
 your password in any way) or you can create a new password to use specifically for the ICSE website.
-{% if ImperialPasswd == true %}
-You are currently using your Imperial College password.
+{% if user.password is null %}
+You are currently using your <strong>Imperial College password</strong>.
 {% else %}
-You are currently using a separate ICSE password.
+You are currently using a <strong>separate ICSE password</strong>.
 {% endif %}
 </p>
 
-<form class="standard" method="post" action="">
-  <div>
-    {% if cpResponse['oldpass'] is defined %}
-    <p class="error_wide">{{ cpResponse['oldpass'] }}</p>
-    {% endif %}
-    <div class="field_row">
-      <label for="form_old_password">Old Password</label>
-      <input type="password" id="form_old_password" name="old_password" required="required" />
-    </div>
+{{ form_start(password_form, {attr: {class: 'standard account-settings' }}) }}
+  {{ form_errors(password_form) }}
+
+  {{ form_row(password_form.old_password) }}
+  {{ form_row(password_form.password_operation) }}
+  <div id="new_password_fields">
+  {{ form_row(password_form.plain_password) }}
   </div>
-  <div>
-    {% if cpResponse['icsepass'] is defined %}
-    <p class="error_wide">{{ cpResponse['icsepass'] }}</p>
-    {% endif %}
-    <div class="field_row">
-      <label>Create a new ICSE password?</label>
-      <div class="choices_list" id="form_pass_type">
-        <input type="radio" id="form_icse_passwd" name="icse_passwd" required="required" value="2" {% if cpResponse['passtype'] is defined and cpResponse['passtype'] == 2 %}checked="yes"{% endif %}/>
-        <label for="form_icse_passwd" class=" required">Yes, make a separate password for ICSE.</label>
-        <input type="radio" id="form_ic_passwd" name="icse_passwd" required="required" value="1" {% if cpResponse['passtype'] is defined and cpResponse['passtype'] == 1 %}checked="yes"{% endif %}/>
-        <label for="form_ic_passwd" class=" required">No, I'll use my Imperial College password.</label>
-      </div>
-    </div>
-  </div>
-  <div class="show_if_newpass">
-    {% if cpResponse['newpass'] is defined %}
-    <p class="error_wide">{{ cpResponse['newpass'] }}</p>
-    {% endif %}
-    <div class="field_row">
-      <label for="form_new_password">Choose a new password</label>
-      <input type="password" id="form_new_password" name="new_password" required="required" />
-    </div>
-  </div>
-  <div class="show_if_newpass">
-    <div class="field_row">
-      <label for="form_new_password_again">Enter your new password again</label>
-      <input type="password" id="form_new_password_again" name="new_password_again" required="required" />
-    </div>
-  </div>
-  <input type="hidden" name="form_id" value="cp" /> 
-  <input type="submit" value="Change Password"/>
-</form>
+{{ form_end(password_form) }}
 
 <script>
-  var enableDisablePasswd = function(slideTime){
-    if ($('#form_icse_passwd').is(':checked')){
-      $('#form_new_password, #form_new_password_again').attr('required', 'required');
-      $('.show_if_newpass').slideDown(slideTime);
-    } else {
-      $('#form_new_password, #form_new_password_again').removeAttr('required');
-      $('.show_if_newpass').slideUp(slideTime);
-    }
-  }
-  enableDisablePasswd(0);
-  $('#form_pass_type').change(10, enableDisablePasswd);
+  (function(){
+
+    var $pass_op_section = $('#password_password_operation');
+    var $icse_pass_opt     = $pass_op_section.find('input[value={{ constant('PASSWORD_SET', user) }}]');
+    var $new_pass_section = $('#new_password_fields');
+
+    var enableDisablePasswd = function(slideTime){
+      if ($icse_pass_opt.is(':checked')){
+        $new_pass_section.find('input').attr('required', 'required');
+        $new_pass_section.slideDown(slideTime);
+      } else {
+        $new_pass_section.find('input').removeAttr('required');
+        $new_pass_section.slideUp(slideTime);
+      }
+    };
+    enableDisablePasswd(0);
+    $pass_op_section.change(10, enableDisablePasswd);
+
+  })();
 </script>
 
 {% endblock %}

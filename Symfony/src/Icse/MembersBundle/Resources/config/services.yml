@@ -9,14 +9,30 @@ services:
         tags:
             - { name: form.type, alias: hidden_entity }
 
-    security.authentication.provider.imperial:
+    icse.security.password_checker:
+        class: Icse\MembersBundle\Security\Authentication\PasswordChecker
+        arguments: [@security.password_encoder]
+
+    icse.security.validator.user_password:
+        class: Icse\MembersBundle\Validator\Constraints\UserPasswordValidator
+        arguments: [@security.token_storage, @icse.security.password_checker]
+        tags:
+            - { name: validator.constraint_validator, alias: icse.security.validator.user_password }
+
+    icse.security.authentication.provider.imperial:
         class: Icse\MembersBundle\Security\Authentication\Provider\ImperialProvider
-        arguments: ['', @security.user_checker, '', @security.encoder_factory, %security.authentication.hide_user_not_found%]
+        arguments:
+            - ''
+            - @security.user_checker
+            - ''
+            - @security.encoder_factory
+            - @icse.security.password_checker
+            - %security.authentication.hide_user_not_found%
 
     icse.twig.table_utils:
         class: Icse\MembersBundle\Twig\TableUtils
         tags:
-            - { name: twig.extension } 
+            - { name: twig.extension }
 
     kernel.listener.last_online_at_listener:
         class: Icse\MembersBundle\EventListener\LastOnlineAtListener

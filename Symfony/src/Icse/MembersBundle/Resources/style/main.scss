@@ -9,9 +9,11 @@ $nav_col_colour: #d4b896;
 
 @import "select2-theme/layout";
 
-body.main {
+body.members-main {
     @include display-flex;
     @include flex-flow(column nowrap);
+
+    height: 100%;
 
     #above_footer {
         min-height: 0;
@@ -115,6 +117,7 @@ nav.members {
         float: right;
         @include transition(transform $sidebar_button_flip_animation_time);
         position: relative;
+        @include rotate(0.0001deg);
 
         &:hover {
             cursor: pointer;
@@ -162,16 +165,38 @@ nav.members {
 }
 
 section.members-main {
-    @include flex(1 0 auto);
+    @include flex(1 0 0);
     position: relative;
 }
 
 form.standard {
 
+    &.account-settings {
+        margin-bottom: 1em;
+    }
+
     div.form_row {
-        .form_row_main {
+        div.form_row_main {
             margin-left: 320px;
+
+            @include display-flex;
+            @include flex-flow(row wrap-reverse);
+            @include align-items(flex-end);
+
+            & > .error_list {
+                order: 1;
+            }
         }
+    }
+
+    .error_list {
+        li {
+            margin-bottom: 0.2em;
+        }
+    }
+
+    & > .error_list {
+        margin-bottom: 1em;
     }
 
     label {
@@ -187,6 +212,7 @@ form.standard {
         margin-left: 320px;
     }
 }
+
 
 html {
     li.ui-timepicker-selected,

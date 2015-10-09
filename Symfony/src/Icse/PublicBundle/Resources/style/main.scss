@@ -383,26 +383,15 @@ form.standard {
             div {
                 clear: none;
             }
-
-
         }
     }
 
     .error_list ul {
-        float: right;
         margin-bottom: 0px;
-    }
 
-    .error {
-        clear: none;
-        float: right;
-        color: #f00;
-        clear: right;
-        text-align: right;
-    }
-
-    .global_error {
-        padding-bottom: 0.7em;
+        body.main & {
+            float: right;
+        }
     }
 
     %text-box-styles {
@@ -430,7 +419,7 @@ form.standard {
             min-height: 1.4em;
             color: #ffffff;
             background: #ad8f61;
-            padding: 0.3em 15px;
+            padding: 0.25em 15px 0.3em;
             border: 0;
         }
 
@@ -448,7 +437,6 @@ form.standard {
 
     textarea {
         @extend %text-box-styles;
-        margin-bottom: -5px;
     }
 
     button:not(.ui-button) {
@@ -460,6 +448,7 @@ form.standard {
     }
 
     input {
+
         &:not([type]),
         &[type='text'],
         &[type='password'],
@@ -605,9 +594,16 @@ form.standard {
         margin-top: 0.2em;
     }
 
-    #username_or_email_error, .error_list li {
+    #username_or_email_lookup {
+        #username_or_email_error {
+            float: right;
+        }
+    }
+
+    .error_list li,
+    ul.login_error_list li,
+    #username_or_email_error {
         color: #f00;
-        float: right;
     }
 
     .global_errors li {
