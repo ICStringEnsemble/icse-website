@@ -175,17 +175,24 @@
     $('button.preview').click(function(){
         preview_frame.dialog('open');
         preview_frame.html($('.email_buttons .loading_spinner').clone().removeAttr('hidden'));
-        preview_frame.load(preview_frame.data('base-url'), getEmailDataForPOST());
+
+        $.ajax({
+            type: 'POST',
+            data: getEmailDataForPOST(),
+            url: preview_frame.data('base-url'),
+            dataType: 'html'
+        }).done(function(r){
+            preview_frame.html(r);
+        });
     });
 
     $('button.send').click(function(){
         ui_confirm_and_do("Send email?", "Send", function(){
             var dfd = $.Deferred();
-            var send_url = $('button.send').data('base-url');
             $.ajax({
                 type: 'POST',
                 data: getEmailDataForPOST(),
-                url: send_url,
+                url: $('button.send').data('base-url'),
                 dataType: 'json'
             }).always(function(r){
                 if (r.status == "success") {

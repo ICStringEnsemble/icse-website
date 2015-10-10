@@ -103,7 +103,7 @@ class EmailController extends Controller
 
     public function previewAction(Request $request)
     {
-        $form = $this->getEmailForm('GET');
+        $form = $this->getEmailForm();
         $form->handleRequest($request);
 
         if ($form->isValid()) {
