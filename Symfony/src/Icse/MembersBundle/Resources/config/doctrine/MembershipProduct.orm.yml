@@ -1,0 +1,25 @@
+Icse\MembersBundle\Entity\MembershipProduct:
+    type: entity
+    table: null
+    repositoryClass: Icse\MembersBundle\Entity\MembershipProductRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: NONE
+    fields:
+        starts_at:
+            type: datetime
+        ends_at:
+            type: datetime
+        price:
+            type: decimal
+            precision: 5
+            scale: 2
+        url:
+            type: string
+            length: 512
+        last_synced_at:
+            type: datetime
+    lifecycleCallbacks: {  }
