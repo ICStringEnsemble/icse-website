@@ -2,12 +2,13 @@ Icse\PublicBundle\Entity\Event:
     type: entity
     repositoryClass: Icse\PublicBundle\Entity\EventRepository
     table: null
-    fields:
+    id:
         id:
             type: integer
             id: true
             generator:
                 strategy: AUTO
+    fields:
         name:
             type: string
             length: 255

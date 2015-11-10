@@ -24,6 +24,15 @@ class CommitteeRole
      */
     private $start_year;
 
+    /**
+     * @var Member
+     */
+    private $member;
+
+    /**
+     * @var integer
+     */
+    private $sort_index;
 
     /**
      * Get id
@@ -86,12 +95,6 @@ class CommitteeRole
     }
 
     /**
-     * @var Member
-     */
-    private $member;
-
-
-    /**
      * Set member
      *
      * @param Member $member
@@ -113,11 +116,6 @@ class CommitteeRole
     {
         return $this->member;
     }
-    /**
-     * @var integer
-     */
-    private $sort_index;
-
 
     /**
      * Set sort_index
