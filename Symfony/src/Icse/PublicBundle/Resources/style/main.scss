@@ -647,6 +647,16 @@ div#end_form {
     clear: both;
 }
 
+#login_page_error_details {
+    margin-top:    1em;
+    margin-bottom: 2em;
+
+    p {
+        margin-left: auto;
+        margin-right: auto;
+    }    
+}
+
 textarea#email_textarea {
     vertical-align: top;
     height: 2.7em;

@@ -9,9 +9,12 @@
 
 <form class="standard" action="{{ path('IcsePublicBundle_login_check') }}" method="post">
   <ul class="login_error_list global_errors"><li class="error">
-  {% if error %}
+  {% if creds_error %}
   Incorrect username or password
-  {# {{ error.message }} #}
+  {% elseif locked_error %}
+  Your account has been locked
+  {% elseif expired_error %}
+  Your account has expired
   {% endif %}
   </li></ul>
   <div class="form_row">
@@ -28,5 +31,12 @@
 </form>
 
 <div id="end_form"></div>
+
+
+{% if expired_error %}
+  <div id="login_page_error_details">
+    {{ render(controller('IcseMembersBundle:Default:MembershipPaymentInfoFragment', { username: last_username } )) }}
+  </div>
+{% endif %}
 
 {% endblock %}
