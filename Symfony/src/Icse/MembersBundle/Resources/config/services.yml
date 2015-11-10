@@ -54,7 +54,10 @@ services:
 
     icse.members_report_parser:
         class: Icse\MembersBundle\Service\MembersReportParser
-#        arguments: [@doctrine.orm.entity_manager]
+
+    icse.members_edit_hooks:
+        class: Icse\MembersBundle\Service\MembersEditHooks
+        arguments: [@icse.mailer]
 
     icse.form.type.time12:
         class: Icse\MembersBundle\Form\Type\TimeType

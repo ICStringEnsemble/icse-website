@@ -91,30 +91,6 @@ class MembersController extends EntityAdminController
     /**
      * @param Member $member
      */
-    private function sendNewAccountEmail($member)
-    {
-        $mailer = $this->get('icse.mailer');
-        $mailer->setTemplate('IcseMembersBundle:Email:account_created.html.twig')
-            ->setBodyFields(['member' => $member])
-            ->setSubject('ICSE Online Account Created')
-            ->send($member->getEmail(), $member->getFirstName());
-    }
-
-    /**
-     * @param Member $member
-     */
-    private function sendTempPasswordEmail($member)
-    {
-        $mailer = $this->get('icse.mailer');
-        $mailer->setTemplate('IcseMembersBundle:Email:temporary_password.html.twig')
-            ->setBodyFields(['member' => $member])
-            ->setSubject('ICSE Account Password Reset')
-            ->send($member->getEmail(), $member->getFirstName());
-    }
-
-    /**
-     * @param Member $member
-     */
     private function applyPasswordOp($member)
     {
         $op = $member->getPasswordOperation();
@@ -188,18 +164,12 @@ class MembersController extends EntityAdminController
 
     protected function postCreateEntity($member)
     {
-        $this->sendNewAccountEmail($member);
+        $this->get('icse.members_edit_hooks')->postCreateMember($member);
     }
 
-    /**
-     * @param Member $member
-     */
     protected function postEditEntity($member)
     {
-        if ($member->getPasswordOperation() == Member::PASSWORD_RANDOM)
-        {
-            $this->sendTempPasswordEmail($member);
-        }
+        $this->get('icse.members_edit_hooks')->postEditMember($member);
     }
 
     private function getBatchUploadForm()
