@@ -40,7 +40,7 @@ class MembersController extends EntityAdminController
             'Username' => function(Member $member){return $member->getUsername();},
             'Email' => function(Member $member){return $member->getEmail();},
             'Password' => function(Member $member){return $member->getPassword()?"Stored":"Imperial";},
-            'Active' => function(Member $member){return $member->getActive()? "Yes":"No";},
+            'Status' => function(Member $member){if (!$member->getActive()) return "Locked"; if (!$member->isAccountNonExpired()) return "Expired"; return "Active";},
             'Role' => function(Member $member){return $member->getRoleCode() == $member::ROLE_SUPER_ADMIN? "Super Admin":($member->getRoleCode() == $member::ROLE_ADMIN?"Admin":'('.strtolower($member->getRoles()[0]).')');},
             'Paid' => function(Member $member){return $member->getLastPaidMembershipOn()? $member->getLastPaidMembershipOn()->format('d/M/Y') : "Never";},
             'Last Online' => function(Member $member){return $member->getLastOnlineAt()? $this->timeagoDate($member->getLastOnlineAt()) : "Never";},
@@ -55,7 +55,7 @@ class MembersController extends EntityAdminController
         $form->add('username', 'text');
         $form->add('email', 'email');
         $form->add('active', 'choice', [
-            'choices' => [true => 'Yes', false => 'No'],
+            'choices' => [true => 'Yes', false => 'Locked'],
             'required' => true
         ]);
         $form->add('last_paid_membership_on', 'date', [

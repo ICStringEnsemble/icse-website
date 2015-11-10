@@ -7,17 +7,18 @@ use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Security\Core\User\EquatableInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 use JMS\Serializer\Annotation as Serializer;
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Icse\MembersBundle\Entity\Member
  */
-class Member implements AdvancedUserInterface, \Serializable
+class Member implements AdvancedUserInterface, EquatableInterface, \Serializable
 {
     /**
      * @var integer $id
@@ -137,14 +138,15 @@ class Member implements AdvancedUserInterface, \Serializable
      */
     public function serialize()
     {
-        return serialize(
-            array(
-                $this->username,
-                $this->password,
-                $this->salt,
-                $this->active
-            )
-        );
+        return serialize(array(
+            $this->id,
+            $this->username,
+            $this->password,
+            $this->salt,
+            $this->last_paid_membership_on,
+            $this->active,
+            $this->getRoles(),
+        ));
     }
 
     /**
@@ -158,12 +160,28 @@ class Member implements AdvancedUserInterface, \Serializable
      */
     public function unserialize($serialized)
     {
-        list (
+        list(
+            $this->id,
             $this->username,
             $this->password,
             $this->salt,
+            $this->last_paid_membership_on,
             $this->active,
-            ) = unserialize($serialized);
+            $this->cached_roles,
+        ) = unserialize($serialized);
+    }
+
+    public function isEqualTo(UserInterface $member)
+    {
+        return (
+            $member instanceof AdvancedUserInterface && $this instanceof AdvancedUserInterface
+            &&  $member->getUsername()         === $this->getUsername()
+            &&  $member->getPassword()         === $this->getPassword()
+            &&  $member->getSalt()             === $this->getSalt()
+            &&  $member->getRoles()            === $this->getRoles()
+            &&  $member->isAccountNonLocked()  === $this->isAccountNonLocked()
+            &&  $member->isAccountNonExpired() === $this->isAccountNonExpired()
+        );
     }
 
     private function getAutoRole(\DateTime $dt = null)
@@ -182,7 +200,7 @@ class Member implements AdvancedUserInterface, \Serializable
         else return ['ROLE_USER'];
     }
 
-    public function getRoles(\DateTime $dt = null)
+    public function getFreshRoles(\DateTime $dt = null)
     {
         switch($this->getRoleCode())
         {
@@ -197,23 +215,29 @@ class Member implements AdvancedUserInterface, \Serializable
         }
     }
 
-    public function equals(UserInterface $member)
+    public function getRoles(\DateTime $dt = null)
     {
-        return $member->getUsername() === $this->username;
+        if ($dt === null)
+        {
+            if ($this->cached_roles === null)
+            {
+                $this->cached_roles = $this->getFreshRoles($dt);
+            }
+            return $this->cached_roles;            
+        }
+        else
+        {
+            return $this->getFreshRoles($dt);
+        }
     }
 
     public function eraseCredentials()
     {
     }
 
-    public function isAccountNonExpired()
-    {
-        return true;
-    }
-
     public function isAccountNonLocked()
     {
-        return true;
+        return $this->isActive();
     }
 
     public function isCredentialsNonExpired()
@@ -223,7 +247,7 @@ class Member implements AdvancedUserInterface, \Serializable
 
     public function isEnabled()
     {
-        return $this->isActive();
+        return true;
     }
 
     /**
@@ -589,6 +613,26 @@ class Member implements AdvancedUserInterface, \Serializable
         while ($last_august > $dt) $last_august->sub(new \DateInterval("P1Y"));
 
         return $last_paid >= $last_august;
+    }
+
+    public function isAccountNonExpired($dt = null)
+    {
+        if (array_intersect(['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'], $this->getRoles($dt)))
+        {
+            return true;
+        }
+
+        $last_paid = $this->getLastPaidMembershipOn();
+        if (is_null($last_paid)) return true;
+        if (is_null($dt)) $dt = new \DateTime;
+
+        $last_paid_month = intval($last_paid->format("m"));
+        $last_paid_year = intval($last_paid->format("Y"));
+
+        $expiry_year = ($last_paid_month < 8) ? $last_paid_year : $last_paid_year + 1;
+        $expiry_date = new \DateTime("1st January ". ($expiry_year+1));
+
+        return $dt < $expiry_date;
     }
 
     const PASSWORD_NO_CHANGE = 0;

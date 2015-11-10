@@ -47,5 +47,26 @@ class MemberTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(false, $member->hasCurrentMembership(new \DateTime("1st January 2012")));
     }
 
+    public function testisAccountNonExpired()
+    {
+        $member = new Member;
+        $member->setLastPaidMembershipOn(new \DateTime("31st July 2010"));
+
+        $this->assertEquals(true, $member->isAccountNonExpired(new \DateTime("15th January 2010")));
+        $this->assertEquals(true, $member->isAccountNonExpired(new \DateTime("31st July 2010")));
+        $this->assertEquals(true, $member->isAccountNonExpired(new \DateTime("1st August 2010")));
+        $this->assertEquals(true, $member->isAccountNonExpired(new \DateTime("31st December 2010")));
+        $this->assertEquals(false, $member->isAccountNonExpired(new \DateTime("1st January 2011")));
+
+        $member->setLastPaidMembershipOn(new \DateTime("1st August 2010"));
+        $this->assertEquals(true, $member->isAccountNonExpired(new \DateTime("31st July 2010")));
+        $this->assertEquals(true, $member->isAccountNonExpired(new \DateTime("1st August 2010")));
+        $this->assertEquals(true, $member->isAccountNonExpired(new \DateTime("31st December 2010")));
+        $this->assertEquals(true, $member->isAccountNonExpired(new \DateTime("1st January 2011")));
+        $this->assertEquals(true, $member->isAccountNonExpired(new \DateTime("31st July 2011")));
+        $this->assertEquals(true, $member->isAccountNonExpired(new \DateTime("1st August 2011")));
+        $this->assertEquals(true, $member->isAccountNonExpired(new \DateTime("31st December 2011")));
+        $this->assertEquals(false, $member->isAccountNonExpired(new \DateTime("1st January 2012")));
+    }
 }
  
