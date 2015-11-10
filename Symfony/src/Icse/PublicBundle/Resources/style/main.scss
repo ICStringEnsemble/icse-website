@@ -403,11 +403,15 @@ form.standard {
         }
     }
 
+    %single-line-input-styles {
+        margin-right: 10px;
+    }
+
     %single-line-text-box-styles {
         min-height: 1.4em;
         padding: 0 2px;
         margin-top: 0;
-        margin-right: 10px;
+        @extend %single-line-input-styles;
     }
 
     %button-styles {
@@ -433,6 +437,10 @@ form.standard {
             cursor: default;
             @include transition(background 0s);
         }
+    }
+
+    .select2-container {
+        @extend %single-line-input-styles;
     }
 
     textarea {
