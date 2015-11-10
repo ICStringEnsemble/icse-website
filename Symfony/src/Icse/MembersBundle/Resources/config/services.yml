@@ -55,6 +55,18 @@ services:
     icse.members_report_parser:
         class: Icse\MembersBundle\Service\MembersReportParser
 
+    icse.eactivities:
+        class: Icse\MembersBundle\Service\EActivities
+        arguments: [%eactivities_club_id%, %eactivities_api_key%]
+
+    icse.members_auto_updater:
+        class: Icse\MembersBundle\Service\MembersAutoUpdater
+        arguments: [@icse.eactivities, @icse.members_edit_hooks, @doctrine.orm.entity_manager, @validator]
+
+    icse.membership_product_auto_updater:
+        class: Icse\MembersBundle\Service\MembershipProductAutoUpdater
+        arguments: [@icse.eactivities, @doctrine.orm.entity_manager]
+
     icse.members_edit_hooks:
         class: Icse\MembersBundle\Service\MembersEditHooks
         arguments: [@icse.mailer]

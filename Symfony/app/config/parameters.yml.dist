@@ -19,6 +19,9 @@ parameters:
     icsepublic_mailman_list: icu-stringensemble-public 
     icsepublic_mailman_pw: ~
 
+    eactivities_club_id: 417
+    eactivities_api_key: ~
+
     dev_user: icse
     dev_password: ~
 

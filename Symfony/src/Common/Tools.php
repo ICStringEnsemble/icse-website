@@ -9,7 +9,7 @@ class Tools
         if (isset($array[$index])) {
             $val = $array[$index];
         } else {
-            throw new \UnexpectedValueException("\"" . $index . "\" does not exist in array."); 
+            throw new \UnexpectedValueException("\"" . $index . "\" does not exist in array: ". json_encode($array)); 
         }
         return $val;
     }
