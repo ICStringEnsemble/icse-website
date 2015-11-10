@@ -1,3 +1,5 @@
+parameters:
+    security.user_checker.class: Icse\MembersBundle\Security\User\UserChecker
 security:
     firewalls:
         secured_area:
