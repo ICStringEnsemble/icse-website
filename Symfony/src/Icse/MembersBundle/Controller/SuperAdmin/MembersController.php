@@ -41,7 +41,7 @@ class MembersController extends EntityAdminController
             'Email' => function(Member $member){return $member->getEmail();},
             'Password' => function(Member $member){return $member->getPassword()?"Stored":"Imperial";},
             'Active' => function(Member $member){return $member->getActive()? "Yes":"No";},
-            'Role' => function(Member $member){return $member->getRole() == $member::ROLE_SUPER_ADMIN? "Super Admin":($member->getRole() == $member::ROLE_ADMIN?"Admin":'('.strtolower($member->getRoles()[0]).')');},
+            'Role' => function(Member $member){return $member->getRoleCode() == $member::ROLE_SUPER_ADMIN? "Super Admin":($member->getRoleCode() == $member::ROLE_ADMIN?"Admin":'('.strtolower($member->getRoles()[0]).')');},
             'Paid' => function(Member $member){return $member->getLastPaidMembershipOn()? $member->getLastPaidMembershipOn()->format('d/M/Y') : "Never";},
             'Last Online' => function(Member $member){return $member->getLastOnlineAt()? $this->timeagoDate($member->getLastOnlineAt()) : "Never";},
         ];
@@ -64,9 +64,10 @@ class MembersController extends EntityAdminController
             'required' => false,
             'format' => 'dd/MM/yy'
         ]);
-        $form->add('role', 'choice', [
+        $form->add('role_code', 'choice', [
             'choices' => [Member::ROLE_AUTO => 'Auto', Member::ROLE_ADMIN => 'Admin', Member::ROLE_SUPER_ADMIN => 'Super Admin'],
-            'required' => true
+            'required' => true,
+            'label' => 'Role'
         ]);
         $form->add('password_operation', 'choice', [
             'choices' => [

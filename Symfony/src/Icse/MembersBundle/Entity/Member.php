@@ -32,6 +32,16 @@ class Member implements AdvancedUserInterface, \Serializable
     private $username;
 
     /**
+     * @var string $first_name
+     */
+    private $first_name;
+
+    /**
+     * @var string $last_name
+     */
+    private $last_name;
+
+    /**
      * @var string $salt
      * @Groups({"superadmin"})
      */
@@ -85,11 +95,36 @@ class Member implements AdvancedUserInterface, \Serializable
      */
     private $last_paid_membership_on;
 
+    /**
+     * @var integer $role_code
+     * @Groups({"superadmin"})
+     */
+    private $role_code;
+
+    private $cached_roles = null;
+    
+    /**
+     * @var \DateTime
+     * @Groups({"superadmin"})
+     */
+    private $created_at;
+    
+    /**
+     * @var \DateTime
+     * @Groups({"superadmin"})
+     */
+    private $last_online_at;
+
+    const ROLE_AUTO = 1;
+    const ROLE_ADMIN = 10;
+    const ROLE_SUPER_ADMIN = 100;
+
+
     public function __construct()
     {
         $this->committee_roles = new Arraycollection;
         $this->active = true;
-        $this->role = self::ROLE_AUTO;
+        $this->role_code = self::ROLE_AUTO;
         $this->created_at = new \DateTime();
         $this->password_operation = self::PASSWORD_NO_CHANGE;
     }
@@ -147,14 +182,9 @@ class Member implements AdvancedUserInterface, \Serializable
         else return ['ROLE_USER'];
     }
 
-
-    const ROLE_AUTO = 1;
-    const ROLE_ADMIN = 10;
-    const ROLE_SUPER_ADMIN = 100;
-
     public function getRoles(\DateTime $dt = null)
     {
-        switch($this->getRole())
+        switch($this->getRoleCode())
         {
             case self::ROLE_AUTO:
                 return $this->getAutoRole($dt);
@@ -305,16 +335,6 @@ class Member implements AdvancedUserInterface, \Serializable
     {
         return $this->active;
     }
-    /**
-     * @var string $first_name
-     */
-    private $first_name;
-
-    /**
-     * @var string $last_name
-     */
-    private $last_name;
-
 
     /**
      * Get active
@@ -377,20 +397,13 @@ class Member implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * @var integer $role
-     * @Groups({"superadmin"})
-     */
-    private $role;
-
-
-    /**
      * Set role
      *
      * @param integer $role
      */
-    public function setRole($role)
+    public function setRoleCode($role)
     {
-        $this->role = $role;
+        $this->role_code = $role;
     }
 
     /**
@@ -398,16 +411,10 @@ class Member implements AdvancedUserInterface, \Serializable
      *
      * @return integer
      */
-    public function getRole()
+    public function getRoleCode()
     {
-        return $this->role;
+        return $this->role_code;
     }
-    /**
-     * @var \DateTime
-     * @Groups({"superadmin"})
-     */
-    private $created_at;
-
 
     /**
      * Set created_at
@@ -431,12 +438,6 @@ class Member implements AdvancedUserInterface, \Serializable
     {
         return $this->created_at;
     }
-    /**
-     * @var \DateTime
-     * @Groups({"superadmin"})
-     */
-    private $last_online_at;
-
 
     /**
      * Set last_online_at

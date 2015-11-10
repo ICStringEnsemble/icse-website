@@ -64,7 +64,6 @@ class MembersReportParser
                     $member->setLastName($csv_row[$indices['last_name']]);
                     $member->setUsername($csv_row[$indices['login']]);
                     $member->setEmail($csv_row[$indices['email']]);
-                    $member->setRole(member::ROLE_AUTO);
                     $member->setPassword(null);
                     $member->setSalt(null);
                     $member->setPasswordOperation(Member::PASSWORD_IMPERIAL);

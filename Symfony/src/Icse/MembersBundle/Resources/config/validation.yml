@@ -17,7 +17,7 @@ Icse\MembersBundle\Entity\Member:
                 checkMX: true
         active:
             - NotBlank: ~
-        role:
+        role_code:
             - NotBlank: ~
 
 Icse\MembersBundle\Entity\PracticePart:

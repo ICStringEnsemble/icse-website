@@ -36,7 +36,7 @@ Icse\MembersBundle\Entity\Member:
             unique: true
         active:
             type: boolean
-        role:
+        role_code:
             type: integer
         last_online_at:
             type: datetime 
