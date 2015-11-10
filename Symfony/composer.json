@@ -28,7 +28,8 @@
         "tijsverkoyen/css-to-inline-styles": "dev-master",
         "robertotru/to-inline-style-email-bundle": "dev-master",
         "sabre/vobject" : "~3.1",
-        "acts/social-api-bundle": "dev-master"
+        "acts/social-api-bundle": "dev-master",
+        "sensiolabs/ansi-to-html": "^1.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",

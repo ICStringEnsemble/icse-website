@@ -518,7 +518,9 @@ ul.entity_main_buttons, ul.email_buttons {
     }
 }
 
-#practice_parts_page, #past_newsletters_page {
+#practice_parts_page,
+#past_newsletters_page,
+div.symfony-console-command {
     h2 {
         overflow: hidden;
         margin-bottom: 0.7em;
@@ -839,3 +841,38 @@ form.standard {
 .cke_button_disabled .cke_button_label {
     opacity: .3;
 }
+
+div.symfony-console-command {
+
+    margin-bottom: 1em;
+
+    .button-container {
+        overflow: hidden;
+    }
+
+    button {
+        float: left;
+    }
+
+    .loading_spinner {
+        float: left;
+        margin-left: 5px;
+        margin-top: 3px;
+    }
+
+    pre.output {
+        line-height: 1.2em;
+        font-family: monospace;
+        white-space: pre-wrap;
+        overflow-x: hidden;
+        clear: left;
+        margin-top: 1em;
+        background-color: #000;
+        padding: 0.5em;
+
+        &:empty {
+            padding: 0;
+        }
+    }
+}
+

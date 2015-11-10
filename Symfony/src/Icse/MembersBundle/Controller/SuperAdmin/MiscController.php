@@ -4,6 +4,11 @@ namespace Icse\MembersBundle\Controller\SuperAdmin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Output\OutputInterface;
+use SensioLabs\AnsiConverter\AnsiToHtmlConverter;
 use Icse\PublicBundle\Entity\Subscriber;
 use Icse\PublicBundle\Entity\Image;
 use Common\Tools;
@@ -12,8 +17,22 @@ class MiscController extends Controller
 {
     public function siteDevAction()
     {
+        $last_tick_time = null;
+        try
+        {
+            $membership_product = $this->getDoctrine()
+                ->getRepository('IcseMembersBundle:MembershipProduct')
+                ->findCurrent();
+            if ($membership_product) $last_tick_time = $membership_product->getLastSyncedAt();
+        }
+        catch (\Exception $e)
+        {}
+
         $form = $this->createFormBuilder()->getForm();
-        return $this->render('IcseMembersBundle:SuperAdmin:sitedev.html.twig', ['dummy_form' => $form->createView()]);
+        return $this->render('IcseMembersBundle:SuperAdmin:sitedev.html.twig', [
+            'dummy_form' => $form->createView(),
+            'last_tick_time' => $last_tick_time
+        ]);
     }
 
     private function userIsDeveloper()
@@ -39,21 +58,50 @@ class MiscController extends Controller
         return new Response('<html manifest="/appcache"><body>Link .appcache</body></html>');
     }
 
+    private function doConsoleCommand($command)
+    {
+        $kernel = $this->get('kernel');
+        $app = new Application($kernel);
+        $app->setAutoExit(false);
+        $app->setTerminalDimensions(80, 50);
+
+        $input = new ArrayInput(array(
+           'command' => $command,
+        ));
+        $output = new BufferedOutput(
+            OutputInterface::VERBOSITY_NORMAL,
+            true // true for decorated
+        );
+        $app->run($input, $output);
+
+        $converter = new AnsiToHtmlConverter();
+        $content = $output->fetch();
+
+        return $converter->convert($content);
+    }
+
     public function migrateDBAction()
     {
-        if ($this->userIsDeveloper()) {
-            exec('/usr/bin/php ./Symfony/app/console -n doctrine:migrations:migrate', $output, $error);
-            if ($error == 0)
-            {
-                array_push($output, "Success");
-            }
-            else
-            {
-                array_push($output, "Fail");
-            }
-            $pageBody = implode('<br />', $output);
-            return new Response($pageBody);
-        } else {
+        if ($this->userIsDeveloper())
+        {
+            $output = $this->doConsoleCommand('doctrine:migrations:migrate');
+            return new Response($output);
+        }
+        else
+        {
+            return new Response("Developer mode required; no changes made.");
+        }
+    }
+
+    public function periodicTickAction()
+    {
+        if ($this->userIsDeveloper())
+        {
+            $output = $this->doConsoleCommand('icse:tick');
+            return new Response($output);
+        }
+        else
+        {
             return new Response("Developer mode required; no changes made.");
         }
     }
@@ -117,7 +165,7 @@ class MiscController extends Controller
         }
     }
 
-    public function testAction()
+    public function testMailman()
     {
         $mm = $this->get('icsepublic_mailman');
 //get a list of lists as an array
@@ -129,5 +177,18 @@ class MiscController extends Controller
         //var_dump ($mm->subscribe('user@example.co.uk'));
 
         return new Response('hi');
+    }
+
+    public function testAction()
+    {
+        try
+        {
+            $this->get('icse.members_auto_updater')->start();
+        }
+        catch (\Exception $e)
+        {
+            return $this->get('ajax_response_gen')->returnFail($e->getMessage());
+        }
+        return $this->get('ajax_response_gen')->returnSuccess();
     }
 }

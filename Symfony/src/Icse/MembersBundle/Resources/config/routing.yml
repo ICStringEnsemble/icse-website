@@ -83,6 +83,10 @@ IcseMembersBundle_migrateDB:
     pattern:  /migratedb
     defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:migrateDB }
 
+IcseMembersBundle_periodicTick:
+    pattern:  /members/superadmin/periodictick
+    defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:periodicTick }
+
 IcseMembersBundle_phpinfo:
     pattern:  /phpinfo
     defaults: { _controller: IcseMembersBundle:SuperAdmin/Misc:phpinfo }

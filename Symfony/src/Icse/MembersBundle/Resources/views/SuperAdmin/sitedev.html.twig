@@ -4,48 +4,72 @@
 
 {% block content %}
 <h1>Site Dev</h1>
-<p>
-<div id="db_migration">
-  <h2>Database Migration</h2>
-  <button type=button>Migrate</button> 
-  <img hidden class="loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" /> 
-  <div class="output">
+
+<div id="periodic_update" class="symfony-console-command">
+  <h2>
+      <div>Periodic Update</div>
+      {% if last_tick_time is not null %}
+        <div class="info">Last performed: {{ last_tick_time | date('l jS F Y, g:ia') }}</div>
+      {% endif %}
+  </h2>
+
+
+  <div class="button-container">
+    <button type=button>Tick</button> 
+    <img hidden class="loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" /> 
   </div>
-    <div id="confirm_migrate_db" title="Perform Database Migration?" hidden=hidden>
-      <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span>
-      WARNING! You are about to execute a database migration that could result in schema
-      changes and data lost. Are you sure you wish to continue?</p>
-    </div>
+  <pre class="output"></pre>
 
-    <script>
-      $('#confirm_migrate_db').dialog({
-        autoOpen: false,
-        resizable: false,
-        modal: true,
-        width: 400,
-        buttons : {
-          "Yes" : function(){
-            $('#db_migration .output').load("{{ path('IcseMembersBundle_migrateDB') }}", function(){
-              $('#db_migration .loading_spinner').hide();
-            });
-            $('#db_migration .loading_spinner').show();
-            $(this).dialog("close");
-          },
-          "No" : function(){
-            $(this).dialog("close");
-          }
-        }
+  <script>
+    $('#periodic_update button').button().click(function(e){
+      $('#periodic_update .output').empty().load("{{ path('IcseMembersBundle_periodicTick') }}", function(){
+        $('#periodic_update .loading_spinner').hide();
       });
-
-      $('#db_migration button').removeAttr('disabled');
- 
-      $('#db_migration button').button().click(function(e){
-        $('#confirm_migrate_db').dialog('open');
-      })
-    </script> 
+      $('#periodic_update .loading_spinner').show();
+    })
+  </script> 
 
 </div>
-</p>
+
+<div id="db_migration" class="symfony-console-command">
+  <h2>Database Migration</h2>
+  <div class="button-container">
+    <button type=button>Migrate</button> 
+    <img hidden class="loading_spinner" src="{{ asset('bundles/icsemembers/images/loading.gif') }}" /> 
+  </div>
+  <pre class="output"></pre>
+  <div id="confirm_migrate_db" title="Perform Database Migration?" hidden=hidden>
+    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 0 0;"></span>
+    WARNING! You are about to execute a database migration that could result in schema
+    changes and data lost. Are you sure you wish to continue?</p>
+  </div>
+
+  <script>
+    $('#confirm_migrate_db').dialog({
+      autoOpen: false,
+      resizable: false,
+      modal: true,
+      width: 400,
+      buttons : {
+        "Yes" : function(){
+          $('#db_migration .output').empty().load("{{ path('IcseMembersBundle_migrateDB') }}", function(){
+            $('#db_migration .loading_spinner').hide();
+          });
+          $('#db_migration .loading_spinner').show();
+          $(this).dialog("close");
+        },
+        "No" : function(){
+          $(this).dialog("close");
+        }
+      }
+    });
+
+    $('#db_migration button').button().click(function(e){
+      $('#confirm_migrate_db').dialog('open');
+    });
+  </script> 
+
+</div>
 
 <h2>CSRF Token</h2>
 <p>
