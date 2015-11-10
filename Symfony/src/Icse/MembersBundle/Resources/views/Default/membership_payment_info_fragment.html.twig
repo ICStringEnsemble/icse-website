@@ -1,0 +1,37 @@
+{% set email_body =
+'Dear ICSE
+
+I have purchased membership, yet the website is still telling me I have not yet paid.
+
+Please could you look into this?
+
+Thanks
+%s' | format(user.fullName) %}
+
+<p>
+    You have not yet purchased this year's membership.
+    You can do so by visiting
+
+    <a href=
+{% if product is not null and product.url %}
+    "{{ product.url }}"
+{% else %}
+    "https://www.imperialcollegeunion.org/shop/club-society-project-products/string-ensemble-products/"
+{% endif %}
+    >the online shop</a>
+
+    and making a one-off payment
+
+{% if product is not null %}
+    of £{{ product.price | replace({".00" : ""}) }},
+{% endif %}
+
+    which lasts for the whole academic year.
+    Membership fees go towards the cost of snacks, drinks and music hire, as well as the many other things that ICSE has to pay for!
+</p>
+
+<p>
+    If you have in fact paid membership and this notice still appears, please
+    <a href="mailto:icse@imperial.ac.uk?{{ {subject: 'ICSE Membership', body: email_body} | url_encode }}" >get in touch</a>
+    and we'll make sure the system is up to date.
+</p>

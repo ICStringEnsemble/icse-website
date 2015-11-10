@@ -17,33 +17,13 @@
 {% set membership_is_good = app.user.hasCurrentMembership %}
 
 <p>
-    Paid membership: <span class="membership_date {{ membership_is_good ? "good" : "bad" }}">{{ app.user.lastPaidMembershipOn is null ? 'No' : (app.user.lastPaidMembershipOn | date('d/m/Y')) }}</span>
+    Paid membership: <span class="membership_date {{ membership_is_good ? "good" : "bad" }}">
+        {{ app.user.lastPaidMembershipOn is null ? 'No' : (app.user.lastPaidMembershipOn | date('d/m/Y')) }}
+    </span>
 </p>
 
 {% if not membership_is_good %}
-    <p>
-        You have not yet paid for this year's membership.
-        You can do so by visiting <a href="https://www.imperialcollegeunion.org/shop/club-society-project-products/string-ensemble-products/">the online shop</a> and making a one-off payment of £15, which lasts for the whole academic year.
-        Membership fees go towards the cost of snacks, drinks and music hire, as well as the many other things that ICSE has to pay for!
-    </p>
-
-    {% set email_body =
-'Dear ICSE
-
-I have purchased membership, yet the website is still telling me I have not yet paid.
-
-Please could you look into this?
-
-Thanks
-%s' | format(app.user.fullName) %}
-
-    <p>
-        If you have in fact paid membership and this notice still appears, please
-        <a href="mailto:icse@imperial.ac.uk?{{ {subject: 'ICSE Membership', body: email_body} | url_encode }}" >
-            get in touch
-        </a>
-        and we'll make sure the system is up to date.
-    </p>
+    {{ render(controller('IcseMembersBundle:Default:MembershipPaymentInfoFragment' )) }}
 {% endif %}
 
 

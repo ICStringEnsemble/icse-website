@@ -72,4 +72,27 @@ class DefaultController extends Controller
             'events' => $events['event'],
         ]);
     }
+
+    public function membershipPaymentInfoFragmentAction($username = null)
+    {
+        if ($username !== null)
+        {
+            $user = $this->getDoctrine()
+                ->getRepository('IcseMembersBundle:Member')
+                ->findOneByUsername($username);
+        }
+        else
+        {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+        }
+
+        $membership_product = $this->getDoctrine()
+            ->getRepository('IcseMembersBundle:MembershipProduct')
+            ->findCurrent();
+
+        return $this->render('IcseMembersBundle:Default:membership_payment_info_fragment.html.twig', [
+            'user' => $user,
+            'product' => $membership_product,
+        ]);
+    }
 }
