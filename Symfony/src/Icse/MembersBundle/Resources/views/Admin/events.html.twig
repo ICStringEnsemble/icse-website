@@ -18,19 +18,23 @@
     <div class="form_row">
         {{ form_label(form.performances) }}
         <div class="form_row_main">
-            <ul id="performances" class="collection sortable-list">
-                <li class="performance">
-                    {#<i class="handle fa fa-bars"></i>#}
-                    <span class="piece_full_name"></span>
-                    <i class="a-button delete fa fa-trash-o"></i>
-                    {{ form_widget(form.performances['__ID__'].piece, {attr: {class: 'piece_id'} }) }}
-                    {{ form_widget(form.performances['__ID__'].sort_index, {attr: {class: 'sort_index'} }) }}
-                </li>
-            </ul>
-            {{ form_widget(form.performance_adder, {attr: {
-                class: 'performance_adder entity-select',
-                placeholder: 'Add a piece...'
-            } }) }}
+            <div class="wide_widget">
+                <ul id="performances" class="collection sortable-list">
+                    <li class="performance">
+                        {#<i class="handle fa fa-bars"></i>#}
+                        <span class="piece_full_name"></span>
+                        <i class="a-button delete fa fa-trash-o"></i>
+                        {{ form_widget(form.performances['__ID__'].piece, {attr: {class: 'piece_id'} }) }}
+                        {{ form_widget(form.performances['__ID__'].sort_index, {attr: {class: 'sort_index'} }) }}
+                    </li>
+                </ul>
+                <div class="performance_adder">
+                    {{ form_widget(form.performance_adder, {attr: {
+                        class: 'performance_adder entity-select',
+                        placeholder: 'Add a piece...'
+                    } }) }}
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

@@ -20,3 +20,14 @@
     {% set attr={class: "text-autosuggest"} %}
     {{- block('form_widget_simple') -}}
 {% endblock %}
+
+{% block icse_doc_editor_widget %}
+    <div class="wide_widget">
+        {% set classes = "doceditor" %}
+        {% if doceditor_style == 'newsarticle' %}
+            {% set classes = classes ~ " newsarticleeditor" %}
+        {% endif %}
+        {% set attr={class: classes} %}
+        {{- block('textarea_widget') -}}
+    </div>
+{% endblock %}

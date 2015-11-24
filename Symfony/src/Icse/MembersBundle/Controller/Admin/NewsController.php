@@ -4,6 +4,7 @@ namespace Icse\MembersBundle\Controller\Admin;
 
 use Symfony\Component\Form\FormBuilder;
 use Icse\PublicBundle\Entity\NewsArticle;
+use Icse\MembersBundle\Form\Type\DocEditorType;
 
 class NewsController extends EntityAdminController
 {
@@ -46,8 +47,8 @@ class NewsController extends EntityAdminController
             'required' => false,
             'attr' => ['class' => 'entity-select']
         ]);
-        $form->add('body', 'textarea', [
-            'attr' => ['class' => 'doceditor newsarticleeditor']
+        $form->add('body', new DocEditorType(), [
+            'doceditor_style' => 'newsarticle'
         ]);
     }
 

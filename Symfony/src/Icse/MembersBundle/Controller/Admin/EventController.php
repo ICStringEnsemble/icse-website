@@ -4,6 +4,7 @@ namespace Icse\MembersBundle\Controller\Admin;
 
 use Acts\SocialApiBundle\Exception\ApiException;
 use Icse\MembersBundle\Form\Type\EndTimeType;
+use Icse\MembersBundle\Form\Type\DocEditorType;
 use Icse\MembersBundle\Form\Type\PerformanceOfAPieceType;
 use Icse\PublicBundle\Entity\PerformanceOfAPiece;
 use Symfony\Component\Form\FormBuilder;
@@ -102,10 +103,9 @@ class EventController extends EntityAdminController
             'required' => false,
             'mapped' => false,
         ]);
-        $form->add('description', 'textarea', [
+        $form->add('description', new DocEditorType(), [
             'required' => false,
             'label' => 'Information',
-            'attr' => ['class' => 'doceditor'],
         ]);
     }
 

@@ -655,9 +655,9 @@ $(document).ready(function(){
 
             var new_count = 0;
 
-            performance_adder_select.change(function(){
-                var select_data = $(this).select2('data');
-                if (select_data !== null) {
+            performance_adder_select.on('select2:select', function(e){
+                var select_data = e.params.data;
+                if (select_data) {
                     var piece_id = select_data.id;
                     var piece_name = select_data.text;
                     if (piece_id !== '') {

@@ -186,6 +186,10 @@ form.standard {
             & > .error_list {
                 order: 1;
             }
+
+            & > .wide_widget {
+                flex: 1 0 0;
+            }
         }
     }
 
@@ -678,13 +682,13 @@ form.standard {
                     cursor: -webkit-grabbing;
                 }
 
-
                 &.drag-placeholder {
                     list-style: none;
                 }
 
                 &.hidden {
                     height: 0;
+                    min-height: 0;
                     padding: 0;
                     margin: 0;
                     opacity: 0;
@@ -706,8 +710,6 @@ form.standard {
             }
 
         }
-
-
     }
 
     #practice_parts_section {
