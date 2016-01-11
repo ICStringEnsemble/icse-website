@@ -11,13 +11,18 @@
 <!DOCTYPE HTML>
 <html class="main">
 {% spaceless %}
-<head>
-<title>
+{% set is_home = currentSection == 'home' %}
+<head {{ is_home ? 'itemscope itemtype="http://schema.org/WebSite"' }} >
+<title {{ is_home ? 'itemprop="name"' }}>
   {% if pageTitle is defined %}
   {{ pageTitle }} -
   {% endif %}
   Imperial College String Ensemble
 </title>
+{% if is_home %}
+  <meta itemprop="alternateName" content="ICSE" />
+  <link rel="canonical" href="{{ url('IcsePublicBundle_home') }}" itemprop="url">
+{% endif %}
 <!--[if lt IE 9]>
 <script src="{{ asset('bundles/icsepublic/lib/js/html5shiv-printshiv.js') }}"></script>
 <![endif]-->

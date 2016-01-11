@@ -10,10 +10,16 @@
 
 {% block content %}
 
-<div id=col_left>
-  {% autoescape false %} 
-  {{ home_intro }}
-  {% endautoescape %}
+<div id="col_left">
+  <div itemscope itemtype="http://schema.org/MusicGroup">
+    <link itemprop="url" href="{{ url('IcsePublicBundle_home') }}" />
+    <link itemprop="sameAs" href="https://www.imperialcollegeunion.org/activities/a-to-z/417" />
+    <link itemprop="sameAs" href="https://www.facebook.com/ImperialCollegeStringEnsemble" />
+    <link itemprop="sameAs" href="https://plus.google.com/103940088893023414758" />
+    {% autoescape false %} 
+    {{ home_intro }}
+    {% endautoescape %}
+  </div>
   {% set includedEventList = false %}
 
   {% for event_group in [{label:"Today", events:today_events},

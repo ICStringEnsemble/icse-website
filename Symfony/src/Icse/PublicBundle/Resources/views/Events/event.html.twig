@@ -27,68 +27,85 @@
 
 {% block content %}
 
-<div id="TitleAndDate">
-<h1>{{ event.getName() }}</h1>
-{# Event Time #}
-{% if event.startsAt is not null %}
-<div class="datetime">{{ event.startsAt | date("l jS F Y" ~ (event.isStartTimeKnown ? ", g:ia")) }}</div>
-{% endif %}
-</div>
+<div itemscope itemtype="http://schema.org/MusicEvent">
 
-{% if event.getPoster() %}
-<a class="poster view_full_image" href="{{ path('IcsePublicBundle_resource', {object: event.poster, 'size':'enlarge'}) }}" title="{{ event.getName() }}" >
-<img src="{{ path('IcsePublicBundle_resource', {object: event.poster, 'size':'article'}) }}" />
-</a>
-{% endif %}
+  <link itemprop="url" href="{{ url('IcsePublicBundle_event', event) }}" />
 
-{# Event Repertoire #}
-{% if not event.getPerformances().isEmpty() %}
-<ul class="repertoire">
-{% for performance in event.getPerformances() %}
-<li>{{ performance.piece.fullName }}</li>
-{% endfor %}
-</ul>
-{% endif %}
-
-{# Event Description #}
-{% if event.getDescription() %}
-    <h2>Information</h2>
-    <div class="main_content">
-    {{ event.getDescription() | raw }}
-    </div>
-{% else %}
-    <p class="no_info">Sorry, we don't have any more information just yet.</p>
-{% endif %}
-
-
-{# Map #}
-{% if event.getLocation() %}
-<div id="location">
-  <h2>Location</h2>
-  <div id=address>
-    <h3>{{ event.getLocation().getName() }}</h3>
-    <div>{{ event.getLocation().getAddress() | nl2br }}</div>
+  <div id="TitleAndDate">
+  <h1 itemprop="name">{{ event.getName() }}</h1>
+  {# Event Time #}
+  {% if event.startsAt is not null %}
+  <div
+    class="datetime"
+    {% if event.isStartTimeKnown %}
+      itemprop="startDate" content="{{ event.startsAt | date('c') }}"
+    {% endif %}
+  >
+    {{ event.startsAt | date("l jS F Y" ~ (event.isStartTimeKnown ? ", g:ia")) }}
   </div>
-  <div>{{ event.getLocation.getEmbedMap() | raw }}</div>
-</div>
-{% endif %}
+  {% endif %}
+  </div>
+
+  {% if event.getPoster() %}
+  <a class="poster view_full_image" href="{{ path('IcsePublicBundle_resource', {object: event.poster, 'size':'enlarge'}) }}" title="{{ event.getName() }}" >
+  <img itemprop="image" src="{{ path('IcsePublicBundle_resource', {object: event.poster, 'size':'article'}) }}" />
+  </a>
+  {% endif %}
+
+  {# Event Repertoire #}
+  {% if not event.getPerformances().isEmpty() %}
+  <ul class="repertoire">
+  {% for performance in event.getPerformances() %}
+  <li>{{ performance.piece.fullName }}</li>
+  {% endfor %}
+  </ul>
+  {% endif %}
+
+  {# Event Description #}
+  {% if event.getDescription() %}
+      <h2>Information</h2>
+      <div class="main_content" itemprop="description">
+      {{ event.getDescription() | raw }}
+      </div>
+  {% else %}
+      <p class="no_info">Sorry, we don't have any more information just yet.</p>
+  {% endif %}
+
+  <div itemprop="performer" itemscope itemtype="http://schema.org/MusicGroup">
+    <link itemprop="sameAs" href="{{ url('IcsePublicBundle_home') }}" />
+    <meta itemprop="name" content="Imperial College String Ensemble" />
+  </div>
+
+  {# Map #}
+  {% if event.getLocation() %}
+  <div id="location">
+    <h2>Location</h2>
+    <div id="address" itemprop="location" itemscope itemtype="http://schema.org/Place">
+      <h3 itemprop="name">{{ event.getLocation().getName() }}</h3>
+      <div itemprop="address">{{ event.getLocation().getAddress() | nl2br }}</div>
+    </div>
+    <div>{{ event.getLocation.getEmbedMap() | raw }}</div>
+  </div>
+  {% endif %}
 
 
-<script>
-  $('.view_full_image').fancybox({
-    padding: 0,
-    closeClick: true,
-    openEffect:'elastic',
-    closeEffect:'elastic',
-    helpers: {
-      orig: $(this),
-      overlay: {
-        css: {
-          'background': 'rgba(45, 45, 45, 0.5)' 
+  <script>
+    $('.view_full_image').fancybox({
+      padding: 0,
+      closeClick: true,
+      openEffect:'elastic',
+      closeEffect:'elastic',
+      helpers: {
+        orig: $(this),
+        overlay: {
+          css: {
+            'background': 'rgba(45, 45, 45, 0.5)' 
+          }
         }
       }
-    }
-  });
-</script> 
+    });
+  </script>
+
+</div>
 
 {% endblock %}
