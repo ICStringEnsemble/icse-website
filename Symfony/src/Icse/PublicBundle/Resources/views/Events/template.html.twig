@@ -3,6 +3,6 @@
 {% set currentSection = 'events' %}
 
 {% set subnav_items = [
-              {label: 'Upcoming Events', id:'future_events', url: path('IcsePublicBundle_future_events')},
-              {label: 'Past Events', id:'past_events', url: path('IcsePublicBundle_past_events')},
+    {label:'Upcoming Events', shortlabel:'Upcoming', id:'future_events', url: path('IcsePublicBundle_future_events')},
+    {label:'Past Events',     shortlabel:'Past',     id:'past_events',   url: path('IcsePublicBundle_past_events')  },
 ] %}

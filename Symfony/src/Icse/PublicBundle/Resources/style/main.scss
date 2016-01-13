@@ -110,22 +110,26 @@ nav.main a {
     }
 }
 
-#sub_nav ul ul a.crumb {
-    background-image: url(@IcsePublicBundle/images/breadcrumb.png);
-    background-repeat: no-repeat;
-    background-position: right center; 
-    padding-right: 20px + 24px;
-    &:link, &:visited {
-        background-color: $nav_colour3;
-        color: #000;
-    }
-    &:hover {
-        background-color: lighten($nav_colour3, 10%);
-    }
-}
 
-#sub_nav ul ul a.midcrumb {
-    padding-left: 10px;
+#sub_nav ul ul {
+
+    a.crumb {
+        background-image: url(@IcsePublicBundle/images/breadcrumb.png);
+        background-repeat: no-repeat;
+        background-position: right center; 
+        padding-right: 20px + 24px;
+        &:link, &:visited {
+            background-color: $nav_colour3;
+            color: #000;
+        }
+        &:hover {
+            background-color: lighten($nav_colour3, 10%);
+        }
+    }
+
+    li:not(:first-child):not(:last-child) a.crumb {
+        padding-left: 10px;
+    }
 }
 
 #top_nav a.current  {

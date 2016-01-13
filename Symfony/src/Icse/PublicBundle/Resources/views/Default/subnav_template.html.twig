@@ -1,24 +1,51 @@
-{% extends 'IcsePublicBundle:Default:template.html.twig' %} 
+{% extends 'IcsePublicBundle:Default:template.html.twig' %}
+
+{% import _self as self %}
+
+{% macro nav_li(item, is_current, is_crumb, b_position) %}
+<li
+  {% if is_current %}
+    itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"
+  {% endif %}
+>
+  <a
+    {% if is_current %}
+      class="{{ is_crumb ? 'crumb' : 'current' }}" itemprop="item"
+    {% endif %}
+    href="{{ item.url }}"
+  >
+    <span
+      {% if is_current %}
+        itemprop="name" {% if item.shortlabel is defined %}content="{{ item.shortlabel }}"{% endif %}
+      {% endif %}
+    >
+      {{- item.label -}}
+    </span>
+  </a>
+  {% if is_current %}
+    <meta itemprop="position" content="{{ b_position }}" />
+  {% endif %}
+</li>
+{% endmacro %}
 
 {% block navbars %}
 {{ parent() }}
 <div id="sub_nav">
 <ul>
   {% for item in subnav_items %}
-  <li>
-      {% if currentSubSection != item.id or breadcrumbs is not defined %}
-        <a {% if currentSubSection == item.id %}class=current{% endif %} href="{{ item.url }}" >{{ item.label}}</a>
-      {% else %}
+    {% set is_current = currentSubSection == item.id %}
+    {% if is_current and breadcrumbs is defined %}
+      <li>
         <ul>
-          <li><a class="crumb" href="{{ item.url }}" >{{ item.label}}</a></li>
+          {{ self.nav_li(item, true, true, 2) }}
           {% for crumb in breadcrumbs %}
-            <li>
-            <a class={% if loop.last %}"current"{% else %}"crumb midcrumb"{% endif %} href="{{ crumb.url }}" >{{ crumb.label}}</a>
-            </li>
+            {{ self.nav_li(crumb, true, not loop.last, loop.index0 + 3) }}
           {% endfor %}
         </ul>
-      {% endif %}
-  </li>
+      </li>
+    {% else %}
+      {{ self.nav_li(item, is_current, false, 2) }}
+    {% endif %}
   {% endfor %}
 </ul>
 </div>

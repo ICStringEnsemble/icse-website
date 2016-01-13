@@ -1,10 +1,10 @@
 {% set main_nav_items = [
-              {label: 'Home', id:'home', url: path('IcsePublicBundle_home')},
-              {label: 'News', id:'news', url: path('IcsePublicBundle_news')},
-              {label: 'About Us', id:'about', url:path('IcsePublicBundle_about')},
-              {label: 'Events', id:'events', url:path('IcsePublicBundle_events')},
-              {label: 'Join Us', id:'join', url:path('IcsePublicBundle_join')},
-              {label: 'Members', id:'members', url:path('IcseMembersBundle_return')}
+    {label: 'Home', id:'home', url: path('IcsePublicBundle_home')},
+    {label: 'News', id:'news', url: path('IcsePublicBundle_news')},
+    {label: 'About Us', id:'about', url:path('IcsePublicBundle_about')},
+    {label: 'Events', id:'events', url:path('IcsePublicBundle_events')},
+    {label: 'Join Us', id:'join', url:path('IcsePublicBundle_join')},
+    {label: 'Members', id:'members', url:path('IcseMembersBundle_return')}
 ] %}
 {% set allow_nav = no_nav is defined ? not no_nav : true %}
 {% set allow_offline_mode = allow_offline_mode is defined ? allow_offline_mode : false %}
@@ -78,16 +78,44 @@
             </h1>
         </div>
     </header>
-    <nav class="main">
+    <nav class="main" itemscope itemtype="http://schema.org/BreadcrumbList">
     {% block navbars %}
     <div id="top_nav">
       {% if allow_nav %}
       <ul>
         {% set is_logged_in = (app.user and is_granted('ROLE_USER')) %}
         {% for item in main_nav_items %}
-        <li {% if item.id == 'members' %}id="members_area_button" {% if is_logged_in %}class="logged_in"{% endif %} {% endif %} >
-            <a {% if item.id == currentSection %}class='current'{% endif %} href="{{ item.url }}">{{ item.label }}</a>
-        </li>
+          {% set is_current = item.id == currentSection %}
+          <li
+            {% if item.id == 'members' %}
+              id="members_area_button"
+              {% if is_logged_in %}
+                class="logged_in"
+              {% endif %}
+            {% endif %}
+            {% if is_current %}
+              itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"
+            {% endif %}
+          >
+            <a 
+              {% if is_current %}
+                class="current"
+                itemprop="item"
+              {% endif %}
+              href="{{ item.url }}"
+            >
+              <span
+                {% if is_current %}
+                  itemprop="name"
+                {% endif %}
+              >
+                {{- item.label -}}
+              </span>
+            </a>
+            {% if is_current %}
+              <meta itemprop="position" content="1" />
+            {% endif %}
+          </li>
         {% endfor %}
       </ul>
       {% endif %}
