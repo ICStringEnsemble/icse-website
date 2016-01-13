@@ -1,12 +1,15 @@
-{% extends (event.startsAt is not null and event.startsAt|date('U') < 'tomorrow'|date('U'))?
-'IcsePublicBundle:Events:past_events_year_template.html.twig':
-'IcsePublicBundle:Events:future_events_template.html.twig'
-%} 
+{% set is_past = event.startsAt is not null and event.startsAt|date('U') < 'tomorrow'|date('U') %}
+{% extends is_past ?
+  'IcsePublicBundle:Events:past_events_year_template.html.twig'
+: 'IcsePublicBundle:Events:future_events_template.html.twig'
+%}
 
 {% set year = event.getStartsAt() | date('Y') %}
-{% set breadcrumbs = [{label: event.getName(), url: path('IcsePublicBundle_event', event)}] %} 
+{% set breadcrumbs = [{label: event.name, url: path('IcsePublicBundle_event', event)}] %} 
 
-{% set pageTitle = event.getName() %} 
+{% set pageTitle %}
+  {{ event.name }} {% if is_past %} ({{ year }}) {% endif %}
+{% endset %}
 
 {% block stylesheets %}
 {{ parent() }}
@@ -32,7 +35,7 @@
   <link itemprop="url" href="{{ url('IcsePublicBundle_event', event) }}" />
 
   <div id="TitleAndDate">
-  <h1 itemprop="name">{{ event.getName() }}</h1>
+  <h1 itemprop="name">{{ event.name }}</h1>
   {# Event Time #}
   {% if event.startsAt is not null %}
   <div
@@ -46,26 +49,26 @@
   {% endif %}
   </div>
 
-  {% if event.getPoster() %}
-  <a class="poster view_full_image" href="{{ path('IcsePublicBundle_resource', {object: event.poster, 'size':'enlarge'}) }}" title="{{ event.getName() }}" >
+  {% if event.poster %}
+  <a class="poster view_full_image" href="{{ path('IcsePublicBundle_resource', {object: event.poster, 'size':'enlarge'}) }}" title="{{ event.name }}" >
   <img itemprop="image" src="{{ path('IcsePublicBundle_resource', {object: event.poster, 'size':'article'}) }}" />
   </a>
   {% endif %}
 
   {# Event Repertoire #}
-  {% if not event.getPerformances().isEmpty() %}
+  {% if not event.performances.isEmpty() %}
   <ul class="repertoire">
-  {% for performance in event.getPerformances() %}
+  {% for performance in event.performances %}
   <li>{{ performance.piece.fullName }}</li>
   {% endfor %}
   </ul>
   {% endif %}
 
   {# Event Description #}
-  {% if event.getDescription() %}
+  {% if event.description %}
       <h2>Information</h2>
       <div class="main_content" itemprop="description">
-      {{ event.getDescription() | raw }}
+      {{ event.description | raw }}
       </div>
   {% else %}
       <p class="no_info">Sorry, we don't have any more information just yet.</p>
@@ -77,14 +80,14 @@
   </div>
 
   {# Map #}
-  {% if event.getLocation() %}
+  {% if event.location %}
   <div id="location">
     <h2>Location</h2>
     <div id="address" itemprop="location" itemscope itemtype="http://schema.org/Place">
-      <h3 itemprop="name">{{ event.getLocation().getName() }}</h3>
-      <div itemprop="address">{{ event.getLocation().getAddress() | nl2br }}</div>
+      <h3 itemprop="name">{{ event.location.name }}</h3>
+      <div itemprop="address">{{ event.location.address | nl2br }}</div>
     </div>
-    <div>{{ event.getLocation.getEmbedMap() | raw }}</div>
+    <div>{{ event.location.getEmbedMap() | raw }}</div>
   </div>
   {% endif %}
 
