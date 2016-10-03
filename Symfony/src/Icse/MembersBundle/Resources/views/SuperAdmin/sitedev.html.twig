@@ -78,8 +78,16 @@
 </p>
 
 <h2>Misc</h2>
-<a class="button-link" href="{{ path('IcseMembersBundle_phpinfo') }}">PHPInfo</a>
-<a class="button-link" href="{{ path('IcseMembersBundle_linkappcache') }}">Link Appcache</a>
+<p>
+  <a class="button-link" href="{{ path('IcseMembersBundle_phpinfo') }}">PHPInfo</a>
+  <a class="button-link" href="{{ path('IcseMembersBundle_linkappcache') }}">Link Appcache</a>
+</p>
+
+<h2>Version Information</h2>
+<ul>
+  <li>ICSE Website: <a href="https://github.com/ICStringEnsemble/icse-website/commit/{{ icse_website_version }}" >{{ icse_website_version }}</a></li>
+  <li>Symfony: <a href="https://symfony.com/doc/{{ symfony_version }}/index.html" >{{ symfony_version }}</a></li>
+</ul>
 
 <script>
     $('.button-link').button();

@@ -8,9 +8,9 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\HttpKernel\Kernel;
 use SensioLabs\AnsiConverter\AnsiToHtmlConverter;
 use Icse\PublicBundle\Entity\Subscriber;
-use Icse\PublicBundle\Entity\Image;
 use Common\Tools;
 
 class MiscController extends Controller
@@ -28,10 +28,17 @@ class MiscController extends Controller
         catch (\Exception $e)
         {}
 
+        $symfony_version = Kernel::VERSION;
+        $icse_version = @file_get_contents(".revision");
+        if ($icse_version === false) $icse_version = "Unknown";
+        else                         $icse_version = trim($icse_version);
+
         $form = $this->createFormBuilder()->getForm();
         return $this->render('IcseMembersBundle:SuperAdmin:sitedev.html.twig', [
             'dummy_form' => $form->createView(),
-            'last_tick_time' => $last_tick_time
+            'last_tick_time' => $last_tick_time,
+            'symfony_version' => $symfony_version,
+            'icse_website_version' => $icse_version
         ]);
     }
 
