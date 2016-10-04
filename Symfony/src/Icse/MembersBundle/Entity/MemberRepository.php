@@ -67,5 +67,5 @@ class MemberRepository extends EntityRepository implements UserProviderInterface
 
         }
         return false;
-    } 
+    }
 }

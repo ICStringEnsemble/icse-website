@@ -29,4 +29,40 @@ class CommitteeRoleRepository extends EntityRepository
                     ->setParameters(['year' => $start_year])
                     ->getResult();
     }
+
+    public function findByUsernameAndYear($username, $start_year)
+    {
+        return $this
+            ->getEntityManager()
+            ->createQuery ('
+                SELECT r
+                FROM IcseMembersBundle:CommitteeRole r
+                JOIN r.member m
+                WHERE r.start_year = :year
+                AND m.username = :username
+            ')
+            ->setParameters([
+                'year' => $start_year,
+                'username' => $username,
+            ])
+            ->getResult();
+    }
+
+    public function getMaxSortIndexForYear($year)
+    {
+        $result = $this
+            ->getEntityManager()
+            ->createQuery ('
+                SELECT COUNT(r.sort_index), MAX(r.sort_index)
+                FROM IcseMembersBundle:CommitteeRole r
+                WHERE r.start_year = :year
+            ')
+            ->setParameters(['year' => $year])
+            ->getSingleResult();
+
+        $count      = $result[1];
+        $sort_index = $result[2];
+
+        return $count ? $sort_index : -1;
+    }
 }

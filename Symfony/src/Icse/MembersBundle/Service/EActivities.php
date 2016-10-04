@@ -2,6 +2,7 @@
 namespace Icse\MembersBundle\Service;
 
 use Common\Tools;
+use Icse\MembersBundle\Entity\CommitteeRole;
 use Icse\MembersBundle\Entity\Member;
 use Icse\MembersBundle\Entity\MembershipProduct;
 
@@ -124,5 +125,27 @@ class EActivities
         {
             throw new \Exception("Error: " . $e->getMessage());
         }
+    }
+
+    public function get_committee_members($year = null)
+    {
+        $role_list = $this->get_report("Committee", $year);
+        $results = [];
+
+        if (!isset($role_list[0])) return $results;
+
+        foreach ($role_list as $r)
+        {
+            $role = new CommitteeRole();
+            $role->setPositionName(Tools::arrayGet($r, 'PostName'));
+
+            $start_time = new \DateTime(Tools::arrayGet($r, 'StartDate'));
+            $role->setStartYear(intval($start_time->format('Y')));
+
+            $login = Tools::arrayGet($r, 'Login');
+            $results[$login][] = $role;
+        }
+
+        return $results;
     }
 } 

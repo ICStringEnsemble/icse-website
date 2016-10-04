@@ -63,6 +63,10 @@ services:
         class: Icse\MembersBundle\Service\MembersAutoUpdater
         arguments: [@icse.eactivities, @icse.members_edit_hooks, @doctrine.orm.entity_manager, @validator]
 
+    icse.committee_auto_updater:
+        class: Icse\MembersBundle\Service\CommitteeAutoUpdater
+        arguments: [@icse.eactivities, @doctrine.orm.entity_manager]
+
     icse.membership_product_auto_updater:
         class: Icse\MembersBundle\Service\MembershipProductAutoUpdater
         arguments: [@icse.eactivities, @doctrine.orm.entity_manager]

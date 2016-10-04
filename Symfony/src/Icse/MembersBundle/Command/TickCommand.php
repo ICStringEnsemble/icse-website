@@ -23,6 +23,7 @@ class TickCommand extends ContainerAwareCommand
         $container = $this->getContainer();
         $members_updater = $container->get('icse.members_auto_updater');
         $product_updater = $container->get('icse.membership_product_auto_updater');
+        $committee_updater = $container->get('icse.committee_auto_updater');
 
         try
         {
@@ -35,6 +36,12 @@ class TickCommand extends ContainerAwareCommand
         catch (NoMembershipProductException $e)
         {
             $output->writeln("<error>No membership product was found</>");
+        }
+
+        $committee_updater->start();
+        foreach ($committee_updater->iter_stats_keys() as $k)
+        {
+            $output->writeln("Committee $k updated: <fg=green>OK</> (". $committee_updater->stats_string($k) .")");
         }
     }
 }
