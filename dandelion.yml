@@ -1,0 +1,15 @@
+# Required
+scheme: sftp
+host: dougal.union.ic.ac.uk
+username: <%= ENV['DANDELION_USER'] %>
+password: <%= ENV['DANDELION_PASSWORD'] %>
+
+# Optional
+path: /website/arts/stringensemble/
+exclude:
+    - .gitignore
+    - .git
+    - dandelion.yml
+    - README.md
+revision_file: .revision
+preserve_permissions: false
