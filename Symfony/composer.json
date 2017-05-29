@@ -25,8 +25,7 @@
         "doctrine/migrations": "dev-master@dev",
         "doctrine/doctrine-migrations-bundle": "dev-master@dev",
         "jms/serializer-bundle": "*@dev",
-        "tijsverkoyen/css-to-inline-styles": "dev-master",
-        "robertotru/to-inline-style-email-bundle": "dev-master",
+        "robertotru/to-inline-style-email-bundle": "^1.2",
         "sabre/vobject" : "~3.1",
         "acts/social-api-bundle": "dev-master",
         "sensiolabs/ansi-to-html": "^1.1"
